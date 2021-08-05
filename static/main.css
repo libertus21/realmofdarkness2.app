@@ -1,0 +1,41 @@
+body {
+    background: #292f31;
+    color: #333333;
+    margin-top: 5rem;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: #000000;
+  }
+
+  ruby {
+    ruby-position: under;
+  }
+
+  rt {
+    color: #006d3b
+  }
+  
+  .bg-steel {
+    background-color: #29a795;
+  }
+  
+  .site-header .navbar-nav .nav-link {
+    color: #ffffff;
+  }
+  
+  .site-header .navbar-nav .nav-link:hover {
+    color: #1b1d21;
+  }
+  
+  .site-header .navbar-nav .nav-link.active {
+    font-weight: 500;
+  }
+  
+  .content-section {
+    background: #efefef;
+    padding: 10px 20px;
+    border: 1px solid #efefef;
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }

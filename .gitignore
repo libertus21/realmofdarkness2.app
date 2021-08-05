@@ -61,6 +61,8 @@ db.sqlite3
 db.sqlite3-journal
 settings.py
 config.py
+*/migrations/*
+!*/migrations/__init__.py
 
 # Flask stuff:
 instance/
