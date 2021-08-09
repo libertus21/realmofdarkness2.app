@@ -1,0 +1,53 @@
+.vtm-static-dot input{
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.vtm-static-dot label{
+    width: 20px;
+    height: 20px;
+    background-image: url(https://cdn.discordapp.com/emojis/817641377826471936.png?v=1);
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: center;
+}
+
+.vtm-static-filled label {
+    background-image: url(https://cdn.discordapp.com/emojis/817642148794335253.png?v=1);
+}
+
+.vtm-static-filled label:hover {
+    background-image: url(https://cdn.discordapp.com/attachments/817275006311989268/873506491343196211/FilledDotGlow.png);
+}
+
+.hidden-dot input{
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.underline-input, .underline-input:focus {
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 1;
+    border-width: 1px;
+    background: transparent;
+    outline: none;
+}
+
+.input-text-center {
+    text-align: center;
+}
+
+.underline {
+    border-style: solid;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-width: 1px;
+    border-color: #767676;
+}

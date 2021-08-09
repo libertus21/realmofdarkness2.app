@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 def index(request):
-    render(request, 'layout.html')
+    if request.user.is_authenticated:
+        return redirect('haven:haven')
+    return render(request, 'layout.html')
 
 def about(request):
-    pass
+    return render(request, 'layout.html')

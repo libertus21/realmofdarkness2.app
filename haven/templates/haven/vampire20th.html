@@ -1,0 +1,2885 @@
+{% extends "layout.html" %}
+{% block staticLinks %}
+{% load static %}
+<script type="text/javascript" src="{% static 'sheet.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'sheet.css' %}"> 
+{% endblock staticLinks %}
+
+{% block content %}
+<!-- =============================== Models ================================ -->
+
+<div class="modal fade" id="clanModel" tabindex="-1" 
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title display-5 w-100">
+          Clans
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" 
+          aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class='container-fluid'>
+          <div class='row'>
+            <div class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='updateClan("Malkavian", "Incurable Derangement")'
+                >
+                  Malkavian
+                </button>
+              </div>
+            </div>
+            <div class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='updateClan("Brujah", "+2 diff on Frenzy checks")'
+                >
+                  Brujah
+                </button>
+              </div>
+            </div>
+            <div class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='updateClan("Gangrel", 
+                    "Temporary Animal Characteristic")'
+                >
+                  Gangrel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="natureModel" tabindex="-1" 
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title display-5 w-100">
+          Clans
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" 
+          aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class='container-fluid'>
+          <div class='row'>
+            <div class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='updateStaticField("natureID", "Malkavian")'
+                >
+                  Malkavian
+                </button>
+              </div>
+            </div>
+            <div class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='updateStaticField("natureID", "Brujah")'
+                >
+                  Brujah
+                </button>
+              </div>
+            </div>
+            <div class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='updateStaticField("natureID", "Gangrel")'
+                >
+                  Gangrel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="demeanorModel" tabindex="-1" 
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title display-5 w-100">
+          Clans
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" 
+          aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class='container-fluid'>
+          <div class='row'>
+            <div class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='updateStaticField("demeanorID", "Malkavian")'
+                >
+                  Malkavian
+                </button>
+              </div>
+            </div>
+            <div class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='updateStaticField("demeanorID", "Brujah")'
+                >
+                  Brujah
+                </button>
+              </div>
+            </div>
+            <div class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='updateStaticField("demeanorID", "Gangrel")'
+                >
+                  Gangrel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="disciplineModel" tabindex="-1" 
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title display-5 w-100">
+          Disciplines
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" 
+          aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class='container-fluid'>
+          <div class='row'>
+            <div class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='addDynamicField("disc-template", "disc_auspex", 
+                    "Auspex")'
+                >
+                  Auspex
+                </button>
+              </div>
+            </div>
+            <div class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='addDynamicField("disc-template", "disc_potence",
+                    "Potence")'
+                >
+                  Potence
+                </button>
+              </div>
+            </div>
+            <div class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='addDynamicField("disc-template", "disc_celerity",
+                    "Celerity")'
+                >
+                  Celerity
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="bgModel" tabindex="-1" 
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title display-5 w-100">
+          Backgrounds
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" 
+          aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class='container-fluid'>
+          <div class='row'>
+            
+            <div id='allies' class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='addDynamicField("bg-template", "bg_allies", 
+                    "Allies")'
+                >
+                  Allies
+                </button>
+              </div>
+            </div>
+            
+            <div id='alt-identity' class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='addDynamicField("bg-template", "bg_alternate-identity",
+                    "Alternate Identity")'
+                >
+                  Alternate Identity
+                </button>
+              </div>
+            </div>
+            
+            <div id='black-hand-membership' class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='addDynamicField("bg-template", 
+                    "bg_black-hand-membership", "Black Hand Membership")'
+                >
+                  Black Hand Membership
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="meritModel" tabindex="-1" 
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title display-5 w-100">
+          Merits
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" 
+          aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class='container-fluid'>
+          <div class='row'>
+            
+            <div id='acute-sense' class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='addDynamicField("merit-template", "merit_acute-sense", 
+                    "Acute Sense", value="1")'
+                >
+                  Acute Sense 1pt
+                </button>
+              </div>
+            </div>
+            
+            <div id='ambidextrous' class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='addDynamicField("merit-template", "merit_ambidextrous",
+                    "Ambidextrous", value="1")'
+                >
+                  Ambidextrous
+                </button>
+              </div>
+            </div>
+            
+            <div id='bruiser' class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='addDynamicField("merit-template", 
+                    "merit_bruiser", "Bruiser", value="1")'
+                >
+                  Bruiser
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="flawModel" tabindex="-1" 
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title display-5 w-100">
+          Flaws
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" 
+          aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class='container-fluid'>
+          <div class='row'>
+            
+            <div id='acute-sense' class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='addDynamicField("flaw-template", "flaw_acute-sense", 
+                    "Acute Sense", value="1")'
+                >
+                  Acute Sense 1pt
+                </button>
+              </div>
+            </div>
+            
+            <div id='ambidextrous' class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='addDynamicField("flaw-template", "flaw_ambidextrous",
+                    "Ambidextrous", value="1")'
+                >
+                  Ambidextrous
+                </button>
+              </div>
+            </div>
+            
+            <div id='bruiser' class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='addDynamicField("flaw-template", 
+                    "flaw_bruiser", "Bruiser", value="1")'
+                >
+                  Bruiser
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="moralityModel" tabindex="-1" 
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title display-5 w-100">
+          Morality
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" 
+          aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class='container-fluid'>
+          <div class='row'>
+            
+            <div id='humanity' class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='changeMorality("morality_humanity", "Humanity",
+                    "Normalcy", ["Conscience", "Self-Control"])'
+                >
+                  Humanity
+                </button>
+              </div>
+            </div>
+            
+            <div id='path-of-blood' class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='changeMorality("morality_path-of-blood", 
+                    "The Path of Blood", "Resolve", 
+                    ["Conviction", "Self-Control"])'
+                >
+                  The Path of Blood
+                </button>
+              </div>
+            </div>
+            
+            <div id='path of the Bones' class='col-lg-4'>
+              <div class='d-grid gap-2'>
+                <button class="btn btn-primary btn-lg" type="button"
+                  data-bs-dismiss="modal" 
+                  onclick='changeMorality("morality_path-of-bones", 
+                    "The Path of the Bones", "Silence", 
+                    ["Conviction", "Self-Control"])'
+                >
+                  The Path of the Bones
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =============================== Base ================================ -->
+  
+<div class='row'>
+  <div class="col-md-10 mx-auto content-section">
+    <h1 class="display-1 text-center">Vampire 20th</h1>
+    <hr>
+    <div class='row' >
+      <div id='general' class='col-md-12 col-xl-9'> 
+        <div class='row'>
+          <div id='player-details' class='col-md-6 col-lg-4 col-xl-6 col-xxl-4'>
+            <div id='name' class='row my-2'>
+              <label class='col-auto my-auto'>Name:</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+            </div>
+
+            <div id='player' class='row my-2'>
+              <label class='col-auto my-auto'>Player:</label>
+              <input class='col px-1 w-100 underline-input' readOnly 
+                value='{{ request.user.username }}#{{ request.user.discriminator}}'>
+            </div>
+
+            <div id='chronicle' class='row my-2'>
+              <label class='col-auto my-auto'>Chonicle:</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+            </div>
+          </div>
+
+          <div id='character-details' class='col-md-6 col-lg-4 col-xl-6 col-xxl-4'>
+            <div id='nature' class='row my-2'>
+              <label class='col-auto my-auto'>Nature:</label>
+              <input class='col px-1 w-100 underline-input' type='text' readOnly
+                data-bs-toggle="modal" data-bs-target="#natureModel"
+                name='nature' id='natureID'>
+            </div>
+
+            <div id='demeanor' class='row my-2'>
+              <label class='col-auto my-auto'>Demeanor:</label>
+              <input class='col px-1 w-100 underline-input' type='text' readOnly
+                data-bs-toggle="modal" data-bs-target="#demeanorModel"
+                name='demeanor' id='demeanorID'>
+            </div>
+
+            <div id='concept' class='row my-2'>
+              <label class='col-auto my-auto'>Concept:</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+            </div>
+          </div>
+
+          <div id='vampire-details' class='col-md-6 col-lg-4 col-xl-6 col-xxl-4 
+            mx-auto'>
+            <div id='clan' class='row my-2'>
+              <label class='col-auto my-auto'>Clan:</label>
+              <input class='col px-1 w-100 underline-input' type='text' readOnly
+                data-bs-toggle="modal" data-bs-target="#clanModel"
+                name='clan' id='clanID'>
+            </div>
+
+            <div id='generation' class='row my-2'>
+              <label class='col-auto my-auto'>Generation:</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+            </div>
+
+            <div id='sire' class='row my-2'>
+              <label class='col-auto my-auto'>Sire:</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div id='attributes' class='col-md-12 col-xl-9'>
+        <div class='row'>
+          <div class='col-12'>
+            <div class='row'>
+              <div class='col m-auto'><hr></div> 
+              <div class='col-auto'><h2 class='display-4 text-center'>Attributes</h2></div>          
+              <div class='col m-auto'><hr></div> 
+            </div>
+          </div>          
+
+          <div id='physical' class='col-md-6 col-lg-4 col-xl-6 col-xxl-4'>
+            <h3 class='display-6 text-center'>Physical</h3>
+
+            <div id='strength' class='row my-2'>
+              <label class='col-auto my-auto'>Strength</label>
+              <div class='col w-100 underline'></div>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="strengthDot" id="strengthDot0" value='0'>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                    <input class="" type="radio" 
+                        name="strengthDot" id="strengthDot1" value='1' checked> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="strengthDot" id="strengthDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="strengthDot" id="strengthDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="strengthDot" id="strengthDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="strengthDot" id="strengthDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+            <div id='dexterity' class='row my-2'>
+              <label class='col-auto my-auto'>Dexterity</label>
+              <div class='col w-100 underline'></div>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="dexterityDot" id="strengthDot0" value='0'>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                    <input class="" type="radio" 
+                        name="dexterityDot" id="dexterityDot1" value='1' checked> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="dexterityDot" id="dexterityDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="dexterityDot" id="dexterityDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="dexterityDot" id="dexterityDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="dexterityDot" id="dexterityDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+            <div id='stamina' class='row my-2'>
+              <label class='col-auto my-auto'>Stamina</label>
+              <div class='col w-100 underline'></div>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="staminaDot" id="staminaDot0" value='0'>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                    <input class="" type="radio" 
+                        name="staminaDot" id="staminaDot1" value='1' checked> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="staminaDot" id="staminaDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="staminaDot" id="staminaDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="staminaDot" id="staminaDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="staminaDot" id="staminaDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+          </div>
+
+          <div id='social' class='col-md-6 col-lg-4 col-xl-6 col-xxl-4'>
+            <h3 class='display-6 text-center'>Social</h3>
+
+            <div id='charisma' class='row my-2'>
+              <label class='col-auto my-auto'>Charisma</label>
+              <div class='col w-100 underline'></div>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="charismaDot" id="charismaDot0" value='0'>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                    <input class="" type="radio" 
+                        name="charismaDot" id="charismaDot1" value='1' checked> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="charismaDot" id="charismaDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="charismaDot" id="charismaDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="charismaDot" id="charismaDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="charismaDot" id="charismaDot" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>      
+
+            <div id='manipulation' class='row my-2'>
+              <label class='col-auto my-auto'>Manipulation</label>
+              <div class='col w-100 underline'></div>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="manipulationDot" id="manipulationDot0" value='0'>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                    <input class="" type="radio" 
+                        name="manipulationDot" id="manipulationDot1" value='1' checked> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="manipulationDot" id="manipulationDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="manipulationDot" id="manipulationDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="manipulationDot" id="manipulationDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="manipulationDot" id="manipulationDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>           
+
+            <div id='appearance' class='row my-2'>
+              <label class='col-auto my-auto'>Appearance</label>
+              <div class='col w-100 underline'></div>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="appearanceDot" id="appearanceDot0" value='0'>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                    <input class="" type="radio" 
+                        name="appearanceDot" id="appearanceDot1" value='1' checked> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="appearanceDot" id="appearanceDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="appearanceDot" id="appearanceDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="appearanceDot" id="appearanceDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="appearanceDot" id="appearanceDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+          </div>
+
+          <div id='mental' class='col-md-6 col-lg-4 col-xl-6 col-xxl-4 mx-auto'> 
+            <h3 class='display-6 text-center col-auto'>Mental</h3>       
+
+            <div id='perception' class='row my-2'>
+              <label class='col-auto my-auto'>Perception</label>
+              <div class='col w-100 underline'></div>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="perceptionDot" id="perceptionDot0" value='0'>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                    <input class="" type="radio" 
+                        name="perceptionDot" id="perceptionDot1" value='1' checked> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="perceptionDot" id="perceptionDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="perceptionDot" id="perceptionDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="perceptionDot" id="perceptionDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="perceptionDot" id="perceptionDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>       
+
+            <div id='intelligence' class='row my-2'>
+              <label class='col-auto my-auto'>Intelligence</label>
+              <div class='col w-100 underline'></div>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="intelligenceDot" id="intelligenceDot0" value='0'>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                    <input class="" type="radio" 
+                        name="intelligenceDot" id="intelligenceDot1" value='1' checked> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="intelligenceDot" id="intelligenceDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="intelligenceDot" id="intelligenceDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="intelligenceDot" id="intelligenceDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="intelligenceDot" id="intelligenceDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>         
+
+            <div id='wits' class='row my-2'>
+              <label class='col-auto my-auto'>Wits</label>
+              <div class='col w-100 underline'></div>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="witsDot" id="witsDot0" value='0'>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                    <input class="" type="radio" 
+                        name="witsDot" id="witsDot1" value='1' checked> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="witsDot" id="witsDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="witsDot" id="witsDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="witsDot" id="witsDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="witsDot" id="witsDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div> 
+          </div>
+
+        </div>
+      </div>
+
+      <div id='abilites' class='col-md-12 col-xl-9'>
+        <div class='row'>
+          <div class='col-12'>
+            <div class='row'>
+              <div class='col m-auto'><hr></div> 
+              <div class='col-auto'><h2 class='display-4 text-center'>Abilities</h2></div>          
+              <div class='col m-auto'><hr></div> 
+            </div>  
+          </div>        
+
+          <div id='talents' class='col-lg-6 col-xxl-4'>
+            <h3 class='display-6 text-center'>Talents</h3>
+
+            <div id='alertness' class='row my-2'>
+              <label class='col-auto my-auto'>Alertness</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="alertnessDot" id="alertnessDot0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="alertnessDot" id="alertnessDot1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="alertnessDot" id="alertnessDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="alertnessDot" id="alertnessDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="alertnessDot" id="alertnessDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="alertnessDot" id="alertnessDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div> 
+
+            <div id='athletics' class='row my-2'>
+              <label class='col-auto my-auto'>Athletics</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="athleticsDot" id="athleticsDot0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="athleticsDot" id="athleticsDot1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="athleticsDot" id="athleticsDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="athleticsDot" id="athleticsDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="athleticsDot" id="athleticsDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="athleticsDot" id="athleticsDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+            <div id='awareness' class='row my-2'>
+              <label class='col-auto my-auto'>Awareness</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="awarenessDot" id="awarenessDot0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="awarenessDot" id="awarenessDot1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="awarenessDot" id="awarenessDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="awarenessDot" id="awarenessDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="awarenessDot" id="awarenessDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="awarenessDot" id="awarenessDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+            <div id='brawl' class='row my-2'>
+              <label class='col-auto my-auto'>Brawl</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="brawlDot" id="brawlDot0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="brawlDot" id="brawlDot1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="brawlDot" id="brawlDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="brawlDot" id="brawlDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="brawlDot" id="brawlDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="brawlDot" id="brawlDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+            <div id='empathy' class='row my-2'>
+              <label class='col-auto my-auto'>Empathy</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="empathyDot" id="empathyDot0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="empathyDot" id="empathyDot1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="empathyDot" id="empathyDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="empathyDot" id="empathyDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="empathyDot" id="empathyDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="empathyDot" id="empathyDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+            <div id='expression' class='row my-2'>
+              <label class='col-auto my-auto'>Expression</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="expressionDot" id="expressionDot0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="expressionDot" id="expressionDot1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="expressionDot" id="expressionDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="expressionDot" id="expressionDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="expressionDot" id="expressionDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="expressionDot" id="expressionDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+            <div id='intimidation' class='row my-2'>
+              <label class='col-auto my-auto'>Intimidation</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="intimidationDot" id="intimidationDot0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="intimidationDot" id="intimidationDot1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="intimidationDot" id="intimidationDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="intimidationDot" id="intimidationDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="intimidationDot" id="intimidationDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="intimidationDot" id="intimidationDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+            <div id='leadership' class='row my-2'>
+              <label class='col-auto my-auto'>Leadership</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="leadershipDot" id="leadershipDot0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="leadershipDot" id="leadershipDot1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="leadershipDot" id="leadershipDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="leadershipDot" id="leadershipDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="leadershipDot" id="leadershipDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="leadershipDot" id="leadershipDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+            <div id='streetwise' class='row my-2'>
+              <label class='col-auto my-auto'>Streetwise</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="streetwiseDot" id="streetwiseDot0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="streetwiseDot" id="streetwiseDot1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="streetwiseDot" id="streetwiseDot2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="streetwiseDot" id="streetwiseDot3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="streetwiseDot" id="streetwiseDot4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="streetwiseDot" id="streetwiseDot5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+            <div id='subterfuge' class='row my-2'>
+              <label class='col-auto my-auto'>Subterfuge</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="subterfuge" id="subterfuge0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="subterfuge" id="subterfuge1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="subterfuge" id="subterfuge2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="subterfuge" id="subterfuge3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="subterfuge" id="subterfuge4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="subterfuge" id="subterfuge5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+          </div>
+
+          <div id='skills' class='col-lg-6 col-xxl-4'>
+            <h3 class='display-6 text-center'>Skills</h3>
+
+            <div id='animal-ken' class='row my-2'>
+              <label class='col-auto my-auto'>Animal Ken</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="animal-ken" id="animal-ken0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="animal-ken" id="animal-ken1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="animal-ken" id="animal-ken2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="animal-ken" id="animal-ken3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="animal-ken" id="animal-ken4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="animal-ken" id="animal-ken5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>     
+
+            <div id='crafts' class='row my-2'>
+              <label class='col-auto my-auto'>Crafts</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="crafts" id="crafts0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="crafts" id="crafts1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="crafts" id="crafts2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="crafts" id="crafts3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="crafts" id="crafts4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="crafts" id="crafts5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>         
+
+            <div id='drive' class='row my-2'>
+              <label class='col-auto my-auto'>Drive</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="drive" id="drive0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="drive" id="drive1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="drive" id="drive2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="drive" id="drive3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="drive" id="drive4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="drive" id="drive5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+        	  <div id='etiquette' class='row my-2'>
+              <label class='col-auto my-auto'>Etiquette</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="etiquette" id="etiquette0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="etiquette" id="etiquette1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="etiquette" id="etiquette2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="etiquette" id="etiquette3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="etiquette" id="etiquette4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="etiquette" id="etiquette5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>       
+
+            <div id='firearms' class='row my-2'>
+              <label class='col-auto my-auto'>Firearms</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="firearms" id="firearms0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="firearms" id="firearms1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="firearms" id="firearms2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="firearms" id="firearms3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="firearms" id="firearms4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="firearms" id="firearms5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>         
+
+            <div id='larceny' class='row my-2'>
+              <label class='col-auto my-auto'>Larceny</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="larceny" id="larceny0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="larceny" id="larceny1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="larceny" id="larceny2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="larceny" id="larceny3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="larceny" id="larceny4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="larceny" id="larceny5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+            <div id='melee' class='row my-2'>
+              <label class='col-auto my-auto'>Melee</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="melee" id="melee0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="melee" id="melee1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="melee" id="melee2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="melee" id="melee3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="melee" id="melee4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="melee" id="melee5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>    
+
+        	  <div id='performance' class='row my-2'>
+              <label class='col-auto my-auto'>Performance</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="performance" id="performance0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="performance" id="performance1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="performance" id="performance2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="performance" id="performance3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="performance" id="performance4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="performance" id="performance5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>        
+
+            <div id='stealth' class='row my-2'>
+              <label class='col-auto my-auto'>Stealth</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="stealth" id="stealth0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="stealth" id="stealth1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="stealth" id="stealth2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="stealth" id="stealth3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="stealth" id="stealth4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="stealth" id="stealth5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div> 
+
+        	  <div id='survival' class='row my-2'>
+              <label class='col-auto my-auto'>Survival</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="survival" id="survival0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="survival" id="survival1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="survival" id="survival2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="survival" id="survival3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="survival" id="survival4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="survival" id="survival5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+          </div>
+
+          <div id='knowledges' class='col-lg-6 col-xxl-4 mx-auto'> 
+            <h3 class='display-6 text-center col-auto'>Knowledges</h3>       
+
+        	  <div id='academics' class='row my-2'>
+              <label class='col-auto my-auto'>Academics</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="academics" id="academics0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="academics" id="academics1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="academics" id="academics2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="academics" id="academics3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="academics" id="academics4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="academics" id="academics5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>        
+
+            <div id='computer' class='row my-2'>
+              <label class='col-auto my-auto'>Computer</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="computer" id="computer0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="computer" id="computer1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="computer" id="computer2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="computer" id="computer3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="computer" id="computer4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="computer" id="computer5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>      
+
+        	  <div id='finance' class='row my-2'>
+              <label class='col-auto my-auto'>Finance</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="finance" id="finance0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="finance" id="finance1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="finance" id="finance2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="finance" id="finance3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="finance" id="finance4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="finance" id="finance5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+        	  <div id='investigation' class='row my-2'>
+              <label class='col-auto my-auto'>Investigation</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="investigation" id="investigation0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="investigation" id="investigation1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="investigation" id="investigation2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="investigation" id="investigation3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="investigation" id="investigation4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="investigation" id="investigation5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+        	  <div id='law' class='row my-2'>
+              <label class='col-auto my-auto'>Law</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="law" id="law0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="law" id="law1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="law" id="law2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="law" id="law3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="law" id="law4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="law" id="law5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+        	  <div id='medicine' class='row my-2'>
+              <label class='col-auto my-auto'>Medicine</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="medicine" id="medicine0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="medicine" id="medicine1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="medicine" id="medicine2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="medicine" id="medicine3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="medicine" id="medicine4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="medicine" id="medicine5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+        	  <div id='occult' class='row my-2'>
+              <label class='col-auto my-auto'>Occult</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="occult" id="occult0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="occult" id="occult1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="occult" id="occult2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="occult" id="occult3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="occult" id="occult4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="occult" id="occult5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+        	  <div id='politics' class='row my-2'>
+              <label class='col-auto my-auto'>Politics</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="politics" id="politics0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="politics" id="politics1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="politics" id="politics2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="politics" id="politics3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="politics" id="politics4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="politics" id="politics5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+        	  <div id='science' class='row my-2'>
+              <label class='col-auto my-auto'>Science</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="science" id="science0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="science" id="science1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="science" id="science2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="science" id="science3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="science" id="science4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="science" id="science5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+        	  <div id='technology' class='row my-2'>
+              <label class='col-auto my-auto'>Technology</label>
+              <input class='col px-1 w-100 underline-input' type='text'>
+              <div class='col-auto'>
+                <div class='row'>
+                  <div class='col hidden-dot p-0'>                    
+                    <input class="" type="radio" 
+                        name="technology" id="technology0" value='0' checked>              
+                  </div>
+                  <div class='col-auto pe-0 vtm-static-dot pt-1'>                    
+                    <input class="" type="radio" 
+                        name="technology" id="technology1" value='1'> 
+                    <label onclick='updateRow(this)'></label>               
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="technology" id="technology2" value='2'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="technology" id="technology3" value='3'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto px-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="technology" id="technology4" value='4'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                  <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                    <input class="" type="radio" 
+                      name="technology" id="technology5" value='5'>
+                    <label onclick='updateRow(this)'></label> 
+                  </div>
+                </div>    
+              </div>
+            </div>
+
+          </div>        
+        </div>
+      </div>
+
+      <div id='advantages' class='row'>
+        <div class='col-12'>
+          <div class='row'>
+            <div class='col m-auto'><hr></div> 
+            <div class='col-auto'><h2 class='display-4 text-center'>Advantages</h2></div>          
+            <div class='col m-auto'><hr></div> 
+          </div>  
+        </div>        
+
+        <div id='disciplines' class='col-md-6 col-xl-4 pb-3'>
+          <div class='row'>
+            <h3 class='col-12 display-6 text-center'>Disciplines</h3>
+
+            <template id='disc-template'>
+              <div id='template-id' class='col-12'>
+                <div class='row my-2 ms-1'>
+                  <input class='col px-1 w-100 underline-input' 
+                    id='template-name' type='text'>
+                  <div class='col-auto'>
+                    <div class='row'>
+                      <div class='col hidden-dot p-0'>                    
+                        <input class="" type="radio" 
+                            name="" value='0'>              
+                      </div>
+                      <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                        <input class="template " type="radio" 
+                            name="" value='1' checked> 
+                        <label onclick='updateRow(this)'></label>               
+                      </div>
+                      <div class='col-auto px-0 vtm-static-dot pt-1'>
+                        <input class="template " type="radio" 
+                          name="" value='2'>
+                        <label onclick='updateRow(this)'></label> 
+                      </div>
+                      <div class='col-auto px-0 vtm-static-dot pt-1'>
+                        <input class="template " type="radio" 
+                          name="" value='3'>
+                        <label onclick='updateRow(this)'></label> 
+                      </div>
+                      <div class='col-auto px-0 vtm-static-dot pt-1'>
+                        <input class="template " type="radio" 
+                          name="" value='4'>
+                        <label onclick='updateRow(this)'></label> 
+                      </div>
+                      <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                        <input class="template " type="radio" 
+                          name="" value='5'>
+                        <label onclick='updateRow(this)'></label> 
+                      </div>
+                    </div>    
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <div class='col-12 d-grid gap-2'>
+              <button class="btn btn-primary" type="button"
+                data-bs-toggle="modal" data-bs-target="#disciplineModel"
+              >
+                Add Discipline
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <div id='backgrounds' class='col-md-6 col-xl-4 pb-3'>
+          <div class='row'>
+            <h3 class='display-6 text-center'>Backgrounds</h3>
+
+            <template id='bg-template'>
+              <div id='template-id' class='col-12'>
+                <div class='row my-2 ms-1'>
+                  <input class='col px-1 w-100 underline-input' 
+                    id='template-name' type='text'>
+                  <div class='col-auto'>
+                    <div class='row'>
+                      <div class='col hidden-dot p-0'>                    
+                        <input class="" type="radio" 
+                            name="" value='0'>              
+                      </div>
+                      <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                        <input class="template " type="radio" 
+                            name="" value='1' checked> 
+                        <label onclick='updateRow(this)'></label>               
+                      </div>
+                      <div class='col-auto px-0 vtm-static-dot pt-1'>
+                        <input class="template " type="radio" 
+                          name="" value='2'>
+                        <label onclick='updateRow(this)'></label> 
+                      </div>
+                      <div class='col-auto px-0 vtm-static-dot pt-1'>
+                        <input class="template " type="radio" 
+                          name="" value='3'>
+                        <label onclick='updateRow(this)'></label> 
+                      </div>
+                      <div class='col-auto px-0 vtm-static-dot pt-1'>
+                        <input class="template " type="radio" 
+                          name="" value='4'>
+                        <label onclick='updateRow(this)'></label> 
+                      </div>
+                      <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                        <input class="template " type="radio" 
+                          name="" value='5'>
+                        <label onclick='updateRow(this)'></label> 
+                      </div>
+                    </div>    
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <div class='col-12 d-grid gap-2'>
+              <button class="btn btn-primary" type="button"
+                data-bs-toggle="modal" data-bs-target="#bgModel"
+              >
+                Add Background
+              </button>
+            </div>
+          </div>
+        </div> 
+
+        <div id='virtues' class='col-md-6 col-xl-4 pb-3'>
+          <h3 class='display-6 text-center'>Virtues</h3>
+          <div class='row'>
+            
+            <div id='conscience' class='col-12 my-2'>              
+              <div class='row my-auto'>
+                <label id='conscienceLabel' class='col-auto my-auto'>Conscience</label>
+                <div class='col w-100 underline'></div>
+                <div class='col-auto'>
+                  <div class='row'>
+                    <div class='col hidden-dot p-0'>                    
+                      <input class="" type="radio" 
+                          name="conscienceDot" id="conscienceDot0" value='0'>              
+                    </div>
+                    <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                      <input class="" type="radio" 
+                          name="conscienceDot" id="conscienceDot1" 
+                          value='1' checked> 
+                      <label onclick='updateRow(this)'></label>               
+                    </div>
+                    <div class='col-auto px-0 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="conscienceDot" id="conscienceDot2" value='2'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto px-0 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="conscienceDot" id="conscienceDot3" value='3'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto px-0 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="conscienceDot" id="conscienceDot4" value='4'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="conscienceDot" id="conscienceDot5" value='5'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                  </div>
+                </div>  
+              </div>               
+            </div>
+            
+            <div id='self-control' class='col-12 my-2'>
+              <div class='row'>
+                <label id='selfControlLabel' class='col-auto my-auto'>
+                  Self-Control
+                </label>
+                <div class='col w-100 underline'></div>
+                <div class='col-auto'>
+                  <div class='row'>
+                    <div class='col hidden-dot p-0'>                    
+                      <input class="" type="radio" 
+                          name="self-controlDot" id="self-controlDot0" value='0'>              
+                    </div>
+                    <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                      <input class="" type="radio" 
+                          name="self-controlDot" id="self-controlDot1" 
+                          value='1' checked> 
+                      <label onclick='updateRow(this)'></label>               
+                    </div>
+                    <div class='col-auto px-0 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="self-controlDot" id="self-controlDot2" value='2'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto px-0 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="self-controlDot" id="self-controlDot3" value='3'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto px-0 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="self-controlDot" id="self-controlDot4" value='4'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="self-controlDot" id="self-controlDot5" value='5'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                  </div>    
+                </div>
+              </div>
+            </div>
+            
+            <div id='courage' class='col-12 my-2'>
+              <div class='row my-auto'>
+                <label class='col-auto my-auto'>Courage</label>
+                <div class='col w-100 underline'></div>
+                <div class='col-auto'>
+                  <div class='row'>
+                    <div class='col hidden-dot p-0'>                    
+                      <input class="" type="radio" 
+                          name="courageDot" id="courageDot0" value='0'>              
+                    </div>
+                    <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                      <input class="" type="radio" 
+                          name="courageDot" id="courageDot1" value='1' checked> 
+                      <label onclick='updateRow(this)'></label>               
+                    </div>
+                    <div class='col-auto px-0 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="courageDot" id="courageDot2" value='2'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto px-0 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="courageDot" id="courageDot3" value='3'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto px-0 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="courageDot" id="courageDot4" value='4'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="courageDot" id="courageDot5" value='5'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                  </div>    
+                </div>
+              </div>
+            </div>           
+          </div>          
+
+        </div> 
+             
+      </div>
+
+      <div id='other' class='row'>
+        <hr>
+
+        <div id='merits-flaws' class='col-md-6 col-xl-4'>
+          <div class='row'>
+
+            <div class='col-12'>
+              <div class='row'>
+                <div class='col m-auto'><hr></div> 
+                <div class='col-auto'>
+                  <h3 class='display-6 text-center'>Merits & Flaws</h3>
+                </div>          
+                <div class='col m-auto'><hr></div> 
+              </div> 
+            </div>
+
+            <div id='merits' class='col-12'>
+              <div class='row my-2'>
+                <div class='col-12'>
+                  <div class='row'>
+                    <div class='col-10'><p>Merit</p></div>
+                    <div class='col-2 text-center'><p>Cost</p></div>
+                  </div>
+                </div>                
+
+                <template id='merit-template'>
+                  <div id='template-id' class='col-12'>
+                    <div class='row my-2'>
+                      <div class='col-10'>
+                        <input class='w-100 underline-input' type="text" 
+                          id="template-name">
+                      </div>
+                      <div class='col-2 text-center'>
+                        <input class='w-100 underline-input template 
+                          input-text-center' 
+                          type="text" name="">
+                      </div>                      
+                    </div>
+                  </div>                  
+                </template>
+
+                <div class='col-12 d-grid gap-2' data-bs-toggle="modal" 
+                  data-bs-target="#meritModel"
+                >
+                  <div class='row my-2'>
+                      <div class='col-10'>
+                        <input class='w-100 underline-input' type="text" 
+                          id="template-name" readOnly>
+                      </div>
+                      <div class='col-2 text-center'>
+                        <input class='w-100 underline-input template 
+                          input-text-center' 
+                          type="text" name="" readOnly>
+                      </div>                      
+                    </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div id='flaws' class='col-12'>
+              <div class='row my-2'>
+                <div class='col-12'>
+                  <div class='row'>
+                    <div class='col-10'><p>Flaw</p></div>
+                    <div class='col-2 text-center'><p>Cost</p></div>
+                  </div>
+                </div>                
+
+                <template id='flaw-template'>
+                  <div id='template-id' class='col-12'>
+                    <div class='row my-2'>
+                      <div class='col-10'>
+                        <input class='w-100 underline-input' type="text" 
+                          id="template-name">
+                      </div>
+                      <div class='col-2 text-center'>
+                        <input class='w-100 underline-input template 
+                          input-text-center' 
+                          type="text" name="">
+                      </div>
+                      
+                    </div>
+                  </div>                  
+                </template>
+
+                <div class='col-12 d-grid gap-2' data-bs-toggle="modal" 
+                  data-bs-target="#flawModel"
+                >
+                  <div class='row my-2'>
+                      <div class='col-10'>
+                        <input class='w-100 underline-input' type="text" 
+                          id="template-name" readOnly>
+                      </div>
+                      <div class='col-2 text-center'>
+                        <input class='w-100 underline-input template 
+                          input-text-center' 
+                          type="text" name="" readOnly>
+                      </div>                      
+                    </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div id='center-other' class='col-md-6 col-xl-4'>
+          <div class='row'>
+            
+            <div id='morality' class='col-12 py-3'>
+              <div class='row'>
+                <div class='col-12'>
+                  <div class='row'>
+                    <div class='col m-auto'><hr></div> 
+                    <div class='col-auto'>
+                    <h3 class='display-6 text-center'>Humanity/Path</h3>
+                  </div>          
+                    <div class='col m-auto'><hr></div> 
+                  </div> 
+                </div>
+                
+                <div id='moralityTracker' class='col-12'>
+                  <div class='row mt-2'>
+                    
+                    <div class='col-12 px-5 mb-3'>
+                      <div class='row justify-content-center'>
+                        <div class='col-12'>
+                          <input class='underline-input input-text-center w-100'
+                          value='Humanity' data-bs-toggle="modal" 
+                          data-bs-target="#moralityModel" id='moralityLabel'
+                          readOnly> 
+                        </div>
+                      </div>
+                    </div>                       
+
+                    <div class='col-12'>
+                      <div class='row justify-content-center'>
+                        <div class='col-auto hidden-dot p-0'>                    
+                          <input class="morality-input" type="radio" 
+                              name="morality_humanity" value='0'>              
+                        </div>
+                        <div class='col-auto pe-0 mx-1 vtm-static-dot pt-1 
+                          vtm-static-filled'>                    
+                          <input class="morality-input" type="radio" 
+                              name="morality_humanity" value='1' checked> 
+                          <label onclick='updateRow(this)'></label>               
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="morality-input" type="radio" 
+                            name="morality_humanity" value='2'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="morality-input" type="radio" 
+                            name="morality_humanity" value='3'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="morality-input" type="radio" 
+                            name="morality_humanity" value='4'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="morality-input" type="radio" 
+                            name="morality_humanity" value='5'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>                    
+                          <input class="morality-input" type="radio" 
+                              name="morality_humanity" value='6'> 
+                          <label onclick='updateRow(this)'></label>               
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="morality-input" type="radio" 
+                            name="morality_humanity" value='7'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="morality-input" type="radio" 
+                            name="morality_humanity" value='8'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="morality-input" type="radio" 
+                            name="morality_humanity" value='9'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto ps-0 me-1 vtm-static-dot pt-1'>
+                          <input class="morality-input" type="radio" 
+                            name="morality_humanity" value='10'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                      </div>    
+                    </div>
+
+                    <div class='col-12 px-5 my-1'>
+                      <div class='row'>
+                        <label class='col-auto my-auto'>Bearing:</label>
+                        <input class='col w-100 underline-input input-text-center'
+                          id='bearingName' value="Normalcy" readOnly>
+                        <label class='col-auto my-auto'>(___)</label>    
+                      </div>                
+                    </div>   
+                  </div>
+                </div>
+              </div>  
+            </div>
+
+            <div id='willpower' class='col-12 py-3'>
+              <div class='row'>
+                <div class='col-12'>
+                  <div class='row'>
+                    <div class='col m-auto'><hr></div> 
+                    <div class='col-auto'>
+                      <h3 class='display-6 text-center'>Willpower</h3>
+                    </div>          
+                    <div class='col m-auto'><hr></div> 
+                  </div> 
+                </div>
+
+                <div id='willpowerTracker' class='col-12'>
+                  <div class='row justify-content-center'>
+                    <div class='col-auto hidden-dot p-0'>                    
+                      <input class="" type="radio" 
+                          name="willpower" value='0'>              
+                    </div>
+                    <div class='col-auto pe-0 mx-1 vtm-static-dot pt-1 
+                      vtm-static-filled'>                    
+                      <input class="" type="radio" 
+                          name="willpower" value='1' checked> 
+                      <label onclick='updateRow(this)'></label>               
+                    </div>
+                    <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="willpower" value='2'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="willpower" value='3'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="willpower" value='4'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="willpower" value='5'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>                    
+                      <input class="" type="radio" 
+                          name="willpower" value='6'> 
+                      <label onclick='updateRow(this)'></label>               
+                    </div>
+                    <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="willpower" value='7'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="willpower" value='8'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="willpower" value='9'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                    <div class='col-auto ps-0 me-1 vtm-static-dot pt-1'>
+                      <input class="" type="radio" 
+                        name="willpower" value='10'>
+                      <label onclick='updateRow(this)'></label> 
+                    </div>
+                  </div>    
+                </div>
+              </div>
+            </div>
+
+            <div id='bloodPool' class='col-12 py-3'>
+              <div class='row'>
+                <div class='col-12'>
+                  <div class='row'>
+                    <div class='col m-auto'><hr></div> 
+                    <div class='col-auto'>
+                      <h3 class='display-6 text-center'>Blood Pool</h3>
+                    </div>          
+                    <div class='col m-auto'><hr></div> 
+                  </div>  
+                </div>
+
+                <div id='bloodTracker' class='col-12'>
+                  <div class='row'>                      
+                    <div class='col-12'>
+                      <div class='row justify-content-center'>
+                        <div class='col-auto hidden-dot p-0'>                    
+                          <input class="" type="radio" 
+                              name="blood" value='0'>              
+                        </div>
+                        <div class='col-auto pe-0 mx-1 vtm-static-dot pt-1 
+                          vtm-static-filled'>                    
+                          <input class="" type="radio" 
+                              name="blood" value='1' checked> 
+                          <label onclick='updateRow(this)'></label>               
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='2'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='3'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='4'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='5'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>                    
+                          <input class="" type="radio" 
+                              name="blood" value='6'> 
+                          <label onclick='updateRow(this)'></label>               
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='7'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='8'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='9'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto ps-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='10'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                      </div>
+                    </div>
+                    <div class='col-12'>
+                      <div class='row justify-content-center'>
+                        <div class='col-auto pe-0 mx-1 vtm-static-dot pt-1'>                    
+                          <input class="" type="radio" 
+                              name="blood" value='11'> 
+                          <label onclick='updateRow(this)'></label>               
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='12'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='13'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='14'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='15'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>                    
+                          <input class="" type="radio" 
+                              name="blood" value='16'> 
+                          <label onclick='updateRow(this)'></label>               
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='17'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='18'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto px-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='19'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                        <div class='col-auto ps-0 me-1 vtm-static-dot pt-1'>
+                          <input class="" type="radio" 
+                            name="blood" value='20'>
+                          <label onclick='updateRow(this)'></label> 
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+              
+            </div>
+          </div>
+        </div> 
+
+        <div id='right-other' class='col-md-6 col-xl-4'>
+          <div class='row h-100'>
+            <div id='health' class='col-12'>
+              <div class='row'>
+                <div class='col m-auto'><hr></div> 
+                <div class='col-auto'>
+                <h3 class='display-6 text-center'>Health</h3>
+              </div>          
+                <div class='col m-auto'><hr></div> 
+              </div>      
+
+              <div id='health-tracker' class='row mt-2'>             
+                <div class='col-12 ps-5 ms-2'>
+                  <div class='row justify-content-center'>
+                    <div class='col-8'>
+                      <label class='w-100'>Bruised</label>
+                    </div>
+                    <div div class='col-auto'>
+                      <input class=" mx-1" type="checkbox" 
+                        name="healthBox" id="healthBox1" value='1'>
+                    </div>                    
+                  </div>
+
+                  <div class='row justify-content-center'>
+                    <div class='col-6'>
+                      <label class='w-100'>Hurt</label>
+                    </div>
+                    <div class='col-2 pe-3'>
+                      <label>-1</label>
+                    </div>
+                    <div div class='col-auto'>
+                      <input class=" mx-1" type="checkbox" 
+                        name="healthBox" id="healthBox2" value='2'>
+                    </div>                    
+                  </div>
+
+                  <div class='row justify-content-center'>
+                    <div class='col-6'>
+                      <label class='w-100'>Injured</label>
+                    </div>
+                    <div class='col-2 pe-3'>
+                      <label>-1</label>
+                    </div>
+                    <div div class='col-auto'>
+                      <input class=" mx-1" type="checkbox" 
+                        name="healthBox" id="healthBox1" value='1'>
+                    </div>                    
+                  </div>
+
+                  <div class='row justify-content-center'>
+                    <div class='col-6'>
+                      <label class='w-100'>Wounded</label>
+                    </div>
+                    <div class='col-2 pe-3'>
+                      <label>-2</label>
+                    </div>
+                    <div div class='col-auto'>
+                      <input class=" mx-1" type="checkbox" 
+                        name="healthBox" id="healthBox1" value='1'>
+                    </div>                    
+                  </div>
+
+                  <div class='row justify-content-center'>
+                    <div class='col-6'>
+                      <label class='w-100'>Mauled</label>
+                    </div>
+                    <div class='col-2 pe-3'>
+                      <label>-2</label>
+                    </div>
+                    <div div class='col-auto'>
+                      <input class=" mx-1" type="checkbox" 
+                        name="healthBox" id="healthBox1" value='1'>
+                    </div>                    
+                  </div>
+
+                  <div class='row justify-content-center'>
+                    <div class='col-6'>
+                      <label class='w-100'>Crippled</label>
+                    </div>
+                    <div class='col-2'>
+                      <label>-5</label>
+                    </div>
+                    <div div class='col-auto'>
+                      <input class=" mx-1" type="checkbox" 
+                        name="healthBox" id="healthBox1" value='1'>
+                    </div>                    
+                  </div>
+
+                  <div class='row justify-content-center'>
+                    <div class='col-8'>
+                      <label class='w-100'>Incapacitated</label>
+                    </div>
+                    <div div class='col-auto'>
+                      <input class=" mx-1" type="checkbox" 
+                        name="healthBox" id="healthBox1" value='1'>
+                    </div>                    
+                  </div>
+
+                </div> 
+              </div>
+            </div>
+
+
+            <div id='weakness' class='col-12'>
+              <div class='row'>
+                <div class='col m-auto'><hr></div> 
+                <div class='col-auto'>
+                  <h3 class='display-6 text-center'>Weakness</h3>
+                </div>          
+                <div class='col m-auto'><hr></div> 
+              </div>      
+
+              <div class='row mt-2 justify-content-center'>                      
+                <div class='col-12 px-5 mx-2'>
+                  <input class="underline-input w-100 input-text-center" 
+                    type="text" id="weaknessInput" readOnly>
+                </div>
+              </div>
+            </div>     
+
+              <div id='exp' class='col-12'>
+                <div class='row'>
+                  <div class='col m-auto'><hr></div> 
+                  <div class='col-auto'>
+                    <h3 class='display-6 text-center'>Experience</h3>
+                  </div>          
+                  <div class='col m-auto'><hr></div> 
+                </div>      
+
+                <div class='row mt-2 justify-content-center'>                      
+                  <div class='col-12 px-5 mx-2'>
+                    <input class="underline-input w-100 input-text-center" 
+                      type="text" id="exp-input">
+                  </div>
+                </div>
+              </div>
+            </div>              
+          </div>
+
+        </div> 
+             
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

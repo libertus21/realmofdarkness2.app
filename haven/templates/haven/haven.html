@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class='row'>
+    <div class="col-md-8 mx-auto content-section">
+      <h1 class="display-1 text-center">Haven</h1>
+      <hr>
+      <a class='btn btn-primary' href='{% url 'haven:new' %}'>
+        New Character +
+      </a>
+    </div>
+  </div>
+{% endblock content %}
