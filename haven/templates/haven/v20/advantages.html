@@ -1,0 +1,251 @@
+{% block advantages %}
+<div class='col-12'>
+  <div class='row'>
+    <div class='col m-auto'><hr></div> 
+    <div class='col-auto'><h2 class='display-4 text-center'>Advantages</h2></div>          
+    <div class='col m-auto'><hr></div> 
+  </div>  
+</div>        
+
+<div id='disciplines' class='col-md-6 col-xl-4 pb-3'>
+  <div class='row'>
+    <h3 class='col-12 display-6 text-center'>Disciplines</h3>
+
+    <template id='disc-template'>
+      <div id='template-id' class='col-12'>
+        <div class='row my-2 ms-1'>
+          <input class='col px-1 w-100 underline-input' 
+            id='template-name' type='text'>
+          <div class='col-auto'>
+            <div class='row'>
+              <div class='col hidden-dot p-0'>                    
+                <input class="template" type="radio" 
+                    name="" value='0'>              
+              </div>
+              <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                <input class="template" type="radio" 
+                    name="" value='1' checked> 
+                <label onclick='updateRow(this)'></label>               
+              </div>
+              <div class='col-auto px-0 vtm-static-dot pt-1'>
+                <input class="template" type="radio" 
+                  name="" value='2'>
+                <label onclick='updateRow(this)'></label> 
+              </div>
+              <div class='col-auto px-0 vtm-static-dot pt-1'>
+                <input class="template" type="radio" 
+                  name="" value='3'>
+                <label onclick='updateRow(this)'></label> 
+              </div>
+              <div class='col-auto px-0 vtm-static-dot pt-1'>
+                <input class="template" type="radio" 
+                  name="" value='4'>
+                <label onclick='updateRow(this)'></label> 
+              </div>
+              <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                <input class="template" type="radio" 
+                  name="" value='5'>
+                <label onclick='updateRow(this)'></label> 
+              </div>
+            </div>    
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <div class='col-12 d-grid gap-2'>
+      <button class="btn btn-primary" type="button"
+        data-bs-toggle="modal" data-bs-target="#disciplineModel"
+      >
+        Add Discipline
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id='backgrounds' class='col-md-6 col-xl-4 pb-3'>
+  <div class='row'>
+    <h3 class='display-6 text-center'>Backgrounds</h3>
+
+    <template id='bg-template'>
+      <div id='template-id' class='col-12'>
+        <div class='row my-2 ms-1'>
+          <input class='col px-1 w-100 underline-input' 
+            id='template-name' type='text'>
+          <div class='col-auto'>
+            <div class='row'>
+              <div class='col hidden-dot p-0'>                    
+                <input class="template" type="radio" 
+                    name="" value='0'>              
+              </div>
+              <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+                <input class="template " type="radio" 
+                    name="" value='1' checked> 
+                <label onclick='updateRow(this)'></label>               
+              </div>
+              <div class='col-auto px-0 vtm-static-dot pt-1'>
+                <input class="template " type="radio" 
+                  name="" value='2'>
+                <label onclick='updateRow(this)'></label> 
+              </div>
+              <div class='col-auto px-0 vtm-static-dot pt-1'>
+                <input class="template " type="radio" 
+                  name="" value='3'>
+                <label onclick='updateRow(this)'></label> 
+              </div>
+              <div class='col-auto px-0 vtm-static-dot pt-1'>
+                <input class="template " type="radio" 
+                  name="" value='4'>
+                <label onclick='updateRow(this)'></label> 
+              </div>
+              <div class='col-auto ps-0 vtm-static-dot pt-1'>
+                <input class="template " type="radio" 
+                  name="" value='5'>
+                <label onclick='updateRow(this)'></label> 
+              </div>
+            </div>    
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <div class='col-12 d-grid gap-2'>
+      <button class="btn btn-primary" type="button"
+        data-bs-toggle="modal" data-bs-target="#bgModel"
+      >
+        Add Background
+      </button>
+    </div>
+  </div>
+</div> 
+
+<div id='virtues' class='col-md-6 col-xl-4 pb-3'>
+  <h3 class='display-6 text-center'>Virtues</h3>
+  <div class='row'>
+            
+  <div id='conscience' class='col-12 my-2'>              
+    <div class='row my-auto'>
+      <label id='conscienceLabel' class='col-auto my-auto'>Conscience</label>
+      <div class='col w-100 underline'></div>
+      <div class='col-auto'>
+        <div class='row'>
+          <div class='col hidden-dot p-0'>                    
+            <input class="" type="radio" 
+                name="conscienceDot" id="conscienceDot0" value='0'>              
+          </div>
+          <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+            <input class="" type="radio" 
+                name="conscienceDot" id="conscienceDot1" 
+                value='1' checked> 
+            <label onclick='updateRow(this)'></label>               
+          </div>
+          <div class='col-auto px-0 vtm-static-dot pt-1'>
+            <input class="" type="radio" 
+              name="conscienceDot" id="conscienceDot2" value='2'>
+            <label onclick='updateRow(this)'></label> 
+          </div>
+          <div class='col-auto px-0 vtm-static-dot pt-1'>
+            <input class="" type="radio" 
+              name="conscienceDot" id="conscienceDot3" value='3'>
+            <label onclick='updateRow(this)'></label> 
+          </div>
+          <div class='col-auto px-0 vtm-static-dot pt-1'>
+            <input class="" type="radio" 
+              name="conscienceDot" id="conscienceDot4" value='4'>
+            <label onclick='updateRow(this)'></label> 
+          </div>
+          <div class='col-auto ps-0 vtm-static-dot pt-1'>
+            <input class="" type="radio" 
+              name="conscienceDot" id="conscienceDot5" value='5'>
+            <label onclick='updateRow(this)'></label> 
+          </div>
+        </div>
+      </div>  
+    </div>               
+  </div>
+            
+  <div id='self-control' class='col-12 my-2'>
+    <div class='row'>
+      <label id='selfControlLabel' class='col-auto my-auto'>
+        Self-Control
+      </label>
+      <div class='col w-100 underline'></div>
+      <div class='col-auto'>
+        <div class='row'>
+          <div class='col hidden-dot p-0'>                    
+            <input class="" type="radio" 
+                name="self-controlDot" id="self-controlDot0" value='0'>              
+          </div>
+          <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+            <input class="" type="radio" 
+                name="self-controlDot" id="self-controlDot1" 
+                value='1' checked> 
+            <label onclick='updateRow(this)'></label>               
+          </div>
+          <div class='col-auto px-0 vtm-static-dot pt-1'>
+            <input class="" type="radio" 
+              name="self-controlDot" id="self-controlDot2" value='2'>
+            <label onclick='updateRow(this)'></label> 
+          </div>
+          <div class='col-auto px-0 vtm-static-dot pt-1'>
+            <input class="" type="radio" 
+              name="self-controlDot" id="self-controlDot3" value='3'>
+            <label onclick='updateRow(this)'></label> 
+          </div>
+          <div class='col-auto px-0 vtm-static-dot pt-1'>
+            <input class="" type="radio" 
+              name="self-controlDot" id="self-controlDot4" value='4'>
+            <label onclick='updateRow(this)'></label> 
+          </div>
+          <div class='col-auto ps-0 vtm-static-dot pt-1'>
+            <input class="" type="radio" 
+              name="self-controlDot" id="self-controlDot5" value='5'>
+            <label onclick='updateRow(this)'></label> 
+          </div>
+        </div>    
+      </div>
+    </div>
+  </div>
+            
+    <div id='courage' class='col-12 my-2'>
+      <div class='row my-auto'>
+        <label class='col-auto my-auto'>Courage</label>
+        <div class='col w-100 underline'></div>
+        <div class='col-auto'>
+          <div class='row'>
+            <div class='col hidden-dot p-0'>                    
+              <input class="" type="radio" 
+                  name="courageDot" id="courageDot0" value='0'>              
+            </div>
+            <div class='col-auto pe-0 vtm-static-dot pt-1 vtm-static-filled'>                    
+              <input class="" type="radio" 
+                  name="courageDot" id="courageDot1" value='1' checked> 
+              <label onclick='updateRow(this)'></label>               
+            </div>
+            <div class='col-auto px-0 vtm-static-dot pt-1'>
+              <input class="" type="radio" 
+                name="courageDot" id="courageDot2" value='2'>
+              <label onclick='updateRow(this)'></label> 
+            </div>
+            <div class='col-auto px-0 vtm-static-dot pt-1'>
+              <input class="" type="radio" 
+                name="courageDot" id="courageDot3" value='3'>
+              <label onclick='updateRow(this)'></label> 
+            </div>
+            <div class='col-auto px-0 vtm-static-dot pt-1'>
+              <input class="" type="radio" 
+                name="courageDot" id="courageDot4" value='4'>
+              <label onclick='updateRow(this)'></label> 
+            </div>
+            <div class='col-auto ps-0 vtm-static-dot pt-1'>
+              <input class="" type="radio" 
+                name="courageDot" id="courageDot5" value='5'>
+              <label onclick='updateRow(this)'></label> 
+            </div>
+          </div>    
+        </div>
+      </div>
+    </div>           
+  </div>
+</div> 
+{% endblock advantages %}
