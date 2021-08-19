@@ -1,0 +1,10 @@
+
+/* Hide scrollbar for Chrome */
+.no-scroll-bar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE and Edge */
+.no-scroll-bar {
+  -ms-overflow-style: none;
+}
