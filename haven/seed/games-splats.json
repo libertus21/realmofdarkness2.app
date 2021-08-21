@@ -1,0 +1,21 @@
+[
+    {
+        "model": "haven.Game",
+        "pk": 1,
+        "fields": {
+          "name": "Vampire: The Masquerade 20th Anniversary Edition",
+          "slug": "vtm20th",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Splat",
+        "pk": 1,
+        "fields": {
+          "name": "Vampire",
+          "slug": "vampire20th",
+          "game": 1,
+          "description": ""
+        }
+    }
+]

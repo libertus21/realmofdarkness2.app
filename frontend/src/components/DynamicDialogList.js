@@ -18,22 +18,20 @@ class DynamicDialogList extends React.Component
     {
         super(props);
 
-        this.dialogList = [];
-
         this.handleClose = this.handleClose.bind(this);
-        this.defineDialogList = this.defineDialogList.bind(this);
-
-        this.defineDialogList();
+        this.initDialogList = this.initDialogList.bind(this);
     }
 
-    defineDialogList()
+    initDialogList()
     {
-        this.dialogList = Object.keys(this.props.options).map((key) => {
+        if (!this.props.options) return "";
+
+        const dialogList = Object.keys(this.props.options).map((key) => {
             let option = this.props.options[key];
             return (
                 <ListItem key={option.slug}>
                     <Button variant="outlined"
-                    color="error"
+                    color="secondary"
                     fullWidth={true}
                     onClick={this.handleClose}
                     value={option.slug}
@@ -43,10 +41,13 @@ class DynamicDialogList extends React.Component
                 </ListItem>
             );
         });
+
+        return dialogList;
     }
 
     handleClose(e)
     {
+        if (!this.props.options) return this.props.onClose();
         this.props.onClose(this.props.options[e.target.value]);
     }
 
@@ -62,7 +63,7 @@ class DynamicDialogList extends React.Component
                 </DialogTitle>
                 <DialogContent className="no-scroll-bar">
                     <List>
-                        {this.dialogList} 
+                        {this.initDialogList()} 
                     </List>
                 </DialogContent>
                               

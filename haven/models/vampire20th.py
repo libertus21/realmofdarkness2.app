@@ -23,14 +23,57 @@ class Clan20th(models.Model):
 class Generation20th(models.Model):
     pass
 
+class Discipline20thLevel(models.Model):
+    character = models.ForeignKey('haven.Character', on_delete=models.CASCADE)
+    discipline = models.ForeignKey('haven.Discipline20th', on_delete=models.CASCADE)
+    level = models.IntegerField(default=1)
+
 class Discipline20th(models.Model):
-    pass
+    characters = models.ManyToManyField('haven.Character', 
+        through=Discipline20thLevel)
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50, unique=True)
+    referance = models.CharField(max_length=50, blank=True)
+    description = models.TextField()
 
 class DisciplinePowers20th(models.Model):
     discipline = models.ForeignKey(Discipline20th, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50, unique=True)
+    referance = models.CharField(max_length=50, blank=True)
+    description = models.TextField()
+    system = models.TextField()
 
-class CharDiscipline20th(models.Model):
-    vamp = models.ForeignKey(Vampire20th, on_delete=models.CASCADE)
+class Path20th(models.Model):
     discipline = models.ForeignKey(Discipline20th, on_delete=models.CASCADE)
-    dots = models.IntegerField(default=1)
-    powers = models.ManyToManyField(DisciplinePowers20th)
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50, unique=True)
+    referance = models.CharField(max_length=50, blank=True)
+    description = models.TextField()
+
+class PathPowers20th(models.Model):
+    discipline = models.ForeignKey(Discipline20th, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50, unique=True)
+    referance = models.CharField(max_length=50, blank=True)
+    description = models.TextField()
+    system = models.TextField()
+
+class Rituals20th(models.Model):
+    discipline = models.ForeignKey(Discipline20th, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50, unique=True)
+    referance = models.CharField(max_length=50, blank=True)
+    description = models.TextField()
+
+class VirtueLevel(models.Model):
+    character = models.ForeignKey('haven.Character', on_delete=models.CASCADE)
+    virtue = models.ForeignKey('haven.Virtue', on_delete=models.CASCADE)
+    level = models.IntegerField(default=1)
+
+class Virtue(models.Model):
+    characters = models.ManyToManyField('haven.Character', through=VirtueLevel)
+    slug = models.SlugField(max_length=50, unique=True) 
+    name = models.CharField(max_length=50)
+    referance = models.CharField(max_length=50, blank=True)
+    description = models.TextField()

@@ -1,0 +1,362 @@
+[
+    {
+      "model": "haven.Discipline20th",
+      "pk": 1,
+      "fields": {
+        "name": "Animalism",
+        "slug": "animalism",                    
+        "referance": "V20 Core p128",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Discipline20th",
+      "pk": 2,
+      "fields": {
+        "name": "Assamite Sorcery",
+        "slug": "assamiteSorcery",                    
+        "referance": "V20 Core p441",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Discipline20th",
+      "pk": 3,
+      "fields": {
+        "name": "Auspex",
+        "slug": "auspex",                    
+        "referance": "V20 Core p134",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Discipline20th",
+      "pk": 4,
+      "fields": {
+        "name": "Bardo",
+        "slug": "bardo",                    
+        "referance": "V20 Core p443",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Discipline20th",
+      "pk": 5,
+      "fields": {
+        "name": "Celerity",
+        "slug": "celerity",                    
+        "referance": "V20 Core p142",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Discipline20th",
+      "pk": 6,
+      "fields": {
+        "name": "Chimerstry",
+        "slug": "chimerstry",                    
+        "referance": "V20 Core p144",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Discipline20th",
+      "pk": 7,
+      "fields": {
+        "name": "Daimoinon",
+        "slug": "daimoinon",                    
+        "referance": "V20 Core p445",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Discipline20th",
+      "pk": 8,
+      "fields": {
+        "name": "Dark Thaumaturgy",
+        "slug": "darkThaumaturgy",                    
+        "referance": "Rites of the Blood 167",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Discipline20th",
+      "pk": 9,
+      "fields": {
+        "name": "Dementation",
+        "slug": "dementation",                    
+        "referance": "V20 Core p148",
+        "description": ""
+      }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 10,
+        "fields": {
+          "name": "Dominate",
+          "slug": "dominate",                    
+          "referance": "V20 Core p152",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 11,
+        "fields": {
+          "name": "Flight",
+          "slug": "flight",                    
+          "referance": "V20 Core p448",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 12,
+        "fields": {
+          "name": "Fortitude",
+          "slug": "fortitude",                    
+          "referance": "V20 Core p158",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 13,
+        "fields": {
+          "name": "Infernalism",
+          "slug": "infernalism",                    
+          "referance": "Rites of the Blood 117",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 14,
+        "fields": {
+          "name": "Koldunic Sorcery",
+          "slug": "koldunicSorcery",                    
+          "referance": "Black Hand 170",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 15,
+        "fields": {
+          "name": "Melpominee",
+          "slug": "melpominee",                    
+          "referance": "V20 Core p453",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 16,
+        "fields": {
+          "name": "Mytherceria",
+          "slug": "mytherceria",                    
+          "referance": "V20 Core p455",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 17,
+        "fields": {
+          "name": "Necromancy",
+          "slug": "necromancy",                    
+          "referance": "V20 Core p163",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 18,
+        "fields": {
+          "name": "Obeah",
+          "slug": "obeah",                    
+          "referance": "V20 Core p457",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 19,
+        "fields": {
+          "name": "Obfuscate",
+          "slug": "obfuscate",                    
+          "referance": "V20 Core p184",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 20,
+        "fields": {
+          "name": "Obtenebration",
+          "slug": "obtenebration",                    
+          "referance": "V20 Core p188",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 21,
+        "fields": {
+          "name": "Ogham",
+          "slug": "ogham",                    
+          "referance": "V20 Core p461",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 22,
+        "fields": {
+          "name": "Potence",
+          "slug": "potence",                    
+          "referance": "V20 Core p192",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 23,
+        "fields": {
+          "name": "Presence",
+          "slug": "presence",                    
+          "referance": "V20 Core p193",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 24,
+        "fields": {
+          "name": "Protean",
+          "slug": "protean",                    
+          "referance": "V20 Core p199",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 25,
+        "fields": {
+          "name": "Quietus",
+          "slug": "quietus",                    
+          "referance": "V20 Core p203",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 26,
+        "fields": {
+          "name": "Sanguinus",
+          "slug": "sanguinus",                    
+          "referance": "V20 Core p464",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 27,
+        "fields": {
+          "name": "Serpentis",
+          "slug": "serpentis",                    
+          "referance": "V20 Core p209",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 28,
+        "fields": {
+          "name": "Setite Sorcery",
+          "slug": "setiteSorcery",                    
+          "referance": "Rites of the Blood 166",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 29,
+        "fields": {
+          "name": "Spiritus",
+          "slug": "spiritus",                    
+          "referance": "V20 Core p466",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 30,
+        "fields": {
+          "name": "Temporis",
+          "slug": "temporis",                    
+          "referance": "V20 Core p467",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 31,
+        "fields": {
+          "name": "Thanatosis",
+          "slug": "thanatosis",                    
+          "referance": "V20 Core p471",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 32,
+        "fields": {
+          "name": "Thaumaturgical Countermagic",
+          "slug": "thaumaturgicalCountermagic",                    
+          "referance": "V20 Core p228",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 33,
+        "fields": {
+          "name": "Thaumaturgy",
+          "slug": "thaumaturgy",                    
+          "referance": "V20 Core p212",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 34,
+        "fields": {
+          "name": "Valeren",
+          "slug": "valeren",                    
+          "referance": "V20 Core p474",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 35,
+        "fields": {
+          "name": "Vicissitude",
+          "slug": "vicissitude",                    
+          "referance": "V20 Core p241",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Discipline20th",
+        "pk": 36,
+        "fields": {
+          "name": "Visceratika",
+          "slug": "visceratika",                    
+          "referance": "V20 Core p476",
+          "description": ""
+        }
+    }
+  ]

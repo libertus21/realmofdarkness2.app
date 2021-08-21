@@ -4,7 +4,7 @@ import React from 'react';
 
 /*
     props: {
-        label: {id: string, name: string}
+        label: {slug: string, name: string}
         selected: int
         onChange: function({label: {}}),
     }
@@ -15,16 +15,15 @@ class LabeledDotGroup extends React.Component
     {
         super(props);
 
-        this.onDotclicked = this.onDotclicked.bind(this);
+        this.onDotClicked = this.onDotClicked.bind(this);
     }
 
-    onDotclicked(selected)
+    onDotClicked(selected)
     {
-        this.props.onChange({[this.props.label.id]: {
-            id: this.props.label.id,
-            name: this.props.label.name,
+        this.props.onChange({
+            slug: this.props.label.slug,
             level: selected
-        }});
+        });
     }
 
 
@@ -49,6 +48,7 @@ class LabeledDotGroup extends React.Component
                     <DotGroup 
                         dots={5} 
                         selected={this.props.selected ? this.props.selected : 0}
+                        onDotClicked={this.onDotClicked}
                     />
                 </Grid>                
             </Grid>

@@ -1,0 +1,52 @@
+[
+    {
+      "model": "haven.Virtue",
+      "pk": 1,
+      "fields": {
+        "name": "Conscience",
+        "slug": "conscience",         
+        "referance": "",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Virtue",
+      "pk": 2,
+      "fields": {
+        "name": "Conviction",
+        "slug": "conviction",          
+        "referance": "",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Virtue",
+      "pk": 3,
+      "fields": {
+        "name": "Self-Control",
+        "slug": "selfControl",        
+        "referance": "",
+        "description": ""
+      }
+    },
+    {
+        "model": "haven.Virtue",
+        "pk": 4,
+        "fields": {
+          "name": "Instinct",
+          "slug": "instinct",        
+          "referance": "",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Virtue",
+        "pk": 5,
+        "fields": {
+          "name": "Courage",
+          "slug": "courage",        
+          "referance": "",
+          "description": ""
+        }
+      }
+  ]
