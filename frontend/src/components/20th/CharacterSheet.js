@@ -131,12 +131,15 @@ class CharacterSheet extends React.Component
                 <Grid container columnSpacing={{xs: 5}} py={2.5}>
                     <DialogDotGroup 
                         label={{slug: 'disciplines_v20', name: "Disciplines"}}
-                        active={this.state.disciplines}
+                        active={this.state.disciplines_v20}
                         options={this.state.disciplineOptions} 
+                        onChange={this.onChange}
                     />
                     <DialogDotGroup 
-                        label="Backgrounds" 
-                        options={""} 
+                        label={{slug: 'backgrounds_v20', name: "Backgrounds"}}
+                        active={this.state.backgrounds_v20} 
+                        options={this.state.backgroundOptions} 
+                        onChange={this.onChange}
                     />
                     <Virtues 
                         virtues={this.state.virtues}

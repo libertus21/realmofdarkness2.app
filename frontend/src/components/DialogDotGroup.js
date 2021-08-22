@@ -5,6 +5,7 @@ import DynamicDialog from './DynamicDialogList';
 
 /*
     props: {
+        label: {slug: string, name: string}
         options: {},
         active: {},
         onChange: function({})
@@ -21,21 +22,25 @@ class DialogDotGroup extends React.Component
         this.initRows = this.initRows.bind(this);
         this.onClose = this.onClose.bind(this);
         this.onChange = this.onChange.bind(this);
-
-        this.rows = [];
-        this.initRows(this.state.options);
     }
 
-    onChange()
+    onChange(clicked)
     {
+        const response = {}
+        const clone = JSON.parse(JSON.stringify(this.props.active));
+        clone[clicked.slug] = {slug: clicked.slug, level: clicked.level};
+            response.state = {[this.props.label.slug]: clone};
+            response.server = {[this.props.label.slug]: {
+                slug: clicked.slug, level: clicked.level
+        }};
 
+        this.props.onChange(response);
     }
 
     initRows(active)
     {
         if (!active) return "";
-
-        this.rows = Object.keys(active).map((key) => {
+        const rows = Object.keys(active).map((key) => {
             const act = active[key];
             const option = this.props.options[act.slug];
             return (
@@ -43,11 +48,13 @@ class DialogDotGroup extends React.Component
                     <UnderlinedDotGroup 
                         label={{slug: option.slug, name: option.name}}
                         selected={act.level}
-                        onchange={this.onChange} 
+                        onChange={this.onChange} 
                     />
                 </Grid>
             );
         });
+
+        return rows
     }
     
     handleClickOpen()
@@ -60,18 +67,31 @@ class DialogDotGroup extends React.Component
         this.setState({open: false})
         if (clicked) 
         {
-            if (this.state.options[clicked.slug])
+            const response = {state: null, server: {}}
+            if (this.props.active && this.props.active[clicked.slug])
             {
-                const clone = JSON.parse(JSON.stringify(this.state.options));
+                const clone = JSON.parse(JSON.stringify(this.props.active));
                 delete clone[clicked.slug];
-                this.setState({options: clone});
+                response.state = {[this.props.label.slug]: clone};
+                response.server = {[this.props.label.slug]: {
+                    wasRemoved: true, slug: clicked.slug
+                }};
             }
             else
             {
-                const clone = JSON.parse(JSON.stringify(this.state.options));
-                clone[clicked.slug] = clicked;
-                this.setState({options: clone});
+                let clone;
+                if (this.props.active)
+                    clone = JSON.parse(JSON.stringify(this.props.active));
+                else
+                    clone = {};
+
+                clone[clicked.slug] = {slug: clicked.slug, level: 1};
+                response.state = {[this.props.label.slug]: clone};
+                response.server = {[this.props.label.slug]: {
+                    slug: clicked.slug, level: 1
+                }};
             }
+            this.props.onChange(response);
         }
     }
 

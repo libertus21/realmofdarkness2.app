@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from haven.models import Character, AttributeLevel, AbilityLevel, VirtueLevel,\
-    Discipline20th
+    Discipline20th, Discipline20thLevel, Background20th, CharBackground20th
 
 class CharacterConsumer(WebsocketConsumer):
     def connect(self):
@@ -30,26 +30,68 @@ class CharacterConsumer(WebsocketConsumer):
     def handle_update(self, update, char_pk):
         for key, value in update.items():
             if (key == "attributeLevel"):
-                attr = AttributeLevel.objects.filter(
+                attr = AttributeLevel.objects.get(
                     character=char_pk, attribute__slug=value["slug"])
                 if not attr: return
-                attr = attr[0]
                 attr.level = value["level"]
                 attr.save()
             if (key == "abilityLevel"):
-                abil = AbilityLevel.objects.filter(
+                abil = AbilityLevel.objects.get(
                     character=char_pk, ability__slug=value["slug"])
                 if not abil: return
-                abil = abil[0]
                 abil.level = value["level"]
                 abil.save()
             if (key == "virtueLevel"):
-                virtue = VirtueLevel.objects.filter(
+                virtue = VirtueLevel.objects.get(
                     character=char_pk, virtue__slug=value["slug"])
                 if not virtue: return
-                virtue = virtue[0]
                 virtue.level = value["level"]
-                virtue.save()             
+                virtue.save()
+            if (key == "disciplines_v20"):
+                disc_level = Discipline20thLevel.objects.filter(
+                    character=char_pk, 
+                    discipline__slug=value["slug"]
+                )
+                if (value.get("wasRemoved", False) and disc_level):
+                    disc_level.delete()
+                    break
+                elif (disc_level):
+                    disc_level[0].level = value["level"]
+                    disc_level[0].save()
+                else:
+                    char = Character.objects.get(pk=char_pk)
+                    disc = Discipline20th.objects.get(slug=value["slug"])
+                    disc.characters.add(char)
+                    disc_level = Discipline20thLevel.objects.get(
+                    character=char_pk, 
+                    discipline__slug=value["slug"])
+                    disc_level.level = value["level"]
+                    disc_level.save()
+            if (key == "backgrounds_v20"):
+                print("entered")
+                bg_level = CharBackground20th.objects.filter(
+                    character=char_pk, 
+                    background__slug=value["slug"]
+                )
+                if (value.get("wasRemoved", False) and bg_level):
+                    bg_level.delete()
+                    print("removed")
+                    break
+                elif (bg_level):
+                    bg_level[0].level = value["level"]
+                    bg_level[0].save()
+                    print("bg_level")
+                else:
+                    char = Character.objects.get(pk=char_pk)
+                    bg = Background20th.objects.get(slug=value["slug"])
+                    bg.characters.add(char)
+                    bg_level = CharBackground20th.objects.get(
+                    character=char_pk, 
+                    background__slug=value["slug"])
+                    bg_level.level = value["level"]
+                    bg_level.save()
+                    print("saved")               
+
 
 def load_character(character_pk):
     response = {
@@ -71,6 +113,19 @@ def prepare_disciplines():
             "description": disc.description
         }
     return disciplines
+
+def prepare_backgrounds():
+    bg_set = Background20th.objects.all()
+    bgs = {}
+
+    for bg in bg_set:
+        bgs[bg.slug] = {
+            "name": bg.name,
+            "slug": bg.slug,
+            "refernace": bg.referance,
+            "description": bg.description
+        }
+    return bgs
 
 def prepare_character(character_pk):
     try:
@@ -114,8 +169,30 @@ def prepare_character(character_pk):
             "description": ability.description,
             "level": ability_level.level
         }
+
+    ##################### Backgrounds ######################
+
+    bgs = CharBackground20th.objects.filter(
+            character=character
+        ).select_related("background")
+
+    backgrounds_v20 = {}
+
+    for bg_level in bgs:
+        bg = bg_level.background
+        backgrounds_v20[bg.slug] = {"slug": bg.slug,
+            "level": bg_level.level}
     
     ##################### Vampire ######################
+    char = {
+        "pk": str(character.id),
+        "name": character.name,
+        "attributes": attributes,
+        "abilities": abilities,
+        "backgroundOptions": prepare_backgrounds(),
+        "backgrounds_v20": backgrounds_v20,
+    }
+    
     if (character.splat.slug == 'vampire20th'):        
         virtues_set = VirtueLevel.objects.filter(
             character=character).select_related('virtue')
@@ -130,22 +207,21 @@ def prepare_character(character_pk):
                 "description": virtue.description,
                 "level": virtue_level.level
             }
-    
-        char = {
-            "pk": str(character.id),
-            "name": character.name,
-            "attributes": attributes,
-            "abilities": abilities,
-            "virtues": virtues,            
-            "disciplineOptions": prepare_disciplines(),
-        }
 
-    else:
-        char = {
-            "pk": str(character.id),
-            "name": character.name,
-            "attributes": attributes,
-            "abilities": abilities,
-        }
+        disciplines = Discipline20thLevel.objects.filter(
+            character=character
+        ).select_related("discipline")
+
+        disciplines_v20 = {}
+
+        for discipline_level in disciplines:
+            discipline = discipline_level.discipline
+
+            disciplines_v20[discipline.slug] = {"slug": discipline.slug,
+                "level": discipline_level.level}
+    
+        char["virtues"] = virtues            
+        char["disciplineOptions"] = prepare_disciplines()
+        char["disciplines_v20"] = disciplines_v20
 
     return char

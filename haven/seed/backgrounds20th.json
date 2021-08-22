@@ -1,0 +1,342 @@
+[
+    {
+      "model": "haven.Background20th",
+      "pk": 1,
+      "fields": {
+        "name": "Allies",
+        "slug": "allies",                    
+        "referance": "V20 Core p111",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Background20th",
+      "pk": 2,
+      "fields": {
+        "name": "Alternate Identity",
+        "slug": "alternateIdentity",                    
+        "referance": "V20 Core p111",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Background20th",
+      "pk": 3,
+      "fields": {
+        "name": "Anarch Info Exchange",
+        "slug": "anarchInfoExchange",                    
+        "referance": "Anarchs Unbound p98",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Background20th",
+      "pk": 4,
+      "fields": {
+        "name": "Anarch Status",
+        "slug": "anarchStatus",                    
+        "referance": "Anarchs Unbound p98",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Background20th",
+      "pk": 5,
+      "fields": {
+        "name": "Armory",
+        "slug": "armory",                    
+        "referance": "Anarchs Unbound p99, Hunters Hunted II p37",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Background20th",
+      "pk": 6,
+      "fields": {
+        "name": "Artifact",
+        "slug": "artifact",                    
+        "referance": "Hunters Hunted II p140",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Background20th",
+      "pk": 7,
+      "fields": {
+        "name": "Base of Operations",
+        "slug": "baseOfOperations",                    
+        "referance": "Hunters Hunted II p38",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Background20th",
+      "pk": 8,
+      "fields": {
+        "name": "Black Hand Membership",
+        "slug": "blackHandMembership",                    
+        "referance": "Rites of the Blood 167",
+        "description": "V20 Core p111"
+      }
+    },
+    {
+      "model": "haven.Background20th",
+      "pk": 9,
+      "fields": {
+        "name": "Blasphemous Shrine",
+        "slug": "blasphemousShrine",                    
+        "referance": "Rites of the Blood p78",
+        "description": ""
+      }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 10,
+        "fields": {
+          "name": "Communal Haven",
+          "slug": "communalHaven",                    
+          "referance": "Anarchs Unbound p100",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 11,
+        "fields": {
+          "name": "Contacts",
+          "slug": "contacts",                    
+          "referance": "V20 Core p112",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 12,
+        "fields": {
+          "name": "Cult",
+          "slug": "cult",                    
+          "referance": "Black Hand p50",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 13,
+        "fields": {
+          "name": "Domain",
+          "slug": "domain",                    
+          "referance": "Rites of the Blood 112",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 14,
+        "fields": {
+          "name": "Domitor",
+          "slug": "Domitor",                    
+          "referance": "Ghouls & Revenants p122",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 15,
+        "fields": {
+          "name": "Double Life",
+          "slug": "doubleLife",                    
+          "referance": "Ghouls & Revenants 122",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 16,
+        "fields": {
+          "name": "Fame",
+          "slug": "fame",                    
+          "referance": "V20 Core p114",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 17,
+        "fields": {
+          "name": "Family Elder",
+          "slug": "familyElder",                    
+          "referance": "Ghouls & Revenants p122",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 18,
+        "fields": {
+          "name": "Generation",
+          "slug": "generation",                    
+          "referance": "V20 Core p114",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 19,
+        "fields": {
+          "name": "Guide",
+          "slug": "guide",                    
+          "referance": "Hunters Hunted II II p39",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 20,
+        "fields": {
+          "name": "Herd",
+          "slug": "herd",                    
+          "referance": "V20 Core p114",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 21,
+        "fields": {
+          "name": "Influence",
+          "slug": "influence",                    
+          "referance": "V20 Core p114",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 22,
+        "fields": {
+          "name": "Library",
+          "slug": "library",                    
+          "referance": "Hunters Hunted II p140",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 23,
+        "fields": {
+          "name": "Majordomo",
+          "slug": "majordomo",                    
+          "referance": "Ghouls & Revenants p124",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 24,
+        "fields": {
+          "name": "Memento de Morte",
+          "slug": "mementoDeMorte",                    
+          "referance": "Lore of the Clans p107",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 25,
+        "fields": {
+          "name": "Mentor",
+          "slug": "mentor",                    
+          "referance": "V20 Core p115",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 26,
+        "fields": {
+          "name": "Mob",
+          "slug": "mob",                    
+          "referance": "Hunters Hunted II p122",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 27,
+        "fields": {
+          "name": "Rank",
+          "slug": "rank",                    
+          "referance": "Hunters Hunted II p134",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 28,
+        "fields": {
+          "name": "Reliquary",
+          "slug": "Reliquary",                    
+          "referance": "Hunters Hunted II p122",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 29,
+        "fields": {
+          "name": "Requisition",
+          "slug": "Requisition",                    
+          "referance": "Hunters Hunted II p134, p155",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 30,
+        "fields": {
+          "name": "Resources",
+          "slug": "resources",                    
+          "referance": "V20 Core p115",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 31,
+        "fields": {
+          "name": "Retainers",
+          "slug": "retainers",                    
+          "referance": "V20 Core p116",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 32,
+        "fields": {
+          "name": "Rituals",
+          "slug": "rituals",                    
+          "referance": "V20 Core p117",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 33,
+        "fields": {
+          "name": "Spirit Slaves",
+          "slug": "spiritSlaves",                    
+          "referance": "Lore of the Clans p107",
+          "description": ""
+        }
+    },
+    {
+        "model": "haven.Background20th",
+        "pk": 34,
+        "fields": {
+          "name": "Status",
+          "slug": "status",                    
+          "referance": "V20 Core p118, Hunters Hunted II 123",
+          "description": ""
+        }
+    }
+  ]
