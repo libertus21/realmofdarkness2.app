@@ -68,19 +68,16 @@ class CharacterConsumer(WebsocketConsumer):
                     disc_level.level = value["level"]
                     disc_level.save()
             if (key == "backgrounds_v20"):
-                print("entered")
                 bg_level = CharBackground20th.objects.filter(
                     character=char_pk, 
                     background__slug=value["slug"]
                 )
                 if (value.get("wasRemoved", False) and bg_level):
                     bg_level.delete()
-                    print("removed")
                     break
                 elif (bg_level):
                     bg_level[0].level = value["level"]
                     bg_level[0].save()
-                    print("bg_level")
                 else:
                     char = Character.objects.get(pk=char_pk)
                     bg = Background20th.objects.get(slug=value["slug"])
@@ -89,8 +86,7 @@ class CharacterConsumer(WebsocketConsumer):
                     character=char_pk, 
                     background__slug=value["slug"])
                     bg_level.level = value["level"]
-                    bg_level.save()
-                    print("saved")               
+                    bg_level.save()             
 
 
 def load_character(character_pk):

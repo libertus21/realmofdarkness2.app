@@ -147,28 +147,37 @@ class CharacterSheet extends React.Component
                     />
                 </Grid>
                 <Grid container>
-                  <MeritsFlaws options={""} />
+                    <MeritsFlaws 
+                        meritOptions={this.state.meritOptions}
+                        flawOptions={this.state.flawOptions}
+                        activeMerits={this.state.merits}
+                        activeFlaws={this.state.flaws}
+                        onChange={this.onChange}
+                    />
                   <Grid item xs={4}>
                     <Morality20th 
-                        morality={
-                            this.state.morality ? 
-                            this.state.morality : 
-                            {id: "", name: "Humanity", 
-                            level: 1, bearing: "Normalcy"}
-                        }
+                        morality={this.state.morality}
                         onChange={this.onChange}                        
-                        options={""}  
+                        options={this.state.moralityOptions}  
                     />
-                    <Willpower20th />
+                    <Willpower20th 
+                    
+                    />
                     <BloodPool 
                         bloodPool={this.state.bloodPool} 
                         onChange={this.onChange} 
                     />
                   </Grid>
                   <Grid item xs={4}>
-                    <Health20th />
-                    <Weakness />
-                    <Exp20th />
+                    <Health20th 
+                    
+                    />
+                    <Weakness 
+                    
+                    />
+                    <Exp20th 
+                    
+                    />
                   </Grid>
                 </Grid>
             </Grid>

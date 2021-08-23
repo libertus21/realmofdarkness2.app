@@ -10,6 +10,7 @@ import React from 'react';
         onClose: handleClose(clicked)
         options: Object // contains all the choices
         open: bool // opens the dialog or not
+        label: string // Heading
     }
  */
 class DynamicDialogList extends React.Component

@@ -23,16 +23,21 @@ class Morality20th extends React.Component
         this.handleOpen = this.handleOpen.bind(this);
         this.onClose = this.onClose.bind(this);
         this.onDotClicked = this.onDotClicked.bind(this);
+        this.getBearing = this.getBearing.bind(this);
     }
 
     onDotClicked(selected)
     {
-        this.props.onChange({morality: {
-            id: this.props.morality.id,
-            name: this.props.morality.name, 
-            level: selected,
-            bearing: this.props.morality.bearing,
-        }});
+        this.props.onChange({
+            state: {morality: {
+                slug: this.props.morality.slug,
+                level: selected,
+            }},
+            server: {morality: {
+                slug: this.props.morality.slug, 
+                level: selected,
+            }}
+        });
     }
 
     handleOpen()
@@ -45,17 +50,46 @@ class Morality20th extends React.Component
         this.setState({openDialog: false});
         if (clicked) 
         {
-            this.props.onChange({morality: {
-                id: clicked.id,
-                name: clicked.name, 
-                level: this.props.morality.level,
-                bearing: clicked.bearing,
-            }});
+            this.props.onChange(
+                {
+                    state: 
+                    {
+                        morality: {
+                            slug: clicked.slug,
+                            level: this.props.morality.level,
+                        }
+                    },
+                    server: 
+                    {
+                        morality: {
+                            slug: clicked.slug,
+                            level: this.props.morality.level,
+                        }
+                    }                
+                }
+            );
         }
+    }
+
+    getBearing()
+    {
+        if (!this.props.morality) return "";
+
+        let modifier = "";
+
+        if (this.props.morality.level === 10) modifier = "(-2 Diff)";
+        else if (this.props.morality.level >= 8) modifier = "(-1 Diff)";
+        else if (this.props.morality.level >= 4) modifier = "( 0 )";
+        else if (this.props.morality.level >= 2) modifier = "(+1 Diff)";
+        else if (this.props.morality.level === 1) modifier = "(+2 Diff)";
+        else modifier = "( Wight )"
+
+        return modifier;
     }
 
     render()
     {
+        
         return (
             <Grid container item xs={12}>
                 <Grid item xs={12} mb={1} sx={{textAlign: "center"}}>
@@ -68,7 +102,8 @@ class Morality20th extends React.Component
                         textAlign: "center", borderBottom: 1
                         }}
                     >
-                        {this.props.morality.name}
+                        {this.props.morality ? 
+                            this.props.morality.name : "Loading"}
                     </Grid>
                     <Grid item xs={3} />
                 </Grid>
@@ -77,7 +112,8 @@ class Morality20th extends React.Component
                     <Grid item xs />
                     <DotGroup 
                         dots={10} 
-                        selected={this.props.morality.level}
+                        selected={this.props.morality ? 
+                            this.props.morality.level : 1}
                         onDotClicked={this.onDotClicked} 
                     />
                     <Grid item xs />
@@ -89,9 +125,10 @@ class Morality20th extends React.Component
                     <Grid item xs={4} mx={0.5} 
                         sx={{borderBottom: 1, textAlign: "center"}}
                     >
-                        {this.props.morality.bearing}
+                        {this.props.morality ? 
+                            this.props.morality.bearing : "Loading"}
                     </Grid>
-                    <Box>( 0 )</Box>
+                    <Box>{this.getBearing()}</Box>
                     <Grid item xs />
                 </Grid>
 
@@ -99,6 +136,7 @@ class Morality20th extends React.Component
                     onClose={this.onClose} 
                     options={this.props.options}
                     open={this.state.openDialog}
+                    label="Morality"
                 />             
             </Grid>            
         );

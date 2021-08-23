@@ -2,14 +2,22 @@ import { Grid, Button, Stack } from '@material-ui/core';
 import React from 'react';
 import DynamicDialogList from '../DynamicDialogList';
 
-
+/*
+    props: {
+        meritOptions: {},
+        flawOptions: {},
+        activeMerits: {},
+        activeFlaws: {},
+        onChange: function({})
+    }
+*/
 class MeritsFlaws extends React.Component
 {
     constructor(props)
     {
         super(props);
         this.state = {
-            meritOpen: false, flawOpen: false, merits: {}, flaws: {}
+            meritOpen: false, flawOpen: false
         }
 
         this.handleMeritOpen = this.handleMeritOpen.bind(this);
@@ -17,19 +25,16 @@ class MeritsFlaws extends React.Component
         this.initRows = this.initRows.bind(this);
         this.onMeritClose = this.onMeritClose.bind(this);
         this.onFlawClose = this.onFlawClose.bind(this);
-
-        this.merits = [];
-        this.flaws = [];
-        this.initRows(this.state.merits, "merits");
-        this.initRows(this.state.flaws, "flaws");
     }
 
-    initRows(dict, state)
+    initRows(active)
     {
+        if (!active) return "";
+
         let total = 0;
-        let rows = Object.keys(dict).map((key) => {
-            const field = dict[key];
-            if (field.cost) total += parseInt(field.cost);
+        const rows = Object.keys(active).map((key) => {
+            const field = active[key];
+            if (field.cost) total += field.cost;
             return (
                 <Grid container item xs={12} key={field.slug}>
                     <Grid item xs={10} mr={1.5} my={1} sx={{borderBottom: 1}}>
@@ -58,8 +63,7 @@ class MeritsFlaws extends React.Component
             )          
         }
 
-        if (state === 'merits') this.merits = rows;
-        else this.flaws = rows;
+        return rows;
     }
     
     handleMeritOpen()
@@ -84,24 +88,35 @@ class MeritsFlaws extends React.Component
         this.onClose(clicked, "flaws");      
     }
 
-    onClose(clicked, state)
+    onClose(clicked, type)
     {
         if (clicked) 
         {
-            if (this.state[state][clicked.slug])
+            const response = {state: null, server: {}}
+            if (this.props[type] && this.props[type][clicked.slug])
             {
-                const clone = JSON.parse(JSON.stringify(this.state[state]));
+                const clone = JSON.parse(JSON.stringify(this.props[type]));
                 delete clone[clicked.slug];
-                this.initRows(clone, state);
-                this.setState({[state]: clone});
+                response.state = {[type]: clone};
+                response.server = {[type]: {
+                    wasRemoved: true, slug: clicked.slug
+                }};
             }
             else
             {
-                const clone = JSON.parse(JSON.stringify(this.state[state]));
-                clone[clicked.slug] = clicked;
-                this.initRows(clone, state);
-                this.setState({[state]: clone});
+                let clone;
+                if (this.props[type])
+                    clone = JSON.parse(JSON.stringify(this.props[type]));
+                else
+                    clone = {};
+
+                clone[clicked.slug] = {slug: clicked.slug, cost: clicked.cost};
+                response.state = {[type]: clone};
+                response.server = {[type]: {
+                    slug: clicked.slug, cost: clicked.cost
+                }};
             }
+            this.props.onChange(response);
         }
     }
 
@@ -122,7 +137,7 @@ class MeritsFlaws extends React.Component
                             <strong>Cost</strong>
                         </Grid>
                     </Grid>
-                    {this.merits}
+                    {this.initRows(this.props.activeMerits)}
                 </Grid>
                 <Grid container item xs my={2}>
                     <Grid container item xs={12} my={2}>
@@ -133,7 +148,7 @@ class MeritsFlaws extends React.Component
                             <strong>Cost</strong>
                         </Grid>
                     </Grid>
-                    {this.flaws}
+                    {this.initRows(this.props.activeFlaws)}
                 </Grid>
                 
                 <Grid item xs={12} my={2} 
@@ -141,14 +156,14 @@ class MeritsFlaws extends React.Component
                 >
                     <Stack direction="row" spacing={2}>
                         <Button variant="outlined" 
-                        color="error"
+                        color="secondary"
                         onClick={this.handleMeritOpen}
                         size="large"
                         >
                             Add Merit
                         </Button>
                         <Button variant="outlined" 
-                        color="error"
+                        color="secondary"
                         onClick={this.handleFlawOpen}
                         size="large"
                         >
@@ -160,14 +175,14 @@ class MeritsFlaws extends React.Component
                 <DynamicDialogList 
                     open={this.state.meritOpen} 
                     onClose={this.onMeritClose} 
-                    label="Mertis"
-                    options={this.props.options}
+                    label="Merits"
+                    options={this.props.meritOptions}
                 /> 
                 <DynamicDialogList 
                     open={this.state.flawOpen} 
                     onClose={this.onFlawClose} 
                     label="Flaws"
-                    options={this.props.options}
+                    options={this.props.flawOptions}
                 />              
             </Grid>               
         );
