@@ -15,6 +15,7 @@ class Demeanor(models.Model):
     description = models.TextField()
 
 class Willpower20th(models.Model):
+    character = models.OneToOneField('haven.Character', on_delete=models.CASCADE)
     total = models.IntegerField(default=1)
     pool = models.IntegerField(default=1)
 
@@ -32,6 +33,7 @@ class CharBackground20th(models.Model):
     level = models.IntegerField(default=1)
 
 class Health20th(models.Model):
+    character = models.OneToOneField('haven.Character', on_delete=models.CASCADE)
     total = models.IntegerField(default=7)
     bashing = models.IntegerField(default=0)
     lethal = models.IntegerField(default=0)

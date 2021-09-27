@@ -77,3 +77,26 @@ class Virtue(models.Model):
     name = models.CharField(max_length=50)
     referance = models.CharField(max_length=50, blank=True)
     description = models.TextField()
+
+class MoralityLevel(models.Model):
+    character = models.OneToOneField('haven.Character', on_delete=models.CASCADE)
+    morality = models.ForeignKey('Morality', on_delete=models.CASCADE)
+    level = models.IntegerField(default=1)
+
+class Morality(models.Model):
+    slug = models.SlugField(max_length=50, unique=True) 
+    name = models.CharField(max_length=50, unique=True)
+    conviction = models.BooleanField(default=False)
+    instinct = models.BooleanField(default=False)
+    referance = models.CharField(max_length=50, blank=True)
+    description = models.TextField()
+
+class BloodPool(models.Model):
+    character = models.OneToOneField('haven.Character', on_delete=models.CASCADE)
+    total = models.IntegerField(default=10)
+    current = models.IntegerField(default=10)
+
+class VitaePool(models.Model):
+    character = models.OneToOneField('haven.Character', on_delete=models.CASCADE)
+    total = models.IntegerField(default=5)
+    current = models.IntegerField(default=1)

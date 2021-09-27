@@ -77,7 +77,7 @@ def login_success(request):
         user.discriminator = discord_user['discriminator']
         user_id = discord_user["id"]
         avatar_id = discord_user["avatar"]
-        user.avatar = f'https://cdn.discordapp.com/avatars/{user_id}/{avatar_id}.png'
+        user.avatar_url = f'https://cdn.discordapp.com/avatars/{user_id}/{avatar_id}.png'
         user.email = discord_user['email']
         user.verified = discord_user['verified']
         user.registered = True
@@ -86,7 +86,7 @@ def login_success(request):
     else:
         user_id = discord_user["id"]
         avatar_id = discord_user["avatar"]
-        discord_user['avatar'] = f'https://cdn.discordapp.com/avatars/{user_id}/{avatar_id}.png'
+        discord_user['avatarURL'] = f'https://cdn.discordapp.com/avatars/{user_id}/{avatar_id}.png'
         user = User.objects.create_user(discord_user, is_registered=True)
 
     auth_login(request, user, backend='discordauth.backends.DiscordAuthBackend')

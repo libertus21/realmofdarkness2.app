@@ -1,0 +1,278 @@
+[
+    {
+      "model": "haven.Morality",
+      "pk": 1,
+      "fields": {
+        "name": "Humanity",
+        "slug": "humanity",
+        "conviction": false,
+        "instinct": false,         
+        "referance": "VtM 20th Core p311",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Morality",
+      "pk": 2,
+      "fields": {
+        "name": "Path of Asakku",
+        "slug": "path_of_asakku", 
+        "conviction": true,
+        "instinct": true,          
+        "referance": "Black Hand p115",
+        "description": ""
+      }
+    },
+    {
+      "model": "haven.Morality",
+      "pk": 3,
+      "fields": {
+        "name": "Path of Blood",
+        "slug": "path_of_blood",  
+        "conviction": true,
+        "instinct": false,       
+        "referance": "VtM 20th Core p316",
+        "description": ""
+      }
+    },
+    {
+        "model": "haven.Morality",
+        "pk": 4,
+        "fields": {
+          "name": "Path of the Bones",
+          "slug": "path_of_the_bones",  
+          "conviction": true,
+          "instinct": false,       
+          "referance": "VtM 20th Core p318",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 5,
+        "fields": {
+          "name": "Path of Caine",
+          "slug": "path_of_caine", 
+          "conviction": true,
+          "instinct": true,        
+          "referance": "VtM 20th Core p320",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 6,
+        "fields": {
+          "name": "Path of Cathari",
+          "slug": "path_of_cathari", 
+          "conviction": true,
+          "instinct": true,        
+          "referance": "VtM 20th Core p318",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 7,
+        "fields": {
+          "name": "Path of Death and the Soul",
+          "slug": "path_of_death_and_the_soul", 
+          "conviction": true,
+          "instinct": false,        
+          "referance": "VtM 20th Core p320",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 8,
+        "fields": {
+          "name": "Path of Ecstasy",
+          "slug": "path_of_ecstasy", 
+          "conviction": false,
+          "instinct": false,        
+          "referance": "Lore of Clans p70",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 9,
+        "fields": {
+          "name": "Path of Entelechy",
+          "slug": "path_of_entelechy", 
+          "conviction": true,
+          "instinct": false,        
+          "referance": "Lore of Clans p51",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 10,
+        "fields": {
+          "name": "Path of Evil Revelations",
+          "slug": "path_of_evil_revelations", 
+          "conviction": true,
+          "instinct": true,        
+          "referance": "Dread Names, Red List p121",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 11,
+        "fields": {
+          "name": "Path of the Feral Heart",
+          "slug": "path_of_the_feral_heart", 
+          "conviction": true,
+          "instinct": true,        
+          "referance": "VtM 20th Core p324",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 12,
+        "fields": {
+          "name": "Path of Harmony",
+          "slug": "path_of_harmony", 
+          "conviction": false,
+          "instinct": true,        
+          "referance": "VtM 20th Core p326",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 13,
+        "fields": {
+          "name": "Path of the Hive",
+          "slug": "path_of_the_hive", 
+          "conviction": true,
+          "instinct": true,        
+          "referance": "Black Hand p53",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 14,
+        "fields": {
+          "name": "Path of Honorable Accord",
+          "slug": "path_of_honorable_accord", 
+          "conviction": false,
+          "instinct": false,        
+          "referance": "VtM 20th Core p326",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 15,
+        "fields": {
+          "name": "Path of Lilith",
+          "slug": "path_of_lilith", 
+          "conviction": true,
+          "instinct": true,        
+          "referance": "VtM 20th Core p329, Black Hand p73",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 16,
+        "fields": {
+          "name": "Path of Metamorphosis",
+          "slug": "path_of_metamorphosis", 
+          "conviction": true,
+          "instinct": true,        
+          "referance": "VtM 20th Core p331",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 17,
+        "fields": {
+          "name": "Path of Night",
+          "slug": "path_of_night", 
+          "conviction": true,
+          "instinct": true,        
+          "referance": "VtM 20th Core p318",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 18,
+        "fields": {
+          "name": "Path of Paradox",
+          "slug": "path_of_paradox", 
+          "conviction": true,
+          "instinct": false,        
+          "referance": "VtM 20th Core p335, Lore of Clans p177",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 19,
+        "fields": {
+          "name": "Path of Power and the Inner Voice",
+          "slug": "path_of_power_and_the_inner_voice", 
+          "conviction": true,
+          "instinct": true,        
+          "referance": "VtM 20th Core p336",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 20,
+        "fields": {
+          "name": "Path of the Scorched Heart",
+          "slug": "path_of_the_scorched_heart", 
+          "conviction": true,
+          "instinct": false,        
+          "referance": "Black Hand p55",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 21,
+        "fields": {
+          "name": "Path of Self-Focus",
+          "slug": "path_of_self_focus", 
+          "conviction": true,
+          "instinct": true,        
+          "referance": "Black Hand p58",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 22,
+        "fields": {
+          "name": "Path of Typhon",
+          "slug": "path_of_typhon", 
+          "conviction": true,
+          "instinct": false,        
+          "referance": "VtM 20th Core p338",
+          "description": ""
+        }
+      },
+      {
+        "model": "haven.Morality",
+        "pk": 23,
+        "fields": {
+          "name": "Path of the Warrior",
+          "slug": "path_of_the_warrior", 
+          "conviction": true,
+          "instinct": false,        
+          "referance": "Lore of the Clans p72",
+          "description": ""
+        }
+      }
+  ]
