@@ -28,6 +28,7 @@ class User(AbstractBaseUser):
     verified = models.BooleanField()
     registered = models.BooleanField()
     admin = models.BooleanField(default=False)
+    supporter = models.IntegerField(default=0)
 
     objects = UserManager()
 

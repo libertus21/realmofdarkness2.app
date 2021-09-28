@@ -2,135 +2,135 @@ from django.http import JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.db import transaction
+
 from chronicle.models import Chronicle, Member
 from haven.models import Character, History, Morality
-import json
+from bot.util import get_splat
+from bot.serializers import serialize
+from json import dumps, loads
 
 @csrf_exempt
 def get_character(request):
-    post = get_post(request)
-    print(post)
+    data = get_post(request)
+    name = data['name']
+    user_id = data['userId']
+    splat = data['splat']
 
-
-
-    return JsonResponse({"content": json.dumps(post)})
+    character = get_splat(splat, name=name, user_id=user_id)
+    if not character:
+        return JsonResponse({'status': False})
+    
+    json = serialize(splat, character)
+    return JsonResponse({"status": True, 'character': json})
 
 @csrf_exempt
+@transaction.atomic
 def save_character(request):
     data = get_post(request)
     character = data['character']
     User = get_user_model()
     splatSlug = character['splat'].lower() + character['version']
 
+    if not character['id']:
+        char = Character.objects.filter(
+            name=character['name'], player=data['user']['id'])
+        if char:
+            return JsonResponse({'status': 'exists'})
+
+
     # Update or Create a User for this character
-    duser = data['user']
-    try:
-        user = User.objects.get(pk=duser['id'])
-        user.username = duser['username']
-        user.discriminator = duser['discriminator']
-        user.avatar_url = duser['avatarURL']
-        user.save()
-    except User.DoesNotExist:
-        user = User.objects.create_user(duser)
+    u = data['user']
+    user = User.objects.filter(pk=u['id'])
+    if user:
+        user.update(
+            username=u['username'],
+            discriminator=u['discriminator'],
+            avatar_url=u['avatarURL'],
+        )
+        user = user[0]
+    else:
+        user = User.objects.create_user(u)
 
 
     if (character['id']):
-        char = Character.objects.get(pk=character['id'])
+        char = get_splat(splatSlug, id=character['id'])
     else:
-        # New character
-        try:
-            char = Character.objects.get(name=character['name'], player=user)
-            # This is bad
-            return JsonResponse({"content": json.dumps({'status': 'exists'})})
-        except Character.DoesNotExist:
-            # This is good
-            char = Character.objects.create_character(splatSlug, user)
-            
+        char = Character.objects.create_character(splatSlug, user)            
 
     # If this character is apart of a guild, update or create the guild.
-    dguild = data['guild']
-    if (dguild['id']):
-        try:
-            guild = Chronicle.objects.get(pk=dguild['id'])
-            guild.name = dguild['name']
-            guild.icon_url = dguild['iconURL']
-        except Chronicle.DoesNotExist:
-            guild = Chronicle(
-                id=dguild['id'],
-                name=dguild['name'],
-                icon_url=dguild['iconURL']
-            )
-        guild.save()
+    g = data['guild']
+    if (g['id']):
+        guild, created = Chronicle.objects.update_or_create(
+            id=g['id'],
+            name=g['name'],
+            icon_url=g['iconURL']
+        )
         
         # if this is a guild then the user is a Member
-        try:
-            member = Member.objects.get(chronicle=guild, user=user)
-            member.display_name = dguild['displayName']
-        except Member.DoesNotExist:
-            member = Member(
-                chronicle=guild, 
-                user=user, 
-                display_name=dguild['displayName']
-            )
-        member.save()
+        member, created = Member.objects.update_or_create(
+            chronicle=guild, 
+            user=user, 
+            display_name=g['displayName']
+        )
 
         char.chronicle = guild
         char.member = member
 
-    char.player = user
+    # Update character relations
+
+    char.name = character['name']
+    char.faceclaim = character.get('thumbnail', '')
+    char.discord_colour.red = character['colour'][0]
+    char.discord_colour.green = character['colour'][1]
+    char.discord_colour.blue = character['colour'][2]
+    char.discord_colour.save()
+    char.exp.total = character['exp']['total']
+    char.exp.current = character['exp']['current']
+    char.exp.save()
+
+    historyList = []
+    for history in character['history']:
+        if (history.get('id', None)):
+            continue
+        historyList.append(History(
+            character=char,
+            args=dumps(history.get('args', '')),
+            notes=history.get('notes', ''),
+            mode=history['mode']
+        ))
+    History.objects.bulk_create(historyList)
+
+    if '20th' in splatSlug:
+        char.willpower20th.total = character['willpower']['total']
+        char.willpower20th.current = character['willpower']['current']
+        char.willpower20th.save()
+        char.health20th.total = character['health']['total']
+        char.health20th.bashing = character['health']['bashing']
+        char.health20th.lethal = character['health']['lethal']
+        char.health20th.aggravated = character['health']['aggravated']
+        char.health20th.save()
     
     if (splatSlug == 'vampire20th'):
-        updateVampire20th(char, character)
+        char.bloodpool.total = character['blood']['total']
+        char.bloodpool.current = character['blood']['current']
+        char.bloodpool.save()
+        char.moralitylevel.level = character['morality']['current']
+        char.moralitylevel.morality = Morality.objects.get(
+            name=character['morality']['name'])
+        char.moralitylevel.save()
     
     char.save()
-    print(char.id)
-    return JsonResponse({"content": json.dumps({'status': 'saved'})})
+    
+    return JsonResponse({'status': 'saved'})
 
 def get_post(request):
     if (request.method != 'POST'): 
         raise Http404    
-    post = json.loads(request.body)
+    post = loads(request.body)
 
     # Change secret_key to an actual shared secret key
     if not post or post.get('APIKey', None) != settings.API_KEY: 
         raise Http404
     
     return post
-
-def updateCharacter(character, data):
-    character.name = data['name']
-    character.faceclaim = data.get('thumbnail', '')
-    character.discord_colour.red = data['colour'][0]
-    character.discord_colour.green = data['colour'][1]
-    character.discord_colour.blue = data['colour'][2]
-    character.exp.total = data['exp']['total']
-    character.exp.current = data['exp']['current']
-
-    for history in data['history']:
-        h = History(
-            character=character,
-            args=json.dumps(history.get('args', '')),
-            notes=history.get('notes', ''),
-            mode=history['mode']
-        )
-        h.save()
-
-def update20th(character, data):
-    character.willpower20th.total = data['willpower']['total']
-    character.willpower20th.current = data['willpower']['current']
-    character.health20th.total = data['health']['total']
-    character.health20th.bashing = data['health']['bashing']
-    character.health20th.lethal = data['health']['lethal']
-    character.health20th.aggravated = data['health']['aggravated']
-
-def updateVampire20th(character, data):
-    updateCharacter(character, data)
-    update20th(character, data)
-
-    character.bloodpool.total = data['blood']['total']
-    character.bloodpool.current = data['blood']['current']
-    character.moralitylevel.level = data['morality']['current']
-    character.moralitylevel.morality = Morality.objects.get(
-        name=data['morality']['name'])
-
-    return character

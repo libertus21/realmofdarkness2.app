@@ -58,10 +58,9 @@ class CharacterManager(models.Manager):
             return
 
         char = self.create(player=user, splat=splat)
-        char.save()
 
-        colour = Colour(character=char).save()
-        exp = Exp(character=char).save()
+        colour = Colour.objects.create(character=char)
+        exp = Exp.objects.create(character=char)
 
         # Now to assaign all the Default Foreign Keys
         #attributes = Attribute.objects.filter(splat=splat)
@@ -79,15 +78,16 @@ class CharacterManager(models.Manager):
         return char
 
     def create_20th(self, char):
-        willpower = Willpower20th(character=char).save()
-        health = Health20th(character=char).save()
+        willpower = Willpower20th.objects.create(character=char)
+        health = Health20th.objects.create(character=char)
         
     
     def create_vampire20th(self, char):
-        blood = BloodPool(character=char).save()
+        blood = BloodPool.objects.create(character=char)
        
         humanity = Morality.objects.get(slug='humanity')
-        morality_level = MoralityLevel(character=char, morality=humanity).save()
+        morality_level = MoralityLevel.objects.create(
+            character=char, morality=humanity)
 
         #virtues = Virtue.objects.filter(Q(slug="conscience") | 
         #    Q(slug="selfControl") | Q(slug="courage"))        
@@ -103,6 +103,7 @@ class Character(models.Model):
     member = models.ForeignKey('chronicle.Member', on_delete=models.SET_NULL,
         null=True)
     
+    partial = models.BooleanField(default=True)
     date_created = models.DateField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     faceclaim = models.URLField(blank=True)

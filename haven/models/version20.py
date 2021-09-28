@@ -17,7 +17,7 @@ class Demeanor(models.Model):
 class Willpower20th(models.Model):
     character = models.OneToOneField('haven.Character', on_delete=models.CASCADE)
     total = models.IntegerField(default=1)
-    pool = models.IntegerField(default=1)
+    current = models.IntegerField(default=1)
 
 class Background20th(models.Model):
     characters = models.ManyToManyField('haven.Character', 
