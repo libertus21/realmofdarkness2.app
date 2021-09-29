@@ -18,3 +18,6 @@ class Member(models.Model):
     chronicle = models.ForeignKey(Chronicle, on_delete=models.CASCADE)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     display_name = models.CharField(max_length=100)
+
+    class Meta:
+        unique_together = ('chronicle', 'user')

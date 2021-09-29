@@ -4,6 +4,7 @@ def serializeVampire20th(character):
     return {
         'name': character.name,
         'id': str(character.id),
+        'splat': character.splat.slug,
         'user': {
             'id': str(character.player.id),
             'username': character.player.username,
@@ -22,7 +23,7 @@ def serializeVampire20th(character):
             character.discord_colour.green, 
             character.discord_colour.blue
         ],
-        'thumbnail': character.faceclaim,
+        'thumbnail': character.faceclaim if character.player.supporter > 0 else None,
         'exp': {'total': character.exp.total, 'current': character.exp.current},
         'history': [],
         'willpower': {

@@ -6,7 +6,7 @@ from django.db import transaction
 
 from chronicle.models import Chronicle, Member
 from haven.models import Character, History, Morality
-from bot.util import get_splat
+from bot.util import get_splat, get_name_list
 from bot.serializers import serialize
 from json import dumps, loads
 
@@ -15,14 +15,46 @@ def get_character(request):
     data = get_post(request)
     name = data['name']
     user_id = data['userId']
-    splat = data['splat']
+    splat = data.get('splat', '')
+    pk = data.get('pk', '')
 
-    character = get_splat(splat, name=name, user_id=user_id)
+    if (pk): character = get_splat(splat, id=pk)
+    else: character = get_splat(splat, name=name, user_id=user_id)
+
     if not character:
         return JsonResponse({'status': False})
     
-    json = serialize(splat, character)
+    json = serialize(character.splat.slug, character)
     return JsonResponse({"status": True, 'character': json})
+
+@csrf_exempt
+def name_list(request):
+    data = get_post(request)
+    user_id = data['userId']
+    guild_id = data.get('guildId', '')
+
+    names = get_name_list(user_id, guild_id)
+
+    if not names:
+        return JsonResponse({'status': 'noChar'})
+    
+    return JsonResponse({"status": True, 'list': names})
+
+@csrf_exempt
+def delete_characters(request):
+    data = get_post(request)
+    id_list = data['ids']
+
+    for id in id_list:
+        char = Character.objects.get(pk=int(id))
+        member = char.member
+        char.delete()
+        if (member):
+            chars = member.character_set.all()
+            if not chars:
+                char.member.delete()
+    
+    return JsonResponse({"status": True})
 
 @csrf_exempt
 @transaction.atomic
