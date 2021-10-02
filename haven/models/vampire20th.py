@@ -1,22 +1,5 @@
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator 
-
-class Vampire20th(models.Model):
-    ########################### General Info ###############################
-
-    concept = models.CharField(max_length=40, blank=True)
-    clan = models.ForeignKey('Clan20th', on_delete=models.SET_NULL, null=True)
-    generation = models.ForeignKey('Generation20th', on_delete=models.SET_NULL,
-        null=True)
-    sire = models.CharField(max_length=30, blank=True)
-
-    # Humanity/Path
-    # Blood Pool
-
-    # Weakness
-    # Virtues
-    # Disciplines
-
+"""
 class Clan20th(models.Model):
     pass
 
@@ -78,19 +61,6 @@ class Virtue(models.Model):
     referance = models.CharField(max_length=50, blank=True)
     description = models.TextField()
 
-class MoralityLevel(models.Model):
-    character = models.OneToOneField('haven.Character', on_delete=models.CASCADE)
-    morality = models.ForeignKey('Morality', on_delete=models.CASCADE)
-    level = models.IntegerField(default=1)
-
-class Morality(models.Model):
-    slug = models.SlugField(max_length=50, unique=True) 
-    name = models.CharField(max_length=50, unique=True)
-    conviction = models.BooleanField(default=False)
-    instinct = models.BooleanField(default=False)
-    referance = models.CharField(max_length=50, blank=True)
-    description = models.TextField()
-
 class BloodPool(models.Model):
     character = models.OneToOneField('haven.Character', on_delete=models.CASCADE)
     total = models.IntegerField(default=10)
@@ -100,3 +70,15 @@ class VitaePool(models.Model):
     character = models.OneToOneField('haven.Character', on_delete=models.CASCADE)
     total = models.IntegerField(default=5)
     current = models.IntegerField(default=1)
+"""
+class Morality(models.Model):
+    character = models.OneToOneField('haven.Character', on_delete=models.CASCADE)
+    morality = models.ForeignKey('MoralityInfo', on_delete=models.CASCADE)
+    current = models.IntegerField(default=7)
+
+class MoralityInfo(models.Model):
+    slug = models.SlugField(max_length=50, unique=True) 
+    name = models.CharField(max_length=50, unique=True)
+    conviction = models.BooleanField(default=False)
+    instinct = models.BooleanField(default=False)
+    referance = models.CharField(max_length=50, blank=True)

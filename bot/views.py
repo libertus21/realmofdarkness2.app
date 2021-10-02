@@ -63,6 +63,7 @@ def save_character(request):
     character = data['character']
     User = get_user_model()
     splatSlug = character['splat'].lower() + character['version']
+    return JsonResponse(data)
 
     if not character['id']:
         char = Character.objects.filter(
@@ -88,7 +89,7 @@ def save_character(request):
     if (character['id']):
         char = get_splat(splatSlug, id=character['id'])
     else:
-        char = Character.objects.create_character(splatSlug, user)            
+        char = Character.objects.create_partial_character(splatSlug, user)            
 
     # If this character is apart of a guild, update or create the guild.
     g = data['guild']
@@ -137,11 +138,11 @@ def save_character(request):
         char.willpower20th.total = character['willpower']['total']
         char.willpower20th.current = character['willpower']['current']
         char.willpower20th.save()
-        char.health20th.total = character['health']['total']
-        char.health20th.bashing = character['health']['bashing']
-        char.health20th.lethal = character['health']['lethal']
-        char.health20th.aggravated = character['health']['aggravated']
-        char.health20th.save()
+        #char.health20th.total = character['health']['total']
+        #char.health20th.bashing = character['health']['bashing']
+        #char.health20th.lethal = character['health']['lethal']
+        #char.health20th.aggravated = character['health']['aggravated']
+        #char.health20th.save()
     
     if (splatSlug == 'vampire20th'):
         char.bloodpool.total = character['blood']['total']
