@@ -126,3 +126,26 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# React App
+frontend/node_modules/
+frontend/package-lock.json
+frontend/package.json
+frontend/README.md
+
+# dependencies
+.pnp
+.pnp.js
+
+# testing
+frontend/coverage
+
+# production
+frontend/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
