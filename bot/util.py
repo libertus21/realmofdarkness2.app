@@ -1,27 +1,40 @@
 from haven.models import Character
+from bot.constants import Splats, Versions
 
 def get_splat(splat, id=None, name=None, user_id=None):
-    if id: char = Character.objects.filter(pk=id)
-    elif not splat: char = Character.objects.filter(
-        name=name, player=user_id)
-    else: char = Character.objects.filter(
-        name=name, player=user_id, splat__slug=splat)
+    if id: 
+        char = Character.objects.filter(pk=id)
+    elif not splat: 
+        char = Character.objects.filter(name=name, user=user_id)
+    else: 
+        char = Character.objects.filter(
+            name=name, 
+            user=user_id, 
+            splat__slug=splat
+        )
 
-    char.select_related(
-            'discord_colour', 'exp', 'history_set', 
-            'player', 'chronicle', 'member'
-        )
+    select = ['colour', 'user', 'chronicle', 'member']
+    prefetch = ['history', 'trackable']
+
+    if Versions.v20.value in splat:
+        prefetch.append('health')    
+    elif Versions.v5.value in splat:        
+        prefetch.append('damage')
     
-    if splat == 'vampire20th':        
-        char.select_related(
-            'willpower20th', 'health20th', 'bloodpool', 'moralitylevel'
-        )
+    if (splat == Splats.vampire20th.value or splat == Splats.human20th.value or
+    splat == Splats.ghoul20th.value):        
+        select.append('morality')
+    elif (splat == Splats.mortal5th.value or splat == Splats.vampire5th.value):
+        select.append('humanity')
+
+    char.select_related(*select)
+    char.prefetch_related(*prefetch)
     
     return char[0] if char else None
 
 def get_name_list(id, guild_id):
-    if (guild_id): chars = Character.objects.filter(player=id, chronicle=guild_id)
-    else: chars = Character.objects.filter(player=id)
+    if (guild_id): chars = Character.objects.filter(user=id, chronicle=guild_id)
+    else: chars = Character.objects.filter(user=id)
     
     chars.select_related('splat', 'chronicle')
 

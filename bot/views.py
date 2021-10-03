@@ -5,9 +5,10 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 
 from chronicle.models import Chronicle, Member
-from haven.models import Character, History, Morality
+from haven.models import Character, History, Morality, MoralityInfo
 from bot.util import get_splat, get_name_list
 from bot.serializers import serialize
+from bot.constants import Splats, Versions
 from json import dumps, loads
 
 @csrf_exempt
@@ -62,14 +63,18 @@ def save_character(request):
     data = get_post(request)
     character = data['character']
     User = get_user_model()
-    splatSlug = character['splat'].lower() + character['version']
-    return JsonResponse(data)
+    splatSlug = character['splat']
 
     if not character['id']:
         char = Character.objects.filter(
-            name=character['name'], player=data['user']['id'])
+            name=character['name'], user=data['user']['id'])
         if char:
             return JsonResponse({'status': 'exists'})
+        
+        count = Character.objects.filter(user=data['user']['id']).count()
+        print(count)
+        if (count > 50):
+            return JsonResponse({'status': 'charOverflow'})
 
 
     # Update or Create a User for this character
@@ -89,8 +94,12 @@ def save_character(request):
     if (character['id']):
         char = get_splat(splatSlug, id=character['id'])
     else:
-        char = Character.objects.create_partial_character(splatSlug, user)            
+        char = Character.objects.create_partial_character(
+            splatSlug, user, character, data['guild'])
+        # character is all saved and ready to go
+        return JsonResponse({'status': 'saved'})
 
+    # Character is not new so we need to update everything.
     # If this character is apart of a guild, update or create the guild.
     g = data['guild']
     if (g['id']):
@@ -114,13 +123,16 @@ def save_character(request):
 
     char.name = character['name']
     char.faceclaim = character.get('thumbnail', '')
-    char.discord_colour.red = character['colour'][0]
-    char.discord_colour.green = character['colour'][1]
-    char.discord_colour.blue = character['colour'][2]
-    char.discord_colour.save()
-    char.exp.total = character['exp']['total']
-    char.exp.current = character['exp']['current']
-    char.exp.save()
+    # Character Vanity Colour
+    char.colour.red = character['colour'][0]
+    char.colour.green = character['colour'][1]
+    char.colour.blue = character['colour'][2]
+    char.colour.save()
+    
+    exp = char.trackable.get(slug='exp')
+    exp.total = character['exp']['total']
+    exp.current = character['exp']['current']
+    exp.save()
 
     historyList = []
     for history in character['history']:
@@ -134,24 +146,135 @@ def save_character(request):
         ))
     History.objects.bulk_create(historyList)
 
-    if '20th' in splatSlug:
-        char.willpower20th.total = character['willpower']['total']
-        char.willpower20th.current = character['willpower']['current']
-        char.willpower20th.save()
-        #char.health20th.total = character['health']['total']
-        #char.health20th.bashing = character['health']['bashing']
-        #char.health20th.lethal = character['health']['lethal']
-        #char.health20th.aggravated = character['health']['aggravated']
-        #char.health20th.save()
+    # TODO need remove old history as well.
+
+    if Versions.v20.value == character['version']:
+        willpower = char.trackable.get(slug='willpower')
+        willpower.total = character['willpower']['total']
+        willpower.current = character['willpower']['current']
+        willpower.save()
+
+        health = char.health.get(slug='health')
+        health.total = character['health']['total']
+        health.bashing = character['health']['bashing']
+        health.lethal = character['health']['lethal']
+        health.aggravated = character['health']['aggravated']
+        health.save()
+
+    elif Versions.v5.value == character['version']:
+        health = char.damage.get(slug='health')
+        health.total = character['health']['total']
+        health.superficial = character['health']['superficial']
+        health.aggravated = character['health']['aggravated']
+        health.save()
+
+        willpower = char.damage.get(slug='willpower')
+        willpower.total = character['willpower']['total']
+        willpower.superficial = character['willpower']['superficial']
+        willpower.aggravated = character['willpower']['aggravated']
+        willpower.save()
     
-    if (splatSlug == 'vampire20th'):
-        char.bloodpool.total = character['blood']['total']
-        char.bloodpool.current = character['blood']['current']
-        char.bloodpool.save()
-        char.moralitylevel.level = character['morality']['current']
-        char.moralitylevel.morality = Morality.objects.get(
-            name=character['morality']['name'])
-        char.moralitylevel.save()
+    if (splatSlug == Splats.vampire20th.value):
+        blood = char.trackable.get(slug='blood')
+        blood.total = character['blood']['total']
+        blood.current = character['blood']['current']
+        blood.save()
+
+        char.morality.current = character['morality']['current']
+        char.morality.morality_info = MoralityInfo.objects.get(
+            slug=character['morality']['name'])
+        char.morality.save()
+
+    elif (splatSlug == Splats.human20th.value or splatSlug == Splats.ghoul20th.value):
+        blood = char.trackable.get(slug='blood')
+        blood.current = character['blood']
+        blood.save()
+
+        char.morality.current = character['morality']
+        char.morality.save()
+
+        if (splatSlug == Splats.ghoul20th.value):
+            vitae = char.trackable.get(slug='vitae')
+            vitae.current = character['vitae']
+            vitae.save()
+
+    elif (splatSlug == Splats.changeling20th.value):
+        glamour = char.trackable.get(slug='glamour')
+        glamour.total = character['glamour']['total']
+        glamour.current = character['glamour']['current']
+        glamour.save()
+
+        banality = char.trackable.get(slug='banality')
+        banality.total = character['banality']['total']
+        banality.current = character['banality']['current']
+        banality.save()
+
+        nightmare = char.trackable.get(slug='nightmare')
+        nightmare.current = character['nightmare']
+        nightmare.save()
+
+        imbalance = char.trackable.get(slug='imbalance')
+        imbalance.current = character['imbalance']
+        imbalance.save()
+
+        chimerical = char.health.get(slug='chimerical')
+        chimerical.total = character['chimerical']['total']
+        chimerical.bashing = character['chimerical']['bashing']
+        chimerical.lethal = character['chimerical']['lethal']
+        chimerical.aggravated = character['chimerical']['aggravated']
+        chimerical.save()
+
+    elif (splatSlug == Splats.werewolf20th.value):
+        rage = char.trackable.get(slug='rage')
+        rage.total = character['rage']['total']
+        rage.current = character['rage']['current']
+        rage.save()
+
+        gnosis = char.trackable.get(slug='gnosis')
+        gnosis.total = character['gnosis']['total']
+        gnosis.current = character['gnosis']['current']
+        gnosis.save()
+
+    elif (splatSlug == Splats.mage20th.value):
+        arete = char.trackable.get(slug='arete')
+        arete.current = character['arete']
+        arete.save()
+
+        quint_paradox = char.trackable.get(slug='quint_paradox')
+        quint_paradox.total = character['quint_paradox']['total']
+        quint_paradox.current = character['quint_paradox']['current']
+        quint_paradox.save()
+
+    elif (splatSlug == Splats.wraith20th.value):
+        pathos = char.trackable.get(slug='pathos')
+        pathos.current = character['pathos']
+        pathos.save()
+
+        corpus = char.trackable.get(slug='corpus')
+        corpus.total = character['corpus']['total']
+        corpus.current = character['corpus']['current']
+        corpus.save()
+
+    elif (splatSlug == Splats.demonTF.value):
+        faith = char.trackable.get(slug='faith')
+        faith.total = character['faith']['total']
+        faith.current = character['faith']['current']
+        faith.save()
+
+        torment = char.trackable.get(slug='torment')
+        torment.total = character['torment']['total']
+        torment.current = character['torment']['current']
+        torment.save()
+    
+    elif (splatSlug == Splats.vampire5th.value or splatSlug == Splats.mortal5th.value):
+        char.humanity.current = character['humanity']['total']
+        char.humanity.stains = character['humanity']['stains']
+        char.humanity.save()
+
+        if (splatSlug == Splats.vampire5th.value):
+            hunger = char.trackable.get(slug='hunger')
+            hunger.current = character['hunger']
+            hunger.save()    
     
     char.save()
     

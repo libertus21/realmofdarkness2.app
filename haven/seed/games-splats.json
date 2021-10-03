@@ -1,21 +1,166 @@
 [
-    {
-        "model": "haven.Game",
-        "pk": 1,
-        "fields": {
-          "name": "Vampire: The Masquerade 20th Anniversary Edition",
-          "slug": "vtm20th",
-          "description": ""
-        }
-    },
-    {
-        "model": "haven.Splat",
-        "pk": 1,
-        "fields": {
-          "name": "Vampire",
-          "slug": "vampire20th",
-          "game": 1,
-          "description": ""
-        }
+  {
+      "model": "haven.Game",
+      "pk": 1,
+      "fields": {
+        "name": "Vampire: The Masquerade",
+        "slug": "vtm",
+        "description": ""
+      }
+  },
+  {
+    "model": "haven.Game",
+    "pk": 2,
+    "fields": {
+      "name": "Werewolf: The Apocalypse",
+      "slug": "wta",
+      "description": ""
     }
+  },
+  {
+    "model": "haven.Game",
+    "pk": 3,
+    "fields": {
+      "name": "Mage: The Ascension",
+      "slug": "mta",
+      "description": ""
+    }
+  },
+  {
+    "model": "haven.Game",
+    "pk": 4,
+    "fields": {
+      "name": "Changeling: The Dreaming",
+      "slug": "ctd",
+      "description": ""
+    }
+  },
+  {
+    "model": "haven.Game",
+    "pk": 5,
+    "fields": {
+      "name": "Wraith: The Oblivion",
+      "slug": "wto",
+      "description": ""
+    }
+  },
+  {
+    "model": "haven.Game",
+    "pk": 6,
+    "fields": {
+      "name": "Demon: The Fallen",
+      "slug": "dtf",
+      "description": ""
+    }
+  },
+  {
+      "model": "haven.Splat",
+      "pk": 1,
+      "fields": {
+        "name": "Vampire",
+        "version": "20th",
+        "slug": "vampire20th",
+        "game": 1,
+        "description": ""
+      }
+  },
+  {
+    "model": "haven.Splat",
+    "pk": 2,
+    "fields": {
+      "name": "Human",
+      "version": "20th",
+      "slug": "human20th",
+      "game": 1,
+      "description": ""
+    }
+  },
+  {
+    "model": "haven.Splat",
+    "pk": 3,
+    "fields": {
+      "name": "Ghoul",
+      "version": "20th",
+      "slug": "ghoul20th",
+      "game": 1,
+      "description": ""
+    }
+  },
+  {
+    "model": "haven.Splat",
+    "pk": 4,
+    "fields": {
+      "name": "Vampire",
+      "version": "5th",
+      "slug": "vampire5th",
+      "game": 1,
+      "description": ""
+    }
+  },
+  {
+    "model": "haven.Splat",
+    "pk": 5,
+    "fields": {
+      "name": "Mortal",
+      "version": "5th",
+      "slug": "mortal5th",
+      "game": 1,
+      "description": ""
+    }
+  },
+  {
+    "model": "haven.Splat",
+    "pk": 6,
+    "fields": {
+      "name": "Werewolf",
+      "version": "20th",
+      "slug": "werewolf20th",
+      "game": 2,
+      "description": ""
+    }
+  },
+  {
+    "model": "haven.Splat",
+    "pk": 7,
+    "fields": {
+      "name": "Changeling",
+      "version": "20th",
+      "slug": "changeling",
+      "game": 4,
+      "description": ""
+    }
+  },
+  {
+    "model": "haven.Splat",
+    "pk": 8,
+    "fields": {
+      "name": "Mage",
+      "version": "20th",
+      "slug": "mage",
+      "game": 3,
+      "description": ""
+    }
+  },
+  {
+    "model": "haven.Splat",
+    "pk": 9,
+    "fields": {
+      "name": "Wraith",
+      "version": "20th",
+      "slug": "wraith",
+      "game": 5,
+      "description": ""
+    }
+  },
+  {
+    "model": "haven.Splat",
+    "pk": 10,
+    "fields": {
+      "name": "Demon",
+      "version": "20th",
+      "slug": "demon",
+      "game": 6,
+      "description": ""
+    }
+  }
 ]

@@ -31,7 +31,6 @@ class Willpower20th(models.Model):
     character = models.OneToOneField('haven.Character', on_delete=models.CASCADE)
     total = models.IntegerField(default=1)
     current = models.IntegerField(default=1)
-"""
 
 class Health20th(models.Model):
     character = models.ForeignKey('haven.Character', on_delete=models.CASCADE)
@@ -40,3 +39,5 @@ class Health20th(models.Model):
     bashing = models.IntegerField(default=0)
     lethal = models.IntegerField(default=0)
     aggravated = models.IntegerField(default=0)
+"""
+

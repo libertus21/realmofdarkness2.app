@@ -1,3 +1,4 @@
+"""
 import json
 from channels.generic.websocket import WebsocketConsumer
 from haven.models import Character, AttributeLevel, AbilityLevel, VirtueLevel,\
@@ -221,3 +222,4 @@ def prepare_character(character_pk):
         char["disciplines_v20"] = disciplines_v20
 
     return char
+"""

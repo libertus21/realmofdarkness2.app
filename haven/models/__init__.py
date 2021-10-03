@@ -1,4 +1,3 @@
 from .game import *
-from .version20 import *
-from .vampire20th import *
+from .splats import *
 from .character import *
