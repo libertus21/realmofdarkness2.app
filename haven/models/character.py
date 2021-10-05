@@ -67,6 +67,8 @@ class Trackable(models.Model):
 class CharacterManager(models.Manager):
     def create_partial_character(self, splatSlug, user, json, guild_info):
         splat = Splat.objects.get(slug=splatSlug)
+        guild = None
+        
         if (guild_info['id']):
             guild, created = Chronicle.objects.update_or_create(
                 id=guild_info['id'],
