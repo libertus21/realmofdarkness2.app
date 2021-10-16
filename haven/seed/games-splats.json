@@ -125,7 +125,7 @@
     "fields": {
       "name": "Changeling",
       "version": "20th",
-      "slug": "changeling",
+      "slug": "changeling20th",
       "game": 4,
       "description": ""
     }
@@ -136,7 +136,7 @@
     "fields": {
       "name": "Mage",
       "version": "20th",
-      "slug": "mage",
+      "slug": "mage20th",
       "game": 3,
       "description": ""
     }
@@ -147,7 +147,7 @@
     "fields": {
       "name": "Wraith",
       "version": "20th",
-      "slug": "wraith",
+      "slug": "wraith20th",
       "game": 5,
       "description": ""
     }
@@ -158,7 +158,7 @@
     "fields": {
       "name": "Demon",
       "version": "20th",
-      "slug": "demon",
+      "slug": "demon20th",
       "game": 6,
       "description": ""
     }
