@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction
 
-from chronicle.models import Chronicle, Member
+from chronicle.models import Chronicle, Member, StorytellerRole
 from haven.models import Character, History, Morality, MoralityInfo
 from bot.util import get_splat, get_name_list
 from bot.serializers import serialize
@@ -56,6 +56,119 @@ def delete_characters(request):
                 char.member.delete()
     
     return JsonResponse({"status": True})
+
+@csrf_exempt
+def set_tracker_channel(request):
+    data = get_post(request)
+    discord_guild = data['guild']
+    channel_id = data['channel_id']
+
+    try:
+        guild = Chronicle.objects.get(pk=discord_guild['id'])
+    except Chronicle.DoesNotExist:
+        guild = Chronicle.objects.create(
+            id=discord_guild['id'],
+            guild_member_count=discord_guild['member_count'],
+            icon_url=discord_guild['icon_url'],
+            tracker_channel=channel_id
+        )
+        return JsonResponse({"saved": True})
+
+    guild.guild_member_count = discord_guild['member_count']
+    guild.icon_url = discord_guild['icon_url']
+    
+    if (guild.tracker_channel == channel_id):
+        guild.tracker_channel = ''
+        response = {"removed": True}
+    else:
+        guild.tracker_channel = channel_id
+        response = {"saved": True}
+    
+    guild.save()    
+    return JsonResponse(response)
+
+@csrf_exempt
+def get_tracker_channel(request):
+    data = get_post(request)
+
+    try:
+        guild = Chronicle.objects.get(pk=data['guild_id'])
+    except Chronicle.DoesNotExist:
+        return JsonResponse({"no_guild": True})
+    
+    return JsonResponse({'channel_id': guild.tracker_channel})
+
+@csrf_exempt
+def set_st_role(request):
+    data = get_post(request)
+    discord_guild = data['guild']
+    role_id = data['role_id']
+
+    try:
+        guild = Chronicle.objects.get(pk=discord_guild['id'])
+    except Chronicle.DoesNotExist:
+        guild = Chronicle.objects.create(
+            id=discord_guild['id'],
+            guild_member_count=discord_guild['member_count'],
+            icon_url=discord_guild['icon_url']
+        )
+        StorytellerRole.objects.create(id=role_id, guild=guild)
+        return JsonResponse({"saved": True})
+
+    guild.guild_member_count = discord_guild['member_count']
+    guild.icon_url = discord_guild['icon_url']    
+    guild.save()
+
+    role, created = StorytellerRole.objects.get_or_create(id=role_id, guild=guild)
+    
+    if (created):
+        response = {"saved": True}
+    else:
+        role.delete()
+        response = {"removed": True}
+
+    return JsonResponse(response)
+
+@csrf_exempt
+def get_st_roles(request):
+    data = get_post(request)
+
+    st_roles = StorytellerRole.objects.filter(guild=int(data['guild_id']))
+    role_ids = []
+
+    for role in st_roles:
+        role_ids.append(str(role.id))
+    
+    return JsonResponse({'roles': role_ids})
+
+@csrf_exempt
+def delete_st_role(request):
+    data = get_post(request)
+    discord_guild = data['guild']
+    role_id = data['role_id']
+
+    try:
+        guild = Chronicle.objects.get(pk=discord_guild['id'])
+    except Chronicle.DoesNotExist:
+        guild = Chronicle.objects.create(
+            id=discord_guild['id'],
+            guild_member_count=discord_guild['member_count'],
+            icon_url=discord_guild['icon_url']
+        )
+        return JsonResponse({"deleted": False})
+
+    guild.guild_member_count = discord_guild['member_count']
+    guild.icon_url = discord_guild['icon_url']    
+    guild.save()
+
+    try:
+        role = StorytellerRole.objects.get(pk=role_id)
+        role.delete()
+        response = {'deleted': True}
+    except StorytellerRole.DoesNotExist:
+        response = {'deleted': False}
+    
+    return JsonResponse(response)
 
 @csrf_exempt
 @transaction.atomic

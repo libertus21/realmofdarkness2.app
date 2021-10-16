@@ -13,11 +13,18 @@ class Chronicle(models.Model):
         related_name='owned', null=True)
     guild_member_count = models.IntegerField(default=0)
     icon_url = models.URLField(blank=True)
+    tracker_channel = models.CharField(max_length=20, blank=True)
+    last_updated = models.DateField(auto_now=True)
 
 class Member(models.Model):
     chronicle = models.ForeignKey(Chronicle, on_delete=models.CASCADE)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     display_name = models.CharField(max_length=100)
+    last_updated = models.DateField(auto_now=True)
 
     class Meta:
         unique_together = ('chronicle', 'user')
+
+class StorytellerRole(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    guild = models.ForeignKey(Chronicle, on_delete=models.CASCADE)
