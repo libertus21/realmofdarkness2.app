@@ -48,9 +48,9 @@ class Colour(models.Model):
 class History(models.Model):
     character = models.ForeignKey('haven.Character', on_delete=models.CASCADE,
         related_name='history')
-    date = models.DateField(auto_now_add=True)
-    args = models.CharField(max_length=400, blank=True)
-    notes = models.CharField(max_length=300, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+    args = models.CharField(max_length=250, blank=True)
+    notes = models.CharField(max_length=150, blank=True)
     mode = models.CharField(max_length=50, blank=True)
 
 class Trackable(models.Model):

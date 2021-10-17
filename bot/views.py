@@ -258,8 +258,10 @@ def save_character(request):
             mode=history['mode']
         ))
     History.objects.bulk_create(historyList)
+    history_list = History.objects.filter(character=char).order_by('-date')[30:]
 
-    # TODO need remove old history as well.
+    for history in history_list:
+        history.delete()
 
     if Versions.v20.value == character['version']:
         willpower = char.trackable.get(slug='willpower')
