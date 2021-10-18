@@ -29,6 +29,8 @@ class User(AbstractBaseUser):
     registered = models.BooleanField()
     admin = models.BooleanField(default=False)
     supporter = models.IntegerField(default=0)
+    date_created = models.DateField(auto_now_add=True)
+    last_saved = models.DateField(auto_now=True)
 
     objects = UserManager()
 

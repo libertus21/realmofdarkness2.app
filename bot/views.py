@@ -6,10 +6,43 @@ from django.db import transaction
 
 from chronicle.models import Chronicle, Member, StorytellerRole
 from haven.models import Character, History, Morality, MoralityInfo
+from bot.models import DiceStats20th, DiceStatsV5
 from bot.util import get_splat, get_name_list
 from bot.serializers import serialize
 from bot.constants import Splats, Versions
 from json import dumps, loads
+
+@csrf_exempt
+def update_dice_stats(request):
+    data = get_post(request)
+    d_user = data['user']
+    version = data['version']
+    reroll = data['reroll']
+    result = data['result']
+    User = get_user_model()
+
+    try:
+        user = User.objects.get(pk=d_user['id'])
+        user.username = d_user['username']
+        user.discriminator = d_user['discriminator']
+        user.avatar_url = d_user['avatarURL']
+        user.save()
+    except User.DoesNotExist:
+        user = User.objects.create_user(d_user)
+    
+    if version == Versions.v5.value:
+        Stats = DiceStatsV5
+        
+    elif version == Versions.v20.value:
+        Stats = DiceStats20th
+
+    stats, created = Stats.objects.get_or_create(user=user)
+    stats.rolled += 1
+    setattr(stats, result, (getattr(stats, result) + 1))
+    if reroll: stats.reroll += 1
+    stats.save()
+
+    return JsonResponse({"updated": True})
 
 @csrf_exempt
 def get_character(request):
@@ -45,17 +78,40 @@ def name_list(request):
 def delete_characters(request):
     data = get_post(request)
     id_list = data['ids']
+    disconnect = data['disconnect']
 
     for id in id_list:
         char = Character.objects.get(pk=int(id))
-        member = char.member
-        char.delete()
-        if (member):
-            chars = member.character_set.all()
-            if not chars:
-                char.member.delete()
+        if disconnect:
+            char.chronicle = None
+            char.save()
+        else:
+            member = char.member
+            char.delete()
+            if (member):
+                chars = member.character_set.all()
+                if not chars and not member.user.registered:
+                    # Only deletes the member if no characters and is not
+                    # registered.
+                    char.member.delete()
     
     return JsonResponse({"status": True})
+
+@csrf_exempt
+def member_delete(request):
+    data = get_post(request)
+    guild_id = data['guild_id']
+    user_id = data['user_id']
+
+    try:
+        member = Member.objects.get(chronicle=int(guild_id), user=int(user_id)).prefetch_related('character_set')
+    except Member.DoesNotExist:
+        return JsonResponse({'removed': False})
+
+    member.character_set.update(chronicle=None)
+    member.delete()        
+
+    return JsonResponse({'removed': True})
 
 @csrf_exempt
 def set_tracker_channel(request):
@@ -191,19 +247,16 @@ def save_character(request):
 
 
     # Update or Create a User for this character
-    u = data['user']
-    user = User.objects.filter(pk=u['id'])
-    if user:
-        user.update(
-            username=u['username'],
-            discriminator=u['discriminator'],
-            avatar_url=u['avatarURL'],
-        )
-        user = user[0]
-    else:
-        user = User.objects.create_user(u)
-
-
+    d_user = data['user']
+    try:
+        user = User.objects.get(pk=d_user['id'])
+        user.username = d_user['username']
+        user.discriminator = d_user['discriminator']
+        user.avatar_url = d_user['avatarURL']
+        user.save()
+    except User.DoesNotExist:
+        user = User.objects.create_user(d_user)
+    
     if (character['id']):
         char = get_splat(splatSlug, id=character['id'])
     else:
