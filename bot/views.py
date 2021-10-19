@@ -241,7 +241,6 @@ def save_character(request):
             return JsonResponse({'status': 'exists'})
         
         count = Character.objects.filter(user=data['user']['id']).count()
-        print(count)
         if (count > 50):
             return JsonResponse({'status': 'charOverflow'})
 
