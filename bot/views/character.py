@@ -1,48 +1,16 @@
-from django.http import JsonResponse, Http404
-from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.db import transaction
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.contrib.auth import get_user_model
+from json import dumps
 
-from chronicle.models import Chronicle, Member, StorytellerRole
-from haven.models import Character, History, Morality, MoralityInfo
-from bot.models import DiceStats20th, DiceStatsV5
-from bot.util import get_splat, get_name_list
 from bot.serializers import serialize
+from bot.util import get_splat, get_name_list
+from .get_post import get_post
+from haven.models import Character, History, MoralityInfo
 from bot.constants import Splats, Versions
-from json import dumps, loads
+from chronicle.models import Chronicle, Member
 
-@csrf_exempt
-def update_dice_stats(request):
-    data = get_post(request)
-    d_user = data['user']
-    version = data['version']
-    reroll = data['reroll']
-    result = data['result']
-    User = get_user_model()
-
-    try:
-        user = User.objects.get(pk=d_user['id'])
-        user.username = d_user['username']
-        user.discriminator = d_user['discriminator']
-        user.avatar_url = d_user['avatarURL']
-        user.save()
-    except User.DoesNotExist:
-        user = User.objects.create_user(d_user)
-    
-    if version == Versions.v5.value:
-        Stats = DiceStatsV5
-        
-    elif version == Versions.v20.value:
-        Stats = DiceStats20th
-
-    stats, created = Stats.objects.get_or_create(user=user)
-    stats.rolled += 1
-    setattr(stats, result, (getattr(stats, result) + 1))
-    if reroll: stats.reroll += 1
-    stats.save()
-
-    return JsonResponse({"updated": True})
 
 @csrf_exempt
 def get_character(request):
@@ -96,135 +64,6 @@ def delete_characters(request):
                     char.member.delete()
     
     return JsonResponse({"status": True})
-
-@csrf_exempt
-def member_delete(request):
-    data = get_post(request)
-    guild_id = data['guild_id']
-    user_id = data['user_id']
-
-    try:
-        member = Member.objects.get(chronicle=int(guild_id), user=int(user_id)).prefetch_related('character_set')
-    except Member.DoesNotExist:
-        return JsonResponse({'removed': False})
-
-    member.character_set.update(chronicle=None)
-    member.delete()        
-
-    return JsonResponse({'removed': True})
-
-@csrf_exempt
-def set_tracker_channel(request):
-    data = get_post(request)
-    discord_guild = data['guild']
-    channel_id = data['channel_id']
-
-    try:
-        guild = Chronicle.objects.get(pk=discord_guild['id'])
-    except Chronicle.DoesNotExist:
-        guild = Chronicle.objects.create(
-            id=discord_guild['id'],
-            guild_member_count=discord_guild['member_count'],
-            icon_url=discord_guild['icon_url'],
-            tracker_channel=channel_id
-        )
-        return JsonResponse({"saved": True})
-
-    guild.guild_member_count = discord_guild['member_count']
-    guild.icon_url = discord_guild['icon_url']
-    
-    if (guild.tracker_channel == channel_id):
-        guild.tracker_channel = ''
-        response = {"removed": True}
-    else:
-        guild.tracker_channel = channel_id
-        response = {"saved": True}
-    
-    guild.save()    
-    return JsonResponse(response)
-
-@csrf_exempt
-def get_tracker_channel(request):
-    data = get_post(request)
-
-    try:
-        guild = Chronicle.objects.get(pk=data['guild_id'])
-    except Chronicle.DoesNotExist:
-        return JsonResponse({"no_guild": True})
-    
-    return JsonResponse({'channel_id': guild.tracker_channel})
-
-@csrf_exempt
-def set_st_role(request):
-    data = get_post(request)
-    discord_guild = data['guild']
-    role_id = data['role_id']
-
-    try:
-        guild = Chronicle.objects.get(pk=discord_guild['id'])
-    except Chronicle.DoesNotExist:
-        guild = Chronicle.objects.create(
-            id=discord_guild['id'],
-            guild_member_count=discord_guild['member_count'],
-            icon_url=discord_guild['icon_url']
-        )
-        StorytellerRole.objects.create(id=role_id, guild=guild)
-        return JsonResponse({"saved": True})
-
-    guild.guild_member_count = discord_guild['member_count']
-    guild.icon_url = discord_guild['icon_url']    
-    guild.save()
-
-    role, created = StorytellerRole.objects.get_or_create(id=role_id, guild=guild)
-    
-    if (created):
-        response = {"saved": True}
-    else:
-        role.delete()
-        response = {"removed": True}
-
-    return JsonResponse(response)
-
-@csrf_exempt
-def get_st_roles(request):
-    data = get_post(request)
-
-    st_roles = StorytellerRole.objects.filter(guild=int(data['guild_id']))
-    role_ids = []
-
-    for role in st_roles:
-        role_ids.append(str(role.id))
-    
-    return JsonResponse({'roles': role_ids})
-
-@csrf_exempt
-def delete_st_role(request):
-    data = get_post(request)
-    discord_guild = data['guild']
-    role_id = data['role_id']
-
-    try:
-        guild = Chronicle.objects.get(pk=discord_guild['id'])
-    except Chronicle.DoesNotExist:
-        guild = Chronicle.objects.create(
-            id=discord_guild['id'],
-            guild_member_count=discord_guild['member_count'],
-            icon_url=discord_guild['icon_url']
-        )
-        return JsonResponse({"deleted": False})
-
-    guild.guild_member_count = discord_guild['member_count']
-    guild.icon_url = discord_guild['icon_url']    
-    guild.save()
-
-    try:
-        role = StorytellerRole.objects.get(pk=role_id)
-        role.delete()
-        response = {'deleted': True}
-    except StorytellerRole.DoesNotExist:
-        response = {'deleted': False}
-    
-    return JsonResponse(response)
 
 @csrf_exempt
 @transaction.atomic
@@ -446,14 +285,3 @@ def save_character(request):
     char.save()
     
     return JsonResponse({'status': 'saved'})
-
-def get_post(request):
-    if (request.method != 'POST'): 
-        raise Http404    
-    post = loads(request.body)
-
-    # Change secret_key to an actual shared secret key
-    if not post or post.get('APIKey', None) != settings.API_KEY: 
-        raise Http404
-    
-    return post
