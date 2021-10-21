@@ -107,18 +107,29 @@ def save_character(request):
     # If this character is apart of a guild, update or create the guild.
     g = data['guild']
     if (g['id']):
-        guild, created = Chronicle.objects.update_or_create(
-            id=g['id'],
-            name=g['name'],
-            icon_url=g['iconURL']
-        )
+        try:
+            guild = Chronicle.objects.get(pk=g['id'])
+            guild.name = g['name']
+            guild.icon_url = g['iconURL']
+            guild.save()
+        except Chronicle.DoesNotExist:
+            guild = Chronicle.objects.create(
+                id=g['id'],
+                name=g['name'],
+                icon_url=g['iconURL']
+            )
         
         # if this is a guild then the user is a Member
-        member, created = Member.objects.update_or_create(
-            chronicle=guild, 
-            user=user, 
-            display_name=g['displayName']
-        )
+        try:
+            member = Member.objects.get(chronicle=guild, user=user)
+            member.display_name = g['displayName']
+            member.save()
+        except Member.DoesNotExist:
+            member = Member.objects.create(
+                chronicle=guild,
+                user=user,
+                display_name=g['displayName']
+            )
 
         char.chronicle = guild
         char.member = member

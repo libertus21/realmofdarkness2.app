@@ -71,18 +71,29 @@ class CharacterManager(models.Manager):
         member = None
 
         if (guild_info['id']):
-            guild, created = Chronicle.objects.update_or_create(
-                id=guild_info['id'],
-                name=guild_info['name'],
-                icon_url=guild_info['iconURL']
-            )
+            try:
+                guild = Chronicle.objects.get(pk=guild_info['id'])
+                guild.name = guild_info['name']
+                guild.icon_url = guild_info['iconURL']
+                guild.save()
+            except Chronicle.DoesNotExist:
+                guild = Chronicle.objects.create(
+                    id=guild_info['id'],
+                    name=guild_info['name'],
+                    icon_url=guild_info['iconURL']
+                )
 
             # if this is a guild then the user is a Member
-            member, created = Member.objects.update_or_create(
-                chronicle=guild, 
-                user=user, 
-                display_name=guild_info['displayName']
-            )
+            try:
+                member = Member.objects.get(chronicle=guild, user=user)
+                member.display_name = guild_info['displayName']
+                member.save()
+            except Member.DoesNotExist:
+                member = Member.objects.create(
+                    chronicle=guild,
+                    user=user,
+                    display_name=guild_info['displayName']
+                )
         
         char = self.create(
             user=user,
@@ -276,8 +287,6 @@ class CharacterManager(models.Manager):
                     slug="hunger",
                     current=json['hunger'],
                 )
-
-        
 
         return char
 
