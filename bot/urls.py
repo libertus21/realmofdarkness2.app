@@ -23,4 +23,7 @@ urlpatterns = [
     # User
     path('user/supporter/get', views.get_supporter_level),
     path('user/supporter/set', views.set_supporter_level),
+
+    # Stats
+    path('stats/get', views.get_stats),
 ]
