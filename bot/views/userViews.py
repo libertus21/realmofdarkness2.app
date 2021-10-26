@@ -9,6 +9,7 @@ def get_supporter_level(request):
     data = get_post(request)
     user_id = data['user_id']
     User = get_user_model()
+    user = None
 
     try:
         user = User.objects.get(pk=user_id)
