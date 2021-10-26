@@ -15,7 +15,7 @@ def get_supporter_level(request):
     except User.DoesNotExist:
         level = -1
     
-    level = user.supporter
+    if user: level = user.supporter
     
     return JsonResponse({"level": level})
 
