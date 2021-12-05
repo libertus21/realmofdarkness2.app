@@ -17,8 +17,8 @@ def get_stats(request):
     # User Stats
     timestamp_30days = date.today() - timedelta(days=30)
     timestamp_14days = date.today() - timedelta(days=14)    
-    users_30days = users.exclude(last_saved__gt=timestamp_30days)
-    users_14days = users_30days.exclude(last_saved__gt=timestamp_14days)
+    users_30days = users.filter(last_saved__gt=timestamp_30days)
+    users_14days = users.filter(last_saved__gt=timestamp_14days)
 
     user_stats = {
         'total': str(users.count()),
