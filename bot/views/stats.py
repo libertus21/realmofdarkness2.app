@@ -15,8 +15,8 @@ def get_stats(request):
     users = User.objects.all()
 
     # User Stats
-    timestamp_30days = date.today() - timedelta(days=-30)
-    timestamp_14days = date.today() - timedelta(days=-14)    
+    timestamp_30days = date.today() - timedelta(days=30)
+    timestamp_14days = date.today() - timedelta(days=14)    
     users_30days = users.exclude(last_saved__gt=timestamp_30days)
     users_14days = users_30days.exclude(last_saved__gt=timestamp_14days)
 
@@ -52,9 +52,6 @@ def get_stats(request):
         botched=Sum('botched'),
         failed=Sum('failed'),
         passed=Sum('passed'))
-    
-    print(dice_v5)
-    print(dice_20th)
 
     return JsonResponse({
         "users": user_stats, 
