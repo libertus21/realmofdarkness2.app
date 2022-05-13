@@ -224,7 +224,7 @@
     "pk": 21,
     "fields": {
       "name": "Path of Self-Focus",
-      "slug": "path_of_self_focus", 
+      "slug": "path_of_self-focus", 
       "conviction": true,
       "instinct": true,        
       "referance": "Black Hand p58"

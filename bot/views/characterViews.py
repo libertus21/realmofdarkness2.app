@@ -75,7 +75,7 @@ def save_character(request):
 
     if not character['id']:
         char = Character.objects.filter(
-            name=character['name'], user=data['user']['id'])
+            name__iexact=character['name'], user=data['user']['id'])
         if char:
             return JsonResponse({'status': 'exists'})
         

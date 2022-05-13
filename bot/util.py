@@ -5,10 +5,10 @@ def get_splat(splat, id=None, name=None, user_id=None):
     if id: 
         char = Character.objects.filter(pk=id)
     elif not splat: 
-        char = Character.objects.filter(name=name, user=user_id)
+        char = Character.objects.filter(name__iexact=name, user=user_id)
     else: 
         char = Character.objects.filter(
-            name=name, 
+            name__iexact=name, 
             user=user_id, 
             splat__slug=splat
         )
