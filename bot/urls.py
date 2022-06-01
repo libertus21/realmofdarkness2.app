@@ -24,6 +24,13 @@ urlpatterns = [
     path('user/supporter/get', views.get_supporter_level),
     path('user/supporter/set', views.set_supporter_level),
 
+    # Initiative Tracker
+    path('init/phase', views.set_phase),
+    path('init/roll', views.init_roll),
+    path('init/declare', views.init_declare),
+    path('init/get', views.get_init_tracker),
+    path('init/set', views.init_set_message_id),
+
     # Stats
     path('stats/get', views.get_stats),
 ]

@@ -1,5 +1,5 @@
-from django.http import JsonResponse, Http404
-from json import dumps, loads
+from django.http import Http404
+from json import loads
 from django.conf import settings
 
 def get_post(request):

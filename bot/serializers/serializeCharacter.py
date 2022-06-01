@@ -23,7 +23,6 @@ def serializeCharacter(character):
             character.colour.green, 
             character.colour.blue
         ],
-        # TODO Fix supporter to work with this DB
         'thumbnail': character.faceclaim if character.user.supporter >= 0 else None,
         'exp': {'total': exp.total, 'current': exp.current},
         'history': serializeHistory(character),
