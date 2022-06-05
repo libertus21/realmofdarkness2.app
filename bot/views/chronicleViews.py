@@ -31,13 +31,11 @@ def set_tracker_channel(request):
     except Chronicle.DoesNotExist:
         guild = Chronicle.objects.create(
             id=discord_guild['id'],
-            guild_member_count=discord_guild['member_count'],
             icon_url=discord_guild['icon_url'],
             tracker_channel=channel_id
         )
         return JsonResponse({"saved": True})
 
-    guild.guild_member_count = discord_guild['member_count']
     guild.icon_url = discord_guild['icon_url']
     
     if (guild.tracker_channel == channel_id):
@@ -72,13 +70,11 @@ def set_st_role(request):
     except Chronicle.DoesNotExist:
         guild = Chronicle.objects.create(
             id=discord_guild['id'],
-            guild_member_count=discord_guild['member_count'],
             icon_url=discord_guild['icon_url']
         )
         StorytellerRole.objects.create(id=role_id, guild=guild)
         return JsonResponse({"saved": True})
 
-    guild.guild_member_count = discord_guild['member_count']
     guild.icon_url = discord_guild['icon_url']    
     guild.save()
 
@@ -115,12 +111,10 @@ def delete_st_role(request):
     except Chronicle.DoesNotExist:
         guild = Chronicle.objects.create(
             id=discord_guild['id'],
-            guild_member_count=discord_guild['member_count'],
             icon_url=discord_guild['icon_url']
         )
         return JsonResponse({"deleted": False})
 
-    guild.guild_member_count = discord_guild['member_count']
     guild.icon_url = discord_guild['icon_url']    
     guild.save()
 
