@@ -19,7 +19,5 @@ from . import views
 
 app_name = 'discordauth'
 urlpatterns = [
-    path('login/', views.login, name='login'),
-    path('login/success/', views.login_success, name='login_success'),
-    path('logout/', views.logout, name='logout')
+    
 ]
