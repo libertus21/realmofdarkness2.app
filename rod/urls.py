@@ -19,5 +19,5 @@ from django.urls import path, include
 urlpatterns = [    
     #path('auth/', include('discordauth.urls')),
     path('bot/', include('bot.urls')),
-    #path('', include('main.urls')),              
+    path('', include('main.urls')),              
 ]

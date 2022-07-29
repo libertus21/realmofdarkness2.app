@@ -3,8 +3,6 @@ from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from django.db import transaction
 
-import chronicle
-
 from .get_post import get_post
 from bot.models import InitiativeCharacter, InitiativeTracker20th, InitiativeCharacter
 from chronicle.models import Chronicle, Member
