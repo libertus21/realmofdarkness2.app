@@ -30,10 +30,9 @@ export default function CodIndex() {
           component={Link}
           to='commands'
           size='large'
-          disabled
           sx={{width: '100%', height: 60}}
         >
-          Bot Command Docs (Coming Soon!)
+          Bot Command Docs
         </Button>
       </Grid>
       <Grid item xs={12} md={4}>
@@ -46,13 +45,18 @@ export default function CodIndex() {
           disabled
           sx={{width: '100%', height: 60}}
         >
-          Dice Probability (Coming soon!)
+          Dice (Coming soon!)
         </Button>
       </Grid>
       <Grid item xs={12}>
         <Paper elevation={3}>
           <Container disableGutters sx={{py: 5, px: 5}}>
-            <Typography variant="h3" component="h1" sx={{pb: 2, textAlign: "center"}}>
+            <Typography 
+              variant="h3" 
+              component="h1" 
+              sx={{pb: 2, textAlign: "center"}}
+              color='primary'
+            >
               Chronicles of Darkness
             </Typography>
             <Typography sx={{pb: 2}}>
@@ -60,7 +64,7 @@ export default function CodIndex() {
               and a General Dice roller, new features are also being 
               added all the time!
             </Typography>
-            <Typography variant="h4" component="h2">
+            <Typography variant="h4" component="h2" color='primary'>
               CoD Dice Roller
             </Typography>
             <Typography component="div">
@@ -74,7 +78,7 @@ export default function CodIndex() {
                 <li>Easy to read colour-coded output that tells you everything you need to know about the roll at a glance</li>
               </ul>
             </Typography>
-            <Typography variant="h4" component="h2">
+            <Typography variant="h4" component="h2" color='primary'>
               General Dice Roller
             </Typography>
             <Typography component="div">

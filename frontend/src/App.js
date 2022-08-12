@@ -2,7 +2,6 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Outlet,
   useLocation,
 } from "react-router-dom";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -18,17 +17,47 @@ import CoD from "./routes/CoD/CoD";
 import { useLayoutEffect } from "react";
 import TwentiethIndex from "./routes/20th/20thIndex";
 import CodIndex from "./routes/CoD/CodIndex";
+import CodCommands from "./routes/CoD/CodCommands";
 
 const darkTheme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
-        body: darkScrollbar(),
+        body: {
+          ...darkScrollbar(),
+          backgroundColor: '#0a070a',
+          backgroundImage: `linear-gradient(360deg, #0a070a 40%, 80%, #190821 95%)`,
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+        },
       },
     },
+    MuiListSubheader: {
+      defaultProps: {
+        color: 'primary'
+      }
+    }
   },
   palette: {
     mode: 'dark',
+    primary: {
+      main: '#d8bf31',
+    },
+    secondary: {
+      main: '#c089fa',
+    },
+    background: {
+      default: '#0a070a',
+    },
+    error: {
+      main: '#ef2056',
+    },
+    warning: {
+      main: '#e45f15',
+    },
+    success: {
+      main: '#5ee28a',
+    },
   },
 });
 
@@ -59,7 +88,7 @@ function App() {
               </Route>
               <Route path="cod" element={<CoD />}>
                 <Route index element={<CodIndex />} />
-                <Route path='commands' element={<V5Commands />} />
+                <Route path='commands' element={<CodCommands />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Route>
@@ -75,8 +104,7 @@ export default App;
 function NotFound() {
   return (
     <div>
-      <h2>Wha, no page here</h2>
-      <Outlet />
+      <h1>Sorry, no page here</h1>
     </div>
   );
 }

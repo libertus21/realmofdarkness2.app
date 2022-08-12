@@ -16,16 +16,26 @@ export default function CommandAccordion(props) {
 
   for (let i = 0; i < commands.length; i++)
   {
+    const isExpanded = (expanded === `panel${i}`);
+    let accordionSx = {borderLeft: 0, borderColor: 'primary.main'}
+    let summerySx = {color: 'default'}
+    if (isExpanded) {
+      accordionSx.borderLeft = 2;
+      summerySx.color = 'primary.main';
+    }
+
     accordion.push(
       <Accordion 
-        expanded={expanded === `panel${i}`} 
+        expanded={isExpanded} 
         onChange={handleChange(`panel${i}`)}
         key={i.toString()}
+        sx={accordionSx}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls={`panel${i}bh-content`}
           id={`panel${i}bh-header`}
+          sx={summerySx}        
         >
           {commands[i].summery}
         </AccordionSummary>

@@ -137,7 +137,6 @@ function ResponsiveAppBar (props) {
         endIcon={<KeyboardArrowDownIcon />}
         onClick={handleOpenGamesMenu}
         onMouseOver={handleOpenGamesMenu}
-        sx={{color: '#cfb80c'}}
       >
         Games            
       </Button>
@@ -170,7 +169,6 @@ function ResponsiveAppBar (props) {
       </Menu>
       <Button
         size="large"
-        sx={{color: '#cfb80c'}}
         href="https://discord.gg/p82yc8sKx2"
         target="_blank"
       >
@@ -178,7 +176,6 @@ function ResponsiveAppBar (props) {
       </Button>
       <Button
         size="large"
-        sx={{color: '#cfb80c'}}
         href="https://www.patreon.com/MiraiMiki"
         target="_blank"
       >

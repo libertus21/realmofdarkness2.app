@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import CommandAccordion from '../../components/Commands/CommandAccordion';
-const { DiceV5Doc, TrackerV5Doc } = require('../../components/Commands/V5Doc');
+const { DiceCodDoc } = require('../../components/Commands/CodDoc');
 
-export default function V5Commands(props) {
+export default function CodCommands(props) {
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -55,13 +55,13 @@ export default function V5Commands(props) {
     >
       <Grid item xs={12} sx={{textAlign: 'center'}}>
         <ButtonGroup>
-          <Button variant='contained'>
+          <Button component={Link} to='/v5/commands/'>
             5th Edition
           </Button>
           <Button disabled component={Link} to='/v20/commands/'>
             20th Edition
           </Button>
-          <Button component={Link} to='/cod/commands'>
+          <Button variant='contained'>
             Chronicles of Darkness
           </Button>
         </ButtonGroup>
@@ -70,13 +70,9 @@ export default function V5Commands(props) {
         <Container disableGutters sx={{px: 2}}>
           <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example">
             <Tab label="Dice" {...allyProps(0)}/>
-            <Tab label="Tracker" {...allyProps(1)} />
           </Tabs>
           <TabPanel value={tabValue} index={0}>
-            <CommandAccordion commands={DiceV5Doc}/>
-          </TabPanel>
-          <TabPanel value={tabValue} index={1}>
-            <CommandAccordion commands={TrackerV5Doc}/>
+            <CommandAccordion commands={DiceCodDoc}/>
           </TabPanel>
         </Container>  
       </Grid>
@@ -89,7 +85,7 @@ export default function V5Commands(props) {
           size='large'
           sx={{width: '100%', height: 60}}
         >
-          5th Edition Home
+          Chronicles of Darkness Home
         </Button>
       </Grid>
       <Grid item xs={12} md={4}>
@@ -97,7 +93,7 @@ export default function V5Commands(props) {
           color="primary"
           variant='outlined'
           size='large'
-          href="https://discord.com/oauth2/authorize?client_id=814857851406647309&scope=bot%20applications.commands&permissions=278528"
+          href="https://discord.com/oauth2/authorize?client_id=968461963816484915&scope=bot%20applications.commands&permissions=278528"
           target="_blank"
           sx={{width: '100%', height: 60}}
         >

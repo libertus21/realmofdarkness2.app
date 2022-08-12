@@ -45,20 +45,25 @@ export default function V5Index() {
           disabled
           sx={{width: '100%', height: 60}}
         >
-          Dice Probability (Coming soon!)
+          Dice (Coming soon!)
         </Button>
       </Grid>
       <Grid item xs={12}>
         <Paper elevation={3}>
           <Container disableGutters sx={{py: 5, px: 5}}>
-            <Typography variant="h3" component="h1" sx={{pb: 2, textAlign: "center"}}>
+            <Typography 
+              variant="h3" 
+              component="h1" 
+              sx={{pb: 2, textAlign: "center"}}
+              color='primary'
+            >
               5th Edition
             </Typography>
             <Typography sx={{pb: 2}}>
               The Realm of Darkness 5th edition bot contains both a dice roller,
               character tracker and new features are being added all the time.
             </Typography>
-            <Typography variant="h4" component="h2">
+            <Typography variant="h4" component="h2" color='primary'>
               VtM v5 Dice Roller
             </Typography>
             <Typography component="div">
@@ -111,7 +116,7 @@ export default function V5Index() {
                 </li>
               </ul>
             </Typography>
-            <Typography variant="h4" component="h2">
+            <Typography variant="h4" component="h2" color='primary'>
               Hunter: the Reckoning Dice Roller
             </Typography>
             <Typography component="div">
@@ -143,7 +148,7 @@ export default function V5Index() {
                 <li>Support for using a tracked characters coming soon!</li>
               </ul>
             </Typography>
-            <Typography variant="h4" component="h2">
+            <Typography variant="h4" component="h2" color='primary'>
               Character Tracker
             </Typography>
             <Typography component="div">
@@ -177,7 +182,7 @@ export default function V5Index() {
                 </li>
               </ul>
             </Typography>
-            <Typography variant="h6" component="h3">
+            <Typography variant="h6" component="h3" color='primary'>
               Supported Character Types
             </Typography>
             <Typography component="div">
