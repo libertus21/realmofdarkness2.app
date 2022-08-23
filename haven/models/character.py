@@ -2,42 +2,9 @@ from django.db import models
 from django.db.models import Q
 from json import dumps
 from rod.settings import AUTH_USER_MODEL
-from . import Splat, Health20th, Morality, MoralityInfo, Damage5th, Humanity
+from . import Splat, Health20th, Morality, MoralityInfo, Damage5th, Humanity, Hunter5th
 from chronicle.models import Member, Chronicle
 from bot.constants import Splats, Versions
-
-"""
-class Attribute(models.Model):
-    splat = models.ForeignKey("haven.Splat", on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=50, unique=True)  
-    category = models.SlugField(max_length=50)
-    referance = models.CharField(max_length=50, blank=True)
-    description = models.TextField()
-
-class Ability(models.Model):
-    splat = models.ForeignKey("haven.Splat", on_delete=models.CASCADE)
-    slug = models.SlugField(max_length=50, unique=True) 
-    name = models.CharField(max_length=50)
-    category = models.SlugField(max_length=50)
-    referance = models.CharField(max_length=50, blank=True)
-    description = models.TextField()
-
-class AttributeLevel(models.Model):
-    character = models.ForeignKey('haven.Character', on_delete=models.CASCADE)
-    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
-    level = models.IntegerField(default=1)
-
-class AbilityLevel(models.Model):
-    character = models.ForeignKey('haven.Character', on_delete=models.CASCADE)
-    ability = models.ForeignKey(Ability, on_delete=models.CASCADE)
-    level = models.IntegerField(default=0)
-
-class Exp(models.Model):
-    character = models.OneToOneField("Character", on_delete=models.CASCADE)
-    total = models.IntegerField(default=0)
-    current = models.IntegerField(default=0)
-"""
 
 class Colour(models.Model):
     character = models.OneToOneField("haven.Character", on_delete=models.CASCADE)
@@ -287,36 +254,20 @@ class CharacterManager(models.Manager):
                     slug="hunger",
                     current=json['hunger'],
                 )
+        elif (splatSlug == Splats.hunter5th.value):
+            Trackable.objects.create(
+                character=char,
+                slug="desperation",
+                current=json['desperation'],
+            )
+            Trackable.objects.create(
+                character=char,
+                slug="danger",
+                current=json['danger'],
+            )
+            Hunter5th.objects.create(character=char, despair=json['despair'])            
 
         return char
-
-    def create_full_character(self, splatSlug, user):
-        try:
-            splat = Splat.objects.get(slug=splatSlug)
-        except Splat.DoesNotExist:
-            # Someone is doing something they shouldn't
-            return
-
-        char = self.create(user=user, splat=splat)
-
-        colour = Colour.objects.create(character=char)
-        exp = Trackable.objects.create(character=char)
-
-        # Now to assaign all the Default Foreign Keys
-        #attributes = Attribute.objects.filter(splat=splat)
-        #char.attributes.add(*attributes)
-
-        #abilities = Ability.objects.filter(splat=splat)
-        #char.abilities.add(*abilities)
-
-        if Versions.v20.value in splatSlug:
-            pass
-
-        if (splatSlug == Splats.vampire20th.value):
-            pass
-            #virtues = Virtue.objects.filter(Q(slug="conscience") | 
-            #    Q(slug="selfControl") | Q(slug="courage"))        
-            #char.virtue_set.add(*virtues)
 
 class Character(models.Model):
     name = models.CharField(max_length=50, blank=True)
@@ -332,9 +283,6 @@ class Character(models.Model):
     faceclaim = models.URLField(blank=True)
     
     splat = models.ForeignKey(Splat, on_delete=models.CASCADE)
-
-    #attributes = models.ManyToManyField(Attribute, through=AttributeLevel)
-    #abilities = models.ManyToManyField(Ability, through=AbilityLevel)
 
     objects = CharacterManager()
     

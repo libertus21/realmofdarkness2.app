@@ -109,3 +109,7 @@ class Damage5th(models.Model):
         unique_together = ('character', 'slug')
         indexes = [models.Index(fields=['character', 'slug'])]
 
+class Hunter5th(models.Model):
+    character = models.OneToOneField('character', on_delete=models.CASCADE,
+        primary_key=True)    
+    despair = models.BooleanField(default=False)

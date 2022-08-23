@@ -54,6 +54,15 @@
     }
   },
   {
+    "model": "haven.Game",
+    "pk": 7,
+    "fields": {
+      "name": "Hunter: The Reckoning",
+      "slug": "HtR",
+      "description": ""
+    }
+  },
+  {
       "model": "haven.Splat",
       "pk": 1,
       "fields": {
@@ -160,6 +169,17 @@
       "version": "20th",
       "slug": "demon20th",
       "game": 6,
+      "description": ""
+    }
+  },
+  {
+    "model": "haven.Splat",
+    "pk": 5,
+    "fields": {
+      "name": "Hunter",
+      "version": "5th",
+      "slug": "hunter5th",
+      "game": 7,
       "description": ""
     }
   }

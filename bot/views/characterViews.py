@@ -293,6 +293,16 @@ def save_character(request):
             hunger.current = character['hunger']
             hunger.save()    
     
+    elif (splatSlug == Splats.hunter5th.value):
+        desperation = char.trackable.get(slug='desperation')
+        desperation.current = character['desperation']
+        desperation.save()  
+        danger = char.trackable.get(slug='danger')
+        danger.current = character['danger']
+        danger.save()
+        char.hunter5th.despair = character['despair']
+        char.hunter5th.save()    
+    
     char.save()
     
     return JsonResponse({'status': 'saved'})

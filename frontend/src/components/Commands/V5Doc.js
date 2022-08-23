@@ -142,6 +142,21 @@ const setHunger = (
   </ListItemDialog>
 );
 
+const setDanger = (
+  <ListItemDialog dialogContent={
+    <Box>
+      <Typography>
+        Choose between "true" and "false"
+      </Typography>
+      <Typography>
+        Will set your despair based on the option chosen. Page 128 HtR Corebook
+      </Typography>
+    </Box>
+  }>
+    danger: option
+  </ListItemDialog>
+);
+
 const setExp = (
   <ListItemDialog dialogContent={
     <Box>
@@ -261,6 +276,36 @@ const updateHunger = (
     </Box>
   }>
     hunger: number
+  </ListItemDialog>
+);
+
+const updateDesperation = (
+  <ListItemDialog dialogContent={
+    <Box>
+      <Typography>
+        A Number between -10 and 10
+      </Typography>
+      <Typography>
+        Will add or remove the amount specified. Page 125 HtR Corebook
+      </Typography>
+    </Box>
+  }>
+    desperation: number
+  </ListItemDialog>
+);
+
+const updateDanger = (
+  <ListItemDialog dialogContent={
+    <Box>
+      <Typography>
+        A Number between -10 and 10
+      </Typography>
+      <Typography>
+        Will add or remove the amount specified. Page 125 HtR Corebook
+      </Typography>
+    </Box>
+  }>
+    desperation: number
   </ListItemDialog>
 );
 
@@ -1138,6 +1183,192 @@ const TrackerV5Doc = [
             <Typography>
               Eg. typing the value of 3 in the hunger argument will set
               Hunger to three regardless of what it was before.
+            </Typography>
+          </Box>          
+        </ListItem>
+      </List>
+    )
+  },
+  { // New Hunter Tracker
+    summery: (
+      <AccordionTitle>
+        New Hunter Tracker
+      </AccordionTitle>
+    ),
+    details: (
+      <List>
+        <ListSubheader>
+          Command
+        </ListSubheader>
+        <ListItem>
+          /hunter new
+        </ListItem>
+        <ListSubheader>
+          Required Arguments:
+        </ListSubheader>
+        { nameArg }
+        <Divider component="li" />
+        { setWillpower }
+        <Divider component="li" />
+        { setHealth }
+        <ListSubheader>
+          Optional Arguments:
+        </ListSubheader>
+        { setDesperation }
+        <Divider component="li" />
+        { setDanger }
+        <Divider component="li" />
+        { setDespair }
+        <Divider component="li" />
+        { setExp }
+        <Divider component="li" />
+        { setWillpowerSup }
+        <Divider component="li" />
+        { setWillpowerAgg }
+        <Divider component="li" />
+        { setHealthSup }
+        <Divider component="li" />
+        { setHealthAgg }
+        <Divider component="li" />
+        { notesArg }
+        <Divider component="li" />
+        { setHex }
+        <Divider component="li" />
+        { setImage }      
+        <ListSubheader>
+          Description
+        </ListSubheader>
+        <ListItem>
+          <Box>
+            <Typography>
+              Creates a new Hunter Character tracker for you with the given
+              values.
+            </Typography>
+          </Box>          
+        </ListItem>
+      </List>
+    )
+  },
+  { // Update Hunter Tracker
+    summery: (
+      <AccordionTitle>
+        Update Hunter Tracker
+      </AccordionTitle>
+    ),
+    details: (
+      <List>
+        <ListSubheader>
+          Command
+        </ListSubheader>
+        <ListItem>
+          /hunter update
+        </ListItem>
+        <ListSubheader>
+          Required Arguments:
+        </ListSubheader>
+        { nameArg }
+        <ListSubheader>
+          Optional Arguments:
+        </ListSubheader>
+        { updateDesperation }
+        <Divider component="li" />
+        { updateDanger }
+        <Divider component="li" />
+        { setDespair }
+        <Divider component="li" />
+        { updateWillpowerSup }    
+        <Divider component="li" />
+        { updateHealthSup }
+        <Divider component="li" />
+        { updateWillpowerAgg }
+        <Divider component="li" />
+        { updateHealthAgg }
+        <Divider component="li" />
+        { updateExp }
+        <Divider component="li" />
+        { updateWillpower }
+        <Divider component="li" />
+        { updateHealth }
+        <Divider component="li" />
+        { updatePlayer }
+        <Divider component="li" />
+        { notesArg }    
+        <ListSubheader>
+          Description
+        </ListSubheader>
+        <ListItem>
+          <Box>
+            <Typography>
+              Updates your Character stats using plus or minus values.
+            </Typography>
+            <Typography>
+              Eg. typing the value of 2 in the danger argument will increase
+              Danger by 2 while typing the value -3 will reduce Danger by three.
+            </Typography>
+          </Box>          
+        </ListItem>
+      </List>
+    )
+  },
+  { // Set Hunter Tracker
+    summery: (
+      <AccordionTitle>
+        Set Hunter Tracker
+      </AccordionTitle>
+    ),
+    details: (
+      <List>
+        <ListSubheader>
+          Command
+        </ListSubheader>
+        <ListItem>
+          /hunter set
+        </ListItem>
+        <ListSubheader>
+          Required Arguments:
+        </ListSubheader>
+        { nameArg }
+        <ListSubheader>
+          Optional Arguments:
+        </ListSubheader>        
+        { setWillpower }
+        <Divider component="li" />
+        { setHealth }
+        <Divider component="li" />
+        { setDesperation }
+        <Divider component="li" />
+        { setDanger }       
+        <Divider component="li" />
+        { setDespair }       
+        <Divider component="li" />
+        { setExp }
+        <Divider component="li" />
+        { setWillpowerSup } 
+        <Divider component="li" />
+        { setWillpowerAgg } 
+        <Divider component="li" />
+        { setHealthSup }     
+        <Divider component="li" />
+        { setHealthAgg }
+        <Divider component="li" />
+        { notesArg }
+        <Divider component="li" />
+        { setNameChange }
+        <Divider component="li" />
+        { setHex }
+        <Divider component="li" />
+        { setImage }
+        <ListSubheader>
+          Description
+        </ListSubheader>
+        <ListItem>
+          <Box>
+            <Typography>
+              Sets your Character stats using Absolute values.
+            </Typography>
+            <Typography>
+              Eg. typing the value of 3 in the Danger argument will set
+              Danger to three regardless of what it was before.
             </Typography>
           </Box>          
         </ListItem>

@@ -11,6 +11,7 @@ class Splats(Enum):
     demonTF = 'demon20th'
     vampire5th = 'vampire5th'
     mortal5th = 'mortal5th'
+    hunter5th = 'hunter5th'
 
 class Versions(Enum):
     v5 = '5th'
@@ -27,6 +28,7 @@ def splat_versions(splat):
         Splats.wraith20th: Versions.v20.value,
         Splats.demonTF: Versions.v20.value,
         Splats.vampire5th: Versions.v5.value,
-        Splats.mortal5th: Versions.v5.value
+        Splats.mortal5th: Versions.v5.value,
+        Splats.hunter5th: Versions.v5.value
     }
     return splats_versions[splat]

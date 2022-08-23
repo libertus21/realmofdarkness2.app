@@ -1,7 +1,7 @@
 from .serializeSplat import (serializeVampire20th, serializeChangeling20th, 
     serializeDemon20th, serializeGhoul20th, serializeHuman20th, 
     serializeMage20th, serializeMortal5th, serializeVampire5th, 
-    serializeWerewolf20th, serializeWraith20th)
+    serializeWerewolf20th, serializeWraith20th, serializeHunter5th)
 from bot.constants import Splats
 
 serializers = {
@@ -15,6 +15,7 @@ serializers = {
     Splats.human20th.value: serializeHuman20th,
     Splats.vampire5th.value: serializeVampire5th,
     Splats.mortal5th.value: serializeMortal5th,
+    Splats.hunter5th.value: serializeHunter5th,
 }
 
 def serialize(splat, character):

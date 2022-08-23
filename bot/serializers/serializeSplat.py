@@ -150,3 +150,12 @@ def serializeMortal5th(character):
     }
 
     return s
+
+def serializeHunter5th(character):
+    s = serialize5th(character)
+
+    s['desperation'] = character.trackable.get(slug='desperation').current
+    s['danger'] = character.trackable.get(slug='danger').current
+    s['despair'] = character.hunter5th.despair
+
+    return s
