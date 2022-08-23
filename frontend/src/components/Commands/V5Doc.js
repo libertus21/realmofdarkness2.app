@@ -142,7 +142,37 @@ const setHunger = (
   </ListItemDialog>
 );
 
+const setDesperation = (
+  <ListItemDialog dialogContent={
+    <Box>
+      <Typography>
+        A Number between 1 and 5
+      </Typography>
+      <Typography>
+        Sets Desperation to the input amount. Page 125 HtR Corebook
+      </Typography>
+    </Box>
+  }>
+    desperation: number
+  </ListItemDialog>
+);
+
 const setDanger = (
+  <ListItemDialog dialogContent={
+    <Box>
+      <Typography>
+        A Number between 1 and 5
+      </Typography>
+      <Typography>
+        Sets Desperation to the input amount. Page 125 HtR Corebook
+      </Typography>
+    </Box>
+  }>
+    danger: number
+  </ListItemDialog>
+);
+
+const setDespair = (
   <ListItemDialog dialogContent={
     <Box>
       <Typography>
@@ -153,7 +183,7 @@ const setDanger = (
       </Typography>
     </Box>
   }>
-    danger: option
+    despair: option
   </ListItemDialog>
 );
 
