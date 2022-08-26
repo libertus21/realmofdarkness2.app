@@ -72,7 +72,7 @@ function ScrollToTop({children}) {
 
 function AnalyticRoutes({children}) {
   useAnalytics()
-  return <Routes>children</Routes>
+  return <Routes>{children}</Routes>
 }
 
 function App() {
