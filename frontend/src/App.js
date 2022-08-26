@@ -18,6 +18,7 @@ import { useLayoutEffect } from "react";
 import TwentiethIndex from "./routes/20th/20thIndex";
 import CodIndex from "./routes/CoD/CodIndex";
 import CodCommands from "./routes/CoD/CodCommands";
+import useAnalytics from "./components/useAnalytics";
 
 const darkTheme = createTheme({
   components: {
@@ -69,13 +70,18 @@ function ScrollToTop({children}) {
   return children
 }
 
+function AnalyticRoutes({children}) {
+  useAnalytics()
+  return <Routes>children</Routes>
+}
+
 function App() {
   return (     
     <ThemeProvider theme={darkTheme}>
       <CssBaseline enableColorScheme />
       <BrowserRouter>
         <ScrollToTop>
-          <Routes>
+          <AnalyticRoutes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Index />} />            
               <Route path="v5" element={<V5 />}>
@@ -92,7 +98,7 @@ function App() {
               </Route>
               <Route path="*" element={<NotFound />} />
             </Route>
-          </Routes>
+          </AnalyticRoutes>
         </ScrollToTop>          
       </BrowserRouter> 
     </ThemeProvider>
