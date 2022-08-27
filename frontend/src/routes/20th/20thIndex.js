@@ -28,7 +28,7 @@ export default function TwentiethIndex() {
           color="primary"
           variant='outlined'
           component={Link}
-          to='commands'
+          to='commands/'
           size='large'
           disabled
           sx={{width: '100%', height: 60}}
@@ -41,7 +41,7 @@ export default function TwentiethIndex() {
           color="primary"
           variant='outlined'
           component={Link}
-          to='probability'
+          to='dice/'
           size='large'
           disabled
           sx={{width: '100%', height: 60}}

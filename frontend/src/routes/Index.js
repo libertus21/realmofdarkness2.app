@@ -38,19 +38,19 @@ export default function Index() {
           >
             <Button 
               component={Link}
-              to='v5'
+              to='v5/'
             >
               5th Edition
             </Button>
             <Button 
               component={Link}
-              to='20th'
+              to='20th/'
             >
               20th Anniversary
             </Button>
             <Button 
               component={Link}
-              to='cod'
+              to='cod/'
             >
               Chronicles of Darkness
             </Button>
