@@ -28,7 +28,7 @@ export default function V5Index() {
           color="primary"
           variant='outlined'
           component={Link}
-          to='commands'
+          to='commands/'
           size='large'
           sx={{width: '100%', height: 60}}
         >
@@ -40,7 +40,7 @@ export default function V5Index() {
           color="primary"
           variant='outlined'
           component={Link}
-          to='probability'
+          to='dice/'
           size='large'
           disabled
           sx={{width: '100%', height: 60}}

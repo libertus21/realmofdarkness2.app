@@ -70,18 +70,14 @@ function ScrollToTop({children}) {
   return children
 }
 
-function AnalyticRoutes({children}) {
-  useAnalytics()
-  return <Routes>{children}</Routes>
-}
-
 function App() {
+  useAnalytics()
   return (     
     <ThemeProvider theme={darkTheme}>
       <CssBaseline enableColorScheme />
       <BrowserRouter>
         <ScrollToTop>
-          <AnalyticRoutes>
+          <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Index />} />            
               <Route path="v5" element={<V5 />}>
@@ -98,7 +94,7 @@ function App() {
               </Route>
               <Route path="*" element={<NotFound />} />
             </Route>
-          </AnalyticRoutes>
+          </Routes>
         </ScrollToTop>          
       </BrowserRouter> 
     </ThemeProvider>

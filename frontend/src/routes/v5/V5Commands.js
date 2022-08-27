@@ -61,7 +61,7 @@ export default function V5Commands(props) {
           <Button disabled component={Link} to='/v20/commands/'>
             20th Edition
           </Button>
-          <Button component={Link} to='/cod/commands'>
+          <Button component={Link} to='/cod/commands/'>
             Chronicles of Darkness
           </Button>
         </ButtonGroup>
@@ -109,7 +109,7 @@ export default function V5Commands(props) {
           color="primary"
           variant='outlined'
           component={Link}
-          to='dice'
+          to='dice/'
           size='large'
           disabled
           sx={{width: '100%', height: 60}}

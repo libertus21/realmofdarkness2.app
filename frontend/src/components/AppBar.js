@@ -34,13 +34,13 @@ const pages = {
   ]
 };
 const routes = {
-  "5th Edition": "v5", 
-  "20th Anniversary": "20th", 
-  "Chronicles of Darkness": "cod",
-  Characters: 'characters',
-  Servers: 'servers',
-  Account: 'account',
-  Logout: 'logout',
+  "5th Edition": "v5/", 
+  "20th Anniversary": "20th/", 
+  "Chronicles of Darkness": "cod/",
+  Characters: 'characters/',
+  Servers: 'servers/',
+  Account: 'account/',
+  Logout: 'logout/',
 }
 
 function ResponsiveAppBar (props) {
