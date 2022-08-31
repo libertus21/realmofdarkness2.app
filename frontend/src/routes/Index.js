@@ -12,6 +12,7 @@ export default function Index() {
       direction="row"
       justifyContent="space-evenly"
       alignItems="flex-start"
+      columnSpacing={3}
     >
       <Grid item md={7} xs={12}>
         <Box sx={{pt: {xs: 0, md: 6}}}>

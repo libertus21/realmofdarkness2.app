@@ -42,10 +42,9 @@ export default function V5Index() {
           component={Link}
           to='probability'
           size='large'
-          disabled
           sx={{width: '100%', height: 60}}
         >
-          Dice (Coming soon!)
+          Dice
         </Button>
       </Grid>
       <Grid item xs={12}>
@@ -188,6 +187,7 @@ export default function V5Index() {
             <Typography component="div">
               <ul>
                 <li>Vampire</li>
+                <li>Hunter</li>
                 <li>Mortal</li>
               </ul>
             </Typography>
