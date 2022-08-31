@@ -19,6 +19,7 @@ import TwentiethIndex from "./routes/20th/20thIndex";
 import CodIndex from "./routes/CoD/CodIndex";
 import CodCommands from "./routes/CoD/CodCommands";
 import useAnalytics from "./components/useAnalytics";
+import V5Dice from "./routes/v5/V5Dice";
 
 const darkTheme = createTheme({
   components: {
@@ -83,6 +84,7 @@ function App() {
               <Route path="v5" element={<V5 />}>
                 <Route index element={<V5Index />} />
                 <Route path='commands' element={<V5Commands />} />
+                <Route path='dice' element={<V5Dice />} />
               </Route>
               <Route path="20th" element={<Twentieth />}>
                 <Route index element={<TwentiethIndex />} />
