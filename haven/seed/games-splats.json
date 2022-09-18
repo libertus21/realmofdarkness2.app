@@ -174,7 +174,7 @@
   },
   {
     "model": "haven.Splat",
-    "pk": 5,
+    "pk": 11,
     "fields": {
       "name": "Hunter",
       "version": "5th",
