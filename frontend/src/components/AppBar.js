@@ -79,11 +79,9 @@ function ResponsiveAppBar (props) {
       <Button 
         color="primary"
         variant='contained'
-        component={Link}
-        to='login'
-        disabled
+        href='http://localhost:8000/auth/login'
       >
-        Login Coming Soon!
+        Login
       </Button>
     </Box>
   );

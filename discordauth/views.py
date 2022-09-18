@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib.auth import (authenticate, 
     login as auth_login, logout as auth_logout)
 from .models import User
@@ -11,7 +11,7 @@ class Oauth(object):
     client_scope = settings['scope']
     #Discord redirect URL
     redirect_uri = settings['redirect']
-    login_url = f'https://discordapp.com/api/oauth2/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code&scope={client_scope}&prompt=none'
+    login_url = settings['loginURL']
     token_url = 'https://discordapp.com/api/oauth2/token'
     api_url = 'https://discordapp.com/api'
 
@@ -22,8 +22,7 @@ class Oauth(object):
             'client_secret': Oauth.client_secret,
             'grant_type': 'authorization_code',
             'code': code,
-            'redirect_uri': Oauth.redirect_uri,
-            'scope': Oauth.client_scope,
+            'redirect_uri': Oauth.redirect_uri
         }        
         headers = {
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -63,6 +62,7 @@ def logout(request):
     return redirect('main:index')
 
 def login_success(request):
+    print("Logging you in Sheperd")
     #TODO validate the state making sure it is the same as what we sent
     code = request.GET.get('code', 'no code found')
     access_token = Oauth.get_access_token(code)
@@ -91,4 +91,4 @@ def login_success(request):
 
     auth_login(request, user, backend='discordauth.backends.DiscordAuthBackend')
     # Enter redirect Page
-    return redirect(settings['final_redirect'])
+    return redirect("/")

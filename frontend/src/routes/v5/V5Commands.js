@@ -111,10 +111,9 @@ export default function V5Commands(props) {
           component={Link}
           to='dice/'
           size='large'
-          disabled
           sx={{width: '100%', height: 60}}
         >
-          Dice (Coming soon!)
+          Dice
         </Button>
       </Grid>
     </Grid>
