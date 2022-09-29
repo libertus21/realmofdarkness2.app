@@ -1,75 +1,11 @@
 [
   {
-      "model": "haven.Game",
-      "pk": 1,
-      "fields": {
-        "name": "Vampire: The Masquerade",
-        "slug": "vtm",
-        "description": ""
-      }
-  },
-  {
-    "model": "haven.Game",
-    "pk": 2,
-    "fields": {
-      "name": "Werewolf: The Apocalypse",
-      "slug": "wta",
-      "description": ""
-    }
-  },
-  {
-    "model": "haven.Game",
-    "pk": 3,
-    "fields": {
-      "name": "Mage: The Ascension",
-      "slug": "mta",
-      "description": ""
-    }
-  },
-  {
-    "model": "haven.Game",
-    "pk": 4,
-    "fields": {
-      "name": "Changeling: The Dreaming",
-      "slug": "ctd",
-      "description": ""
-    }
-  },
-  {
-    "model": "haven.Game",
-    "pk": 5,
-    "fields": {
-      "name": "Wraith: The Oblivion",
-      "slug": "wto",
-      "description": ""
-    }
-  },
-  {
-    "model": "haven.Game",
-    "pk": 6,
-    "fields": {
-      "name": "Demon: The Fallen",
-      "slug": "dtf",
-      "description": ""
-    }
-  },
-  {
-    "model": "haven.Game",
-    "pk": 7,
-    "fields": {
-      "name": "Hunter: The Reckoning",
-      "slug": "HtR",
-      "description": ""
-    }
-  },
-  {
       "model": "haven.Splat",
       "pk": 1,
       "fields": {
         "name": "Vampire",
         "version": "20th",
         "slug": "vampire20th",
-        "game": 1,
         "description": ""
       }
   },
@@ -80,7 +16,6 @@
       "name": "Human",
       "version": "20th",
       "slug": "human20th",
-      "game": 1,
       "description": ""
     }
   },
@@ -91,7 +26,6 @@
       "name": "Ghoul",
       "version": "20th",
       "slug": "ghoul20th",
-      "game": 1,
       "description": ""
     }
   },
@@ -102,7 +36,6 @@
       "name": "Vampire",
       "version": "5th",
       "slug": "vampire5th",
-      "game": 1,
       "description": ""
     }
   },
@@ -113,7 +46,6 @@
       "name": "Mortal",
       "version": "5th",
       "slug": "mortal5th",
-      "game": 1,
       "description": ""
     }
   },
@@ -124,7 +56,6 @@
       "name": "Werewolf",
       "version": "20th",
       "slug": "werewolf20th",
-      "game": 2,
       "description": ""
     }
   },
@@ -135,7 +66,6 @@
       "name": "Changeling",
       "version": "20th",
       "slug": "changeling20th",
-      "game": 4,
       "description": ""
     }
   },
@@ -146,7 +76,6 @@
       "name": "Mage",
       "version": "20th",
       "slug": "mage20th",
-      "game": 3,
       "description": ""
     }
   },
@@ -157,7 +86,6 @@
       "name": "Wraith",
       "version": "20th",
       "slug": "wraith20th",
-      "game": 5,
       "description": ""
     }
   },
@@ -168,7 +96,6 @@
       "name": "Demon",
       "version": "20th",
       "slug": "demon20th",
-      "game": 6,
       "description": ""
     }
   },
@@ -179,7 +106,6 @@
       "name": "Hunter",
       "version": "5th",
       "slug": "hunter5th",
-      "game": 7,
       "description": ""
     }
   }

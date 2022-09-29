@@ -6,12 +6,6 @@ from . import Splat, Health20th, Morality, MoralityInfo, Damage5th, Humanity, Hu
 from chronicle.models import Member, Chronicle
 from bot.constants import Splats, Versions
 
-class Colour(models.Model):
-    character = models.OneToOneField("haven.Character", on_delete=models.CASCADE)
-    red = models.IntegerField(default=0)
-    green = models.IntegerField(default=0)
-    blue = models.IntegerField(default=0)
-
 class History(models.Model):
     character = models.ForeignKey('haven.Character', on_delete=models.CASCADE,
         related_name='history')
@@ -68,7 +62,8 @@ class CharacterManager(models.Manager):
             member=member,
             splat=splat,
             name=json['name'],
-            faceclaim=json.get('thumbnail', '')
+            faceclaim=json.get('thumbnail', ''),
+            colour=json['colour']
         )
 
         historyList = []
@@ -83,12 +78,6 @@ class CharacterManager(models.Manager):
             ))
         History.objects.bulk_create(historyList)
 
-        Colour.objects.create(
-            character=char, 
-            red=json['colour'][0],
-            green=json['colour'][1],
-            blue=json['colour'][2]
-        )
         Trackable.objects.create(character=char, slug="exp",
             total=json['exp']['total'], current=json['exp']['current'])
 
@@ -278,9 +267,10 @@ class Character(models.Model):
         null=True)
     
     partial = models.BooleanField(default=True)
-    date_created = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     faceclaim = models.URLField(blank=True)
+    theme = models.CharField(default='#000000', max_length=10)
     
     splat = models.ForeignKey(Splat, on_delete=models.CASCADE)
 

@@ -1,3 +1,2 @@
-from .game import *
-from .splats import *
+from .Splat import *
 from .character import *

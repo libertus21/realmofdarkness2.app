@@ -20,7 +20,7 @@ import CodIndex from "./routes/CoD/CodIndex";
 import CodCommands from "./routes/CoD/CodCommands";
 import initAnalytics from "./functions/initAnalytics";
 import V5Dice from "./routes/v5/V5Dice";
-import Gateway from './components/GatewayContext';
+import ClientProvider from './components/ClientProvider';
 
 const darkTheme = createTheme({
   components: {
@@ -75,7 +75,7 @@ function ScrollToTop({children}) {
 function App() {
   initAnalytics()  
   return (     
-    <Gateway>
+    <ClientProvider>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline enableColorScheme />      
         <BrowserRouter>
@@ -102,7 +102,7 @@ function App() {
           </ScrollToTop>          
         </BrowserRouter>         
       </ThemeProvider>
-    </Gateway>    
+    </ClientProvider>    
   );
 }
 

@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link } from "react-router-dom";
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { UserContext } from './ClientProvider';
 
 const pages = {
   sm: [
@@ -27,8 +28,6 @@ const pages = {
     'Chronicles of Darkness', 
   ],
   user: [
-    'Characters', 
-    'Servers', 
     'Account', 
     'Logout'
   ]
@@ -86,42 +85,43 @@ function ResponsiveAppBar (props) {
     </Box>
   );
 
-  const avatarMenu = (
-    <Box sx={{ flexGrow: 0 }}>
-      <Tooltip title="Open settings">
-        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-        </IconButton>
-      </Tooltip>
-      <Menu
-        sx={{ mt: '45px' }}
-        id="menu-appbar"
-        anchorEl={anchorElUser}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        open={Boolean(anchorElUser)}
-        onClose={handleCloseUserMenu}
-      >
-        {pages.user.map((page) => (
-          <MenuItem 
-            key={page} 
-            onClick={handleCloseUserMenu}
-            component={Link}
-            to={routes[page]}
-          >
-            <Typography textAlign="center">{page}</Typography>
-          </MenuItem>
-        ))}
-      </Menu>
-    </Box>
-  );
+  function avatarMenu(user) {
+    return (
+      <Box sx={{ flexGrow: 0 }}>
+        <Tooltip title="Open settings">
+          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <Avatar alt={user.username} src={user.avatar_url} />
+          </IconButton>
+        </Tooltip>
+        <Menu
+          sx={{ mt: '45px' }}
+          id="menu-appbar"
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={handleCloseUserMenu}
+        >
+          {pages.user.map((page) => (
+            <MenuItem 
+              key={page} 
+              onClick={handleCloseUserMenu}
+              component={Link}
+              to={routes[page]}
+            >
+              <Typography textAlign="center">{page}</Typography>
+            </MenuItem>
+          ))}
+        </Menu>
+      </Box>
+  )};
 
   const mdLinks = (
     <Box sx={{
@@ -327,7 +327,9 @@ function ResponsiveAppBar (props) {
             RoD
           </Typography>
           {mdLinks}
-          {authOption}
+          <UserContext.Consumer>       
+            {user => (user ? avatarMenu(user) : loginButton)}   
+          </UserContext.Consumer>
         </Toolbar>
       </Container>
     </AppBar>
