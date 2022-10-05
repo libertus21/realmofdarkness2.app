@@ -181,7 +181,7 @@ def serializeVampire5th(character):
   hunger = character.trackable.get(slug='hunger')
   s['hunger'] = hunger.current
   s['humanity'] = {
-      'total': character.humanity.current,
+      'current': character.humanity.current,
       'stains': character.humanity.stains
   }
   return s

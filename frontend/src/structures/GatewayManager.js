@@ -8,7 +8,7 @@ module.exports.GatewayManager = class extends EventEmitter {
   }
   
   connect() {
-    this.ws = new WebSocket('ws://localhost:8000/gateway/web');
+    this.ws = new WebSocket('ws://localhost:80/gateway/web');
   }
 
   listenOnMessage(contextSetters) {

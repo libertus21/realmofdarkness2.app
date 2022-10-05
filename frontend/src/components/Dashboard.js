@@ -10,22 +10,19 @@ export default function Dashboard() {
       justifyContent="space-evenly"
       alignItems="flex-start"
       columnSpacing={3}
-      rowSpacing={2}
+      rowSpacing={3}
     >
       <CharactersContext.Consumer>
         {(characters) => {
           if (!characters) return;
-          let y = [];
+          let cards = [];
           Object.keys(characters).forEach((key, index) => {
-            console.log(characters[key]);
-            y.push((
-              <Grid key={key} item xs={12} sm={6} md={4} lg={3}>                
-                <CharacterCard character={characters[key]} />
-              </Grid>
+            cards.push((               
+              <CharacterCard key={key} character={characters[key]} />
             ))
           });
-          console.log(y)
-          return y;
+          
+          return cards;
         }}
       </CharactersContext.Consumer>
     </Grid>

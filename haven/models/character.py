@@ -63,7 +63,7 @@ class CharacterManager(models.Manager):
             splat=splat,
             name=json['name'],
             faceclaim=json.get('thumbnail', ''),
-            colour=json['colour']
+            theme=json['theme']
         )
 
         historyList = []

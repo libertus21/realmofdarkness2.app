@@ -16,13 +16,9 @@ def serializeCharacter(character):
             'id': str(character.chronicle.id) if character.chronicle else '',
             'name': character.chronicle.name if character.chronicle else '',
             'iconURL': character.chronicle.icon_url if character.chronicle else '',
-            'displayName': character.member.display_name if character.member else ''
+            'displayName': character.member.nickname if character.member else ''
         },
-        'colour': [
-            character.colour.red, 
-            character.colour.green, 
-            character.colour.blue
-        ],
+        'colour': character.theme,
         'thumbnail': character.faceclaim if character.user.supporter >= 0 else None,
         'exp': {'total': exp.total, 'current': exp.current},
         'history': serializeHistory(character),
