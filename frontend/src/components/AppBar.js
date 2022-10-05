@@ -78,7 +78,7 @@ function ResponsiveAppBar (props) {
       <Button 
         color="primary"
         variant='contained'
-        href='http://localhost:8000/auth/login'
+        href='http://localhost/auth/login'
       >
         Login
       </Button>

@@ -17,7 +17,7 @@ export default function CharacterCard(props) {
     <UserContext.Consumer>
       {(user) => (        
         <Grid item xs={12} sm={6} md={4} lg={3}> 
-          <Card sx={{minWidth: '200px'}}>      
+          <Card sx={{minWidth: '250px'}}>      
             <CardHeader 
               avatar={
                 <Avatar 

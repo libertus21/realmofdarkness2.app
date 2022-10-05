@@ -47,6 +47,12 @@ class GatewayMessage():
         return self.toJson()
 
     def ready(self, user):
+        if (user.is_anonymous):
+            self.data['op'] = GATEWAY_OPCODE.dispatch
+            self.data['t'] = 'READY'
+            self.data['d'] = {}
+            return self.toJson()
+
         characters = {}
         for character in Character.objects.filter(user=user):
             characters[character.id] = (serialize_character(character))
