@@ -274,7 +274,6 @@ class Character(models.Model):
     splat = models.ForeignKey(Splat, on_delete=models.CASCADE)
     objects = CharacterManager()
 
-    
     class Meta:
         unique_together = ('name', 'user')
         indexes = [models.Index(fields=['name', 'user'])]

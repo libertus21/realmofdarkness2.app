@@ -31,7 +31,7 @@ class User(AbstractBaseUser):
     supporter = models.IntegerField(default=0)
 
     created_at = models.DateTimeField(auto_now_add=True)
-    _last_saved = models.DateTimeField(auto_now=True)
+    last_saved = models.DateTimeField(auto_now=True)
 
     objects = UserManager()
 
