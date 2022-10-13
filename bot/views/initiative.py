@@ -133,7 +133,7 @@ def init_roll(request):
         member = Member.objects.get(user=member_id, chronicle=tracker.chronicle)
     except Member.DoesNotExist:
         member = Member(chronicle=tracker.chronicle, user=user, 
-            display_name=data["memberUsername"])
+            nickname=data["memberUsername"])
         member.save()
     
     try:
@@ -208,7 +208,7 @@ def init_declare(request):
         member = Member.objects.get(user=member_id, chronicle=tracker.chronicle)
     except Member.DoesNotExist:
         member = Member(chronicle=tracker.chronicle, user=user, 
-            display_name=data["memberUsername"])
+            nickname=data["memberUsername"])
         member.save()
     
     try:

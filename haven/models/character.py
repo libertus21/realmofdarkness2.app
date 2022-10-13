@@ -47,13 +47,13 @@ class CharacterManager(models.Manager):
             # if this is a guild then the user is a Member
             try:
                 member = Member.objects.get(chronicle=guild, user=user)
-                member.display_name = guild_info['displayName']
+                member.nickname = guild_info['displayName']
                 member.save()
             except Member.DoesNotExist:
                 member = Member.objects.create(
                     chronicle=guild,
                     user=user,
-                    display_name=guild_info['displayName']
+                    nickname=guild_info['displayName']
                 )
         
         char = self.create(

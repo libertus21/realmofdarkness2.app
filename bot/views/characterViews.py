@@ -122,13 +122,13 @@ def save_character(request):
         # if this is a guild then the user is a Member
         try:
             member = Member.objects.get(chronicle=guild, user=user)
-            member.display_name = g['displayName']
+            member.nickname = g['displayName']
             member.save()
         except Member.DoesNotExist:
             member = Member.objects.create(
                 chronicle=guild,
                 user=user,
-                display_name=g['displayName']
+                nickname=g['displayName']
             )
 
         char.chronicle = guild
