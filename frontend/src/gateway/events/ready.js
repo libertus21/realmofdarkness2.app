@@ -1,6 +1,4 @@
-
-
-module.exports = {
+export default {
 	name: 'READY',
 	async execute(data, contextSetters) {
 		contextSetters.setUser(data.user);

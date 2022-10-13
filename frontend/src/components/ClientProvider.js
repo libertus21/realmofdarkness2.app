@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-const Client = require('../structures/Client');
+import Client from '../structures/Client';
 export const ClientContext = createContext(null);
 export const UserContext = createContext(null);
 export const CharactersContext = createContext(null);

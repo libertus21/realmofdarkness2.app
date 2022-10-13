@@ -1,8 +1,8 @@
-const { GatewayManager } = require("./GatewayManager");
-const GatewayEvents = require('../gateway/GatewayEvents');
+import GatewayManager from "./GatewayManager";
+import { GatewayEvents } from "../gateway/GatewayEvents";
 
 
-module.exports = class Client 
+export default class Client 
 {
   constructor() {
     this.gatewayManager = new GatewayManager();        

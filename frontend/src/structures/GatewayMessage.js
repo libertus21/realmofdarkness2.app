@@ -3,7 +3,7 @@ const { GATEWAY_OPCODE } = require('../constants');
 /**
  * Represents a Gateway Message with utility functions
  */
-module.exports = class GatewayMessage {
+export default class GatewayMessage {
   constructor() {
     this.data = {
       op: null, // opcode for the payload

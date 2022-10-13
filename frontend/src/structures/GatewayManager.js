@@ -1,5 +1,5 @@
+import GatewayMessage  from './GatewayMessage';
 const { EventEmitter } = require('events');
-const GatewayMessage = require('./GatewayMessage');
 const { GATEWAY_OPCODE } = require('../constants');
 
 const cooldownTimer = {
@@ -16,7 +16,7 @@ function incrementCooldown(cooldown)
   return t;
 }
 
-module.exports.GatewayManager = class extends EventEmitter 
+export default class GatewayManager extends EventEmitter 
 {
   constructor()
   {
