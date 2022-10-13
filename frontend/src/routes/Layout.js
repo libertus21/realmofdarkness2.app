@@ -7,9 +7,9 @@ import Container from '@mui/material/Container';
 
 export default function Layout() {
   return (
-  	<main>
+  	<main>      
       <AppBar /> 
-      <Container sx={{ my: 13 }}>
+      <Container sx={{ my: 13 }}>      
         <Outlet />
       </Container> 
       

@@ -18,6 +18,7 @@ from django.urls import path
 from . import views
 
 app_name = 'discordauth'
-urlpatterns = [
-    
+urlpatterns = [    
+    path('login/success/', views.login_success),
+    path('login/', views.login),
 ]

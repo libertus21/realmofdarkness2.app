@@ -18,8 +18,9 @@ import { useLayoutEffect } from "react";
 import TwentiethIndex from "./routes/20th/20thIndex";
 import CodIndex from "./routes/CoD/CodIndex";
 import CodCommands from "./routes/CoD/CodCommands";
-import useAnalytics from "./components/useAnalytics";
+import initAnalytics from "./functions/initAnalytics";
 import V5Dice from "./routes/v5/V5Dice";
+import ClientProvider from './components/ClientProvider';
 
 const darkTheme = createTheme({
   components: {
@@ -72,34 +73,36 @@ function ScrollToTop({children}) {
 }
 
 function App() {
-  useAnalytics()
+  initAnalytics()  
   return (     
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline enableColorScheme />
-      <BrowserRouter>
-        <ScrollToTop>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Index />} />            
-              <Route path="v5" element={<V5 />}>
-                <Route index element={<V5Index />} />
-                <Route path='commands' element={<V5Commands />} />
-                <Route path='dice' element={<V5Dice />} />
+    <ClientProvider>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline enableColorScheme />      
+        <BrowserRouter>
+          <ScrollToTop>
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Index />} />            
+                <Route path="v5" element={<V5 />}>
+                  <Route index element={<V5Index />} />
+                  <Route path='commands' element={<V5Commands />} />
+                  <Route path='dice' element={<V5Dice />} />
+                </Route>
+                <Route path="20th" element={<Twentieth />}>
+                  <Route index element={<TwentiethIndex />} />
+                  <Route path='commands' element={<V5Commands />} />
+                </Route>
+                <Route path="cod" element={<CoD />}>
+                  <Route index element={<CodIndex />} />
+                  <Route path='commands' element={<CodCommands />} />
+                </Route>
+                <Route path="*" element={<NotFound />} />
               </Route>
-              <Route path="20th" element={<Twentieth />}>
-                <Route index element={<TwentiethIndex />} />
-                <Route path='commands' element={<V5Commands />} />
-              </Route>
-              <Route path="cod" element={<CoD />}>
-                <Route index element={<CodIndex />} />
-                <Route path='commands' element={<CodCommands />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
-        </ScrollToTop>          
-      </BrowserRouter> 
-    </ThemeProvider>
+            </Routes>
+          </ScrollToTop>          
+        </BrowserRouter>         
+      </ThemeProvider>
+    </ClientProvider>    
   );
 }
 

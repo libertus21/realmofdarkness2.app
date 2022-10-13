@@ -139,10 +139,7 @@ def save_character(request):
     char.name = character['name']
     char.faceclaim = character.get('thumbnail', '')
     # Character Vanity Colour
-    char.colour.red = character['colour'][0]
-    char.colour.green = character['colour'][1]
-    char.colour.blue = character['colour'][2]
-    char.colour.save()
+    char.theme = character['theme']
     
     exp = char.trackable.get(slug='exp')
     exp.total = character['exp']['total']

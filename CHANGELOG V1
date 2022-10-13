@@ -1,0 +1,26 @@
+Data Migrations:
+3 migrations
+1) create new field, data migration
+2) delete old field
+3) rename new field
+
+
+discordaut.User -
+created_at: DateField -> DateTimeField
+last_saved: DateField -> DateTimeField
+
+haven.Character -
+created_at: DateField -> DateTimeField
+theme: Colour -> CharField
+
+haven.Splat -
+game: DELETED
+
+haven.Game -
+DELETED
+
+chronicle.Chronicle -
+last_updated = dateField -> DateTimeField
+
+chronicle.Member -
+last_updated = dateField -> DateTimeField

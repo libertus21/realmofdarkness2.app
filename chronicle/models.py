@@ -18,6 +18,8 @@ class Chronicle(models.Model):
         related_name='storytellers_chronicles')
     icon_url = models.URLField(blank=True)
     tracker_channel = models.CharField(max_length=20, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    _last_updated = models.DateTimeField(auto_now=True)
     last_updated = models.DateField(auto_now=True)
 
     def __str__(self):
@@ -41,7 +43,9 @@ We do not keep track of Guild members who do not use the bot
 class Member(models.Model):
     chronicle = models.ForeignKey(Chronicle, on_delete=models.CASCADE)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
-    display_name = models.CharField(max_length=100)
+    nickname = models.CharField(max_length=100, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    _last_updated = models.DateTimeField(auto_now=True)
     last_updated = models.DateField(auto_now=True)
 
     class Meta:
