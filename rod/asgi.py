@@ -12,11 +12,14 @@ import os
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'rod.settings')
+application = get_asgi_application()
+
 import gateway.routing
 
 application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
+    "http": application,
     "websocket": AuthMiddlewareStack(
         URLRouter(
             #haven.routing.websocket_urlpatterns
