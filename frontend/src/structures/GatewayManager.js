@@ -26,7 +26,7 @@ export default class GatewayManager extends EventEmitter
 
   connect() 
   {
-    this.ws = new WebSocket('ws://localhost/gateway/web');
+    this.ws = new WebSocket('wss://realmofdarkness.app/gateway/web');
     
     this.ws.onopen = () => {
       this.emit('CONNECT', this.setConnection);
