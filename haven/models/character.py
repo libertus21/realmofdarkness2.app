@@ -270,11 +270,12 @@ class Character(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     faceclaim = models.URLField(blank=True)
-    theme = models.CharField(default='#000000', max_length=10)
-    
+    theme = models.CharField(default='#000000', max_length=10)    
     splat = models.ForeignKey(Splat, on_delete=models.CASCADE)
-
     objects = CharacterManager()
+
+    date_created = models.DateField(auto_now_add=True)
+
     
     class Meta:
         unique_together = ('name', 'user')

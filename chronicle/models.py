@@ -19,7 +19,8 @@ class Chronicle(models.Model):
     icon_url = models.URLField(blank=True)
     tracker_channel = models.CharField(max_length=20, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    last_updated = models.DateTimeField(auto_now=True)
+    _last_updated = models.DateTimeField(auto_now=True)
+    last_updated = models.DateField(auto_now=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -44,7 +45,8 @@ class Member(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     nickname = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    last_updated = models.DateTimeField(auto_now=True)
+    _last_updated = models.DateTimeField(auto_now=True)
+    last_updated = models.DateField(auto_now=True)
 
     class Meta:
         unique_together = ('chronicle', 'user')
