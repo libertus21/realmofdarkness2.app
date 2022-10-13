@@ -1,5 +1,5 @@
 import GatewayManager from "./GatewayManager";
-import { GatewayEvents } from "../gateway/GatewayEvents";
+import GatewayEvents from "../gateway/GatewayEvents";
 
 
 export default class Client 

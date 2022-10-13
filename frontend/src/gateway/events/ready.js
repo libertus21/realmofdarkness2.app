@@ -1,4 +1,4 @@
-export default {
+const Event = {
 	name: 'READY',
 	async execute(data, contextSetters) {
 		contextSetters.setUser(data.user);
@@ -6,3 +6,5 @@ export default {
 		contextSetters.setChronicles(data.chronicles);
 	},
 };
+
+export default Event;

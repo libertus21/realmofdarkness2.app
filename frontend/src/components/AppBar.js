@@ -77,7 +77,7 @@ function ResponsiveAppBar (props) {
       <Button 
         color="primary"
         variant='contained'
-        href='http://localhost/auth/login'
+        href='https://realmofdarkness.app/auth/login'
       >
         Login
       </Button>
