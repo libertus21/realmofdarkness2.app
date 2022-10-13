@@ -5,10 +5,12 @@ def serializeCharacter(character):
     'id': str(character.id),
     'splat': character.splat.slug,
     'user': str(character.user.id),
-    'guild': str(character.chronicle.id) if character.chronicle else '',
+    'chronicle': str(character.chronicle.id) if character.chronicle else '',
     'theme': character.theme,
     'thumbnail': character.faceclaim,
     'exp': {'total': exp.total, 'current': exp.current},
+    'createdAt': (character.created_at.timestamp() if character.created_at else ''),
+    'lastUpdated': character.last_updated.timestamp(),
     'history': serializeHistory(character),
   }
 
@@ -189,7 +191,7 @@ def serializeVampire5th(character):
 def serializeMortal5th(character):
   s = serialize5th(character)
   s['humanity'] = {
-      'total': character.humanity.current,
+      'current': character.humanity.current,
       'stains': character.humanity.stains
   }
   return s

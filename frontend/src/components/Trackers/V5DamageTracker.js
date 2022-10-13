@@ -3,7 +3,6 @@ import { Grid, Rating } from "@mui/material";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
-import PropTypes from 'prop-types';
 
 const AggravatedIcon = 
 {

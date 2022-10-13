@@ -1,6 +1,6 @@
 import json as JSON
 from channels.generic.websocket import WebsocketConsumer
-from .serializers import serialize_user, serialize_character
+from .serializers import serialize_user, serialize_character, serialize_chronicle
 from .constants import GATEWAY_OPCODE
 from haven.models import Character
 
@@ -8,18 +8,14 @@ from haven.models import Character
 class GatewayConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
-        print("Opened Connection!")
-        print(self.scope['user'])
         m = GatewayMessage().welcome()
-        print(m)
         self.send(text_data=m)
 
     def discornnect(self, close_code):
-        print(f'cloded: {close_code}')
+        pass
 
     def receive(self, text_data=None):
         gateway = GatewayMessage().loadJson(text_data)
-        print(gateway.getOpcode())
 
         if (gateway.getOpcode() == GATEWAY_OPCODE.identify):
             self.send(text_data=GatewayMessage().ready(self.scope['user']))
@@ -53,14 +49,20 @@ class GatewayMessage():
             self.data['d'] = {}
             return self.toJson()
 
-        characters = {}
-        for character in Character.objects.filter(user=user):
+        characters = {}        
+        chronicles = {}
+        for character in Character.objects.select_related('chronicle')\
+            .filter(user=user):
             characters[character.id] = (serialize_character(character))
+            chronicle = character.chronicle
+            chronicles[chronicle.id] = (serialize_chronicle(chronicle))
+
 
         self.data['op'] = GATEWAY_OPCODE.dispatch
         self.data['t'] = 'READY'
         self.data['d'] = {
             'user': serialize_user(user),
-            'characters': characters
+            'characters': characters,
+            'chronicles': chronicles,
         }
         return self.toJson()

@@ -4,6 +4,7 @@ from .serializeCharacter import (serializeVampire20th, serializeChangeling20th,
   serializeWerewolf20th, serializeWraith20th, serializeHunter5th)
 from gateway.constants import Splats
 from .serializeUser import serialize_user
+from .serializeChronicle import serialize_chronicle
 
 serializers = {
   Splats.changeling20th: serializeChangeling20th,

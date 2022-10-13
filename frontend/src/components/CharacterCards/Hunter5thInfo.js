@@ -1,16 +1,16 @@
 import { CardActionArea, CardContent, CardMedia } from "@mui/material";
 import { Typography, Divider } from "@mui/material";
 import V5DamageTracker from "../Trackers/V5DamageTracker";
-import V5Humanity from "../Trackers/V5Humanity";
 import ExpBar from "../CharacterCards/ExpBar";
 import ResponsiveRating from "../Trackers/ResponsiveRating";
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 
 
 const defaultImage = 'https://media.discordapp.net/attachments/886983353922891816/1024918662223769600/VampireLogo_xsmall_colour.png?width=1440&height=445'
 
-export default function Vampire5thInfo(props) {
+export default function Hunter5thInfo(props) {
   const { character, chronicle } = props;
-
   return (
     <CardActionArea>
       <CardContent>
@@ -27,7 +27,7 @@ export default function Vampire5thInfo(props) {
             mb: 2
           }}
         />
-        <Typography>Vampire - 5th Edition</Typography>
+        <Typography>Hunter - 5th Edition</Typography>
         <Typography>Server: {chronicle.name}</Typography>
         <Divider sx={{my: 1}} />
         <Typography>Willpower</Typography>
@@ -36,10 +36,24 @@ export default function Vampire5thInfo(props) {
         <Typography>Health</Typography>
         <V5DamageTracker tracker={character.health} />
         <Divider sx={{my: 1}} />
-        <V5Humanity humanity={character.humanity} />
-        <Divider sx={{my: 1}} />
-        <Typography>Hunger {character.hunger}</Typography>
-        <ResponsiveRating tracker={{current: character.hunger, total: 5}} />
+        <Typography>Desperation {character.desperation}</Typography>
+        <ResponsiveRating tracker={{
+          current: character.desperation, 
+          total: 5
+        }} />
+        <Divider sx={{my: 1}} />        
+        <Typography>Danger {character.danger}</Typography>
+        <ResponsiveRating tracker={{
+          current: character.danger, 
+          total: 5
+        }} />
+        <Divider sx={{my: 1}} />        
+        <Typography sx={{pt: 0.4, mb: -0.4}}>
+          Despair -
+          {character.despair ? 
+            <CheckBoxIcon sx={{mb:-0.9, ml: 0.5, color: '#b51b3d'}} /> : 
+            <CheckBoxOutlineBlankIcon color='disabled' sx={{mb:-0.9, ml: 0.5}} />}
+        </Typography>
         <ExpBar exp={character.exp} />
       </CardContent>
     </CardActionArea>

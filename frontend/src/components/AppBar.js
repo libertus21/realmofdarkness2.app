@@ -43,7 +43,6 @@ const routes = {
 }
 
 function ResponsiveAppBar (props) {
-  const [auth] = React.useState(false);
   const [scroll, setScroll] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -195,10 +194,6 @@ function ResponsiveAppBar (props) {
   {
     setScroll(true);
   }
-
-  let authOption;
-  if (auth) authOption = avatarMenu;
-  else authOption = loginButton;
 
   return (
     <AppBar>
