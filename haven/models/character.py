@@ -274,8 +274,6 @@ class Character(models.Model):
     splat = models.ForeignKey(Splat, on_delete=models.CASCADE)
     objects = CharacterManager()
 
-    date_created = models.DateField(auto_now_add=True)
-
     
     class Meta:
         unique_together = ('name', 'user')
