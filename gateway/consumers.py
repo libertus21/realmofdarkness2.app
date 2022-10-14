@@ -15,15 +15,16 @@ class GatewayConsumer(WebsocketConsumer):
         log.error("Connected to Socket")
 
     def disconnect(self, close_code):
-        pass
+        log.error("Connection closed")
+        log.error(close_code)
 
     def receive(self, text_data=None):
-        gateway = GatewayMessage().loadJson(text_data)
         logger.info("Incoming data")
         logger.info(text_data)
         log.error("Incoming data")
         log.error(text_data)
 
+        gateway = GatewayMessage().loadJson(text_data)
         if (gateway.getOpcode() == GATEWAY_OPCODE.identify):
             self.send(text_data=GatewayMessage().ready(self.scope['user']))
 
