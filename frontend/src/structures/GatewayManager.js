@@ -9,6 +9,12 @@ const cooldownTimer = {
   3: 20
 }
 
+let host;
+if (process.env.NODE_ENV === 'production') 
+  host = 'wss://realmofdarkness.app/gateway/web/';
+else
+  host = 'ws://localhost/gateway/web/';
+
 function incrementCooldown(cooldown)
 {
   let t = cooldown + 1;
@@ -25,8 +31,8 @@ export default class GatewayManager extends EventEmitter
   }
 
   connect() 
-  {
-    this.ws = new WebSocket('wss://realmofdarkness.app/gateway/web/');
+  {    
+    this.ws = new WebSocket(host);
     
     this.ws.onopen = () => {
       this.emit('CONNECT', this.setConnection);
@@ -57,9 +63,6 @@ export default class GatewayManager extends EventEmitter
     else if (!this.contextSetters) return;
     
     this.ws.onmessage = (message) => {
-      
-      console.log("Message received")
-      console.log(message)
       const json = message.data
       const gm = new GatewayMessage().loadJson(json);
       

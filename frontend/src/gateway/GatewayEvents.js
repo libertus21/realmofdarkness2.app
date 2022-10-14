@@ -1,5 +1,5 @@
-const GatewayEvents = {
-  ready: require('./events/ready'),
-}
+import { Ready } from './events/ready';
 
-export default GatewayEvents;
+export const GatewayEvents = {
+  ready: Ready,
+}

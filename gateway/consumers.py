@@ -6,11 +6,13 @@ from haven.models import Character
 import logging
 
 logger = logging.getLogger('DEBUG')
+log = logging.getLogger()
 
 class GatewayConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
         self.send(text_data=GatewayMessage().welcome())
+        log.error("Connected to Socket")
 
     def disconnect(self, close_code):
         pass
@@ -19,6 +21,8 @@ class GatewayConsumer(WebsocketConsumer):
         gateway = GatewayMessage().loadJson(text_data)
         logger.info("Incoming data")
         logger.info(text_data)
+        log.error("Incoming data")
+        log.error(text_data)
 
         if (gateway.getOpcode() == GATEWAY_OPCODE.identify):
             self.send(text_data=GatewayMessage().ready(self.scope['user']))
@@ -69,5 +73,7 @@ class GatewayMessage():
             'chronicles': chronicles,
         }
         logger.info("READY")
-        logger.info(self.toJson)
+        logger.info(self.toJson())
+        log.error("READY")
+        log.error(self.toJson())
         return self.toJson()

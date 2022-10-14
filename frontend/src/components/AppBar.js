@@ -16,6 +16,12 @@ import useScrollTrigger from '@mui/material/useScrollTrigger';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { UserContext } from './ClientProvider';
 
+let host;
+if (process.env.NODE_ENV === 'production') 
+  host = 'https://realmofdarkness.app/auth/login/';
+else
+  host = 'http://localhost/auth/login/';
+
 const pages = {
   sm: [
     '5th Edition',
@@ -77,7 +83,7 @@ function ResponsiveAppBar (props) {
       <Button 
         color="primary"
         variant='contained'
-        href='https://realmofdarkness.app/auth/login'
+        href={host}
       >
         Login
       </Button>
