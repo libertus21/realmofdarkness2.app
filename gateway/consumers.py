@@ -5,7 +5,7 @@ from .constants import GATEWAY_OPCODE
 from haven.models import Character
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('DEBUG')
 
 class GatewayConsumer(WebsocketConsumer):
     def connect(self):
