@@ -3,21 +3,22 @@ from channels.generic.websocket import WebsocketConsumer
 from .serializers import serialize_user, serialize_character, serialize_chronicle
 from .constants import GATEWAY_OPCODE
 from haven.models import Character
+import logging
 
+logger = logging.getLogger(__name__)
 
 class GatewayConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
-        m = GatewayMessage().welcome()
-        self.send(text_data=m)
+        self.send(text_data=GatewayMessage().welcome())
 
-    def discornnect(self, close_code):
+    def disconnect(self, close_code):
         pass
 
     def receive(self, text_data=None):
         gateway = GatewayMessage().loadJson(text_data)
-        print("Incoming data")
-        print(text_data)
+        logger.info("Incoming data")
+        logger.info(text_data)
 
         if (gateway.getOpcode() == GATEWAY_OPCODE.identify):
             self.send(text_data=GatewayMessage().ready(self.scope['user']))
@@ -67,6 +68,6 @@ class GatewayMessage():
             'characters': characters,
             'chronicles': chronicles,
         }
-        print("READY")
-        print(self.toJson)
+        logger.info("READY")
+        logger.info(self.toJson)
         return self.toJson()

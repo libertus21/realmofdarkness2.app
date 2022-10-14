@@ -57,6 +57,9 @@ export default class GatewayManager extends EventEmitter
     else if (!this.contextSetters) return;
     
     this.ws.onmessage = (message) => {
+      
+      console.log("Message received")
+      console.log(message)
       const json = message.data
       const gm = new GatewayMessage().loadJson(json);
       
