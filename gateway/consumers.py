@@ -11,7 +11,7 @@ log = logging.getLogger()
 class GatewayConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
-        self.send(text_data=GatewayMessage().welcome())
+        #self.send(text_data=GatewayMessage().welcome())
         log.error("Connected to Socket")
 
     def disconnect(self, close_code):
