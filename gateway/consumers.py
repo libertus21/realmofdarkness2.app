@@ -18,7 +18,7 @@ class GatewayConsumer(WebsocketConsumer):
 
     def receive(self, text_data=None):
         gateway = GatewayMessage().loadJson(text_data)
-        
+
         if (gateway.getOpcode() == GATEWAY_OPCODE.identify):
             self.send(text_data=GatewayMessage().ready(self.scope['user']))
 
@@ -67,5 +67,4 @@ class GatewayMessage():
             'characters': characters,
             'chronicles': chronicles,
         }
-        logger.info("READY")
         return self.toJson()
