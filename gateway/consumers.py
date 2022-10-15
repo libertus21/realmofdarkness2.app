@@ -12,16 +12,13 @@ class GatewayConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
         self.send(text_data=GatewayMessage().welcome())
-        log.error("Connected to Socket")
 
     def disconnect(self, close_code):
-        log.error("Connection closed")
-        log.error(close_code)
+        pass
 
     def receive(self, text_data=None):
-        logger.info("Incoming data")
-
         gateway = GatewayMessage().loadJson(text_data)
+        
         if (gateway.getOpcode() == GATEWAY_OPCODE.identify):
             self.send(text_data=GatewayMessage().ready(self.scope['user']))
 

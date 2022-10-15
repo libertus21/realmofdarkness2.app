@@ -44,13 +44,13 @@ export default class GatewayManager extends EventEmitter
       this.emit('DISCONNECT', this.setConnection);
       const timer = cooldownTimer[this.cooldown];
       console.log(
-        `Socket has closed. Reconnecting in ${timer} seconds.`, e);
-      //setTimeout(this.connect.bind(this), timer*1000);
-      //this.cooldown = incrementCooldown(this.cooldown);
+        `Socket has closed. Reconnecting in ${timer} seconds.`);
+      setTimeout(this.connect.bind(this), timer*1000);
+      this.cooldown = incrementCooldown(this.cooldown);
     }
     
     this.ws.onerror = (e) => {
-      console.error('Socket encountered error: Closing socket', e);
+      console.error('Socket encountered error: Closing socket');
       this.ws.close();
     }
     
