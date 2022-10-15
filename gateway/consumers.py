@@ -11,7 +11,7 @@ log = logging.getLogger()
 class GatewayConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
-        #self.send(text_data=GatewayMessage().welcome())
+        self.send(text_data=GatewayMessage().welcome())
         log.error("Connected to Socket")
 
     def disconnect(self, close_code):
@@ -20,9 +20,6 @@ class GatewayConsumer(WebsocketConsumer):
 
     def receive(self, text_data=None):
         logger.info("Incoming data")
-        logger.info(text_data)
-        log.error("Incoming data")
-        log.error(text_data)
 
         gateway = GatewayMessage().loadJson(text_data)
         if (gateway.getOpcode() == GATEWAY_OPCODE.identify):
@@ -74,7 +71,4 @@ class GatewayMessage():
             'chronicles': chronicles,
         }
         logger.info("READY")
-        logger.info(self.toJson())
-        log.error("READY")
-        log.error(self.toJson())
         return self.toJson()

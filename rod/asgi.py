@@ -21,12 +21,10 @@ import gateway.routing
 
 application = ProtocolTypeRouter({
     "http": application,
-    "websocket": AllowedHostsOriginValidator(
-        AuthMiddlewareStack(
-            URLRouter(
-                #haven.routing.websocket_urlpatterns
-                gateway.routing.websocket_urlpatterns
-            )
+    "websocket": AuthMiddlewareStack(
+        URLRouter(
+            #haven.routing.websocket_urlpatterns
+            gateway.routing.websocket_urlpatterns
         )
     ),
 })

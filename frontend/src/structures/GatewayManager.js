@@ -72,7 +72,7 @@ export default class GatewayManager extends EventEmitter
           break;
         case GATEWAY_OPCODE.welcome:
           // send Identify message
-          //this.send(new GatewayMessage().identify());
+          this.send(new GatewayMessage().identify());
           break;
         default:
           break;
