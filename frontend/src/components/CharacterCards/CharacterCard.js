@@ -3,12 +3,16 @@ import { Divider, Grid, Avatar } from "@mui/material";
 import Vampire5thInfo from './Vampire5thInfo';
 import Hunter5thInfo from './Hunter5thInfo';
 import Mortal5thInfo from "./Mortal5thInfo";
+import Vampire20thInfo from './Vampire20thInfo';
+import Human20thInfo from "./Human20thInfo";
 import { UserContext, ChroniclesContext } from '../ClientProvider'
 
 const cardInfo = {
   'vampire5th': Vampire5thInfo,
   'hunter5th': Hunter5thInfo,
   'mortal5th': Mortal5thInfo,
+  'vampire20th': Vampire20thInfo,
+  'human20th': Human20thInfo,
 }
 
 
