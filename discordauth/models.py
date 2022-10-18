@@ -24,7 +24,7 @@ class User(AbstractBaseUser):
     username = models.CharField(max_length=80)
     discriminator = models.CharField(max_length=5)
     avatar_url = models.URLField(blank=True)
-    email = models.EmailField(max_length=100, blank=True)
+    email = models.EmailField(max_length=100, blank=True, null=True)
     verified = models.BooleanField()
     registered = models.BooleanField()
     admin = models.BooleanField(default=False)

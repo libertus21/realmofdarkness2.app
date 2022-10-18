@@ -73,7 +73,6 @@ export default function V20HealthTracker(props) {
             return bar[value] ? <span {...other}>{bar[value].icon}</span> : undefined
           }}
           defaultValue={5}
-          bar={bar}
         />
       </Grid>
     );

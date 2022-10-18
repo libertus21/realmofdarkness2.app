@@ -60,7 +60,6 @@ export default function V5DamageTracker(props) {
             return bar[value] ? <span {...other}>{bar[value].icon}</span> : undefined
           }}
           defaultValue={5}
-          bar={bar}
         />
       </Grid>
     );

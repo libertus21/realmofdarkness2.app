@@ -5,6 +5,12 @@ import Hunter5thInfo from './Hunter5thInfo';
 import Mortal5thInfo from "./Mortal5thInfo";
 import Vampire20thInfo from './Vampire20thInfo';
 import Human20thInfo from "./Human20thInfo";
+import Werewolf20thInfo from "./Werewolf20thInfo";
+import Ghoul20thInfo from "./Ghoul20thInfo";
+import Changeling20thInfo from "./Changeling20thInfo";
+import Wraith20thInfo from "./Wraith20thInfo";
+import Demon20thInfo from "./Demon20thInfo";
+import Mage20thInfo from "./Mage20thInfo";
 import { UserContext, ChroniclesContext } from '../ClientProvider'
 
 const cardInfo = {
@@ -13,6 +19,12 @@ const cardInfo = {
   'mortal5th': Mortal5thInfo,
   'vampire20th': Vampire20thInfo,
   'human20th': Human20thInfo,
+  'werewolf20th': Werewolf20thInfo,
+  'ghoul20th': Ghoul20thInfo,
+  'changeling20th': Changeling20thInfo,
+  'wraith20th': Wraith20thInfo,
+  'demon20th': Demon20thInfo,
+  'mage20th': Mage20thInfo,
 }
 
 

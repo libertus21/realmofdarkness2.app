@@ -132,8 +132,9 @@ def serializeMage20th(character):
   quint_paradox = character.trackable.get(slug='quint_paradox')
   s['arete'] = arete.current
   s['quint_paradox'] = {
-    "total": quint_paradox.total,
-    "current": quint_paradox.current
+    # TODO Gonna have to do something about the way Paradox is stored
+    "paradox": (20 - quint_paradox.total),
+    "quintessence": quint_paradox.current
   }
 
   return s

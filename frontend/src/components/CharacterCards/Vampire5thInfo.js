@@ -6,7 +6,7 @@ import ExpBar from "../CharacterCards/ExpBar";
 import ResponsiveRating from "../Trackers/ResponsiveRating";
 
 
-const defaultImage = 'https://media.discordapp.net/attachments/886983353922891816/1024918662223769600/VampireLogo_xsmall_colour.png?width=1440&height=445'
+const defaultImage = 'https://media.discordapp.net/attachments/886983353922891816/1031852816421109770/SymbolWODfinal_red_lowRez.png'
 
 export default function Vampire5thInfo(props) {
   const { character, chronicle } = props;
@@ -28,7 +28,7 @@ export default function Vampire5thInfo(props) {
           }}
         />
         <Typography>Vampire - 5th Edition</Typography>
-        <Typography>Server: {chronicle.name}</Typography>
+        <Typography>Server: {chronicle?.name ?? 'None'}</Typography>
         <Divider sx={{my: 1}} />
         <Typography>Willpower</Typography>
         <V5DamageTracker tracker={character.willpower} />

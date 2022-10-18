@@ -27,7 +27,7 @@ export default function Mortal5thInfo(props) {
           }}
         />
         <Typography>Mortal - 5th Edition</Typography>
-        <Typography>Server: {chronicle.name}</Typography>
+        <Typography>Server: {chronicle?.name ?? 'None'}</Typography>
         <Divider sx={{my: 1}} />
         <Typography>Willpower</Typography>
         <V5DamageTracker tracker={character.willpower} />

@@ -57,7 +57,8 @@ class GatewayMessage():
             .filter(user=user):
             characters[character.id] = (serialize_character(character))
             chronicle = character.chronicle
-            chronicles[chronicle.id] = (serialize_chronicle(chronicle))
+            if (chronicle):
+                chronicles[chronicle.id] = (serialize_chronicle(chronicle))
 
 
         self.data['op'] = GATEWAY_OPCODE.dispatch
