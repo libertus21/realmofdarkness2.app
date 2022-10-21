@@ -1,7 +1,7 @@
 
 def serialize_chronicle(chronicle):
   return {
-    'id': chronicle.id,
+    'id': str(chronicle.id),
     'name': chronicle.name,
     'iconUrl': chronicle.icon_url,
     'createdAt': chronicle.created_at.timestamp()

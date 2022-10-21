@@ -1,8 +1,9 @@
 import { Grid, Fab, Box, CircularProgress } from "@mui/material";
 import { Fragment, memo, useState } from "react";
 import CharacterCard from "./CharacterCards/CharacterCard";
-import { CharactersContext, ClientContext } from "./ClientProvider";
+import { CharactersContext, ChroniclesContext, ClientContext } from "./ClientProvider";
 import RefreshIcon from '@mui/icons-material/Refresh';
+import CharacterCardDisplay from "./CharacterCards/CharacterCardDisplay";
 
 function Refresh(props) {
   const handleClick = (event) => {};
@@ -32,7 +33,6 @@ function Refresh(props) {
                 setCooldown(true);
                 setTimeout(timeout, 3000);
               }
-              else console.log("On cooldown");
             }}
           >
             {
@@ -59,23 +59,16 @@ function Dashboard(props) {
         rowSpacing={3}
       >
         <CharactersContext.Consumer>
-          {(characters) => {
-            if (!characters) return;
-            let cards = [];
-
-            // Sorting by last updated time
-            const sortedChars = Object.values(characters).sort((a, b) => (
-             b.lastUpdated - a.lastUpdated
-            ));
-
-            for (const character of sortedChars)
-            {
-              cards.push((
-                <CharacterCard key={character.id} character={character} />
-              ))
-            }          
-            return cards;
-          }}
+          {(characters) => (
+            <ChroniclesContext.Consumer>
+              {(chronicles) => (
+                <CharacterCardDisplay 
+                  characters={characters} 
+                  chronicles={chronicles} 
+                />
+              )}
+            </ChroniclesContext.Consumer>
+          )}
         </CharactersContext.Consumer>
       </Grid>
       <Refresh />
