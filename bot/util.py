@@ -16,9 +16,9 @@ def get_splat(splat, id=None, name=None, user_id=None):
     select = ['colour', 'user', 'chronicle', 'member']
     prefetch = ['history', 'trackable']
 
-    if Versions.v20.value in splat:
+    if splat and Versions.v20.value in splat:
         prefetch.append('health')    
-    elif Versions.v5.value in splat:        
+    elif splat and Versions.v5.value in splat:        
         prefetch.append('damage')
     
     if (splat == Splats.vampire20th.value or splat == Splats.human20th.value or

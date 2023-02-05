@@ -149,3 +149,5 @@ frontend/build
 .env.production.local
 
 .out
+
+.VSCodeCounter

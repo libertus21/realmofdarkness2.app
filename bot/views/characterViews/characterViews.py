@@ -6,7 +6,7 @@ from json import dumps
 
 from bot.serializers import serialize
 from bot.util import get_splat, get_name_list
-from .get_post import get_post
+from ..get_post import get_post
 from haven.models import Character, History, MoralityInfo
 from bot.constants import Splats, Versions
 from chronicle.models import Chronicle, Member
@@ -24,10 +24,10 @@ def get_character(request):
     else: character = get_splat(splat, name=name, user_id=user_id)
 
     if not character:
-        return JsonResponse({'status': False})
+        return JsonResponse({'character': None})
     
     json = serialize(character.splat.slug, character)
-    return JsonResponse({"status": True, 'character': json})
+    return JsonResponse({'character': json})
 
 @csrf_exempt
 def name_list(request):
