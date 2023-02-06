@@ -1,24 +1,22 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 from .get_post import get_post
 
 @csrf_exempt
 def get_supporter_level(request):
-    data = get_post(request)
-    user_id = data['user_id']
-    User = get_user_model()
-    user = None
+  data = get_post(request)
+  user_id = data['user_id']
+  User = get_user_model()
+  user = None
 
-    try:
-        user = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
-        level = -1
-    
-    if user: level = user.supporter
-    
-    return JsonResponse({"level": level})
+  try:
+    user = User.objects.get(pk=user_id)
+  except User.DoesNotExist:
+    return HttpResponse(status=204)
+  
+  return JsonResponse({"level": user.supporter})
 
 @csrf_exempt
 def set_supporter_level(request):

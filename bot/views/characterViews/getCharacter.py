@@ -17,6 +17,5 @@ def get_character(request):
 
   if not character:
     return HttpResponse(status=204)
-    
   json = serialize(character.splat.slug, character)
   return JsonResponse({'character': json})

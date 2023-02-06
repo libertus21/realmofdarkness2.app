@@ -13,7 +13,7 @@ def get_splat(splat, id=None, name=None, user_id=None):
       splat__slug=splat
     )
 
-  select = ['colour', 'user', 'chronicle', 'member']
+  select = ['user', 'chronicle', 'member']
   prefetch = ['history', 'trackable']
 
   if splat and Versions.v20 in splat:

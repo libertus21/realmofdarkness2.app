@@ -18,10 +18,10 @@ def serializeCharacter(character):
       'iconURL': character.chronicle.icon_url if character.chronicle else '',
       'displayName': character.member.nickname if character.member else ''
     },
-    'colour': character.theme,
+    'theme': character.theme,
     'thumbnail': character.faceclaim if character.user.supporter >= 0 else None,
     'exp': {'total': exp.total, 'current': exp.current},
-    'history': serializeHistory(character),
+    #'history': serializeHistory(character),
   }
 
 def serialize20th(character):
