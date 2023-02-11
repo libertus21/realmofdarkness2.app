@@ -13,9 +13,28 @@ def get_character(request):
   user_id = data['userId']
   splat = data.get('splat', None)
   pk = data.get('pk', None)
+
   character = get_splat(splat, name=name, user_id=user_id, id=pk)
+  
+  user = {
+    'id': character.user.id,
+    'username': character.user.username,
+    'discriminator': character.user.discriminator,
+    'avatarURL': character.user.avatar_url,
+    'displayName': character.member.nickname if character.member else None
+  }
+
+  if (character.chronicle):
+    guild = {
+      'id': character.chronicle.id,
+      'name': character.chronicle.name,
+      'iconURL': character.chronicle.icon_url
+    }
+  else: guild = None
 
   if not character:
     return HttpResponse(status=204)
-  json = serialize(character.splat.slug, character)
+  json = serialize(character.splat.slug, character) 
+  json['user'] = user
+  json['guild'] = guild
   return JsonResponse({'character': json})

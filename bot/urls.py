@@ -7,15 +7,15 @@ urlpatterns = [
   path('character/get', views.get_character),
   path('character/new', views.new_character),
   path('character/save', views.save_character),
-  #path('character/name_list', views.name_list),
-  #path('character/delete', views.delete_characters),
+  path('character/name_list', views.name_list),
+  path('character/delete', views.delete_characters),
 
   # Chronicle
+  path('chronicle/set', views.chronicleViews.set_guild),
   path('chronicle/channel/set', views.set_tracker_channel),
   path('chronicle/channel/get', views.get_tracker_channel),
   path('chronicle/storyteller/roles/set', views.set_st_role),
   path('chronicle/storyteller/roles/get', views.get_st_roles),
-  path('chronicle/storyteller/roles/delete', views.delete_st_role),
   path('chronicle/member/delete', views.member_delete),
     
   # Dice

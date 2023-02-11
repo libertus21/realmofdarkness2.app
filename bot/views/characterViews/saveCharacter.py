@@ -221,8 +221,8 @@ def update_mage20th(data, character):
   arete.save()
 
   quint_paradox = character.trackable.get(slug='quint_paradox')
-  quint_paradox.total = data['quint_paradox']['total']
-  quint_paradox.current = data['quint_paradox']['current']
+  quint_paradox.total = data['quintessence']
+  quint_paradox.current = data['paradox']
   quint_paradox.save()
 
 

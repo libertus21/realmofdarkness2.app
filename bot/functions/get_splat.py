@@ -1,7 +1,7 @@
 from haven.models import Character
 from bot.constants import Splats, Versions
 
-def get_splat(splat, id=None, name=None, user_id=None):
+def get_splat(splat, id=None, name=None, user_id=None):  
   if id: 
     char = Character.objects.filter(pk=id)
   elif not splat: 
