@@ -1,11 +1,48 @@
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.contrib.auth import get_user_model
-from django.db import transaction
+from django.http import HttpResponse, JsonResponse
 
 from .get_post import get_post
-from bot.models import InitiativeCharacter, InitiativeTracker20th, InitiativeCharacter
+from bot.models import InitiativeTracker20th
 from chronicle.models import Chronicle, Member
+
+@csrf_exempt
+def init_set(request):
+  data = get_post(request)
+
+  chronicle = Chronicle.objects.get(pk=data['chronicle_id'])
+  try:
+    tracker = InitiativeTracker20th.objects.get(pk=data['channel_id'])
+    tracker.tracker = data['tracker']
+  except InitiativeTracker20th.DoesNotExist:
+    tracker = InitiativeTracker20th(
+      id=data['channel_id'],
+      chronicle=chronicle,
+      tracker=data['tracker']
+    )
+  
+  tracker.save()
+  return HttpResponse()
+
+@csrf_exempt
+def init_get(request):
+  data = get_post(request)
+  try:
+    tracker = InitiativeTracker20th.objects.get(pk=data['channel_id'])
+  except InitiativeTracker20th.DoesNotExist:
+    return HttpResponse(status=204)
+  
+  return JsonResponse({'tracker': tracker}) 
+
+@csrf_exempt
+def init_delete(request):
+  data = get_post(request)
+  try:
+    tracker = InitiativeTracker20th.objects.get(pk=data['channel_id'])
+  except InitiativeTracker20th.DoesNotExist:
+    return HttpResponse(status=204)
+  
+  tracker.delete()
+  return HttpResponse() 
 
 """
 Sets the current phase of the tracker
@@ -25,7 +62,7 @@ Return
 {
     status: string
 }
-"""
+
 @csrf_exempt
 @transaction.atomic
 def set_phase(request):
@@ -79,7 +116,7 @@ def set_phase(request):
     return JsonResponse({"status": "OK"})
     
 
-"""
+
 Updates roll info for a member
 Receive:
 {
@@ -95,7 +132,7 @@ Return
 {
     status: string
 }
-"""
+
 @csrf_exempt
 @transaction.atomic
 def init_roll(request):
@@ -153,7 +190,7 @@ def init_roll(request):
     return JsonResponse({"Status": "OK"})
 
 
-"""
+
 declares an action for a member
 Receive:
 {
@@ -168,8 +205,8 @@ Receive:
 Return:
 {
     status: string
-}
-"""
+
+
 @csrf_exempt
 @transaction.atomic
 def init_declare(request):
@@ -225,7 +262,7 @@ def init_declare(request):
     character.save()
     return JsonResponse({"Status": "OK"})
 
-"""
+
 get a messageId
 Receive:
 {
@@ -251,7 +288,7 @@ Return:
         }]
     }
 }
-"""
+
 @csrf_exempt
 def get_init_tracker(request):
     data = get_post(request)
@@ -273,7 +310,7 @@ def get_init_tracker(request):
     
    
 
-"""
+
 Sets a new Message ID
 Receive:
 {
@@ -284,7 +321,7 @@ Return:
 {
     status: string
 }
-"""
+
 @csrf_exempt
 def init_set_message_id(request):
     data = get_post(request)
@@ -334,3 +371,4 @@ class InitPhase():
     DECLARE = 3
     DECLARED = 4
     END = 5
+"""

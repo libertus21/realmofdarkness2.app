@@ -26,11 +26,9 @@ urlpatterns = [
   path('user/supporter/set', views.set_supporter_level),
 
   # Initiative Tracker
-  path('init/phase', views.set_phase),
-  path('init/roll', views.init_roll),
-  path('init/declare', views.init_declare),
-  path('init/get', views.get_init_tracker),
-  path('init/set', views.init_set_message_id),
+  path('initiative/set', views.init_set),
+  path('initiative/get', views.init_get),
+  path('initiative/delete', views.init_delete),
 
   # Stats
   path('stats/get', views.get_stats),
