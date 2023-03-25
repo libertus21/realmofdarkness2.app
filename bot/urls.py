@@ -11,11 +11,13 @@ urlpatterns = [
   path('character/delete', views.delete_characters),
 
   # Chronicle
-  path('chronicle/set', views.chronicleViews.set_guild),
+  path('chronicle/set', views.set_guild),
+  path('chronicle/delete', views.delete_guild),
   path('chronicle/channel/set', views.set_tracker_channel),
   path('chronicle/channel/get', views.get_tracker_channel),
   path('chronicle/storyteller/roles/set', views.set_st_role),
-  path('chronicle/storyteller/roles/get', views.get_st_roles),
+  path('chronicle/storyteller/roles/get', views.get_st_roles),  
+  path('chronicle/storyteller/roles/delete', views.delete_st_role),
   path('chronicle/member/delete', views.member_delete),
     
   # Dice
@@ -24,6 +26,7 @@ urlpatterns = [
   # User
   path('user/supporter/get', views.get_supporter_level),
   path('user/supporter/set', views.set_supporter_level),
+  path('user/update', views.update_user),
 
   # Initiative Tracker
   path('initiative/set', views.init_set),
@@ -32,4 +35,7 @@ urlpatterns = [
 
   # Stats
   path('stats/get', views.get_stats),
+
+  # Bot Info
+  path('data/set', views.update_bot),
 ]

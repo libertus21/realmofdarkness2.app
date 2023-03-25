@@ -3,21 +3,16 @@ from django.http import JsonResponse, HttpResponse
 
 from ..get_post import get_post
 from haven.models import Character
-from bot.functions import update_or_create_guild, update_or_create_member
-from bot.functions import update_or_create_user
 
 @csrf_exempt
 def name_list(request):
   data = get_post(request)
-  user = data['user']
-  guild = data.get('guild', None)
+  user_id = data['user_id']
+  guild_id = data.get('guild_id', None)
 
-  if user: update_or_create_user(user)
-  if guild:
-    update_or_create_guild(guild)
-    update_or_create_member(guild, user, user)
-    chars = Character.objects.filter(user=user['id'], chronicle=guild['id'])
-  else: chars = Character.objects.filter(user=user['id'])
+  if guild_id:
+    chars = Character.objects.filter(user=user_id, chronicle=guild_id)
+  else: chars = Character.objects.filter(user=user_id)
     
   chars.select_related('splat', 'chronicle')
 

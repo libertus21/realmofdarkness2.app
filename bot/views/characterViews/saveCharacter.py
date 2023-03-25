@@ -5,9 +5,7 @@ from django.http import HttpResponse
 from ..get_post import get_post
 from haven.models import MoralityInfo
 from bot.constants import Splats
-from bot.functions import update_or_create_user, update_or_create_guild
-from bot.functions import update_or_create_member, get_splat
-
+from bot.functions import get_splat
 
 @csrf_exempt
 @transaction.atomic
@@ -15,10 +13,6 @@ def save_character(request):
   data = get_post(request)
   char_data = data['character']
   splatSlug = char_data['splatSlug']
-
-  user = update_or_create_user(data['user'])
-  guild = update_or_create_guild(data['guild'])
-  if (data['guild']): update_or_create_member(guild, user, data['user'])
   
   if (char_data['id']):
     char = get_splat(splatSlug, id=char_data['id'])

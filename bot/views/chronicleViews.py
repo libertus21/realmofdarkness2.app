@@ -9,17 +9,17 @@ from bot.functions import update_or_create_guild
 def member_delete(request):
   data = get_post(request)
   guild_id = data['guild_id']
-  user_id = data['user_id']
+  user_id = data['member_id']
 
   try:
-    member = Member.objects.get(chronicle=int(guild_id), user=int(user_id)).prefetch_related('character_set')
+    member = Member.objects.get(chronicle=guild_id, user=user_id).prefetch_related('character_set')
   except Member.DoesNotExist:
-    return JsonResponse({'removed': False})
+    return HttpResponse(status=204)
 
   member.character_set.update(chronicle=None)
   member.delete()        
 
-  return JsonResponse({'removed': True})
+  return HttpResponse()
 
 @csrf_exempt
 def set_tracker_channel(request):
@@ -90,11 +90,50 @@ def get_st_roles(request):
   return JsonResponse({'roles': role_ids})
 
 @csrf_exempt
+def delete_st_role(request):
+  data = get_post(request)
+  role_id = data['role_id']
+
+  try:
+    StorytellerRole.objects.get(pk=role_id).delete()
+  except StorytellerRole.DoesNotExist:
+    pass # No need to do anything
+  
+  return HttpResponse(status=200)
+
+
+@csrf_exempt
 def set_guild(request):
   data = get_post(request)
   guild = data['guild']
 
-  if (guild): 
-    update_or_create_guild(guild)
+  try:
+    chronicle = Chronicle.objects.get(pk=guild['id'])
+    chronicle.name = guild['name']
+    chronicle.owner_id = guild['owner_id']
+    chronicle.icon_url = guild['icon_url']
+    chronicle.bot_id = guild['bot']
+  except Chronicle.DoesNotExist:
+    chronicle = Chronicle(
+      pk=guild['id'],
+      name=guild['name'],
+      owner_id=guild['owner_id'],
+      icon_url=guild['icon_url']
+    )
+    chronicle.bot_id = guild['bot']
+  chronicle.save()
+  
+  return HttpResponse(status=200)
+
+
+@csrf_exempt
+def delete_guild(request):
+  data = get_post(request)
+  guild_id = data['guild_id']
+
+  try:
+    Chronicle.objects.get(pk=guild_id).delete()
+  except Chronicle.DoesNotExist:
+    pass # No need to do anything
   
   return HttpResponse(status=200)

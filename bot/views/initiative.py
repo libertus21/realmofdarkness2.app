@@ -12,7 +12,7 @@ def init_set(request):
   chronicle = Chronicle.objects.get(pk=data['chronicle_id'])
   try:
     tracker = InitiativeTracker20th.objects.get(pk=data['channel_id'])
-    tracker.tracker = data['tracker']
+    tracker.data = data['tracker']
   except InitiativeTracker20th.DoesNotExist:
     tracker = InitiativeTracker20th(
       id=data['channel_id'],
@@ -21,6 +21,7 @@ def init_set(request):
     )
   
   tracker.save()
+  print(tracker)
   return HttpResponse()
 
 @csrf_exempt
@@ -31,7 +32,7 @@ def init_get(request):
   except InitiativeTracker20th.DoesNotExist:
     return HttpResponse(status=204)
   
-  return JsonResponse({'tracker': tracker}) 
+  return JsonResponse({'tracker': tracker.data}) 
 
 @csrf_exempt
 def init_delete(request):

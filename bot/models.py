@@ -2,6 +2,17 @@ from django.db import models
 from rod.settings import AUTH_USER_MODEL
 from chronicle.models import Chronicle
 
+class Bot(models.Model):
+  id = models.BigIntegerField(primary_key=True) # Snowflake
+  username = models.CharField(max_length=200)
+  discriminator = models.CharField(max_length=5)
+  avatar_url = models.URLField(blank=True)
+  shard_count = models.IntegerField(default=0)
+
+  def __str__(self):
+    return f'{self.username}#{self.discriminator}'
+
+
 class DiceStats20th(models.Model):
   user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.CASCADE)
 
@@ -25,7 +36,7 @@ class DiceStatsV5(models.Model):
 class InitiativeTracker20th(models.Model):
   id = models.BigIntegerField(primary_key=True) # Discord ChannelId
   chronicle = models.ForeignKey(Chronicle, on_delete=models.CASCADE)
-  tracker = models.JSONField()
+  data = models.JSONField()
   last_updated = models.DateField(auto_now=True)
     
 '''

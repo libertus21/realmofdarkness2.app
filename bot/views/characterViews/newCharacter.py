@@ -1,11 +1,13 @@
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from django.contrib.auth import get_user_model
 
 from ..get_post import get_post
 from haven.models import Character
-from bot.functions import update_or_create_user, update_or_create_guild
-from bot.functions import update_or_create_member
+from chronicle.models import Chronicle, Member
+
+User = get_user_model()
 
 @csrf_exempt
 @transaction.atomic
@@ -25,10 +27,10 @@ def new_character(request):
       # 409 Conflict - Too many Characters
       return HttpResponse(status=409)
 
-  user = update_or_create_user(data['user'])
-  guild = update_or_create_guild(data['guild'])
-  if (data['guild']): member = update_or_create_member(guild, user, data['user'])
-  else: member = None
+  user = User.objects.get(pk=data['user_id'])
+  if (data['guild_id']):
+    guild = Chronicle.objects.get(pk=data['guild_id'])
+    member = Member.objects.get(chronicle=data['guild_id'], user=data['user_id'])
 
   Character.objects.create_partial_character(
     user=user,

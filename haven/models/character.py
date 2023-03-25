@@ -48,148 +48,34 @@ class CharacterManager(models.Manager):
       case Splats.mortal5th.slug:
         create_5th_partials(char, data)
         create_mortal5th_partial(char, data)
+
+      case Splats.vampire20th.slug:
+        create_20th_partials(char, data)
+        create_vampire20th_partial(char, data)
+      case Splats.human20th.slug:
+        create_20th_partials(char, data)
+        create_human20th_partial(char, data)
+      case Splats.ghoul20th.slug:
+        create_20th_partials(char, data)
+        create_ghoul20th_partial(char, data)
+      case Splats.changeling20th.slug:
+        create_20th_partials(char, data)
+        create_changeling20th_partial(char, data)
+      case Splats.werewolf20th.slug:
+        create_20th_partials(char, data)
+        create_werewolf20th_partial(char, data)
+      case Splats.mage20th.slug:
+        create_20th_partials(char, data)
+        create_mage20th_partial(char, data)
+      case Splats.wraith20th.slug:
+        create_20th_partials(char, data)
+        create_wraith20th_partial(char, data)
+      case Splats.demonTF.slug:
+        create_20th_partials(char, data)
+        create_demonDT_partial(char, data)
         
     Trackable.objects.create(character=char, slug="exp",
       total=data['exp']['total'], current=data['exp']['current'])
-
-    '''
-        if Versions.v20.value == data['version']:
-            Trackable.objects.create(
-                character=char, 
-                slug="willpower",
-                total=data['willpower']['total'], 
-                current=data['willpower']['current']
-            )
-            Health20th.objects.create(
-                character=char, 
-                slug="health",
-                total=data['health']['total'],
-                bashing=data['health']['bashing'],
-                lethal=data['health']['lethal'],
-                aggravated=data['health']['aggravated']
-            )
-        elif Versions.v5.value == data['version']:
-            
-
-        if (splatSlug == Splats.vampire20th.value):
-            Trackable.objects.create(
-                character=char, 
-                slug="blood",
-                total=data['blood']['total'], 
-                current=data['blood']['current']
-            )       
-            morality = MoralityInfo.objects.get(slug=data['morality']['name'])
-            Morality.objects.create(
-                character=char, 
-                morality_info=morality,
-                current=data['morality']['current']
-            )
-
-        elif (splatSlug == Splats.human20th.value or splatSlug == Splats.ghoul20th.value):
-            Trackable.objects.create(
-                character=char, 
-                slug="blood",
-                current=data['blood'],
-            )       
-            humanity = MoralityInfo.objects.get(slug='humanity')
-            Morality.objects.create(
-                character=char, 
-                morality_info=humanity,
-                current=data['morality'],
-            )
-            if (splatSlug == Splats.ghoul20th.value):
-                Trackable.objects.create(
-                    character=char, 
-                    slug="vitae",
-                    current=data['vitae'],
-                )
-        
-        elif (splatSlug == Splats.changeling20th.value):
-            Trackable.objects.create(
-                character=char, 
-                slug="glamour",
-                total=data['glamour']['total'],
-                current=data['glamour']['current']
-            )
-            Trackable.objects.create(
-                character=char, 
-                slug="banality",
-                total=data['banality']['total'],
-                current=data['banality']['current'],
-            )
-            Trackable.objects.create(
-                character=char, 
-                slug="nightmare",
-                current=data['nightmare'],
-            )
-            Trackable.objects.create(
-                character=char, 
-                slug="imbalance",
-                current=data['imbalance'],
-            )
-            Health20th.objects.create(
-                character=char, 
-                slug="chimerical",                
-                total=data['chimerical']['total'],
-                bashing=data['chimerical']['bashing'],
-                lethal=data['chimerical']['lethal'],
-                aggravated=data['chimerical']['aggravated']
-            )
-
-        elif (splatSlug == Splats.werewolf20th.value):
-            Trackable.objects.create(
-                character=char, 
-                slug="rage",
-                total=data['rage']['total'],
-                current=data['rage']['current'],
-            )
-            Trackable.objects.create(
-                character=char, 
-                slug="gnosis",
-                total=data['gnosis']['total'],
-                current=data['gnosis']['current'],
-            )
-
-        elif (splatSlug == Splats.mage20th.value):
-            Trackable.objects.create(
-                character=char, 
-                slug="arete",
-                current=data['arete'],
-            )
-            Trackable.objects.create(
-                character=char, 
-                slug="quint_paradox",
-                total=data['quint_paradox']['total'],
-                current=data['quint_paradox']['current'],
-            )
-        
-        elif (splatSlug == Splats.wraith20th.value):
-            Trackable.objects.create(
-                character=char, 
-                slug="corpus",
-                total=data['corpus']['total'],
-                current=data['corpus']['current'],
-            )
-            Trackable.objects.create(
-                character=char, 
-                slug="pathos",                
-                current=data['pathos'],
-            )
-
-        elif (splatSlug == Splats.demonTF.value):
-            Trackable.objects.create(
-                character=char, 
-                slug="faith",
-                total=data['faith']['total'],
-                current=data['faith']['current'],
-            )
-            Trackable.objects.create(
-                character=char, 
-                slug="torment",
-                total=data['torment']['total'],
-                current=data['torment']['current'],
-            )           
-'''
     return char
 
 class Character(models.Model):
@@ -206,6 +92,7 @@ class Character(models.Model):
   faceclaim = models.URLField(blank=True)
   theme = models.CharField(default='#000000', max_length=10)    
   splat = models.ForeignKey(Splat, on_delete=models.CASCADE)
+  data = models.JSONField(blank=True)
   objects = CharacterManager()
 
   class Meta:
@@ -229,7 +116,24 @@ def create_5th_partials(char, data):
     aggravated=data['health']['aggravated'],
   )
 
-################$$$$$$ Create 5th edition partials ##########################
+
+def create_20th_partials(char, data):
+  Trackable.objects.create(
+    character=char, 
+    slug="willpower",
+    total=data['willpower']['total'], 
+    current=data['willpower']['current']
+  )
+  Health20th.objects.create(
+    character=char, 
+    slug="health",
+    total=data['health']['total'],
+    bashing=data['health']['bashing'],
+    lethal=data['health']['lethal'],
+    aggravated=data['health']['aggravated']
+  )
+
+######################## Create 5th edition partials ##########################
 def create_vampire5th_partial(char, data):
   Humanity.objects.create(
     character=char,
@@ -257,11 +161,149 @@ def create_hunter5th_partial(char, data):
   )
   Hunter5th.objects.create(character=char, despair=data['despair'])
 
-
-def create_mortal5th_partial(char, data):
-  
+########################## Create 20th edition paritals #######################
+def create_mortal5th_partial(char, data):  
   Humanity.objects.create(
     character=char,
     current=data['humanity']['total'],
     stains=data['humanity']['stains']
   )
+
+
+def create_vampire20th_partial(char, data):
+  Trackable.objects.create(
+    character=char, 
+    slug="blood",
+    total=data['blood']['total'], 
+    current=data['blood']['current']
+  )       
+  morality = MoralityInfo.objects.get(slug=data['morality']['name'])
+  Morality.objects.create(
+    character=char, 
+    morality_info=morality,
+    current=data['morality']['current']
+  )
+
+
+def create_human20th_partial(char, data):
+  Trackable.objects.create(
+    character=char, 
+    slug="blood",
+    current=data['blood'],
+  )       
+  humanity = MoralityInfo.objects.get(slug='humanity')
+  Morality.objects.create(
+    character=char, 
+    morality_info=humanity,
+    current=data['morality'],
+  )
+
+
+def create_ghoul20th_partial(char, data):
+  Trackable.objects.create(
+    character=char, 
+    slug="blood",
+    current=data['blood'],
+  )       
+  humanity = MoralityInfo.objects.get(slug='humanity')
+  Morality.objects.create(
+    character=char, 
+    morality_info=humanity,
+    current=data['morality'],
+  )
+  Trackable.objects.create(
+    character=char, 
+    slug="vitae",
+    current=data['vitae'],
+  )
+
+
+def create_werewolf20th_partial(char, data):
+  Trackable.objects.create(
+    character=char, 
+    slug="rage",
+    total=data['rage']['total'],
+    current=data['rage']['current'],
+  )
+  Trackable.objects.create(
+    character=char, 
+    slug="gnosis",
+    total=data['gnosis']['total'],
+    current=data['gnosis']['current'],
+  )
+
+
+def create_changeling20th_partial(char, data):
+  Trackable.objects.create(
+    character=char, 
+    slug="glamour",
+    total=data['glamour']['total'],
+    current=data['glamour']['current']
+  )
+  Trackable.objects.create(
+    character=char, 
+    slug="banality",
+    total=data['banality']['total'],
+    current=data['banality']['current'],
+  )
+  Trackable.objects.create(
+    character=char, 
+    slug="nightmare",
+    current=data['nightmare'],
+  )
+  Trackable.objects.create(
+    character=char, 
+    slug="imbalance",
+    current=data['imbalance'],
+  )
+  Health20th.objects.create(
+    character=char, 
+    slug="chimerical",                
+    total=data['chimerical']['total'],
+    bashing=data['chimerical']['bashing'],
+    lethal=data['chimerical']['lethal'],
+    aggravated=data['chimerical']['aggravated']
+  )
+
+
+def create_mage20th_partial(char, data):
+  Trackable.objects.create(
+    character=char, 
+    slug="arete",
+    current=data['arete'],
+  )
+  Trackable.objects.create(
+    character=char, 
+    slug="quint_paradox",
+    total=data['quint_paradox']['total'],
+    current=data['quint_paradox']['current'],
+  )
+
+
+def create_wraith20th_partial(char, data):
+  Trackable.objects.create(
+    character=char, 
+    slug="corpus",
+    total=data['corpus']['total'],
+    current=data['corpus']['current'],
+  )
+  Trackable.objects.create(
+    character=char, 
+    slug="pathos",                
+    current=data['pathos'],
+  )
+
+
+def create_demonDT_partial(char, data):
+  Trackable.objects.create(
+    character=char, 
+    slug="faith",
+    total=data['faith']['total'],
+    current=data['faith']['current'],
+  )
+  Trackable.objects.create(
+    character=char, 
+    slug="torment",
+    total=data['torment']['total'],
+    current=data['torment']['current'],
+  ) 

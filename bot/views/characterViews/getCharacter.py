@@ -10,7 +10,7 @@ from ..get_post import get_post
 def get_character(request):
   data = get_post(request)
   name = data['name']
-  user_id = data['userId']
+  user_id = data['user_id']
   splat = data.get('splat', None)
   pk = data.get('pk', None)
 
