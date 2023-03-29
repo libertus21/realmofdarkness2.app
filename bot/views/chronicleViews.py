@@ -45,13 +45,14 @@ def set_tracker_channel(request):
 @csrf_exempt
 def get_tracker_channel(request):
   data = get_post(request)
-
   try:
     guild = Chronicle.objects.get(pk=data['guild_id'])
   except Chronicle.DoesNotExist:
     return HttpResponse(status=418)
-    
-  return JsonResponse({'channel_id': guild.tracker_channel})
+  
+  if not guild.tracker_channel:
+    return HttpResponse(status=204)
+  else: return JsonResponse({'channel_id': guild.tracker_channel})
 
 @csrf_exempt
 def set_st_role(request):

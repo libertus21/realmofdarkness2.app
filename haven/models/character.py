@@ -92,7 +92,7 @@ class Character(models.Model):
   faceclaim = models.URLField(blank=True)
   theme = models.CharField(default='#000000', max_length=10)    
   splat = models.ForeignKey(Splat, on_delete=models.CASCADE)
-  data = models.JSONField(blank=True)
+  data = models.JSONField(null=True)
   objects = CharacterManager()
 
   class Meta:
@@ -161,7 +161,6 @@ def create_hunter5th_partial(char, data):
   )
   Hunter5th.objects.create(character=char, despair=data['despair'])
 
-########################## Create 20th edition paritals #######################
 def create_mortal5th_partial(char, data):  
   Humanity.objects.create(
     character=char,
@@ -170,6 +169,7 @@ def create_mortal5th_partial(char, data):
   )
 
 
+########################## Create 20th edition paritals #######################
 def create_vampire20th_partial(char, data):
   Trackable.objects.create(
     character=char, 
@@ -275,8 +275,8 @@ def create_mage20th_partial(char, data):
   Trackable.objects.create(
     character=char, 
     slug="quint_paradox",
-    total=data['quint_paradox']['total'],
-    current=data['quint_paradox']['current'],
+    total=data['quintessence'],
+    current=data['paradox'],
   )
 
 

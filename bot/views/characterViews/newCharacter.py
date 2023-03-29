@@ -17,12 +17,12 @@ def new_character(request):
 
   if not character['id']:
     char = Character.objects.filter(
-      name__iexact=character['name'], user=data['user']['id'])
+      name__iexact=character['name'], user=data['user_id'])
     if char:
       # 304 Not Modified - Character exists
       return HttpResponse(status=304)
         
-    count = Character.objects.filter(user=data['user']['id']).count()
+    count = Character.objects.filter(user=data['user_id']).count()
     if (count > 50):
       # 409 Conflict - Too many Characters
       return HttpResponse(status=409)
