@@ -38,41 +38,40 @@ class CharacterManager(models.Manager):
       theme=data['theme']
     )
 
-    match data['splatSlug']:
-      case Splats.vampire5th.slug:
-        create_5th_partials(char, data)
-        create_vampire5th_partial(char, data)
-      case Splats.hunter5th.slug:
-        create_5th_partials(char, data)
-        create_hunter5th_partial(char, data)
-      case Splats.mortal5th.slug:
-        create_5th_partials(char, data)
-        create_mortal5th_partial(char, data)
-
-      case Splats.vampire20th.slug:
-        create_20th_partials(char, data)
-        create_vampire20th_partial(char, data)
-      case Splats.human20th.slug:
-        create_20th_partials(char, data)
-        create_human20th_partial(char, data)
-      case Splats.ghoul20th.slug:
-        create_20th_partials(char, data)
-        create_ghoul20th_partial(char, data)
-      case Splats.changeling20th.slug:
-        create_20th_partials(char, data)
-        create_changeling20th_partial(char, data)
-      case Splats.werewolf20th.slug:
-        create_20th_partials(char, data)
-        create_werewolf20th_partial(char, data)
-      case Splats.mage20th.slug:
-        create_20th_partials(char, data)
-        create_mage20th_partial(char, data)
-      case Splats.wraith20th.slug:
-        create_20th_partials(char, data)
-        create_wraith20th_partial(char, data)
-      case Splats.demonTF.slug:
-        create_20th_partials(char, data)
-        create_demonDT_partial(char, data)
+    if (data['splatSlug'] == Splats.vampire5th.slug):      
+      create_5th_partials(char, data)
+      create_vampire5th_partial(char, data)
+    elif (data['splatSlug'] == Splats.hunter5th.slug):
+      create_5th_partials(char, data)
+      create_hunter5th_partial(char, data)
+    elif (data['splatSlug'] == Splats.mortal5th.slug):
+      create_5th_partials(char, data)
+      create_mortal5th_partial(char, data)
+    
+    elif (data['splatSlug'] == Splats.vampire20th.slug):
+      create_20th_partials(char, data)
+      create_vampire20th_partial(char, data)
+    elif (data['splatSlug'] == Splats.human20th.slug):
+      create_20th_partials(char, data)
+      create_human20th_partial(char, data)
+    elif (data['splatSlug'] == Splats.ghoul20th.slug):
+      create_20th_partials(char, data)
+      create_ghoul20th_partial(char, data)
+    elif (data['splatSlug'] == Splats.changeling20th.slug):
+      create_20th_partials(char, data)
+      create_changeling20th_partial(char, data)
+    elif (data['splatSlug'] == Splats.werewolf20th.slug):
+      create_20th_partials(char, data)
+      create_werewolf20th_partial(char, data)
+    elif (data['splatSlug'] == Splats.mage20th.slug):
+      create_20th_partials(char, data)
+      create_mage20th_partial(char, data)
+    elif (data['splatSlug'] == Splats.wraith20th.slug):
+      create_20th_partials(char, data)
+      create_wraith20th_partial(char, data)
+    elif (data['splatSlug'] == Splats.demonTF.slug):
+      create_20th_partials(char, data)
+      create_demonDT_partial(char, data)
         
     Trackable.objects.create(character=char, slug="exp",
       total=data['exp']['total'], current=data['exp']['current'])
