@@ -31,50 +31,40 @@ def save_character(request):
   exp.current = char_data['exp']['current']
   exp.save()
 
-  match splatSlug:
-    case Splats.vampire5th.slug:
-      update_5th(char_data, char)
-      update_vampire5th(char_data, char)
 
-    case Splats.hunter5th.slug:
-      update_5th(char_data, char)
-      update_hunter5th(char_data, char)
-
-    case Splats.mortal5th.slug:
-      update_5th(char_data, char)
-      update_mortal5th(char_data, char)
-
-    case Splats.vampire20th.slug:
-      update_20th(char_data, char)
-      update_vampire20th(char_data, char)
-
-    case Splats.werewolf20th.slug:
-      update_20th(char_data, char)
-      update_werewolf20th(char_data, char)
-
-    case Splats.changeling20th.slug:
-      update_20th(char_data, char)
-      update_changeling20th(char_data, char)
-
-    case Splats.mage20th.slug:
-      update_20th(char_data, char)
-      update_mage20th(char_data, char)
-
-    case Splats.wraith20th.slug:
-      update_20th(char_data, char)
-      update_wraith20th(char_data, char)
-
-    case Splats.ghoul20th.slug:
-      update_20th(char_data, char)
-      update_ghoul20th(char_data, char)
-
-    case Splats.human20th.slug:
-      update_20th(char_data, char)
-      update_human20th(char_data, char)
-
-    case Splats.demonTF.slug:
-      update_20th(char_data, char)
-      update_demon20th(char_data, char)
+  if (splatSlug == Splats.vampire5th.slug):
+    update_5th(char_data, char)
+    update_vampire5th(char_data, char)
+  elif (splatSlug == Splats.hunter5th.slug):
+    update_5th(char_data, char)
+    update_hunter5th(char_data, char)  
+  elif (splatSlug == Splats.mortal5th.slug):  
+    update_5th(char_data, char)
+    update_mortal5th(char_data, char)  
+  elif (splatSlug == Splats.vampire20th.slug):    
+    update_20th(char_data, char)
+    update_vampire20th(char_data, char)
+  elif (splatSlug == Splats.werewolf20th.slug):  
+    update_20th(char_data, char)
+    update_werewolf20th(char_data, char)  
+  elif (splatSlug == Splats.changeling20th.slug): 
+    update_20th(char_data, char)
+    update_changeling20th(char_data, char)   
+  elif (splatSlug == Splats.mage20th.slug): 
+    update_20th(char_data, char)
+    update_mage20th(char_data, char)   
+  elif (splatSlug == Splats.wraith20th.slug): 
+    update_20th(char_data, char)
+    update_wraith20th(char_data, char)   
+  elif (splatSlug == Splats.ghoul20th.slug):
+    update_20th(char_data, char)
+    update_ghoul20th(char_data, char)    
+  elif (splatSlug == Splats.human20th.slug): 
+    update_20th(char_data, char)
+    update_human20th(char_data, char)   
+  elif (splatSlug == Splats.demonTF.slug):
+    update_20th(char_data, char)
+    update_demon20th(char_data, char)   
 
   char.save()    
   return HttpResponse(status=200)
