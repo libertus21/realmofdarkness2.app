@@ -11,6 +11,9 @@ class Chronicle(models.Model):
     # Need to create own snowflake generator
     id = models.BigIntegerField(primary_key=True) # Snowflake
     name = models.CharField(max_length=200)
+    owner_id = models.BigIntegerField(default=0)
+    bot = models.ManyToManyField('bot.Bot', related_name='chronicles')
+    shard = models.IntegerField(default=0)
     is_guild = models.BooleanField(default=True)
     members = models.ManyToManyField(AUTH_USER_MODEL, through='Member',
         related_name='chronicles')
@@ -43,6 +46,7 @@ class Member(models.Model):
     chronicle = models.ForeignKey(Chronicle, on_delete=models.CASCADE)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     nickname = models.CharField(max_length=100, blank=True)
+    avatar_url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 

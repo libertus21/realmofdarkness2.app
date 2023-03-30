@@ -69,11 +69,8 @@ def serializeMage20th(character):
     quint_paradox = character.trackable.get(slug='quint_paradox')
 
     s['arete'] = arete.current
-    s['quint_paradox'] = {
-        "total": quint_paradox.total,
-        "current": quint_paradox.current
-    }
-
+    s['quintessence'] = quint_paradox.total
+    s['paradox'] = quint_paradox.current
     return s
 
 def serializeWraith20th(character):

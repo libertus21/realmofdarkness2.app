@@ -16,9 +16,9 @@ def get_splat(splat, id=None, name=None, user_id=None):
     select = ['colour', 'user', 'chronicle', 'member']
     prefetch = ['history', 'trackable']
 
-    if Versions.v20.value in splat:
+    if splat and Versions.v20.value in splat:
         prefetch.append('health')    
-    elif Versions.v5.value in splat:        
+    elif splat and Versions.v5.value in splat:        
         prefetch.append('damage')
     
     if (splat == Splats.vampire20th.value or splat == Splats.human20th.value or
@@ -31,21 +31,3 @@ def get_splat(splat, id=None, name=None, user_id=None):
     char.prefetch_related(*prefetch)
     
     return char[0] if char else None
-
-def get_name_list(id, guild_id):
-    if (guild_id): chars = Character.objects.filter(user=id, chronicle=guild_id)
-    else: chars = Character.objects.filter(user=id)
-    
-    chars.select_related('splat', 'chronicle')
-
-    name_list = []
-
-    for char in chars:
-        name_list.append({
-            'id': str(char.id),
-            'name': char.name,
-            'splat': char.splat.slug,
-            'guildName': char.chronicle.name if char.chronicle else 'None'
-        })
-    
-    return name_list
