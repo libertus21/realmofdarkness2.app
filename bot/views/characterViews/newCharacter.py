@@ -28,6 +28,9 @@ def new_character(request):
       return HttpResponse(status=409)
 
   user = User.objects.get(pk=data['user_id'])
+  guild = None
+  member = None
+  
   if (data['guild_id']):
     guild = Chronicle.objects.get(pk=data['guild_id'])
     member = Member.objects.get(chronicle=data['guild_id'], user=data['user_id'])

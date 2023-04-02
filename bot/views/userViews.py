@@ -58,13 +58,13 @@ def update_user(request):
     return HttpResponse()
   
   member_data = user_data['member']  
+  guild = Chronicle.objects.get(pk=member_data['guild_id'])
   try:
-    member = Member.objects.get(chronicle=member_data['guild_id'], user=user)
+    member = Member.objects.get(chronicle=guild, user=user)
     member.nickname = member_data['nickname']
     member.avatar_url = member_data['avatar_url']
     member.save()
   except Member.DoesNotExist:
-    guild = Chronicle.objects.get(pk=member_data['guild_id'])
     member = Member.objects.create(
       chronicle=guild,
       user=user,

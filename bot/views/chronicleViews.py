@@ -12,7 +12,7 @@ def member_delete(request):
   user_id = data['member_id']
 
   try:
-    member = Member.objects.get(chronicle=guild_id, user=user_id).prefetch_related('character_set')
+    member = Member.objects.get(chronicle=guild_id, user=user_id)
   except Member.DoesNotExist:
     return HttpResponse(status=204)
 
@@ -45,6 +45,7 @@ def set_tracker_channel(request):
 @csrf_exempt
 def get_tracker_channel(request):
   data = get_post(request)
+  
   try:
     guild = Chronicle.objects.get(pk=data['guild_id'])
   except Chronicle.DoesNotExist:
