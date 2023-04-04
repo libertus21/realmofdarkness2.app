@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from chronicle.models import Chronicle, Member, StorytellerRole
 from .get_post import get_post
-from bot.functions import update_or_create_guild
+from bot.models import Bot
 
 @csrf_exempt
 def member_delete(request):
@@ -99,7 +99,7 @@ def delete_st_role(request):
   try:
     StorytellerRole.objects.get(pk=role_id).delete()
   except StorytellerRole.DoesNotExist:
-    pass # No need to do anything
+    return HttpResponse(status=204)
   
   return HttpResponse(status=200)
 
@@ -108,21 +108,21 @@ def delete_st_role(request):
 def set_guild(request):
   data = get_post(request)
   guild = data['guild']
-
+  bot = Bot.objects.get(pk=guild['bot'])
   try:
     chronicle = Chronicle.objects.get(pk=guild['id'])
     chronicle.name = guild['name']
     chronicle.owner_id = guild['owner_id']
     chronicle.icon_url = guild['icon_url']
-    chronicle.bot_id = guild['bot']
+    chronicle.bot.add(bot)
   except Chronicle.DoesNotExist:
     chronicle = Chronicle(
       pk=guild['id'],
       name=guild['name'],
       owner_id=guild['owner_id'],
-      icon_url=guild['icon_url']
+      icon_url=guild['icon_url'],  
     )
-    chronicle.bot_id = guild['bot']
+    chronicle.bot.add(bot)
   chronicle.save()
   
   return HttpResponse(status=200)

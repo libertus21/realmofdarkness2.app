@@ -63,12 +63,45 @@ def update_user(request):
     member = Member.objects.get(chronicle=guild, user=user)
     member.nickname = member_data['nickname']
     member.avatar_url = member_data['avatar_url']
+    member.admin = member_data['admin']
+    member.storyteller = member_data['storyteller']
     member.save()
   except Member.DoesNotExist:
-    member = Member.objects.create(
-      chronicle=guild,
-      user=user,
-      nickname=member_data['nickname'],
-      avatar_url=member_data['avatar_url']
-    )
+    try:
+      member = Member.objects.create(
+        chronicle=guild,
+        user=user,
+        nickname=member_data['nickname'],
+        avatar_url=member_data['avatar_url'],
+        admin=member_data['admin'],
+        storyteller=member_data['storyteller']
+      )
+    except:
+      print("Member was not created")
+      print(user_data)
+      print(guild.id, user.id, '\n\n')
   return HttpResponse()
+
+@csrf_exempt
+def get_admins_storytellers(request):
+  data = get_post(request)
+  guild_id = data['guild_id']
+
+  storytellers = Member.objects.filter(chronicle=guild_id, storyteller=True)
+  admins = Member.objects.filter(chronicle=guild_id, admin=True)
+
+  storyteller_ids = []
+  for st in storytellers:
+    storyteller_ids.append(str(st.user.id))
+
+  admin_ids = []
+  for a in admins:
+    admin_ids.append(str(a.user.id))
+  
+  members = storyteller_ids + list(set(admin_ids) - set(storyteller_ids))
+
+  return JsonResponse({
+    'admin_ids': admin_ids, 
+    'storyteller_ids': storyteller_ids,
+    'members': members
+  })
