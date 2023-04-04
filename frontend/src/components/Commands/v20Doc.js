@@ -10,8 +10,8 @@ const notesArg = (
     <Box>
       <Typography>
         Additional information to be displayed.
-        This has no mechanical effect on the roll itself and is purely
-        for documentation purposes.
+        This has no mechanical effect on the Roll or Tracker itself and is 
+        purely for documentation purposes.
       </Typography>
     </Box>
   }>
@@ -86,10 +86,11 @@ const setHealth = (
   <ListItemDialog dialogContent={
     <Box>
       <Typography>
-        A Number between 1 and 20
+        A Number between 7 and 15
       </Typography>
       <Typography>
-        The total Health a Character has. Page 119 VtM Corebook
+        The Total Health of your Character. Should only be changed in
+        exceptional conditions.
       </Typography>
     </Box>
   }>
@@ -101,14 +102,53 @@ const setWillpower = (
   <ListItemDialog dialogContent={
     <Box>
       <Typography>
-        A Number between 1 and 20
+        A Number between 1 and 10
       </Typography>
       <Typography>
-        The total Willpower a Character has. Page 157 VtM Corebook
+        The total Willpower a Character has.
       </Typography>
     </Box>
   }>
     willpower: number
+  </ListItemDialog>
+);
+
+const setBlood = (
+  <ListItemDialog dialogContent={
+    <Box>
+      <Typography>
+        A Number between 1 and 100
+      </Typography>
+      <Typography>
+        The Total blood of this vampire. This value is dictated by a vampires
+        Generation.
+      </Typography>
+      <Typography sx={{pt: 2}}>
+        p121 VtM Corebook.
+      </Typography>
+    </Box>
+  }>
+    blood: number
+  </ListItemDialog>
+);
+
+const setMorality = (
+  <ListItemDialog dialogContent={
+    <Box>
+      <Typography>
+        A Number between 0 and 10
+      </Typography>
+      <Typography>
+        The Total Humanity or Path value this Character has.
+        This value is determind by a Characters Virtues.
+        For Humanity this is their Conscience + Self Control
+      </Typography>
+      <Typography sx={{pt: 2}}>
+        p119 VtM Corebook.
+      </Typography>
+    </Box>
+  }>
+    morality: number
   </ListItemDialog>
 );
 
@@ -119,7 +159,11 @@ const setHumanity = (
         A Number between 0 and 10
       </Typography>
       <Typography>
-        The total Humanity a Character has. Page 236 VtM Corebook
+        The Total Humanity value this Character has.
+        This value is determind by their Conscience + Self Control.
+      </Typography>
+      <Typography sx={{pt: 2}}>
+        p119 VtM Corebook.
       </Typography>
     </Box>
   }>
@@ -127,63 +171,19 @@ const setHumanity = (
   </ListItemDialog>
 );
 
-const setHunger = (
+const setMoralityName = (
   <ListItemDialog dialogContent={
     <Box>
       <Typography>
-        A Number between 0 and 5
+        Select the name of the Path your Character follows.
       </Typography>
       <Typography>
-        The total Hunger a Character has. Page 205 VtM Corebook
+        Paths are an alternative to Humanity. They are found starting on
+        page 316 of the VtM corebook.
       </Typography>
     </Box>
   }>
-    hunger: number
-  </ListItemDialog>
-);
-
-const setDesperation = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between 1 and 5
-      </Typography>
-      <Typography>
-        Sets Desperation to the input amount. Page 125 HtR Corebook
-      </Typography>
-    </Box>
-  }>
-    desperation: number
-  </ListItemDialog>
-);
-
-const setDanger = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between 1 and 5
-      </Typography>
-      <Typography>
-        Sets Desperation to the input amount. Page 125 HtR Corebook
-      </Typography>
-    </Box>
-  }>
-    danger: number
-  </ListItemDialog>
-);
-
-const setDespair = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        Choose between "true" and "false"
-      </Typography>
-      <Typography>
-        Will set your despair based on the option chosen. Page 128 HtR Corebook
-      </Typography>
-    </Box>
-  }>
-    despair: option
+    morality_name: option
   </ListItemDialog>
 );
 
@@ -194,7 +194,7 @@ const setExp = (
         A Number between 0 and 1000
       </Typography>
       <Typography>
-        The total Experiance a Character has. Page 130 VtM Corebook
+        The total Experiance a Character has. Page 122 VtM Corebook
       </Typography>
     </Box>
   }>
@@ -202,84 +202,23 @@ const setExp = (
   </ListItemDialog>
 );
 
-const setWillpowerSup = (
+const setBashing = (
   <ListItemDialog dialogContent={
     <Box>
       <Typography>
-        A Number between 0 and 20
+        A Number between 0 and 1000
       </Typography>
       <Typography>
-        The total Superficial Willpower Damage a Character has. 
-        Page 126 VtM Corebook
+        The total Experiance a Character has. Page 122 VtM Corebook
       </Typography>
     </Box>
   }>
-    willpower_superficial: number
+    exp: number
   </ListItemDialog>
 );
 
-const setWillpowerAgg = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between 0 and 20
-      </Typography>
-      <Typography>
-        The total Aggravated Willpower Damage a Character has. 
-        Page 126 VtM Corebook
-      </Typography>
-    </Box>
-  }>
-    willpower_agg: number
-  </ListItemDialog>
-);
 
-const setHealthSup = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between 0 and 20
-      </Typography>
-      <Typography>
-        The total Superficial Health Damage a Character has. 
-        Page 126 VtM Corebook
-      </Typography>
-    </Box>
-  }>
-    health_superficial: number
-  </ListItemDialog>
-);
 
-const setHealthAgg = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between 0 and 20
-      </Typography>
-      <Typography>
-        The total Aggravated Health Damage a Character has. 
-        Page 126 VtM Corebook
-      </Typography>
-    </Box>
-  }>
-    health_agg: number
-  </ListItemDialog>
-);
-
-const setStains = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between 0 and 10
-      </Typography>
-      <Typography>
-        The total Stains a Character has. Page 239 VtM Corebook
-      </Typography>
-    </Box>
-  }>
-    stains: number
-  </ListItemDialog>
-);
 
 const setNameChange = (
   <ListItemDialog dialogContent={
@@ -294,126 +233,6 @@ const setNameChange = (
   </ListItemDialog>
 );
 
-const updateHunger = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between -10 and 10
-      </Typography>
-      <Typography>
-        Will add or remove the amount specified. Page 205 VtM Corebook
-      </Typography>
-    </Box>
-  }>
-    hunger: number
-  </ListItemDialog>
-);
-
-const updateDesperation = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between -10 and 10
-      </Typography>
-      <Typography>
-        Will add or remove the amount specified. Page 125 HtR Corebook
-      </Typography>
-    </Box>
-  }>
-    desperation: number
-  </ListItemDialog>
-);
-
-const updateDanger = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between -10 and 10
-      </Typography>
-      <Typography>
-        Will add or remove the amount specified. Page 125 HtR Corebook
-      </Typography>
-    </Box>
-  }>
-    desperation: number
-  </ListItemDialog>
-);
-
-const updateWillpowerSup = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between -20 and 20
-      </Typography>
-      <Typography>
-        Will add or remove the amount specified. Page 205 VtM Corebook
-      </Typography>
-    </Box>
-  }>
-    willpower_superficial: number
-  </ListItemDialog>
-);
-
-const updateWillpowerAgg = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between -20 and 20
-      </Typography>
-      <Typography>
-        Will add or remove the amount specified. Page 205 VtM Corebook
-      </Typography>
-    </Box>
-  }>
-    willpower_agg: number
-  </ListItemDialog>
-);
-
-const updateHealthSup = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between -30 and 30
-      </Typography>
-      <Typography>
-        Will add or remove the amount specified. Page 205 VtM Corebook
-      </Typography>
-    </Box>
-  }>
-    health_superficial: number
-  </ListItemDialog>
-);
-
-const updateHealthAgg = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between -30 and 30
-      </Typography>
-      <Typography>
-        Will add or remove the amount specified. Page 205 VtM Corebook
-      </Typography>
-    </Box>
-  }>
-    health_agg: number
-  </ListItemDialog>
-);
-
-const updateStains = (
-  <ListItemDialog dialogContent={
-    <Box>
-      <Typography>
-        A Number between -15 and 15
-      </Typography>
-      <Typography>
-        Will add or remove the amount of stains specified. 
-        Page 239 VtM Corebook
-      </Typography>
-    </Box>
-  }>
-    stains: number
-  </ListItemDialog>
-);
 
 const updateExp = (
   <ListItemDialog dialogContent={
@@ -510,11 +329,11 @@ const updatePlayer = (
   </ListItemDialog>
 );
 
-const DiceV5Doc = [
-  { // VtM Dice Roll
+const Dice20thDoc = [
+  { // Dice Roll
     summery: (
       <AccordionTitle>
-        VtM Dice Roll
+        Dice Roll
       </AccordionTitle>
     ),
     details: (
@@ -523,7 +342,7 @@ const DiceV5Doc = [
           Command
         </ListSubheader>
         <ListItem>
-          /v roll
+          /dice roll
         </ListItem>
         <ListSubheader>
           Required Arguments:
@@ -534,15 +353,30 @@ const DiceV5Doc = [
               A number between 1 and 50. 
             </Typography>
             <Typography sx={{pt: 2}}>
-              The base pool you will be rolling with, can be modified by other
-              arguments, such as "speciality" or "blood_surge".
+              The base pool you will be rolling with.
             </Typography>
             <Typography sx={{pt: 2}}>
-              p118 VtM corebook.
+              p247 VtM corebook
             </Typography>
           </Box>
         }>
           pool: number
+        </ListItemDialog>
+        <ListItemDialog dialogContent={
+          <Box>
+            <Typography>
+              A number between 2 and 10. 
+            </Typography>
+            <Typography sx={{pt: 2}}>
+              The difficulty of the roll. This sets the number a dice will need
+              to meet or exceed to be considered a success.
+            </Typography>
+            <Typography sx={{pt: 2}}>
+              p249 VtM Corebook.
+            </Typography>
+          </Box>
+        }>
+          difficulty: number
         </ListItemDialog>
         <ListSubheader>
           Optional Arguments:
@@ -550,59 +384,54 @@ const DiceV5Doc = [
         <ListItemDialog dialogContent={
           <Box>
             <Typography>
-              A number between 0 and 5. Defaults to 0. 
+              Select True of False. 
             </Typography>
             <Typography sx={{pt: 2}}>
-              This will replace X number of dice in your pool with hunger dice.
-              If your hunger is higher then your total pool, all dice will be
-              hunger dice.
+              Selecting True will add one automatic success to your roll.
+              If you have added a tracked character in the character option
+              this will also automatically -1 willpower from your character.
             </Typography>
             <Typography sx={{pt: 2}}>
-              p205 VtM corebook.
+              p250 VtM Corebook.
             </Typography>
           </Box>
         }>
-          hunger: number
+          willpower: True/False
         </ListItemDialog>
         <Divider component="li" />
         <ListItemDialog dialogContent={
           <Box>
             <Typography>
-              A number between 1 and 50. Defaults to 1.
+              A number between -20 and 20.
             </Typography>
             <Typography sx={{pt: 2}}>
-              For a dice to succeed it needs to roll a 6 or higher.
-              The difficulty determines how many dice you need to succeed to
-              win the roll.
+              Adds a number of automatic successes to this roll. If a negative
+              number is used it will take away a number of successes.
             </Typography>
             <Typography sx={{pt: 2}}>
-              Eg. Difficulty 4 needs at least 4 dice to roll a 6 or higher to
-              win the roll.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              p119 VtM Corebook.
+              p250 VtM Corebook.
             </Typography>
           </Box>
         }>
-          difficulty: number
+          modifier: number
         </ListItemDialog>
         <Divider component="li" />
         <ListItemDialog dialogContent={
           <Box>
             <Typography>
-              A number between 0 and 10.
+              The name of the speciality being used.
             </Typography>
             <Typography sx={{pt: 2}}>
-              Enter you current Blood Potency into this field. The bot will
-              automatically add the extra dice to your pool and do a rouse
-              check during your roll.
+              Using this option will make any 10s rolled count as two successes
+              instead of the normal 1. It will also print the name of the
+              Speciality for those to see.
             </Typography>
             <Typography sx={{pt: 2}}>
-              p218 VtM Corebook.
+              p96 VtM Corebook.
             </Typography>
           </Box>
         }>
-          blood_surge: number
+          speciality: string
         </ListItemDialog>
         <Divider component="li" />
         <ListItemDialog dialogContent={
@@ -624,247 +453,99 @@ const DiceV5Doc = [
         <ListItemDialog dialogContent={
           <Box>
             <Typography>
-              Select either the "No Reroll" or "Reroll" from the options.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              This will perform a Rouse check during the roll.
-              If "No Reroll" is selected a single rouse dice will be rolled
-              and if it succeeds hunger will not increase.
-              If "Reroll" is selected 2 dice will be used instead and
-              if either succeed hunger will not increase.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              p211 VtM Corebook.
-            </Typography>
-          </Box>
-        }>
-          rouse: option
-        </ListItemDialog>
-        <Divider component="li" />
-        <ListItemDialog dialogContent={
-          <Box>
-            <Typography>
-              The Name of the Character making the roll.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              If you have a tracked character with the same name, this option
-              will link the roll to that character.
-              This means if your hunger increase or you use willpower, these
-              values will update in your tracked character automatically.
-            </Typography>
-          </Box>
-        }>
-          character: string
-        </ListItemDialog>
-        <Divider component="li" />
-        <ListItemDialog dialogContent={
-          <Box>
-            <Typography>
-              True or False options.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              If you are using a tracked character and have specified their
-              Name in the "character" option, then the "hunger" option will be
-              automatically filled in.
-            </Typography>
-          </Box>
-        }>
-          auto_hunger: option
-        </ListItemDialog>
-        <Divider component="li" />
-        { notesArg }
-        <ListSubheader>
-          Description
-        </ListSubheader>
-        <ListItem>
-          <Typography>
-            Makes a dice roll following the standard Vampire: the Masquerade
-            v5 rules.
-          </Typography>
-        </ListItem>
-      </List>
-    )
-  },
-  { // VtM Rouse Roll
-    summery: (
-      <AccordionTitle>
-        VtM Rouse Check
-      </AccordionTitle>
-    ),
-    details: (
-      <List>
-        <ListSubheader>
-          Command
-        </ListSubheader>
-        <ListItem>
-          /v rouse
-        </ListItem>
-        <ListSubheader>
-          Required Arguments:
-        </ListSubheader>
-        <ListItem>
-          None
-        </ListItem>
-        <ListSubheader>
-          Optional Arguments:
-        </ListSubheader>
-        <ListItemDialog dialogContent={
-          <Box>
-            <Typography>
-              Select either the "True" or "False" from the options.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              If "True" is selected 2 dice will be used instead of one and
-              if either succeed hunger will not increase.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              p211 VtM Corebook.
-            </Typography>
-          </Box>
-        }>
-          reroll: option
-        </ListItemDialog>
-        <Divider component="li" />
-        <ListItemDialog dialogContent={
-          <Box>
-            <Typography>
-              The Name of the Character making the roll.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              If you have a tracked character with the same name, this option
-              will link the roll to that character.
-              This means if your hunger increases your tracked 
-              character will update automatically.
-            </Typography>
-          </Box>
-        }>
-          character: string
-        </ListItemDialog>
-        <Divider component="li" />
-        { notesArg }
-        <ListSubheader>
-          Description
-        </ListSubheader>
-        <ListItem>
-          <Typography>
-            Rolls a rouse check to see if you increase hunger or not.
-          </Typography>
-        </ListItem>
-      </List>
-    )
-  },
-  { // VtM Resonance Roll
-    summery: (
-      <AccordionTitle>
-        VtM Resonance Roll
-      </AccordionTitle>
-    ),
-    details: (
-      <List>
-        <ListSubheader>
-          Command
-        </ListSubheader>
-        <ListItem>
-          /v resonance
-        </ListItem>
-        <ListSubheader>
-          Required Arguments:
-        </ListSubheader>
-        <ListItem>
-          None
-        </ListItem>
-        <ListSubheader>
-          Optional Arguments:
-        </ListSubheader>
-        <ListItemDialog dialogContent={
-          <Box>
-            <Typography>
-              Select one of the four resonance options.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              This will ensure this resonance is used for the roll.
-              Use this if you know what the resonance will be.
-            </Typography>
-          </Box>
-        }>
-          resonance: option
-        </ListItemDialog>
-        <Divider component="li" />
-        <ListItemDialog dialogContent={
-          <Box>
-            <Typography>
-              Select one of the four temperament options.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              If used this will ensure the temperament is used for the roll.
-              Use this if you know what the teperament will be.
-            </Typography>
-          </Box>
-        }>
-          temperament: option
-        </ListItemDialog>
-        <Divider component="li" />
-        <ListItemDialog dialogContent={
-          <Box>
-            <Typography>
-              Select one of the options.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              This will ensure at least the selected temperament or greater
-              is selected for the roll. Use this if you know the temperament
-              will be at least a certain value.
-            </Typography>
-          </Box>
-        }>
-          min_temperament: option
-        </ListItemDialog>
-        <Divider component="li" />
-        { notesArg }
-        <ListSubheader>
-          Description
-        </ListSubheader>
-        <ListItem>
-          <Typography>
-            Rolls for Resonance and Temperament. Follows random humors table
-            on page 228 of VtM Corebook.
-          </Typography>
-        </ListItem>
-      </List>
-    )
-  },
-  { // Hunter the Reckoning Dice Roll
-    summery: (
-      <AccordionTitle>
-        Hunter the Reckoning Dice Roll
-      </AccordionTitle>
-    ),
-    details: (
-      <List>
-        <ListSubheader>
-          Command
-        </ListSubheader>
-        <ListItem>
-          /h hunter
-        </ListItem>
-        <ListSubheader>
-          Required Arguments:
-        </ListSubheader>
-        <ListItemDialog dialogContent={
-          <Box>
-            <Typography>
               A number between 1 and 50.
             </Typography>
             <Typography sx={{pt: 2}}>
-              This number will make up the base pool for your roll. 
-              Usually made up of a Skill and an Attribute.
-              It can be affected by other arguments such as Speciality.
+              Replaces x number of dice in your pool with Nightmare dice.
+              Rolling a 10 on a on a Nightmare dice will increase a players
+              Nightmare by 1.
             </Typography>
             <Typography sx={{pt: 2}}>
-              Page 111 HtR Corebook
+              p274 CtD Corebook.
             </Typography>
           </Box>
         }>
-          pool: number
+          nightmare: number
+        </ListItemDialog>
+        <Divider component="li" />
+        <ListItemDialog dialogContent={
+          <Box>
+            <Typography>
+              The Name of the Character making the roll.
+            </Typography>
+            <Typography sx={{pt: 2}}>
+              If you have a tracked character with the same name, this option
+              will link the roll to that character.
+              This means if you use the willpower option in this roll your
+              tracked character will automatically lose a willpower.
+            </Typography>
+          </Box>
+        }>
+          character: string
+        </ListItemDialog>
+        <Divider component="li" />
+        <ListItemDialog dialogContent={
+          <Box>
+            <Typography>
+              True or False option.
+            </Typography>
+            <Typography sx={{pt: 2}}>
+              Selecting True, will stop any 1s rolled from subtracting a 
+              success from your total and ensuring no botch outcome takes place.
+            </Typography>
+          </Box>
+        }>
+          no_botch: True/False
+        </ListItemDialog>
+        <Divider component="li" />
+        { notesArg }
+        <ListSubheader>
+          Description
+        </ListSubheader>
+        <ListItem>
+          <Typography>
+            Makes a dice roll following the standard 20th edition ruleset.
+          </Typography>
+        </ListItem>
+      </List>
+    )
+  },
+  {
+    summery: (
+      <AccordionTitle>
+        Initiative Roll
+      </AccordionTitle>
+    ),
+    details: (
+      <List>
+        <ListSubheader>
+          Command
+        </ListSubheader>
+        <ListItem>
+          /dice initiative
+        </ListItem>
+        <ListSubheader>
+          Required Arguments:
+        </ListSubheader>
+        <ListItemDialog dialogContent={
+          <Box>
+            <Typography>
+              A number between 0 and 50. 
+            </Typography>
+            <Typography sx={{pt: 2}}>
+              Your Dexterity + Wits. This will be added to a 1d10 dice roll
+              to determine your total Initiative rating.
+            </Typography>
+            <Typography sx={{pt: 2}}>
+              For a more advanced Initative Tracker see the Initative Tracker
+              Commands.
+            </Typography>
+            <Typography sx={{pt: 2}}>
+              p271 VtM corebook
+            </Typography>
+          </Box>
+        }>
+          dexterity_wits: number
         </ListItemDialog>
         <ListSubheader>
           Optional Arguments:
@@ -872,57 +553,12 @@ const DiceV5Doc = [
         <ListItemDialog dialogContent={
           <Box>
             <Typography>
-              A number between 0 and 5. Defaults to 0
+              The Name of the Character making the roll.
             </Typography>
             <Typography sx={{pt: 2}}>
-              Adds an additional number of dice to your base pool but can lead
-              to Overreach or Despair.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              Page 127 HtR Corebook
+              This will just print the value on the roll output.
             </Typography>
           </Box>
-        }>
-          desperation: number
-        </ListItemDialog>
-        <Divider component="li" />
-        <ListItemDialog dialogContent={
-          <Box>
-            <Typography>
-              A number between 1 and 50. Defaults to 1
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              A dice needs to roll a 6 or higher to be considered a successes.
-              Difficulty is the number of successful dice you need in order top
-              win a roll.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              Page 113 HtR Corebook
-            </Typography>
-          </Box>
-        }>
-          difficulty: number
-        </ListItemDialog>
-        <Divider component="li" />
-        <ListItemDialog dialogContent={
-          <Box>
-            <Typography>
-              The name of the specialialty being used.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              Adds +1 die to the base pool automatically. A speciality is Skill
-              a character is particually adept at.
-            </Typography>
-            <Typography sx={{pt: 2}}>
-              Page 61 HtR Corebook
-            </Typography>
-          </Box>
-        }>
-          speciality: string
-        </ListItemDialog>
-        <Divider component="li" />
-        <ListItemDialog dialogContent={
-          <Typography>The name of the Character that made the roll.</Typography>
         }>
           character: string
         </ListItemDialog>
@@ -932,15 +568,9 @@ const DiceV5Doc = [
           Description
         </ListSubheader>
         <ListItem>
-          <Box>
-            <Typography>
-              Makes a dice roll following the standard Hunter: the Reckoning
-              v5 rules. 
-            </Typography>
-            <Typography>
-              Page 110 of the HtR Corebook.
-            </Typography>
-          </Box>          
+          <Typography>
+            Initiative roll using a Characters Dexterity + Wits
+          </Typography>
         </ListItem>
       </List>
     )
@@ -957,7 +587,7 @@ const DiceV5Doc = [
           Command
         </ListSubheader>
         <ListItem>
-          /v general or /h general
+          /dice general
         </ListItem>
         <ListSubheader>
           Required Arguments:
@@ -1032,7 +662,7 @@ const DiceV5Doc = [
   },
 ]
 
-const TrackerV5Doc = [
+const Tracker20thDoc = [
   { // New Vampire Tracker
     summery: (
       <AccordionTitle>
@@ -1054,31 +684,29 @@ const TrackerV5Doc = [
         <Divider component="li" />
         { setWillpower }
         <Divider component="li" />
-        { setHealth }
+        { setBlood }
         <Divider component="li" />
-        { setHumanity }
+        { setMorality }
         <ListSubheader>
           Optional Arguments:
         </ListSubheader>
-        { setHunger }
+        { setMoralityName }
         <Divider component="li" />
         { setExp }
         <Divider component="li" />
-        { setWillpowerSup }
+        { setHealth }
         <Divider component="li" />
-        { setWillpowerAgg }
+        { setBashing }
         <Divider component="li" />
-        { setHealthSup }
+        { setLethal }
         <Divider component="li" />
-        { setHealthAgg }
-        <Divider component="li" />
-        { setStains }
+        { setAgg }
         <Divider component="li" />
         { notesArg }
         <Divider component="li" />
         { setHex }
         <Divider component="li" />
-        { setImage }      
+        { setImage }     
         <ListSubheader>
           Description
         </ListSubheader>
@@ -1114,25 +742,21 @@ const TrackerV5Doc = [
         <ListSubheader>
           Optional Arguments:
         </ListSubheader>
-        { updateHunger }
+        { updateWillpower }
         <Divider component="li" />
-        { updateWillpowerSup }    
+        { updateBlood }    
         <Divider component="li" />
-        { updateHealthSup }
-        <Divider component="li" />
-        { updateWillpowerAgg }
-        <Divider component="li" />
-        { updateHealthAgg }
-        <Divider component="li" />
-        { updateStains }
+        { updateMorality }
         <Divider component="li" />
         { updateExp }
         <Divider component="li" />
-        { updateWillpower }
-        <Divider component="li" />
         { updateHealth }
         <Divider component="li" />
-        { updateHumanity }
+        { updateBashing }
+        <Divider component="li" />
+        { updateLethal }
+        <Divider component="li" />
+        { updateAgg }
         <Divider component="li" />
         { updatePlayer }
         <Divider component="li" />
@@ -1146,8 +770,9 @@ const TrackerV5Doc = [
               Updates your Character stats using plus or minus values.
             </Typography>
             <Typography>
-              Eg. typing the value of 2 in the hunger argument will increase
-              Hunger by 2 while typing the value -3 will reduce Hunger by three.
+              Eg. typing the value of 2 in the willpower argument will increase
+              Willpower by 2 while typing the value -3 will reduce Willpower
+              by three.
             </Typography>
           </Box>          
         </ListItem>

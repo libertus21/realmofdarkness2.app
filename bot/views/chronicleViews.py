@@ -114,7 +114,6 @@ def set_guild(request):
     chronicle.name = guild['name']
     chronicle.owner_id = guild['owner_id']
     chronicle.icon_url = guild['icon_url']
-    chronicle.bot.add(bot)
   except Chronicle.DoesNotExist:
     chronicle = Chronicle(
       pk=guild['id'],
@@ -122,8 +121,8 @@ def set_guild(request):
       owner_id=guild['owner_id'],
       icon_url=guild['icon_url'],  
     )
-    chronicle.bot.add(bot)
   chronicle.save()
+  chronicle.bot.add(bot)
   
   return HttpResponse(status=200)
 
