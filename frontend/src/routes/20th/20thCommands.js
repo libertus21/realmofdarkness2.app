@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import CommandAccordion from '../../components/Commands/CommandAccordion';
-const { DiceCodDoc } = require('../../components/Commands/CodDoc');
+const { Dice20thDoc, Tracker20thDoc } = require('../../components/Commands/v20Doc');
+const { Init20thDoc } = require('../../components/Commands/20thInitDoc');
+const { Server20thDoc } = require('../../components/Commands/20thServerDoc');
 
-export default function CodCommands(props) {
+export default function V20Commands(props) {
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -58,10 +60,10 @@ export default function CodCommands(props) {
           <Button component={Link} to='/v5/commands/'>
             5th Edition
           </Button>
-          <Button component={Link} to='/20th/commands/'>
+          <Button variant='contained'>
             20th Edition
           </Button>
-          <Button variant='contained'>
+          <Button component={Link} to='/cod/commands/'>
             Chronicles of Darkness
           </Button>
         </ButtonGroup>
@@ -70,9 +72,21 @@ export default function CodCommands(props) {
         <Container disableGutters sx={{px: 2}}>
           <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs">
             <Tab label="Dice" {...allyProps(0)}/>
+            <Tab label="Tracker" {...allyProps(1)} />
+            <Tab label="Initiative" {...allyProps(2)} />
+            <Tab label="Server" {...allyProps(3)} />
           </Tabs>
           <TabPanel value={tabValue} index={0}>
-            <CommandAccordion commands={DiceCodDoc}/>
+            <CommandAccordion commands={Dice20thDoc}/>
+          </TabPanel>
+          <TabPanel value={tabValue} index={1}>
+            <CommandAccordion commands={Tracker20thDoc}/>
+          </TabPanel>
+          <TabPanel value={tabValue} index={2}>
+            <CommandAccordion commands={Init20thDoc}/>
+          </TabPanel>
+          <TabPanel value={tabValue} index={3}>
+            <CommandAccordion commands={Server20thDoc}/>
           </TabPanel>
         </Container>  
       </Grid>
@@ -85,7 +99,7 @@ export default function CodCommands(props) {
           size='large'
           sx={{width: '100%', height: 60}}
         >
-          Chronicles of Darkness Home
+          20th Edition Home
         </Button>
       </Grid>
       <Grid item xs={12} md={4}>
@@ -93,7 +107,7 @@ export default function CodCommands(props) {
           color="primary"
           variant='outlined'
           size='large'
-          href="https://discord.com/oauth2/authorize?client_id=968461963816484915&scope=bot%20applications.commands&permissions=278528"
+          href="https://discord.com/oauth2/authorize?client_id=898894443757838418&scope=bot%20applications.commands&permissions=278528"
           target="_blank"
           sx={{width: '100%', height: 60}}
         >
@@ -108,7 +122,7 @@ export default function CodCommands(props) {
           disabled
           sx={{width: '100%', height: 60}}
         >
-          Dice (Coming soon!)
+          Dice (Coming Soon)
         </Button>
       </Grid>
     </Grid>

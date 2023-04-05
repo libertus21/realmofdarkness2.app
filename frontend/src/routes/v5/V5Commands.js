@@ -58,7 +58,7 @@ export default function V5Commands(props) {
           <Button variant='contained'>
             5th Edition
           </Button>
-          <Button disabled component={Link} to='/v20/commands/'>
+          <Button component={Link} to='/20th/commands/'>
             20th Edition
           </Button>
           <Button component={Link} to='/cod/commands/'>
@@ -68,7 +68,7 @@ export default function V5Commands(props) {
       </Grid>
       <Grid item xs={12}>
         <Container disableGutters sx={{px: 2}}>
-          <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example">
+          <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs">
             <Tab label="Dice" {...allyProps(0)}/>
             <Tab label="Tracker" {...allyProps(1)} />
           </Tabs>
@@ -109,7 +109,7 @@ export default function V5Commands(props) {
           color="primary"
           variant='outlined'
           component={Link}
-          to='dice/'
+          to='../dice/'
           size='large'
           sx={{width: '100%', height: 60}}
         >

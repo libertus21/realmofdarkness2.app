@@ -506,7 +506,7 @@ const updatePlayer = (
       </Typography>
     </Box>
   }>
-    player: number
+    player: @mention
   </ListItemDialog>
 );
 
@@ -1762,10 +1762,10 @@ const TrackerV5Doc = [
       </List>
     )
   },
-  { // Set Tracker Storyteller Roles
+  { // Set Storyteller Roles
     summery: (
       <AccordionTitle>
-        Set Tracker Storyteller Roles
+        Set Storyteller Roles
       </AccordionTitle>
     ),
     details: (

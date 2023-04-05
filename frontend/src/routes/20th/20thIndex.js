@@ -30,18 +30,15 @@ export default function TwentiethIndex() {
           component={Link}
           to='commands/'
           size='large'
-          disabled
           sx={{width: '100%', height: 60}}
         >
-          Bot Command Docs (Coming Soon!)
+          Bot Command Docs
         </Button>
       </Grid>
       <Grid item xs={12} md={4}>
         <Button 
           color="primary"
           variant='outlined'
-          component={Link}
-          to='dice/'
           size='large'
           disabled
           sx={{width: '100%', height: 60}}

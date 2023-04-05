@@ -12,6 +12,7 @@ import Index from "./routes/Index";
 import V5Index from "./routes/v5/V5Index";
 import V5 from "./routes/v5/V5";
 import V5Commands from "./routes/v5/V5Commands";
+import V20Commands from "./routes/20th/20thCommands";
 import Twentieth from "./routes/20th/20th";
 import CoD from "./routes/CoD/CoD";
 import { useLayoutEffect } from "react";
@@ -90,7 +91,7 @@ function App() {
                 </Route>
                 <Route path="20th" element={<Twentieth />}>
                   <Route index element={<TwentiethIndex />} />
-                  <Route path='commands' element={<V5Commands />} />
+                  <Route path='commands' element={<V20Commands />} />
                 </Route>
                 <Route path="cod" element={<CoD />}>
                   <Route index element={<CodIndex />} />

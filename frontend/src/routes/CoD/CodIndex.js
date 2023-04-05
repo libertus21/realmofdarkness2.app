@@ -39,8 +39,6 @@ export default function CodIndex() {
         <Button 
           color="primary"
           variant='outlined'
-          component={Link}
-          to='dice/'
           size='large'
           disabled
           sx={{width: '100%', height: 60}}

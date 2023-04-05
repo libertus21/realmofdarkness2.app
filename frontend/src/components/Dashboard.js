@@ -1,6 +1,6 @@
 import { Grid, Fab, Box, CircularProgress } from "@mui/material";
 import { Fragment, memo, useState } from "react";
-import CharacterCard from "./CharacterCards/CharacterCard";
+//import CharacterCard from "./CharacterCards/CharacterCard";
 import { CharactersContext, ChroniclesContext, ClientContext } from "./ClientProvider";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CharacterCardDisplay from "./CharacterCards/CharacterCardDisplay";
