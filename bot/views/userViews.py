@@ -22,22 +22,19 @@ def get_supporter_level(request):
 
 @csrf_exempt
 def set_supporter_level(request):
-    data = get_post(request)
-    user_data = data['user']
-    level = data['level']
+  data = get_post(request)
+  user_data = data['user']
+  level = data['level']
 
-    try:
-        user = User.objects.get(pk=user_data['id'])
-        user.username = user_data['username']
-        user.discriminator = user_data['discriminator']
-        user.avatar_url = user_data['avatar_url']        
-    except User.DoesNotExist:
-        user = User.objects.create_user(user_data)
-        
-    user.supporter = level
-    user.save()
-    
-    return JsonResponse({"saved": True})
+  try:
+    user = User.objects.get(pk=user_data['id'])   
+    if (user.supporter == 0 and level == 0): return HttpResponse(status=204)
+  except User.DoesNotExist:
+    user = User.objects.create_user(user_data)
+      
+  user.supporter = level
+  user.save()    
+  return HttpResponse()
 
 @csrf_exempt
 def update_user(request):

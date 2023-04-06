@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.utils import timezone
 
 class UserManager(BaseUserManager):
     def create_user(self, discord_user, is_registered=False):
@@ -32,6 +33,7 @@ class User(AbstractBaseUser):
 
     created_at = models.DateTimeField(auto_now_add=True)
     last_saved = models.DateTimeField(auto_now=True)
+    last_active = models.DateTimeField(default=timezone.now)
 
     objects = UserManager()
 

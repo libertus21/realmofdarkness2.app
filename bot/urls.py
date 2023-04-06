@@ -20,9 +20,6 @@ urlpatterns = [
   path('chronicle/storyteller/roles/delete', views.delete_st_role),
   path('chronicle/member/delete', views.member_delete),
   path('chronicle/storytellers/get', views.get_admins_storytellers),
-    
-  # Dice
-  path('dice/stats/update', views.update_dice_stats),
 
   # User
   path('user/supporter/get', views.get_supporter_level),
@@ -36,6 +33,7 @@ urlpatterns = [
 
   # Stats
   path('stats/get', views.get_stats),
+  path('stats/command/update', views.command_used),
 
   # Bot Info
   path('data/set', views.update_bot),
