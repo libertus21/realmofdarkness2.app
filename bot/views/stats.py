@@ -31,6 +31,29 @@ def get_stats(request):
   command_stats = CommandStat.objects.filter(last_used__gt=timestamp_30days)\
     .values('command', 'bot__username').order_by().annotate(count=Count('command'))\
     .order_by('-count')
+  
+  total = CommandStat.objects.filter(last_used__gt=timestamp_30days)\
+    .values('bot__username', 'user').distinct()
+    
+  totals = {}
+  
+  for stat in total:
+    if totals.get(stat['bot__username'], None):
+      totals[stat['bot__username']]['count'] += 1
+    else:
+      totals[stat['bot__username']] = {
+        'bot__username': stat['bot__username'],
+        'command': 'Total Users',
+        'count': 1
+        }
+  print(totals)
+  stats = []
+
+  for stat in totals.values():
+    stats.append(stat)  
+
+  for stat in command_stats:
+    stats.append(stat)
 
   # Character Stats
   characters = Character.objects.filter(last_updated__gt=timestamp_30days)\
@@ -47,7 +70,7 @@ def get_stats(request):
   return JsonResponse({
     "users": user_stats, 
     'characters': char_stats,
-    'command_stats': list(command_stats)
+    'command_stats': list(stats)
   })
 
 @csrf_exempt
