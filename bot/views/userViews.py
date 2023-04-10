@@ -30,6 +30,7 @@ def set_supporter_level(request):
     user = User.objects.get(pk=user_data['id'])   
     if (user.supporter == 0 and level == 0): return HttpResponse(status=204)
   except User.DoesNotExist:
+    if (level == 0): return HttpResponse(status=204)
     user = User.objects.create_user(user_data)
       
   user.supporter = level
