@@ -5,6 +5,7 @@ from .serializeCharacter import (serializeVampire20th, serializeChangeling20th,
 from gateway.constants import Splats
 from .serializeUser import serialize_user
 from .serializeChronicle import serialize_chronicle
+from .serializeMember import serialize_member
 
 serializers = {
   Splats.changeling20th: serializeChangeling20th,

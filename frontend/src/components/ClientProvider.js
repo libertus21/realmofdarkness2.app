@@ -4,6 +4,7 @@ export const ClientContext = createContext(null);
 export const UserContext = createContext(null);
 export const CharactersContext = createContext(null);
 export const ChroniclesContext = createContext(null);
+export const MembersContext = createContext(null);
 
 let client = new Client();
 
@@ -11,13 +12,15 @@ export default function ClientProvider({ children }) {
   // Gatway State
   const [user, setUser] = useState(null);
   const [characters, setCharacters] = useState(null);
-  const [chronicles, setChronicles] = useState(null);
+  const [chronicles, setChronicles] = useState(null);  
+  const [members, setMembers] = useState(null);
 
   useEffect(() =>{    
     client.handleGatewayEvents({
       setUser: setUser,
       setCharacters: setCharacters,
-      setChronicles: setChronicles
+      setChronicles: setChronicles,
+      setMembers: setMembers
     });
   }, []); // only happens on site load
 
@@ -26,7 +29,9 @@ export default function ClientProvider({ children }) {
       <UserContext.Provider value={user}>
         <CharactersContext.Provider value={characters}>
           <ChroniclesContext.Provider value={chronicles}>
-            { children }
+            <MembersContext.Provider value={members}>
+              { children }
+            </MembersContext.Provider>
           </ChroniclesContext.Provider>
         </CharactersContext.Provider>
       </UserContext.Provider>

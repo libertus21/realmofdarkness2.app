@@ -1,23 +1,31 @@
-import { Grid, FormControl, Select, MenuItem, InputLabel, ListSubheader } from "@mui/material";
+import { Grid, FormControl, Select, MenuItem, InputLabel, ListSubheader, FormControlLabel, Switch } from "@mui/material";
 import { OutlinedInput, Box, Chip, Alert, ListItemText } from "@mui/material";
-import { useState, useMemo } from "react";
+import { useState, useMemo, Fragment } from "react";
 import CharacterCard from "./CharacterCard";
 import Checkbox from '@mui/material/Checkbox';
 
 
 export default function CharacterCardDisplay(props) 
 {
-  const {characters, chronicles} = props;
+  const {characters, chronicles, user} = props;
   const [sortOptions, setSortOptions] = useState({
     chronicle: '',
     splats: [],
-    sortBy: 'lastUpdated'
+    sortBy: 'lastUpdated',
+    storytellerMode: true,
   });
 
   function handleSelectChange(event, value)
   {
     const newSort = {...sortOptions};
     newSort[value] = event.target.value;
+    setSortOptions(newSort);
+  }
+
+  function handlestorytellerMode(event)
+  {
+    const newSort = {...sortOptions}
+    newSort.storytellerMode = !newSort.storytellerMode;
     setSortOptions(newSort);
   }
 
@@ -61,11 +69,24 @@ export default function CharacterCardDisplay(props)
     return menu;
   }
 
-  function sortCharacters()
+  function renderCharacterCards()
   {        
-    if (!characters) return;
+    if (!characters) return;    
+    let canFilterStorytellerMode = false;
     let cards = [];
-
+    /*
+    // Filtering User only characters if toggled
+    const filteredCharacters = sortOptions.storytellerMode ? characters : {};
+    if (!sortOptions.storytellerMode)
+    {
+      for (const key of Object.keys(characters))
+      {
+        const value = characters[key];
+        if (value.user === user.id) filteredCharacters[key] = value;
+        else canFilterStorytellerMode = true;
+      }
+    }
+    */
     // Sorting by last updated time
     const sortedChars = Object.values(characters).sort((a, b) => {
       if (sortOptions.sortBy === 'lastUpdated')
@@ -88,10 +109,18 @@ export default function CharacterCardDisplay(props)
       {
         continue;
       }
-      if (sortOptions.splats.length && !sortOptions.splats.includes(character.splat)) 
+      else if (sortOptions.splats.length && 
+        !sortOptions.splats.includes(character.splat)) 
       {
         continue;
+      }      
+      else if (character.user !== user.id && !sortOptions.storytellerMode)
+      {
+        canFilterStorytellerMode = true;
+        continue;
       }
+      else if (character.user !== user.id) canFilterStorytellerMode = true;
+
       cards.push((
         <CharacterCard key={character.id} character={character} />
       ))
@@ -105,7 +134,22 @@ export default function CharacterCardDisplay(props)
         No Characters were found!
       </Alert>
     );
-      return (cards.length ? cards : noChars);
+      return (
+        <Fragment>
+          {renderStorytellerModeButton(sortOptions, handlestorytellerMode, 
+            canFilterStorytellerMode)}
+          <Grid          
+            container 
+            item xs={12}
+            justifyContent="space-evenly"
+            alignItems="flex-start"
+            columnSpacing={3}
+            rowSpacing={3}
+          >        
+            {cards.length ? cards : noChars}
+          </Grid>
+        </Fragment>        
+      );
   }
   
   const getSplatMenus = useMemo(() => (
@@ -173,16 +217,26 @@ export default function CharacterCardDisplay(props)
           </Select>          
         </FormControl>
       </Grid>
-      <Grid          
-          container 
-          item xs={12}
-          justifyContent="space-evenly"
-          alignItems="flex-start"
-          columnSpacing={3}
-          rowSpacing={3}
-      >        
-        {sortCharacters()}
-      </Grid>
+      {renderCharacterCards()}
+    </Grid>
+  )
+}
+
+function renderStorytellerModeButton(sortOptions, handleChange, render=true)
+{
+  if (!render) return null;
+  return (
+    <Grid item xs={12} sm={12} sx={{textAlign: 'center'}}>
+      <FormControlLabel 
+        sx={{minWidth: '150px'}}
+        label="Storyteller Mode" 
+        control={
+          <Switch 
+          checked={sortOptions.storytellerMode}
+          onChange={(event) => {handleChange(event)}}
+          />   
+        }
+      />  
     </Grid>
   )
 }

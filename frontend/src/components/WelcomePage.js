@@ -1,4 +1,4 @@
-import { Alert, Box, Grid, Typography, Link as MuiLink } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { Button, ButtonGroup } from '@mui/material';
 import { Link } from "react-router-dom";
 import Slideshow from '../components/Slideshow';
@@ -6,23 +6,6 @@ import Slideshow from '../components/Slideshow';
 const large_logo = "https://cdn.discordapp.com/attachments/886983353922891816/998131572601540638/unknown.png";
 
 export default function WelcomePage(props) {
-  let warning = undefined;
-  if (props.unAuth) {
-    warning = (
-        <Alert variant="outlined" severity="warning" sx={{mb: 4}}>
-          Loggin is an Early Access feature and currently only available
-          to Supporters. To get access please consider supporting on&nbsp;
-          <MuiLink
-            href='https://www.patreon.com/MiraiMiki'
-            underline="hover"
-            color='secondary'
-          >
-            Patreon
-          </MuiLink>
-        </Alert>
-    )
-  }
-
   return (
     <Grid 
       container spacing={{md: 0, xs: 4}} 
@@ -31,7 +14,6 @@ export default function WelcomePage(props) {
       alignItems="flex-start"
       columnSpacing={3}
     >
-      {warning}
       <Grid item md={7} xs={12}>
         <Box sx={{pt: {xs: 0, md: 6}}}>
           <Box 

@@ -4,5 +4,6 @@ export const Ready = {
 		contextSetters.setUser(data.user);
 		contextSetters.setCharacters(data.characters);
 		contextSetters.setChronicles(data.chronicles);
+		contextSetters.setMembers(data.members);
 	},
 };

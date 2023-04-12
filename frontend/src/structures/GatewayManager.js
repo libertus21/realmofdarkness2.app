@@ -51,6 +51,7 @@ export default class GatewayManager extends EventEmitter
     
     this.ws.onerror = (e) => {
       console.error('Socket encountered error: Closing socket');
+      console.error(e)
       this.ws.close();
     }
     

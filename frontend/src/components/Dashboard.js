@@ -1,7 +1,7 @@
 import { Grid, Fab, Box, CircularProgress } from "@mui/material";
 import { Fragment, memo, useState } from "react";
-//import CharacterCard from "./CharacterCards/CharacterCard";
-import { CharactersContext, ChroniclesContext, ClientContext } from "./ClientProvider";
+import { CharactersContext, ChroniclesContext, ClientContext, UserContext }
+  from "./ClientProvider";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CharacterCardDisplay from "./CharacterCards/CharacterCardDisplay";
 
@@ -62,10 +62,15 @@ function Dashboard(props) {
           {(characters) => (
             <ChroniclesContext.Consumer>
               {(chronicles) => (
-                <CharacterCardDisplay 
-                  characters={characters} 
-                  chronicles={chronicles} 
-                />
+                <UserContext.Consumer>
+                  {(user) => (
+                    <CharacterCardDisplay 
+                      characters={characters} 
+                      chronicles={chronicles} 
+                      user={user}
+                    />
+                  )}
+                </UserContext.Consumer>
               )}
             </ChroniclesContext.Consumer>
           )}

@@ -18,9 +18,9 @@ import { UserContext } from './ClientProvider';
 
 let host;
 if (process.env.NODE_ENV === 'production') 
-  host = 'https://realmofdarkness.app/auth/login/';
+  host = 'https://realmofdarkness.app/';
 else
-  host = 'http://localhost/auth/login/';
+  host = 'http://localhost/';
 
 const pages = {
   sm: [
@@ -34,8 +34,7 @@ const pages = {
     'Chronicles of Darkness', 
   ],
   user: [
-    'Account', 
-    'Logout'
+
   ]
 };
 const routes = {
@@ -44,8 +43,6 @@ const routes = {
   "Chronicles of Darkness": "cod/",
   Characters: 'characters/',
   Servers: 'servers/',
-  Account: 'account/',
-  Logout: 'logout/',
 }
 
 function ResponsiveAppBar (props) {
@@ -83,7 +80,7 @@ function ResponsiveAppBar (props) {
       <Button 
         color="primary"
         variant='contained'
-        href={host}
+        href={host + 'auth/login/'}
       >
         Login
       </Button>
@@ -123,7 +120,14 @@ function ResponsiveAppBar (props) {
             >
               <Typography textAlign="center">{page}</Typography>
             </MenuItem>
-          ))}
+          ))}          
+          <MenuItem 
+            onClick={handleCloseUserMenu}
+            component="a"
+            href={host + 'auth/logout/'}
+          >
+            <Typography textAlign="center">Logout</Typography>
+          </MenuItem>
         </Menu>
       </Box>
   )};

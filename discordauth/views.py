@@ -59,10 +59,9 @@ def login(request):
 
 def logout(request):
     auth_logout(request)
-    return redirect('main:index')
+    return redirect(settings['final_redirect'])
 
 def login_success(request):
-    print("Logging you in Sheperd")
     #TODO validate the state making sure it is the same as what we sent
     code = request.GET.get('code', 'no code found')
     access_token = Oauth.get_access_token(code)

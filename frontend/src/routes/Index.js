@@ -9,7 +9,6 @@ export default function Index() {
     <UserContext.Consumer>
       {(user) => {
         if (!user) return (<WelcomePage />)
-        else if (user.supporter < 1) return (<WelcomePage unAuth />)
         else return (<Dashboard />) // Dashboard
       }}      
     </UserContext.Consumer>    

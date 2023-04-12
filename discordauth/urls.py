@@ -21,4 +21,5 @@ app_name = 'discordauth'
 urlpatterns = [    
     path('login/success/', views.login_success),
     path('login/', views.login),
+    path('logout/', views.logout)
 ]
