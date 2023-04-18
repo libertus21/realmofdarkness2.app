@@ -5,6 +5,9 @@ from django.http import JsonResponse, HttpResponse
 from .get_post import get_post
 from chronicle.models import Member, Chronicle
 
+from django.core.cache import cache
+import hashlib
+
 User = get_user_model()
 
 @csrf_exempt
@@ -41,6 +44,13 @@ def set_supporter_level(request):
 def update_user(request):
   data = get_post(request)
   user_data = data['user']
+  update_hash = hashlib.md5(str(data).encode('utf-8')).hexdigest()
+  cache_key = f'user_update_{update_hash}'
+
+  # This is to stop race conditions on the update
+  if not cache.add(cache_key, True, 3):
+    # Cache key already exists, update has already been processed, skip processing
+    return
 
   try:
     user = User.objects.get(pk=user_data['id'])
@@ -65,19 +75,14 @@ def update_user(request):
     member.storyteller = member_data['storyteller']
     member.save()
   except Member.DoesNotExist:
-    try:
-      member = Member.objects.create(
-        chronicle=guild,
-        user=user,
-        nickname=member_data['nickname'],
-        avatar_url=member_data['avatar_url'],
-        admin=member_data['admin'],
-        storyteller=member_data['storyteller']
-      )
-    except:
-      print("Member was not created")
-      print(user_data)
-      print(guild.id, user.id, '\n\n')
+    member = Member.objects.create(
+      chronicle=guild,
+      user=user,
+      nickname=member_data['nickname'],
+      avatar_url=member_data['avatar_url'],
+      admin=member_data['admin'],
+      storyteller=member_data['storyteller']
+    )
   return HttpResponse()
 
 @csrf_exempt
