@@ -50,7 +50,7 @@ def update_user(request):
   # This is to stop race conditions on the update
   if not cache.add(cache_key, True, 3):
     # Cache key already exists, update has already been processed, skip processing
-    return
+    return HttpResponse(status=204)
 
   try:
     user = User.objects.get(pk=user_data['id'])
