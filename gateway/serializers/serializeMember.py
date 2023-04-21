@@ -1,8 +1,9 @@
 
 def serialize_member(member):
     return {
-        'chronicle': member.chronicle_id,
-        'user': member.user_id,
+        'id': str(member.id),
+        'chronicle': str(member.chronicle_id),
+        'user': str(member.user_id),
         'admin': member.admin,
         'storyteller': member.storyteller,
         'nickname': member.nickname if member.nickname else member.user.username,

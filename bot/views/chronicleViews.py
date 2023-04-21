@@ -1,9 +1,15 @@
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 from chronicle.models import Chronicle, Member, StorytellerRole
 from .get_post import get_post
 from bot.models import Bot
+from gateway.serializers import serialize_chronicle
+from gateway.constants import Group
+
+channel_layer = get_channel_layer()
 
 @csrf_exempt
 def member_delete(request):
@@ -124,6 +130,14 @@ def set_guild(request):
   chronicle.save()
   chronicle.bot.add(bot)
   
+  
+  async_to_sync(channel_layer.group_send)(
+    Group.chronicle_update(chronicle.id),
+      {
+        "type": "chronicle.update",
+        "chronicle": serialize_chronicle(chronicle)
+      }
+  ) 
   return HttpResponse(status=200)
 
 

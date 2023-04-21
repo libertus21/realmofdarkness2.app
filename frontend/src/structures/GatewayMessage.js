@@ -33,6 +33,14 @@ export default class GatewayMessage {
     return this;
   }
 
+  refresh() {
+    this.data.op = GATEWAY_OPCODE.refresh;
+    this.data.d = null;
+    this.data.t = null;
+    // Will send Data at some point
+    return this;
+  }
+
   loadJson(data) {
     this.data = JSON.parse(data);
     return this;

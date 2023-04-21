@@ -1,11 +1,17 @@
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 from ..get_post import get_post
 from haven.models import MoralityInfo
 from bot.constants import Splats
 from bot.functions import get_splat
+from gateway.constants import Group
+from gateway.serializers import serialize_character
+
+channel_layer = get_channel_layer()
 
 @csrf_exempt
 @transaction.atomic
@@ -19,7 +25,7 @@ def save_character(request):
   else:
     # 400 Bad Request
     return HttpResponse(status=400)
-  
+
   # Update character relations
   char.name = char_data['name']
   char.faceclaim = char_data.get('thumbnail', '')
@@ -66,7 +72,15 @@ def save_character(request):
     update_20th(char_data, char)
     update_demon20th(char_data, char)   
 
-  char.save()    
+  char.save()
+  async_to_sync(channel_layer.group_send)(
+    Group.character_update(char.id),
+    {
+      "type": "character.update",
+      "id": char.id,
+      "character": serialize_character(char)
+    }
+  )  
   return HttpResponse(status=200)
 
 ################### Update Version Specific ##################################

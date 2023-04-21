@@ -93,6 +93,6 @@ export default class GatewayManager extends EventEmitter
 
   refresh()
   {
-    this.send(new GatewayMessage().identify());
+    this.send(new GatewayMessage().refresh());
   }
 }

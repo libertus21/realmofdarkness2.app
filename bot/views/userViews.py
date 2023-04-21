@@ -1,14 +1,19 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse, HttpResponse
-
-from .get_post import get_post
-from chronicle.models import Member, Chronicle
-
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.core.cache import cache
 import hashlib
 
+from .get_post import get_post
+from chronicle.models import Member, Chronicle
+from gateway.serializers import serialize_member, serialize_user
+from gateway.constants import Group
+
+
 User = get_user_model()
+channel_layer = get_channel_layer()
 
 @csrf_exempt
 def get_supporter_level(request):
@@ -63,6 +68,13 @@ def update_user(request):
     user = User.objects.create_user(user_data)
   
   if not user_data['member']:
+    async_to_sync(channel_layer.group_send)(
+    Group.user_update(user.id),
+      {
+        "type": "user.update",
+        "user": serialize_user(user)
+      }
+    ) 
     return HttpResponse()
   
   member_data = user_data['member']  
@@ -83,6 +95,14 @@ def update_user(request):
       admin=member_data['admin'],
       storyteller=member_data['storyteller']
     )
+  
+  async_to_sync(channel_layer.group_send)(
+    Group.member_update(member.id),
+    {
+      "type": "member.update",
+      "member": serialize_member(member)
+    }
+  ) 
   return HttpResponse()
 
 @csrf_exempt

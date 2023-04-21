@@ -6,6 +6,7 @@ class GATEWAY_OPCODE():
   identify = 3
   welcome = 4
   heartbeatACK = 5
+  refresh = 6
 
 class Splats():
   vampire20th = 'vampire20th'
@@ -41,3 +42,17 @@ class Versions():
   @staticmethod
   def get_splat_version(splat):      
       return Versions.splats_versions.get(splat, None)
+  
+
+class Group():
+  def character_update(id):
+    return f'characterUpdate_{id}'
+  
+  def member_update(id):
+    return f'memberUpdate_{id}'
+  
+  def user_update(id):
+    return f'userUpdate_{id}'
+  
+  def chronicle_update(id):
+    return f'chronicleUpdate_{id}'

@@ -8,5 +8,6 @@ module.exports.GATEWAY_OPCODE = {
   'heartbeat': 2, // Send/Recieve heatbeats
   'identify': 3, // Identify self
   'welcome': 4, // Sent immediately after connecting
-  'heartbeatACK': 5 // sent in response to receiving a heatbeat
+  'heartbeatACK': 5, // sent in response to receiving a heatbeat
+  'refresh': 6, // Tempory code to refresh all gateway data 
 }
