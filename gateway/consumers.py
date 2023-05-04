@@ -18,7 +18,7 @@ class GatewayConsumer(AsyncWebsocketConsumer):
     self.chronicles = None
     self.members = None
     self.user = None
-    self.subscriptions = None
+    self.subscriptions = set()
 
   async def connect(self):
     await self.accept()
@@ -72,7 +72,6 @@ class GatewayConsumer(AsyncWebsocketConsumer):
     self.characters = {}        
     self.chronicles = {}
     self.members = {}
-    self.subscriptions = set()    
     self.subscriptions.add(Group.user_update(self.user.id))
 
     chronicle_set = self.user.chronicles.all()
