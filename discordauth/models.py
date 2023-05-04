@@ -23,7 +23,7 @@ class User(AbstractBaseUser):
     # Discord User Details
     id = models.BigIntegerField(primary_key=True)
     username = models.CharField(max_length=80)
-    discriminator = models.CharField(max_length=5)
+    discriminator = models.CharField(max_length=50)
     avatar_url = models.URLField(blank=True)
     email = models.EmailField(max_length=100, blank=True, null=True)
     verified = models.BooleanField()
