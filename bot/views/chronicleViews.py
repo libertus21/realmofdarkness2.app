@@ -162,7 +162,7 @@ def defaults_set(request):
     chronicle_id=data['guild_id']
   )
 
-  if (data['name'] == None):
+  if (data['disable']):
     member.default_character = None
     member.default_auto_hunger = False
     member.save()    
