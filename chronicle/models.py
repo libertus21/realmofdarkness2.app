@@ -1,5 +1,6 @@
 from django.db import models
 from rod.settings import AUTH_USER_MODEL
+from haven.models import Character
 
 """
 A Chronicle is a game played usually on a Discord Guild. A chronicle can
@@ -49,6 +50,14 @@ class Member(models.Model):
   avatar_url = models.URLField(blank=True)
   created_at = models.DateTimeField(auto_now_add=True)
   last_updated = models.DateTimeField(auto_now=True)
+
+  default_character = models.ForeignKey(
+    Character, 
+    on_delete=models.SET_NULL,
+    null=True,
+    related_name='member_defaults'
+  )
+  default_auto_hunger = models.BooleanField(default=False)
 
   class Meta:
     unique_together = ('chronicle', 'user')

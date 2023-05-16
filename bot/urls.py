@@ -19,6 +19,8 @@ urlpatterns = [
   path('chronicle/storyteller/roles/get', views.get_st_roles),  
   path('chronicle/storyteller/roles/delete', views.delete_st_role),
   path('chronicle/member/delete', views.member_delete),
+  path('chronicle/member/defaults/set', views.defaults_set),
+  path('chronicle/member/defaults/get', views.defaults_get),
   path('chronicle/storytellers/get', views.get_admins_storytellers),
 
   # User

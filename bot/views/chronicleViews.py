@@ -6,6 +6,7 @@ from channels.layers import get_channel_layer
 from chronicle.models import Chronicle, Member, StorytellerRole
 from .get_post import get_post
 from bot.models import Bot
+from haven.models import Character
 from gateway.serializers import serialize_chronicle
 from gateway.constants import Group
 
@@ -152,3 +153,53 @@ def delete_guild(request):
     pass # No need to do anything
   
   return HttpResponse(status=200)
+
+@csrf_exempt
+def defaults_set(request):
+  data = get_post(request)
+  member = Member.objects.get(
+    user_id=data['user_id'], 
+    chronicle_id=data['guild_id']
+  )
+
+  if (data['name'] == None):
+    member.default_character = None
+    member.default_auto_hunger = False
+    member.save()    
+    return HttpResponse(status=200)
+
+  try:
+    character = Character.objects.get(
+      user_id=data['user_id'], 
+      name__iexact=data['name']
+    )
+  except Character.DoesNotExist:
+    return HttpResponse(status=204)
+  
+  member.default_character = character
+  member.default_auto_hunger = data['auto_hunger']
+  member.save()    
+  return HttpResponse(status=200)
+
+@csrf_exempt
+def defaults_get(request):
+  data = get_post(request)
+  member = Member.objects.get(
+    user_id=data["user_id"],
+    chronicle_id=data["guild_id"]
+  )
+
+  character_name = ''
+  if not (member.default_character):
+    return HttpResponse(status=204)
+  else:
+    character_name = member.default_character.name
+
+  defaults = {
+    "defaults": {
+      "name": character_name,
+      "auto_hunger": member.default_auto_hunger
+    }
+  }
+    
+  return JsonResponse(defaults)
