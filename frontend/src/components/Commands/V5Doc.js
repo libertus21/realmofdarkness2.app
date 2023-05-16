@@ -1709,6 +1709,82 @@ const TrackerV5Doc = [
       </List>
     )
   },
+  { // Delete Character
+    summery: (
+      <AccordionTitle>
+        Default Character
+      </AccordionTitle>
+    ),
+    details: (
+      <List>
+        <ListSubheader>
+          Command
+        </ListSubheader>
+        <ListItem>
+          /character default
+        </ListItem>
+        <ListSubheader>
+          Required Arguments:
+        </ListSubheader>
+        <ListItem>
+          None
+        </ListItem>
+        <ListSubheader>
+          Optional Arguments:
+        </ListSubheader>        
+        <ListItemDialog dialogContent={
+          <Box>
+            <Typography>Name of the character to link</Typography>
+            <Typography sx={{pt: 2}}>
+              A character must have already been made in the tracker.
+            </Typography>
+          </Box>
+        }>
+          name: string
+        </ListItemDialog>         
+        <ListItemDialog dialogContent={
+          <Box>
+            <Typography>Enables Auto Hunger for dice rolls</Typography>
+            <Typography sx={{pt: 2}}>
+              Default is False. Setting to True will add hunger dice
+              automatically to all rolls where a linked character has been used.
+              This can be overridden by using the `auto_hunger`: false option
+              in dice roll commands.
+            </Typography>
+          </Box>
+        }>
+          auto_hunger: True/False
+        </ListItemDialog>              
+        <ListItemDialog dialogContent={
+          <Box>
+            <Typography>Turns off the default character if used.</Typography>
+          </Box>
+        }>
+          disable: True/False
+        </ListItemDialog>
+        <ListSubheader>
+          Description
+        </ListSubheader>
+        <ListItem>
+          <Box>
+            <Typography>
+              Links a character as your server default.
+            </Typography>
+            <Typography>
+              This will be used for all dice rolls where the `character` option
+              is not used. It will automatically add your default character.
+              You can override this by specifing another character using the
+              `character` option on dice rolls. Or you can disable this
+              functionality by using the `disable` option if you do not like it.
+            </Typography>
+            <Typography sx={{pt: 2}}>
+              Requires [Fledgling Supporter] status or greater to use.
+            </Typography>
+          </Box>          
+        </ListItem>
+      </List>
+    )
+  },
   { // Set Tracker Channel
     summery: (
       <AccordionTitle>
