@@ -19,6 +19,9 @@ import { useLayoutEffect } from "react";
 import TwentiethIndex from "./routes/20th/20thIndex";
 import CodIndex from "./routes/CoD/CodIndex";
 import CodCommands from "./routes/CoD/CodCommands";
+import Vampire5thSheet from "./routes/Character/Vampire5thSheet";
+import Character from "./routes/Character/Character";
+import CharacterIndex from "./routes/Character/CharacterIndex";
 import initAnalytics from "./functions/initAnalytics";
 import V5Dice from "./routes/v5/V5Dice";
 import ClientProvider from './components/ClientProvider';
@@ -96,6 +99,10 @@ function App() {
                 <Route path="cod" element={<CoD />}>
                   <Route index element={<CodIndex />} />
                   <Route path='commands' element={<CodCommands />} />
+                </Route>
+                <Route path="character" element={<Character />}>
+                  <Route index element={<CharacterIndex />} />
+                  <Route path='test/5th' element={<Vampire5thSheet />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Route>
