@@ -1,11 +1,11 @@
 import { Grid, Fab, Box, CircularProgress } from "@mui/material";
-import { Fragment, memo, useState } from "react";
-import { CharactersContext, ChroniclesContext, ClientContext, UserContext }
-  from "./ClientProvider";
+import { memo, useState } from "react";
+import { useClientContext } from "./ClientProvider";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CharacterCardDisplay from "./CharacterCards/CharacterCardDisplay";
 
 function Refresh(props) {
+  const { client } = useClientContext();
   const handleClick = (event) => {};
   const [cooldown, setCooldown] = useState(false);
 
@@ -19,37 +19,36 @@ function Refresh(props) {
       onClick={handleClick}
       role="presentation"
       sx={{ position: 'fixed', bottom: 16, left: 16 }}
-    > 
-      <ClientContext.Consumer>    
-        {(client) => (                      
-          <Fab 
-            color='primary'
-            disabled={cooldown}
-            onClick={() => 
-            {
-              if (!cooldown)
-              {                
-                client.refresh();
-                setCooldown(true);
-                setTimeout(timeout, 3000);
-              }
-            }}
-          >
-            {
-              cooldown ? 
-              <CircularProgress size='20px' color='inherit' /> : 
-              <RefreshIcon size='large' />
-            }
-          </Fab>           
-        )}   
-      </ClientContext.Consumer> 
+    >                      
+      <Fab 
+        color='primary'
+        disabled={cooldown}
+        onClick={() => 
+        {
+          if (!cooldown)
+          {                
+            client.refresh();
+            setCooldown(true);
+            setTimeout(timeout, 3000);
+          }
+        }}
+      >
+        {
+          cooldown ? 
+          <CircularProgress size='20px' color='inherit' /> : 
+          <RefreshIcon size='large' />
+        }
+      </Fab>
     </Box>
   );
 }
 
-function Dashboard(props) {
+function Dashboard(props) 
+{
+  const { characters, chronicles, user } = useClientContext();
+
   return (
-    <Fragment>
+    <Box paddingTop={15} paddingX={3}>
       <Grid    
         container spacing={{md: 0, xs: 4}} 
         direction="row"
@@ -58,26 +57,14 @@ function Dashboard(props) {
         columnSpacing={3}
         rowSpacing={3}
       >
-        <CharactersContext.Consumer>
-          {(characters) => (
-            <ChroniclesContext.Consumer>
-              {(chronicles) => (
-                <UserContext.Consumer>
-                  {(user) => (
-                    <CharacterCardDisplay 
-                      characters={characters} 
-                      chronicles={chronicles} 
-                      user={user}
-                    />
-                  )}
-                </UserContext.Consumer>
-              )}
-            </ChroniclesContext.Consumer>
-          )}
-        </CharactersContext.Consumer>
+        <CharacterCardDisplay 
+          characters={characters} 
+          chronicles={chronicles} 
+          user={user}
+        />
       </Grid>
       <Refresh />
-    </Fragment>
+    </Box>
   )
 }
 

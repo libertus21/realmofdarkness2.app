@@ -1,16 +1,23 @@
 import WelcomePage from '../components/WelcomePage';
-import { UserContext } from '../components/ClientProvider'
+import { useClientContext } from '../components/ClientProvider'
 import Dashboard from '../components/Dashboard';
+import { Container } from '@mui/material';
 
 
-export default function Index() {
+export default function Index() 
+{
+  const { user } = useClientContext();
 
+  let render = (
+    <Container sx={{ my: 13 }}>      
+      <WelcomePage />
+    </Container>
+  )
+  if (user) render = (<Dashboard />);  
+  
   return (
-    <UserContext.Consumer>
-      {(user) => {
-        if (!user) return (<WelcomePage />)
-        else return (<Dashboard />) // Dashboard
-      }}      
-    </UserContext.Consumer>    
-  );
+    <> 
+      {render}
+    </>
+  )
 }

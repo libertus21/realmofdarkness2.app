@@ -19,8 +19,8 @@ export default function Werewolf20thInfo(props) {
           image={character.thumbnail ? character.thumbnail : defaultImage}
           alt="Character Image"
           sx={{
-            maxHeight: '200px', 
-            maxWidth: '100%', 
+            maxHeight: '250px', 
+            maxWidth: '250px',
             minHeight: '200px',
             minWidth: '100%',
             objectFit: 'contain',

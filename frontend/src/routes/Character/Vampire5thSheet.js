@@ -1,37 +1,67 @@
-import { Box, Container, Paper } from "@mui/material";
+import { Container, Paper, Tab, Tabs } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 
 import GeneralInfo from "../../components/Sheet5th/Vampire/GeneralInfo";
-import Attributes from "../../components/Sheet5th/Attributes";
-import Skills from "../../components/Sheet5th/Skills";
+import Attributes from "../../components/Sheet5th/AttributesTab";
+import Skills from "../../components/Sheet5th/SkillsTab";
+import Tracker from "../../components/Sheet5th/Vampire/Tracker";
+import Disciplines from "../../components/Sheet5th/DisciplinesTab";
+import BloodPotency from "../../components/Sheet5th/Vampire/BloodPotencyTab";
+import HuntingTab from "../../components/Sheet5th/Vampire/HuntingTab";
+import { useState } from "react";
+
+
 
 function Vampire5thSheet(props)
 {
+  const [value, setValue] = useState('Core');
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
-    <Paper elevation={1} sx={{ paddingY: '20px'}}>
-      <Container>
-        <Box 
-          sx={{display: 'flex', justifyContent: 'center'}}
-          marginBottom={4}
-        >
-          <img 
-            src='https://media.discordapp.net/attachments/886983353922891816/1024918662223769600/VampireLogo_xsmall_colour.png' 
-            alt="Vampire: the Masquerade" 
-            style={{ width: '400px', height: 'auto' }} />
-        </Box>
-        <Grid     
-          sx={{
-            border: '2px solid #80172f',
-            borderRadius: '15px',
-            padding: '10px',
-          }}
-        >
-          <GeneralInfo />
+    <Container maxWidth='false' sx={{ mt: 10 }}>
+      <GeneralInfo />
+      <Tracker />
+      <Grid container>
+        <Grid container md={5} direction="column">
           <Attributes />
           <Skills />
         </Grid>
-      </Container>
-    </Paper>
+        <Grid 
+          container 
+          md={7} 
+          direction="column"
+          spacing={1}
+          rowGap={3}
+        > 
+          <Paper 
+            elevation={0} sx={{ borderRadius: '20px', marginBottom: '10px' }}
+          >             
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              textColor="secondary"
+              indicatorColor="secondary"
+              aria-label="secondary tabs example"
+              centered
+
+            >
+              <Tab value="Core" label="Core" />
+              <Tab value="Advantages" label="Advantages" />           
+              <Tab value="Haven" label="Haven" />          
+              <Tab value="Possessions" label="Possessions" />   
+              <Tab value="Background" label="Background" />
+              <Tab value="Gallery" label="Gallery" />
+            </Tabs>
+          </Paper>
+          <Disciplines />
+          <BloodPotency />
+          <HuntingTab />
+        </Grid>
+      </Grid>
+    </Container>
   )
 }
 

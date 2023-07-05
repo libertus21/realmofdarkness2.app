@@ -1,9 +1,11 @@
-import { Grid, FormControl, Select, MenuItem, InputLabel, ListSubheader, FormControlLabel, Switch } from "@mui/material";
+import { FormControl, Select, MenuItem, InputLabel, ListSubheader, FormControlLabel, Switch, Tooltip, IconButton } from "@mui/material";
 import { OutlinedInput, Box, Chip, Alert, ListItemText } from "@mui/material";
+import Grid from '@mui/material/Unstable_Grid2';
 import { useState, useMemo, Fragment } from "react";
 import CharacterCard from "./CharacterCard";
 import Checkbox from '@mui/material/Checkbox';
-
+import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
+import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
 
 export default function CharacterCardDisplay(props) 
 {
@@ -140,7 +142,7 @@ export default function CharacterCardDisplay(props)
             canFilterStorytellerMode)}
           <Grid          
             container 
-            item xs={12}
+            xs={12}
             justifyContent="space-evenly"
             alignItems="flex-start"
             columnSpacing={3}
@@ -159,11 +161,13 @@ export default function CharacterCardDisplay(props)
   return (
     <Grid    
       container
-      alignItems="center"
+      direction="row"
+      justifyContent="center"
       rowSpacing={3}
+      columnSpacing={2}
       sx={{pl: 3}}
     >
-      <Grid item xs={12} sm={4}  sx={{textAlign: 'center'}}>
+      <Grid>
         <FormControl sx={{minWidth: '150px'}}>
           <InputLabel id="chronicle-select-label">Chronicles</InputLabel>
           <Select 
@@ -178,7 +182,7 @@ export default function CharacterCardDisplay(props)
           </Select>          
         </FormControl>
       </Grid>
-      <Grid item xs={12} sm={4} sx={{textAlign: 'center'}}>
+      <Grid>
         <FormControl sx={{minWidth: '150px'}}>
           <InputLabel id="splat-select-label">Splats</InputLabel>
           <Select 
@@ -202,7 +206,7 @@ export default function CharacterCardDisplay(props)
           </Select>          
         </FormControl>
       </Grid>
-      <Grid item xs={12} sm={4} sx={{textAlign: 'center'}}>
+      <Grid>
         <FormControl sx={{minWidth: '150px'}}>
           <InputLabel id="sortBy-select-label">Sort by</InputLabel>
           <Select 
@@ -216,6 +220,9 @@ export default function CharacterCardDisplay(props)
             <MenuItem value='name'>Name</MenuItem>
           </Select>          
         </FormControl>
+      </Grid>      
+      <Grid>
+        {dashboardControls()}
       </Grid>
       {renderCharacterCards()}
     </Grid>
@@ -226,7 +233,7 @@ function renderStorytellerModeButton(sortOptions, handleChange, render=true)
 {
   if (!render) return null;
   return (
-    <Grid item xs={12} sm={12} sx={{textAlign: 'center'}}>
+    <Grid xs={12} sm={12} sx={{textAlign: 'center'}}>
       <FormControlLabel 
         sx={{minWidth: '150px'}}
         label="Storyteller Mode" 
@@ -237,6 +244,49 @@ function renderStorytellerModeButton(sortOptions, handleChange, render=true)
           />   
         }
       />  
+    </Grid>
+  )
+}
+
+function dashboardControls()
+{
+  return (
+    <Grid container columnSpacing={0}>
+      <Grid>
+        <Tooltip title="New Sheet" arrow> 
+          <IconButton>
+            <FeedOutlinedIcon color="secondary" />
+          </IconButton>         
+        </Tooltip>
+      </Grid>
+      <Grid>
+        <Tooltip title="Place Holder" arrow> 
+          <IconButton>
+            <BlurOnOutlinedIcon color="secondary" />
+          </IconButton>         
+        </Tooltip>
+      </Grid>
+      <Grid>
+        <Tooltip title="Place Holder" arrow> 
+          <IconButton>
+            <BlurOnOutlinedIcon color="secondary" />
+          </IconButton>         
+        </Tooltip>
+      </Grid>
+      <Grid>
+        <Tooltip title="Place Holder" arrow> 
+          <IconButton>
+            <BlurOnOutlinedIcon color="secondary" />
+          </IconButton>         
+        </Tooltip>
+      </Grid>
+      <Grid>
+        <Tooltip title="Place Holder" arrow> 
+          <IconButton>
+            <BlurOnOutlinedIcon color="secondary" />
+          </IconButton>         
+        </Tooltip>
+      </Grid>
     </Grid>
   )
 }

@@ -1,10 +1,8 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import Client from '../structures/Client';
-export const ClientContext = createContext(null);
-export const UserContext = createContext(null);
-export const CharactersContext = createContext(null);
-export const ChroniclesContext = createContext(null);
-export const MembersContext = createContext(null);
+
+const ClientContext = createContext(null);
+export const useClientContext = () => useContext(ClientContext);
 
 let client = new Client();
 
@@ -24,17 +22,18 @@ export default function ClientProvider({ children }) {
     });
   }, []); // only happens on site load
 
+  const clientContextValue =
+  {
+    client,
+    user,
+    characters,
+    chronicles,
+    members,
+  }
+
   return (
-    <ClientContext.Provider value={client}>
-      <UserContext.Provider value={user}>
-        <CharactersContext.Provider value={characters}>
-          <ChroniclesContext.Provider value={chronicles}>
-            <MembersContext.Provider value={members}>
-              { children }
-            </MembersContext.Provider>
-          </ChroniclesContext.Provider>
-        </CharactersContext.Provider>
-      </UserContext.Provider>
+    <ClientContext.Provider value={clientContextValue}>
+      { children }
     </ClientContext.Provider>
   )
 }

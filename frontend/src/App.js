@@ -102,7 +102,7 @@ function App() {
                 </Route>
                 <Route path="character" element={<Character />}>
                   <Route index element={<CharacterIndex />} />
-                  <Route path='test/5th' element={<Vampire5thSheet />} />
+                  <Route path='5th' element={<Vampire5thSheet />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Route>
