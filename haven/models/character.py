@@ -3,14 +3,6 @@ from rod.settings import AUTH_USER_MODEL
 from . import Splat, Health20th, Morality, MoralityInfo, Damage5th, Humanity, Hunter5th
 from bot.constants import Splats
 
-class History(models.Model):
-  character = models.ForeignKey('haven.Character', on_delete=models.CASCADE,
-    related_name='history')
-  date = models.DateTimeField(auto_now_add=True)
-  args = models.CharField(max_length=250, blank=True)
-  notes = models.CharField(max_length=150, blank=True)
-  mode = models.CharField(max_length=50, blank=True)
-
 class Trackable(models.Model):
   character = models.ForeignKey('haven.Character', on_delete=models.CASCADE,
     related_name='trackable')
@@ -85,13 +77,14 @@ class Character(models.Model):
   member = models.ForeignKey('chronicle.Member', on_delete=models.SET_NULL,
     null=True)
     
-  partial = models.BooleanField(default=True)
+  is_sheet = models.BooleanField(default=False)
   created_at = models.DateTimeField(auto_now_add=True)
   last_updated = models.DateTimeField(auto_now=True)
   faceclaim = models.URLField(blank=True)
-  theme = models.CharField(default='#000000', max_length=10)    
+  theme = models.CharField(default='#000000', max_length=10)  
+  
+  # Splat is a remenant of old system once all are converted splat should be deleted  
   splat = models.ForeignKey(Splat, on_delete=models.CASCADE)
-  data = models.JSONField(null=True)
   objects = CharacterManager()
 
   class Meta:

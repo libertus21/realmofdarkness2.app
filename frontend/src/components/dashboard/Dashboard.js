@@ -1,8 +1,8 @@
 import { Grid, Fab, Box, CircularProgress } from "@mui/material";
 import { memo, useState } from "react";
-import { useClientContext } from "./ClientProvider";
+import { useClientContext } from "../ClientProvider";
 import RefreshIcon from '@mui/icons-material/Refresh';
-import CharacterCardDisplay from "./CharacterCards/CharacterCardDisplay";
+import CharacterCardDisplay from "../CharacterCards/CharacterCardDisplay";
 
 function Refresh(props) {
   const { client } = useClientContext();

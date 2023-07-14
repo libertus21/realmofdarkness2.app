@@ -1,6 +1,6 @@
 import WelcomePage from '../components/WelcomePage';
 import { useClientContext } from '../components/ClientProvider'
-import Dashboard from '../components/Dashboard';
+import Dashboard from '../components/dashboard/Dashboard';
 import { Container } from '@mui/material';
 
 

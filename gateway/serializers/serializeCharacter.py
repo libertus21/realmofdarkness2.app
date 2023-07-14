@@ -11,7 +11,6 @@ def serializeCharacter(character):
     'exp': {'total': exp.total, 'current': exp.current},
     'createdAt': (character.created_at.timestamp() if character.created_at else ''),
     'lastUpdated': character.last_updated.timestamp(),
-    'history': serializeHistory(character),
   }
 
 def serialize20th(character):
@@ -49,25 +48,6 @@ def serialize5th(character):
   }
 
   return s
-
-from haven.models import History
-
-def serializeHistory(character):
-  history_list = []
-
-  history_qs = History.objects.filter(character=character).order_by('-date')
-
-  for history in history_qs:
-    history_list.append({
-      'id': history.pk,
-      'mode': history.mode,
-      'args': history.args,
-      'notes': history.notes,
-      'date': history.date.timestamp()
-    })
-    
-  return history_list
-
 
 def serializeChangeling20th(character):
   s = serialize20th(character)

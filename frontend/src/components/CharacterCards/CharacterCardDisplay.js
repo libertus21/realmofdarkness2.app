@@ -1,11 +1,10 @@
-import { FormControl, Select, MenuItem, InputLabel, ListSubheader, FormControlLabel, Switch, Tooltip, IconButton } from "@mui/material";
+import { FormControl, Select, MenuItem, InputLabel, ListSubheader, FormControlLabel, Switch } from "@mui/material";
 import { OutlinedInput, Box, Chip, Alert, ListItemText } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import { useState, useMemo, Fragment } from "react";
 import CharacterCard from "./CharacterCard";
 import Checkbox from '@mui/material/Checkbox';
-import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
-import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
+import DashboardControls from "../dashboard/DashboardControls";
 
 export default function CharacterCardDisplay(props) 
 {
@@ -220,10 +219,8 @@ export default function CharacterCardDisplay(props)
             <MenuItem value='name'>Name</MenuItem>
           </Select>          
         </FormControl>
-      </Grid>      
-      <Grid>
-        {dashboardControls()}
-      </Grid>
+      </Grid> 
+      <DashboardControls />
       {renderCharacterCards()}
     </Grid>
   )
@@ -244,49 +241,6 @@ function renderStorytellerModeButton(sortOptions, handleChange, render=true)
           />   
         }
       />  
-    </Grid>
-  )
-}
-
-function dashboardControls()
-{
-  return (
-    <Grid container columnSpacing={0}>
-      <Grid>
-        <Tooltip title="New Sheet" arrow> 
-          <IconButton>
-            <FeedOutlinedIcon color="secondary" />
-          </IconButton>         
-        </Tooltip>
-      </Grid>
-      <Grid>
-        <Tooltip title="Place Holder" arrow> 
-          <IconButton>
-            <BlurOnOutlinedIcon color="secondary" />
-          </IconButton>         
-        </Tooltip>
-      </Grid>
-      <Grid>
-        <Tooltip title="Place Holder" arrow> 
-          <IconButton>
-            <BlurOnOutlinedIcon color="secondary" />
-          </IconButton>         
-        </Tooltip>
-      </Grid>
-      <Grid>
-        <Tooltip title="Place Holder" arrow> 
-          <IconButton>
-            <BlurOnOutlinedIcon color="secondary" />
-          </IconButton>         
-        </Tooltip>
-      </Grid>
-      <Grid>
-        <Tooltip title="Place Holder" arrow> 
-          <IconButton>
-            <BlurOnOutlinedIcon color="secondary" />
-          </IconButton>         
-        </Tooltip>
-      </Grid>
     </Grid>
   )
 }

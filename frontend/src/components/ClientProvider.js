@@ -6,7 +6,8 @@ export const useClientContext = () => useContext(ClientContext);
 
 let client = new Client();
 
-export default function ClientProvider({ children }) {
+export default function ClientProvider({ children }) 
+{
   // Gatway State
   const [user, setUser] = useState(null);
   const [characters, setCharacters] = useState(null);
