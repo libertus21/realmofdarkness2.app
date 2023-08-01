@@ -83,8 +83,8 @@ class GatewayConsumer(AsyncWebsocketConsumer):
       member = Member.objects.get(user=self.user, chronicle=chronicle)
 
       if (member.admin or member.storyteller):
-        character_set = character_set_all.all()
-      else: character_set = character_set_all.filter(user=self.user)    
+        character_set = character_set_all.all().filter(splat__isnull=False)
+      else: character_set = character_set_all.filter(user=self.user, splat__isnull=False)    
       if not self.members.get(chronicle.id): self.members[chronicle.id] = {}  
       
       for character in character_set:      
@@ -95,7 +95,7 @@ class GatewayConsumer(AsyncWebsocketConsumer):
             character.member)          
           self.subscriptions.add(Group.member_update(character.member.id))
 
-    for character in Character.objects.filter(user=self.user, chronicle=None):
+    for character in Character.objects.filter(user=self.user, chronicle=None, splat__isnull=False):
       self.characters[character.id] = (serialize_character(character))
       self.subscriptions.add(Group.character_update(character.id))
 
@@ -118,8 +118,8 @@ class GatewayConsumer(AsyncWebsocketConsumer):
       member = Member.objects.get(user=self.user, chronicle=chronicle)
 
       if (member.admin or member.storyteller):
-        character_set = character_set_all.all()
-      else: character_set = character_set_all.filter(user=self.user)    
+        character_set = character_set_all.all().filter(splat__isnull=False)
+      else: character_set = character_set_all.filter(user=self.user, splat__isnull=False)    
       if not self.members.get(chronicle.id): self.members[chronicle.id] = {}  
       
       for character in character_set:      
@@ -132,7 +132,7 @@ class GatewayConsumer(AsyncWebsocketConsumer):
           if Group.member_update(character.member.id) not in self.subscriptions:      
             self.subscriptions.add(Group.member_update(character.member.id))
 
-    for character in Character.objects.filter(user=self.user, chronicle=None):
+    for character in Character.objects.filter(user=self.user, chronicle=None, splat__isnull=False):
       self.characters[character.id] = (serialize_character(character))
       if Group.character_update(character.id) not in self.subscriptions:
         self.subscriptions.add(Group.character_update(character.id))

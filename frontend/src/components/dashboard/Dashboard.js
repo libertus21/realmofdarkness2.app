@@ -1,5 +1,5 @@
 import { Grid, Fab, Box, CircularProgress } from "@mui/material";
-import { memo, useState } from "react";
+import { useState } from "react";
 import { useClientContext } from "../ClientProvider";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CharacterCardDisplay from "../CharacterCards/CharacterCardDisplay";
@@ -43,7 +43,7 @@ function Refresh(props) {
   );
 }
 
-function Dashboard(props) 
+export default function Dashboard(props) 
 {
   const { characters, chronicles, user } = useClientContext();
 
@@ -67,5 +67,3 @@ function Dashboard(props)
     </Box>
   )
 }
-
-export default memo(Dashboard);

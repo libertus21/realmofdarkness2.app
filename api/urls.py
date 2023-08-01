@@ -1,7 +1,9 @@
 from django.urls import path
-from . import views
+from .views import *
 
 app_name = 'api'
 urlpatterns = [
-  path('sheets/new/v5', views.CharacterCreateV5.as_view()),
+  path('character/new/v5', CharacterSheetCreateV5.as_view()),
+  path('character/get/v5', GetV5Character.as_view()),
+  path('character/update/v5/<int:id>', CharacterUpdateV5.as_view()),
 ]

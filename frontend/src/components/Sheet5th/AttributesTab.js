@@ -1,9 +1,13 @@
 import Grid from '@mui/material/Unstable_Grid2';
 import { Divider, Typography, List } from "@mui/material";
 import Attribute from './Attribute';
+import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
 
 export default function AttributesTab(props)
-{
+{  
+  const { sheet } = useSheetContext();
+  const attr = sheet.attributes;
+
   return (
     <Grid 
       container 
@@ -19,23 +23,23 @@ export default function AttributesTab(props)
       </Grid>
       <Grid direction="column" xs={12} md={4}>
         <List>
-          <Attribute name='Strength' />
-          <Attribute name='Dexterity' />
-          <Attribute name='Stamina' />
+          <Attribute name='Strength' dots={attr.strength} />
+          <Attribute name='Dexterity' dots={attr.dexterity} />
+          <Attribute name='Stamina' dots={attr.stamina} />
         </List>
       </Grid>
       <Grid direction="column" xs={12} md={4}>
         <List>
-          <Attribute name='Charisma' />
-          <Attribute name='Manipulation' />
-          <Attribute name='Composure' />
+          <Attribute name='Charisma' dots={attr.charisma} />
+          <Attribute name='Manipulation' dots={attr.manipulation} />
+          <Attribute name='Composure' dots={attr.composure} />
         </List>
       </Grid>
       <Grid direction="column" xs={12} md={4}>
         <List>
-          <Attribute name='Intelligence' />
-          <Attribute name='Wits' />
-          <Attribute name='Resolve' />
+          <Attribute name='Intelligence' dots={attr.intelligence} />
+          <Attribute name='Wits' dots={attr.wits} />
+          <Attribute name='Resolve' dots={attr.resolve} />
         </List>
       </Grid>
     </Grid>

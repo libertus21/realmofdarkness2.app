@@ -30,10 +30,7 @@ class CharacterManager(models.Manager):
       theme=data['theme']
     )
 
-    if (data['splatSlug'] == Splats.vampire5th.slug):      
-      create_5th_partials(char, data)
-      create_vampire5th_partial(char, data)
-    elif (data['splatSlug'] == Splats.hunter5th.slug):
+    if (data['splatSlug'] == Splats.hunter5th.slug):
       create_5th_partials(char, data)
       create_hunter5th_partial(char, data)
     elif (data['splatSlug'] == Splats.mortal5th.slug):
@@ -69,6 +66,14 @@ class CharacterManager(models.Manager):
       total=data['exp']['total'], current=data['exp']['current'])
     return char
 
+
+class SheetStatus(models.IntegerChoices):
+  DRAFT = 1, 'Draft'
+  REVIEW = 2, 'Review'
+  ACTIVE = 3, 'Active'
+  DEAD = 4, 'Dead'
+  ARCHIVE = 5, 'Archive'
+
 class Character(models.Model):
   name = models.CharField(max_length=50, blank=True)
   user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -78,13 +83,16 @@ class Character(models.Model):
     null=True)
     
   is_sheet = models.BooleanField(default=False)
+  status = models.IntegerField(choices=SheetStatus.choices, default=1)
   created_at = models.DateTimeField(auto_now_add=True)
   last_updated = models.DateTimeField(auto_now=True)
   faceclaim = models.URLField(blank=True)
   theme = models.CharField(default='#000000', max_length=10)  
+  exp_current = models.IntegerField(default=0)
+  exp_total = models.IntegerField(default=0)
   
   # Splat is a remenant of old system once all are converted splat should be deleted  
-  splat = models.ForeignKey(Splat, on_delete=models.CASCADE)
+  splat = models.ForeignKey(Splat, on_delete=models.CASCADE, null=True)
   objects = CharacterManager()
 
   class Meta:
@@ -126,6 +134,7 @@ def create_20th_partials(char, data):
   )
 
 ######################## Create 5th edition partials ##########################
+'''
 def create_vampire5th_partial(char, data):
   Humanity.objects.create(
     character=char,
@@ -138,7 +147,7 @@ def create_vampire5th_partial(char, data):
     slug="hunger",
     current=data['hunger'],
   )
-
+'''
 
 def create_hunter5th_partial(char, data):
   Trackable.objects.create(

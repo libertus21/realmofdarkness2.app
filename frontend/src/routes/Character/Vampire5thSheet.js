@@ -1,29 +1,113 @@
-import { Container, Paper, Tab, Tabs } from "@mui/material";
+import { Container, Tab, Tabs, Box, useMediaQuery } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 
-import GeneralInfo from "../../components/Sheet5th/Vampire/GeneralInfo";
+import GeneralInfo from "../../components/Sheet5th/Vampire/GeneralInfoTab";
 import Attributes from "../../components/Sheet5th/AttributesTab";
 import Skills from "../../components/Sheet5th/SkillsTab";
-import Tracker from "../../components/Sheet5th/Vampire/Tracker";
+import TrackerTab from "../../components/Sheet5th/Vampire/TrackerTab";
 import Disciplines from "../../components/Sheet5th/DisciplinesTab";
 import BloodPotency from "../../components/Sheet5th/Vampire/BloodPotencyTab";
 import HuntingTab from "../../components/Sheet5th/Vampire/HuntingTab";
-import { useState } from "react";
+import SheetSkeleton from "../../components/SheetSkeleton";
+import { useState, useEffect, createContext, useContext } from "react";
+import { useParams } from 'react-router-dom';
+import { getHost, getCSRFToken, getSerializerErrors } from '../../utility';
+import ErrorSnackbar from "../../components/ErrorSnackbar";
 
+const SheetContext = createContext(null);
+export const useSheetContext = () => useContext(SheetContext);
 
-
-function Vampire5thSheet(props)
+export default function Vampire5thSheet(props)
 {
-  const [value, setValue] = useState('Core');
+  const [sheet, setSheet] = useState(null);
+  const [lock, setLock] = useState(true);
+  const [alert, setAlert] = useState(null);
+  const { id } = useParams();  
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  /**
+   * Sends an API update request for the sheet if successful apllies the changes to the sheet 
+   * @param {object} apiUpdate - Update in the Model JSON format
+   * @param {object} sheetUpdate - Sheet update in the Sheet JSON format
+   */
+  async function handleUpdate(apiUpdate, update)
+  {
+    // Creating a deep copy of Skills
+    const oldSheet = JSON.parse(JSON.stringify(sheet));
+    const sheetUpdate = update ?? apiUpdate;
 
-  return (
-    <Container maxWidth='false' sx={{ mt: 10 }}>
-      <GeneralInfo />
-      <Tracker />
+    // Optimistic update
+    setSheet((prevSheet) => ({ ...prevSheet, ...sheetUpdate }));
+
+    // API call to update server
+    try
+    {
+      // Make the API request to update the character's skills
+      const response = await fetch(
+        `${getHost(true)}/api/character/update/v5/${sheet.id}`, 
+        {
+          method: 'PUT',
+          headers: 
+          {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(),
+          },
+          body: JSON.stringify(apiUpdate),
+      });
+
+      if (!response.ok) 
+      { 
+        const data = await response.json();
+        const errorMessage = getSerializerErrors(data) ?? "There was an error with this request and the changes have not been applied."
+        setAlert(errorMessage);
+        setSheet(oldSheet);
+        return 'error'
+      }
+    }
+    catch (error)
+    {
+      setAlert("There was an error with this request and the changes have not been applied.");      
+      setSheet(oldSheet);
+      return 'error'
+    }    
+  }
+
+  function closeAlert()
+  {
+    setAlert(false);
+  }
+
+  function handleLockChange()
+  {
+    setLock(!lock);
+  }
+  
+  useEffect(() => {
+    const fetchSheetData = async () => {
+      try {
+        const response = 
+          await fetch(`/api/character/get/v5?id=${id}&sheet=true`);
+        if (!response.ok) {
+          // Handle non-successful response
+          throw new Error('Error fetching sheet data');
+        }
+        const data = await response.json();
+        setSheet(data);
+      } catch (error) {
+        console.error('Error fetching sheet data:', error);
+        // TODO: Handle error
+      }
+    };
+  
+    fetchSheetData();
+  }, [id]);
+
+  const sheetPage = (
+    <Container maxWidth='false' sx={{ mt: 10 }}>      
+      <ErrorSnackbar 
+        title='API Error' alert={alert} onClose={closeAlert} 
+      />
+      <GeneralInfo handleLockChange={handleLockChange} />
+      <TrackerTab />
       <Grid container>
         <Grid container md={5} direction="column">
           <Attributes />
@@ -36,26 +120,7 @@ function Vampire5thSheet(props)
           spacing={1}
           rowGap={3}
         > 
-          <Paper 
-            elevation={0} sx={{ borderRadius: '20px', marginBottom: '10px' }}
-          >             
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              textColor="secondary"
-              indicatorColor="secondary"
-              aria-label="secondary tabs example"
-              centered
-
-            >
-              <Tab value="Core" label="Core" />
-              <Tab value="Advantages" label="Advantages" />           
-              <Tab value="Haven" label="Haven" />          
-              <Tab value="Possessions" label="Possessions" />   
-              <Tab value="Background" label="Background" />
-              <Tab value="Gallery" label="Gallery" />
-            </Tabs>
-          </Paper>
+          <SheetNav />
           <Disciplines />
           <BloodPotency />
           <HuntingTab />
@@ -63,6 +128,51 @@ function Vampire5thSheet(props)
       </Grid>
     </Container>
   )
+
+  return (
+    <SheetContext.Provider value={{sheet, lock, handleUpdate}}>
+      {sheet ? sheetPage : (<SheetSkeleton />)}
+    </SheetContext.Provider>
+  )
 }
 
-export default Vampire5thSheet;
+
+function SheetNav(props)
+{
+  const [value] = useState('Core');
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('xl'));
+
+  const centered = isSmallScreen ? false : true;
+  const scrollable = isSmallScreen ? 'scrollable' : 'standard';
+
+
+  return (   
+    <Grid xs={12}>
+      <Box 
+        sx={{ 
+          borderRadius: '20px', 
+          marginBottom: '10px', 
+          maxWidth: '100%',
+          bgcolor: 'background.paper' 
+        }}
+      >              
+        <Tabs
+          value={value}
+          textColor="secondary"
+          indicatorColor="secondary"
+          variant={scrollable}
+          centered={centered}
+          scrollButtons
+        >
+          <Tab label="Core" value='Core' />
+          <Tab label="Advantages" />           
+          <Tab label="Haven" /> 
+          <Tab label="Exp" />     
+          <Tab label="Possessions" />   
+          <Tab label="Background" />
+          <Tab label="Gallery" />
+        </Tabs>
+      </Box> 
+    </Grid>
+  )
+}

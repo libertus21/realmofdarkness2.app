@@ -1,5 +1,5 @@
 import Grid from '@mui/material/Unstable_Grid2';
-import { Divider, Typography, Rating } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import Discipline from './Discipline';
 
 export default function DisciplinesTab(props)

@@ -1,18 +1,26 @@
 import Grid from '@mui/material/Unstable_Grid2';
 import { Typography, ListItem } from "@mui/material";
 import RatingInfo from './FiveDotRating';
-import { useState } from 'react';
+import { slugify } from "../../utility";
+import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
 
 export default function Attribute(props)
 {
-  const { name, locked } = props;
-  const [value, setValue] = useState(1);
+  const { name, dots } = props;
+  const { lock, sheet, handleUpdate } = useSheetContext();
 
-  const handleRatingChange = (event, value) => 
+  function onChange(event, value)
   {
-    console.log(value)
-    setValue(value);
+    const updateValue = value ?? 0;
+    const slug = slugify(name);
+    const update = {[slug]: updateValue};
+    
+    const newAttributes = JSON.parse(JSON.stringify(sheet.attributes));;
+    newAttributes[slug] = updateValue;
+    const sheetUpdate = {attributes: newAttributes};
+    handleUpdate(update, sheetUpdate);
   }
+
 
   return (    
     <ListItem>
@@ -23,9 +31,9 @@ export default function Attribute(props)
         <Grid xs={true} sx={{mr: -3}} />
         <Grid >                  
           <RatingInfo  
-            value={value}
-            onChange={handleRatingChange} 
-            locked={locked ?? false} 
+            value={dots}
+            locked={lock ?? false} 
+            onChange={onChange}
           />
         </Grid>
       </Grid>

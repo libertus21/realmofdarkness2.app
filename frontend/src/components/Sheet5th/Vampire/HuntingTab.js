@@ -1,7 +1,5 @@
 import Grid from '@mui/material/Unstable_Grid2';
-import { Divider, Rating, Typography, TextField } from "@mui/material";
-import CircleIcon from '@mui/icons-material/Circle';
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import { Divider, Typography, TextField } from "@mui/material";
 
 export default function HuntingTab(props)
 {

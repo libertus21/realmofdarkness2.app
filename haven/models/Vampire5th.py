@@ -1,49 +1,52 @@
 from django.db import models
-from haven.models import Character5th
+from .Character5th import Character5th
 
-class Clan(models.IntegerChoices):
-  CUSTOM = 1, 'Custom'
-  BANU_HAQIM = 2, 'Banu Haqim'
-  BRUJAH = 3, 'Brujah'
-  GANGREL = 4, 'Gangrel'
-  HECATA = 5, 'Hecata'
-  LASOMBRA = 6, 'Lasombra'
-  MALKAVIAN = 7, 'Malkavian'
-  MINISTRY = 8, 'Ministry'
-  NOSFERATU = 9, 'Nosferatu'
-  RAVNOS = 10, 'Ravnos'
-  SALUBRI = 11, 'Salubri'
-  TOREADOR = 12, 'Toreador'
-  TREMERE = 13, 'Tremere'
-  TZIMISCE = 14, 'Tzimisce'
-  VENTRUE = 15, 'Ventrue'
+class Clan(models.TextChoices):
+  CUSTOM = 'Custom'
+  BANU_HAQIM = 'Banu Haqim'
+  BRUJAH = 'Brujah'
+  GANGREL = 'Gangrel'
+  HECATA = 'Hecata'
+  LASOMBRA = 'Lasombra'
+  MALKAVIAN = 'Malkavian'
+  MINISTRY = 'Ministry'
+  NOSFERATU = 'Nosferatu'
+  RAVNOS = 'Ravnos'
+  SALUBRI = 'Salubri'
+  TOREADOR = 'Toreador'
+  TREMERE = 'Tremere'
+  TZIMISCE = 'Tzimisce'
+  VENTRUE = 'Ventrue'
+  CAITIFF = 'Caitiff'
+  THIN_BLOOD = 'Thin Blood'
 
-class PredatorType(models.IntegerChoices):
-  CUSTOM = 1, 'Custom'
-  ALLEYCAT = 2, 'Alleycat'
-  BLOOD_LEECH = 3, 'Blood Leech'
-  CLEAVER = 4, 'Cleaver'
-  CONSENSUALIST = 5, 'Consensualist'
-  FARMER = 6, 'Farmer'
-  OSIRIS = 7, 'Osiris'
-  SANDMAN = 8, 'Sandman'
-  SCENE_QUEEN = 9, 'Scene Queen'
-  SIREN = 10, 'Siren'
-  EXTORTIONIST = 11, 'Extortionist'
-  GRAVEROBBER = 12, 'Graverobber'
-  ROADSIDE_KILLER = 13, 'Roadside Killer'
-  GRIM_REAPER = 14, 'Grim Reaper'
-  MONTERO = 15, 'Montero'
-  PURSUER = 16, 'Pursuer'
-  TRAPDOOR = 17, 'Trapdoor'
+class PredatorType(models.TextChoices):
+  CUSTOM = 'Custom'
+  ALLEYCAT = 'Alleycat'
+  BLOOD_LEECH = 'Blood Leech'
+  CLEAVER = 'Cleaver'
+  CONSENSUALIST = 'Consensualist'
+  FARMER = 'Farmer'
+  OSIRIS = 'Osiris'
+  SANDMAN = 'Sandman'
+  SCENE_QUEEN = 'Scene Queen'
+  SIREN = 'Siren'
+  EXTORTIONIST = 'Extortionist'
+  GRAVEROBBER = 'Graverobber'
+  ROADSIDE_KILLER = 'Roadside Killer'
+  GRIM_REAPER = 'Grim Reaper'
+  MONTERO = 'Montero'
+  PURSUER = 'Pursuer'
+  TRAPDOOR = 'Trapdoor'
 
 
 class Vampire5th(Character5th):
   # Core
-  clan = models.IntegerField(choices=Clan.choices, null=True)
+  clan = models.CharField(choices=Clan.choices, blank=True, max_length=15)
   sire = models.CharField(max_length=50, blank=True)
   generation = models.IntegerField(null=True)
-  predator_type = models.IntegerField()
+  predator_type = models.CharField(
+    choices=PredatorType.choices, blank=True, max_length=20)
 
   # Humanity
   humanity = models.IntegerField(default=7)

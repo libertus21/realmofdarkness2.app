@@ -1,25 +1,32 @@
 import { Typography, ListItem, IconButton, Tooltip } from "@mui/material";
 import RatingInfo from './FiveDotRating';
-import { useState } from 'react';
 import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { slugify } from "../../utility";
+import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
 
 export default function Skill(props)
 {
-  const { name, locked, spec=false } = props;
-  const [value, setValue] = useState(0);
+  const { name, skill } = props;  
+  const { lock, sheet, handleUpdate } = useSheetContext();
 
-  const handleRatingChange = (event, value) => 
+  function onChange(event, value)
   {
-    console.log(value)
-    setValue(value);
+    const updateValue = value ?? 0;
+    const slug = slugify(name);
+    const update = {[slug]: updateValue};
+    
+    const newSkills = JSON.parse(JSON.stringify(sheet.skills));;
+    newSkills[slug].value = updateValue;
+    const sheetUpdate = {skills: newSkills};
+    handleUpdate(update, sheetUpdate);
   }
 
   let specIcon;
-  if (locked && spec)
+  if (lock && skill.spec)
   {
     specIcon = (
-      <Tooltip arrow title={spec}>
+      <Tooltip arrow title={skill.spec.join(', ')}>
         <ExpandCircleDownIcon 
           fontSize='small' 
           sx={{marginLeft: 0.5, color: '#63199c'}} 
@@ -28,7 +35,7 @@ export default function Skill(props)
       
     )
   }
-  else if (locked)
+  else if (lock)
   {
     
     specIcon = (
@@ -39,6 +46,8 @@ export default function Skill(props)
     )
   }
   else
+  {
+    const color = skill.spec ? 'secondary' : 'primary'
     specIcon = (
       <IconButton
         size='small'
@@ -46,10 +55,12 @@ export default function Skill(props)
       >
         <AddCircleOutlineIcon 
           fontSize="small"
-          color='primary'
+          color={color}
         />
       </IconButton>
     )
+  }
+    
 
   return (    
     <ListItem 
@@ -61,9 +72,9 @@ export default function Skill(props)
     >
       <Typography sx={{ marginRight: 'auto' }}>{name}</Typography>     
       <RatingInfo  
-        value={value}
-        onChange={handleRatingChange} 
-        locked={locked ?? false} 
+        value={skill.value}
+        locked={lock ?? false} 
+        onChange={onChange}
       />
       {specIcon}
     </ListItem>

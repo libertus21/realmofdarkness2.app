@@ -28,8 +28,9 @@ class Health20th(models.Model):
     lethal = models.IntegerField(default=0)
     aggravated = models.IntegerField(default=0)
 
+
 class Humanity(models.Model):
-    character = models.OneToOneField('haven.Character', on_delete=models.CASCADE)
+    character = models.OneToOneField('haven.Character', on_delete=models.CASCADE, related_name='old_humanity')
     current = models.IntegerField(default=7)
     stains = models.IntegerField(default=0)
 

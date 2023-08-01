@@ -5,6 +5,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Container } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import darkScrollbar from '@mui/material/darkScrollbar';
 import Layout from "./routes/Layout";
@@ -21,8 +22,7 @@ import CodIndex from "./routes/CoD/CodIndex";
 import CodCommands from "./routes/CoD/CodCommands";
 import Vampire5thSheet from "./routes/Character/Vampire5thSheet";
 import Character from "./routes/Character/Character";
-import CharacterIndex from "./routes/Character/CharacterIndex";
-import initAnalytics from "./functions/initAnalytics";
+//import initAnalytics from "./functions/initAnalytics";
 import V5Dice from "./routes/v5/V5Dice";
 import ClientProvider from './components/ClientProvider';
 
@@ -77,7 +77,7 @@ function ScrollToTop({children}) {
 }
 
 function App() {
-  initAnalytics()  
+  //initAnalytics()  
   return (     
     <ClientProvider>
       <ThemeProvider theme={darkTheme}>
@@ -101,8 +101,8 @@ function App() {
                   <Route path='commands' element={<CodCommands />} />
                 </Route>
                 <Route path="character" element={<Character />}>
-                  <Route index element={<CharacterIndex />} />
-                  <Route path='5th' element={<Vampire5thSheet />} />
+                  <Route index element={<NotFound />} />
+                  <Route path='v5/:id' element={<Vampire5thSheet />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Route>
@@ -116,10 +116,10 @@ function App() {
 
 export default App;
 
-function NotFound() {
+function NotFound(props) {
   return (
-    <div>
+    <Container sx={{ my: 13 }}>   
       <h1>Sorry, no page here</h1>
-    </div>
+    </Container> 
   );
 }

@@ -1,10 +1,13 @@
 import Grid from '@mui/material/Unstable_Grid2';
 import { Divider, Typography, List } from "@mui/material";
 import Skill from './Skill';
+import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
+
 
 export default function SkillsTab(props)
-{
-  const locked = true;
+{  
+  const { sheet } = useSheetContext();
+  const skills = sheet.skills;
 
   return (
     <Grid 
@@ -22,41 +25,41 @@ export default function SkillsTab(props)
       </Grid>
       <Grid direction="column" xs={12} xl={4}>
         <List>
-          <Skill locked={locked} name='Athletics' spec="Running, Dodge" />
-          <Skill locked={locked} name='Brawl' />
-          <Skill locked={locked} name='Craft' />
-          <Skill locked={locked} name='Drive' />
-          <Skill locked={locked} name='Firearms' />
-          <Skill locked={locked} name='Larceny' />
-          <Skill locked={locked} name='Melee' />
-          <Skill locked={locked} name='Stealth' />
-          <Skill locked={locked} name='Survival' />
+          <Skill name='Athletics' skill={skills.athletics} />
+          <Skill name='Brawl' skill={skills.brawl} />
+          <Skill name='Craft' skill={skills.craft} />
+          <Skill name='Drive' skill={skills.drive} />
+          <Skill name='Firearms' skill={skills.firearms} />
+          <Skill name='Larceny' skill={skills.larceny} />
+          <Skill name='Melee' skill={skills.melee} />
+          <Skill name='Stealth' skill={skills.stealth} />
+          <Skill name='Survival' skill={skills.survival} />
         </List>
       </Grid>
       <Grid direction="column" xs={12} xl={4}>
         <List>          
-        <Skill locked={locked} name='Animal Ken' />
-        <Skill locked={locked} name='Etiquette' />
-        <Skill locked={locked} name='Insight' />
-        <Skill locked={locked} name='Intimidation' />
-        <Skill locked={locked} name='Leadership' />
-        <Skill locked={locked} name='Performance' />
-        <Skill locked={locked} name='Persuasion' spec="Seduction" />
-        <Skill locked={locked} name='Streetwise' />
-        <Skill locked={locked} name='Subterfuge' />
+        <Skill name='Animal Ken' skill={skills.animal_ken} />
+        <Skill name='Etiquette' skill={skills.etiquette} />
+        <Skill name='Insight' skill={skills.insight} />
+        <Skill name='Intimidation' skill={skills.intimidation} />
+        <Skill name='Leadership' skill={skills.leadership} />
+        <Skill name='Performance' skill={skills.performance} />
+        <Skill name='Persuasion' skill={skills.persuasion} />
+        <Skill name='Streetwise' skill={skills.streetwise} />
+        <Skill name='Subterfuge' skill={skills.subterfuge} />
         </List>
       </Grid>
       <Grid direction="column" xs={12} xl={4}>
         <List>
-        <Skill locked={locked} name='Academics' />
-        <Skill locked={locked} name='Awareness' spec="Sight, Hearing, Smell, ambushes" />
-        <Skill locked={locked} name='Finance' />
-        <Skill locked={locked} name='Investigation' />
-        <Skill locked={locked} name='Medicine' />
-        <Skill locked={locked} name='Occult' />
-        <Skill locked={locked} name='Politics' />
-        <Skill locked={locked} name='Science' />
-        <Skill locked={locked} name='Technology' />          
+        <Skill name='Academics' skill={skills.academics} />
+        <Skill name='Awareness' skill={skills.awareness} />
+        <Skill name='Finance' skill={skills.finance} />
+        <Skill name='Investigation' skill={skills.investigation} />
+        <Skill name='Medicine' skill={skills.medicine} />
+        <Skill name='Occult' skill={skills.occult} />
+        <Skill name='Politics' skill={skills.politics} />
+        <Skill name='Science' skill={skills.science} />
+        <Skill name='Technology' skill={skills.technology} />
         </List>
       </Grid>
     </Grid>

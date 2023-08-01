@@ -1,7 +1,9 @@
 from django.db import models
-from haven.models import Character
+from .character import Character
 
 class Character5th(Character):
+  ambition = models.CharField(blank=True, max_length=100)
+  desire = models.CharField(blank=True, max_length=100)
 
   # Willpower
   willpower_superficial = models.IntegerField(default=0)
@@ -84,14 +86,14 @@ class Character5th(Character):
   subterfuge_spec = models.JSONField(null=True)
   # Mental
   academics_spec = models.JSONField(null=True)
-  awareness_spec = models.JSONField(null=True)
+  awareness_spec = models.JSONField(null=True)  
+  finance_spec = models.JSONField(null=True)
   investigation_spec = models.JSONField(null=True)
   medicine_spec = models.JSONField(null=True)
   occult_spec = models.JSONField(null=True)
   politics_spec = models.JSONField(null=True)
   science_spec = models.JSONField(null=True)
   technology_spec = models.JSONField(null=True)
- 
 
 
 class Morals(models.Model):
