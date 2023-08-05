@@ -1,8 +1,11 @@
-import { Grid, Rating } from "@mui/material";
-//import Grid from '@mui/material/Unstable_Grid2';
+import { Button, Rating, Stack, Typography } from "@mui/material";
+import Grid from '@mui/material/Unstable_Grid2';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
+
 
 const AggravatedIcon = 
 {
@@ -24,10 +27,15 @@ const NoDamageIcon =
 }
 
 export default function V5DamageTracker(props) {
-  const { tracker } = props;
+  const { tracker, label, textAlign, justifyContent, onOpen, open } = props;
   let totalCount = tracker.total;
   let supCount = tracker.superficial;
   let aggCount = tracker.aggravated;
+
+  function handleOpen()
+  {
+    onOpen(label);
+  }
 
   const bars = [];
   for (let index = 0; index <= (Math.floor((tracker.total - 1) / 5)); index++)
@@ -50,7 +58,7 @@ export default function V5DamageTracker(props) {
     }
     
     bars.push(
-      <Grid item key={index} sx={{mt: 0.15, mb: -0.15}}>        
+      <Grid key={index} sx={{mt: 0.15, mb: -0.15}}>        
         <Rating 
           name={`Damage Tracker Bar ${index+1}`}
           readOnly
@@ -65,16 +73,49 @@ export default function V5DamageTracker(props) {
     );
   }
 
+  function openPanelButton()
+  {
+    let render = <Typography>{label}</Typography>;
+    const opened = open === label;
+    const button = (
+      opened ? <ExpandLessOutlinedIcon /> : <ExpandMoreOutlinedIcon />
+    )
+    const color = opened ? 'primary' : 'inherit';
+
+    if (onOpen) render = (
+      <Button 
+        onClick={handleOpen} 
+        size='small'
+        endIcon={button}
+        color={color}
+      >
+        <Typography sx={{ textTransform: "none" }}>{label}</Typography>
+      </Button>
+    )
+    return render;
+  }
+
+  
   return (
-    <Grid 
-      container 
-      columnSpacing={1.5}
-      direction="row"
-      justifyContent='flex-start'
-      alignItems='center'
-      sx={{ml: -1.8}}
-    >
-      {bars}
+    <Grid        
+      container
+      direction='column'
+      justifyContent={justifyContent}
+      alignItems={textAlign}
+      textAlign={textAlign}
+    >      
+      <Grid>  
+        <Stack direction='row'>         
+          {openPanelButton()}
+        </Stack>   
+      </Grid>
+      <Grid 
+        container 
+        columnSpacing={1.5} 
+        justifyContent={justifyContent}
+      >
+        {bars}
+      </Grid>
     </Grid>
   )
 }

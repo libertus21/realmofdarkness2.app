@@ -8,6 +8,7 @@ import { getClans, getPredatorTypes } from '../../../constants/';
 import ApiSelect from '../../Sheet/ApiSelect';
 import GenerationMenuItems from './GenerationMenuItems';
 import SheetStatusMenuItems from '../../Sheet/SheetStatusMenuItems';
+import ChronicleMenuItems from './ChronicleMenuItems';
 
 export default function GeneralInfoTab(props)
 {
@@ -33,7 +34,8 @@ export default function GeneralInfoTab(props)
           <ApiTextField label="Name" value={sheet.name} maxLength={50} />
           <ApiSelect 
             label="Chronicle" 
-            value={sheet.chornicle ?? ''} 
+            value={sheet.chronicle ?? ''} 
+            getOptions={ChronicleMenuItems}
           />
         </Grid>
         <Grid 
@@ -56,7 +58,7 @@ export default function GeneralInfoTab(props)
           <ApiSelect 
             label="Generation"
             value={sheet.generation} 
-            options={GenerationMenuItems} 
+            getOptions={GenerationMenuItems} 
           />
         </Grid>
         <Grid 
@@ -80,7 +82,7 @@ export default function GeneralInfoTab(props)
             label="Sheet Status" 
             value={sheet.status} 
             slug='status'
-            options={SheetStatusMenuItems} 
+            getOptions={SheetStatusMenuItems} 
             xs={6} 
           />  
           <ExpTextField label="Experiance" exp={sheet.exp} xs = {6} />

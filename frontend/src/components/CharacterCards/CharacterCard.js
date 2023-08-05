@@ -13,6 +13,7 @@ import Wraith20thInfo from "./Wraith20thInfo";
 import Demon20thInfo from "./Demon20thInfo";
 import Mage20thInfo from "./Mage20thInfo";
 import { useClientContext } from '../ClientProvider'
+import { useTheme } from '@mui/material/styles';
 
 const cardInfo = {
   'vampire5th': Vampire5thInfo,
@@ -31,25 +32,31 @@ const cardInfo = {
 export default function CharacterCard(props) {
   const {character} = props;
   const { user, members, chronicles } = useClientContext();
+  const theme = useTheme();
   const CardInfo = cardInfo[character.splat];
   if (!CardInfo) return null
+  
+  let avatar = user.avatar_url;
+  let nickname = user.username;
+  if (character.chronicle && members[character.chronicle][character.user])
+  {
+    const member = members[character.chronicle][character.user];
+    avatar = member?.avatar_url || avatar;
+    nickname = member?.nickname || nickname;
+  }
+  
+  const sx = {minWidth: '270px', maxWidth: '325px'};
+  if (character.is_sheet) sx.borderLeft =  
+    `1px solid ${theme.palette.primary.main}`
 
   return (           
     <Grid> 
-      <Card sx={{minWidth: '270px', maxWidth: '325px'}}>      
+      <Card sx={sx}>      
         <CardHeader           
           avatar={
             <Avatar 
-              alt={
-                character.chronicle ? 
-                members[character.chronicle][character.user].nickname : 
-                user.username
-              }
-              src={                            
-                character.chronicle ? 
-                members[character.chronicle][character.user].avatar_url :
-                  user.avatar_url
-              }
+              alt={nickname}
+              src={avatar}
             />
           }
           
@@ -59,11 +66,7 @@ export default function CharacterCard(props) {
             </Typography>
           }
           
-          subheader={
-            character.chronicle ? 
-            members[character.chronicle][character.user].nickname :
-            user.username
-          }
+          subheader={nickname}
         />
         <Divider />      
         <CardInfo 

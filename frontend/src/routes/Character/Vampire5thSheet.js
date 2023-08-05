@@ -16,17 +16,25 @@ import ErrorSnackbar from "../../components/ErrorSnackbar";
 
 const SheetContext = createContext(null);
 export const useSheetContext = () => useContext(SheetContext);
+export const SyncState = 
+{
+  SYNC: 'Synced',
+  UNSYNC: 'Uploading',
+  ERROR: 'Error',
+  SYNC_COMPLETE: 'Upload Complete',
+}
 
 export default function Vampire5thSheet(props)
 {
   const [sheet, setSheet] = useState(null);
   const [lock, setLock] = useState(true);
   const [alert, setAlert] = useState(null);
+  const [syncState, setSyncState] = useState(SyncState.SYNC);
   const { id } = useParams();  
 
   /**
    * Sends an API update request for the sheet if successful apllies the changes to the sheet 
-   * @param {object} apiUpdate - Update in the Model JSON format
+   * @param {object} apiUpdate - Update in the ORM JSON format
    * @param {object} sheetUpdate - Sheet update in the Sheet JSON format
    */
   async function handleUpdate(apiUpdate, update)
@@ -36,6 +44,7 @@ export default function Vampire5thSheet(props)
     const sheetUpdate = update ?? apiUpdate;
 
     // Optimistic update
+    setSyncState(SyncState.UNSYNC);
     setSheet((prevSheet) => ({ ...prevSheet, ...sheetUpdate }));
 
     // API call to update server
@@ -60,15 +69,21 @@ export default function Vampire5thSheet(props)
         const errorMessage = getSerializerErrors(data) ?? "There was an error with this request and the changes have not been applied."
         setAlert(errorMessage);
         setSheet(oldSheet);
+        setSyncState(SyncState.ERROR)
+        setTimeout(() => setSyncState(SyncState.SYNC), 5000);
         return 'error'
       }
     }
     catch (error)
     {
       setAlert("There was an error with this request and the changes have not been applied.");      
-      setSheet(oldSheet);
+      setSheet(oldSheet);      
+      setSyncState(SyncState.ERROR)
+      setTimeout(() => setSyncState(SyncState.SYNC), 5000);
       return 'error'
-    }    
+    }
+    setSyncState(SyncState.SYNC_COMPLETE); 
+    setTimeout(() => setSyncState(SyncState.SYNC), 5000);   
   }
 
   function closeAlert()
@@ -130,7 +145,7 @@ export default function Vampire5thSheet(props)
   )
 
   return (
-    <SheetContext.Provider value={{sheet, lock, handleUpdate}}>
+    <SheetContext.Provider value={{sheet, lock, handleUpdate, syncState}}>
       {sheet ? sheetPage : (<SheetSkeleton />)}
     </SheetContext.Provider>
   )

@@ -3,6 +3,7 @@ from rod.settings import AUTH_USER_MODEL
 from . import Splat, Health20th, Morality, MoralityInfo, Damage5th, Humanity, Hunter5th
 from bot.constants import Splats
 
+
 class Trackable(models.Model):
   character = models.ForeignKey('haven.Character', on_delete=models.CASCADE,
     related_name='trackable')

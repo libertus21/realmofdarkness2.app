@@ -83,10 +83,14 @@ class GatewayConsumer(AsyncWebsocketConsumer):
       member = Member.objects.get(user=self.user, chronicle=chronicle)
 
       if (member.admin or member.storyteller):
-        character_set = character_set_all.all().filter(splat__isnull=False)
-      else: character_set = character_set_all.filter(user=self.user, splat__isnull=False)    
+        character_set = \
+          character_set_all.select_related('character5th__vampire5th').all()
+      else: 
+        character_set = character_set_all\
+          .select_related('character5th__vampire5th').filter(user=self.user)    
       if not self.members.get(chronicle.id): self.members[chronicle.id] = {}  
       
+      # We need to go through every character and serialize them
       for character in character_set:      
         self.characters[character.id] = (serialize_character(character))
         self.subscriptions.add(Group.character_update(character.id))
@@ -95,10 +99,11 @@ class GatewayConsumer(AsyncWebsocketConsumer):
             character.member)          
           self.subscriptions.add(Group.member_update(character.member.id))
 
-    for character in Character.objects.filter(user=self.user, chronicle=None, splat__isnull=False):
+    for character in Character.objects.filter(user=self.user, chronicle=None):
       self.characters[character.id] = (serialize_character(character))
       self.subscriptions.add(Group.character_update(character.id))
 
+  
   @database_sync_to_async
   def refresh_data(self):
     if (self.user.is_anonymous): return None
@@ -118,8 +123,11 @@ class GatewayConsumer(AsyncWebsocketConsumer):
       member = Member.objects.get(user=self.user, chronicle=chronicle)
 
       if (member.admin or member.storyteller):
-        character_set = character_set_all.all().filter(splat__isnull=False)
-      else: character_set = character_set_all.filter(user=self.user, splat__isnull=False)    
+        character_set = \
+          character_set_all.select_related('character5th__vampire5th').all()
+      else: character_set = character_set_all\
+          .select_related('character5th__vampire5th').filter(user=self.user) 
+      
       if not self.members.get(chronicle.id): self.members[chronicle.id] = {}  
       
       for character in character_set:      
@@ -132,7 +140,7 @@ class GatewayConsumer(AsyncWebsocketConsumer):
           if Group.member_update(character.member.id) not in self.subscriptions:      
             self.subscriptions.add(Group.member_update(character.member.id))
 
-    for character in Character.objects.filter(user=self.user, chronicle=None, splat__isnull=False):
+    for character in Character.objects.filter(user=self.user, chronicle=None):
       self.characters[character.id] = (serialize_character(character))
       if Group.character_update(character.id) not in self.subscriptions:
         self.subscriptions.add(Group.character_update(character.id))

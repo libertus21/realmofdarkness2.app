@@ -13,19 +13,22 @@ export default function ClientProvider({ children })
   const [characters, setCharacters] = useState(null);
   const [chronicles, setChronicles] = useState(null);  
   const [members, setMembers] = useState(null);
+  const [connected, setConnection] = useState(false);
 
   useEffect(() =>{    
     client.handleGatewayEvents({
       setUser: setUser,
       setCharacters: setCharacters,
       setChronicles: setChronicles,
-      setMembers: setMembers
+      setMembers: setMembers,
+      setConnection: setConnection,
     });
   }, []); // only happens on site load
 
   const clientContextValue =
   {
     client,
+    connected,
     user,
     characters,
     chronicles,

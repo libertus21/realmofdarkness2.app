@@ -7,6 +7,9 @@ from .serializeUser import serialize_user
 from .serializeChronicle import serialize_chronicle
 from .serializeMember import serialize_member
 
+from haven.models import Vampire5th
+from haven.serializers import V5TrackerSerializer
+
 serializers = {
   Splats.changeling20th: serializeChangeling20th,
   Splats.demonTF: serializeDemon20th,
@@ -21,5 +24,25 @@ serializers = {
   Splats.hunter5th: serializeHunter5th,
 }
 
-def serialize_character(character):
-  return serializers[character.splat.slug](character)
+def serialize_character(base_character):
+  character = get_derived_instance(base_character)
+
+  if isinstance(character, Vampire5th):
+    return V5TrackerSerializer(character).data
+  else:
+    return serializers[character.splat.slug](character)
+  
+def get_derived_instance(character):
+  if hasattr(character, 'character5th'):
+    # Check if it's a Vampire5th
+    if hasattr(character.character5th, 'vampire5th'):
+        return character.character5th.vampire5th
+    else:
+      return character.character5th
+  elif hasattr(character, 'character20th'):
+    # Access Character20th fields
+    return character.character20th
+  # Add other derived model checks here
+
+  # If none of the derived models match, return the original Characterinstance
+  return character

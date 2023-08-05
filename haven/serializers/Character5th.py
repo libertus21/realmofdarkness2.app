@@ -1,7 +1,56 @@
 from rest_framework import serializers
-from .Character import CharacterSerializer
+from .Character import CharacterSerializer, CharacterDeserializer
 from haven.models import Character5th
 
+############################ Tracker Serializer ###############################
+class Tracker5thSerializer(CharacterSerializer):  
+  
+  class Meta(CharacterSerializer.Meta):
+    model = Character5th
+  
+  def to_representation(self, instance):
+    data = super().to_representation(instance)
+    
+    data['willpower'] = {
+      'superficial': instance.willpower_superficial,
+      'total': instance.willpower_total,
+      'aggravated': instance.willpower_aggravated,
+    }
+    
+    data['health'] = {
+      'superficial': instance.health_superficial,
+      'total': instance.health_total,
+      'aggravated': instance.health_aggravated,
+    }
+  
+    return data
+
+############################ Character Deserializer ###########################
+class Character5thDeserializer(CharacterDeserializer):  
+  class Meta(CharacterDeserializer.Meta):
+    model = Character5th  
+  
+  def validate_stamina(self, value):
+    diff = value - self.instance.stamina
+
+    self.instance.health_total += diff
+    if self.instance.health_total > 15: self.instance.health_total = 15
+    elif self.instance.health_total < 1: self.instance.health_total = 1
+    return value
+
+  
+  def validate(self, data):
+    data = super().validate(data)
+
+    for field in ['strength', 'dexterity', 'stamina']:
+      value = data.get(field)
+      if value is not None and (value < 0 or value > 5):
+        raise serializers.ValidationError()
+    
+    return data
+
+  
+########################### Character Serializer ##############################
 # Base serializer with common fields for Character5th
 class Character5thSerializer(CharacterSerializer):
   class Meta(CharacterSerializer.Meta):

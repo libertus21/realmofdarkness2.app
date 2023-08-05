@@ -9,8 +9,8 @@ def serializeCharacter(character):
     'theme': character.theme,
     'thumbnail': character.faceclaim,
     'exp': {'total': exp.total, 'current': exp.current},
-    'createdAt': (character.created_at.timestamp() if character.created_at else ''),
-    'lastUpdated': character.last_updated.timestamp(),
+    'created_at': (character.created_at.timestamp() if character.created_at else ''),
+    'last_updated': character.last_updated.timestamp(),
   }
 
 def serialize20th(character):
@@ -163,18 +163,14 @@ def serializeVampire5th(character):
   s = serialize5th(character)
   hunger = character.trackable.get(slug='hunger')
   s['hunger'] = hunger.current
-  s['humanity'] = {
-      'current': character.old_humanity.current,
-      'stains': character.old_humanity.stains
-  }
+  s['humanity'] = character.old_humanity.current
+  s['stains'] = character.old_humanity.stains
   return s
 
 def serializeMortal5th(character):
   s = serialize5th(character)
-  s['humanity'] = {
-      'current': character.old_humanity.current,
-      'stains': character.old_humanity.stains
-  }
+  s['humanity'] = character.old_humanity.current
+  s['stains'] = character.old_humanity.stains
   return s
 
 def serializeHunter5th(character):

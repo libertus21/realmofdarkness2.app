@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useClientContext } from "../ClientProvider";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CharacterCardDisplay from "../CharacterCards/CharacterCardDisplay";
+import Connecting from "../../routes/Connecting";
 
 function Refresh(props) {
   const { client } = useClientContext();
@@ -45,25 +46,26 @@ function Refresh(props) {
 
 export default function Dashboard(props) 
 {
-  const { characters, chronicles, user } = useClientContext();
-
+  const { characters, chronicles, user, connected } = useClientContext();
   return (
-    <Box paddingTop={15} paddingX={3}>
-      <Grid    
-        container spacing={{md: 0, xs: 4}} 
-        direction="row"
-        justifyContent="space-evenly"
-        alignItems="flex-start"
-        columnSpacing={3}
-        rowSpacing={3}
-      >
-        <CharacterCardDisplay 
-          characters={characters} 
-          chronicles={chronicles} 
-          user={user}
-        />
-      </Grid>
-      <Refresh />
-    </Box>
+    connected ? (
+      <Box paddingTop={15} paddingX={3}>
+        <Grid    
+          container spacing={{md: 0, xs: 4}} 
+          direction="row"
+          justifyContent="space-evenly"
+          alignItems="flex-start"
+          columnSpacing={3}
+          rowSpacing={3}
+        >
+          <CharacterCardDisplay 
+            characters={characters} 
+            chronicles={chronicles} 
+            user={user}
+          />
+        </Grid>
+        <Refresh />
+      </Box>
+    ) : <Connecting />
   )
 }

@@ -1,4 +1,4 @@
-import { Select, InputLabel, FormControl, MenuItem } from '@mui/material';
+import { Select, InputLabel, FormControl } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useState, useEffect } from 'react';
 import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
@@ -6,9 +6,9 @@ import { slugify } from '../../utility';
 
 export default function ApiSelect(props)
 {
-  const { label, value, slug, options } = props;  
+  const { label, value, slug, getOptions, xs } = props;  
   const { lock, handleUpdate } = useSheetContext();
-  const [selected, setSelected] = useState(value);
+  const [selected, setSelected] = useState('');
   const [error, setError] = useState(false);  
   const [color, setColor] = useState('primary');
 
@@ -17,7 +17,6 @@ export default function ApiSelect(props)
   {
     let newValue = event.target.value;
     setSelected(newValue);    
-    console.log(value, newValue, value === newValue)
 
     if (value === newValue) return
     setColor('secondary');
@@ -44,7 +43,7 @@ export default function ApiSelect(props)
   }, [value]);
 
   return (
-    <Grid xs={12} md='auto'>
+    <Grid xs={xs ?? 12} md='auto'>
       <FormControl fullWidth>
         <InputLabel id={`Selectselected-${label}`} size='small'>
           {label}
@@ -52,33 +51,16 @@ export default function ApiSelect(props)
         <Select 
           labelId={`Selectselected-${label}`}
           label={label}
-          value={selected}
+          value={selected ?? ''}
           size='small'
           disabled={lock}
           onChange={onChange}
           color={color}
           error={error}
         >
-          {options}
+          {getOptions()}
         </Select>
       </FormControl>
     </Grid>
   )
 }
-
-const xx = (
-  <>
-    <MenuItem value={1}>
-      Draft
-    </MenuItem>
-    <MenuItem value={3}>
-      Active
-    </MenuItem>
-    <MenuItem value={4}>
-      Dead (Archived)
-    </MenuItem>
-    <MenuItem value={5}>
-      Archive
-    </MenuItem>
-  </>
-)

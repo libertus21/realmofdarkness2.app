@@ -1,7 +1,10 @@
-import { Typography, Rating, Box, Grid } from "@mui/material";
+import { Typography, Rating, Button } from "@mui/material";
+import Grid from '@mui/material/Unstable_Grid2';
 import CircleIcon from '@mui/icons-material/Circle';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import NotInterestedOutlinedIcon from '@mui/icons-material/NotInterestedOutlined';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
 
 const fontSize = 'inherit'
 
@@ -25,9 +28,9 @@ const StainIcon =
 
 export default function V5Humanity(props) 
 {
-  const { humanity } = props;
-  let humanityCount = humanity.current;
-  let emptyCount = (10 - humanity.current - humanity.stains);
+  const { humanity, stains, justifyContent, textAlign, open, onOpen } = props;
+  let humanityCount = humanity;
+  let emptyCount = (10 - humanity - stains);
 
   const bars = [];
   for (let index = 0; index < 2; index++)
@@ -50,7 +53,7 @@ export default function V5Humanity(props)
     }
 
     bars.push(
-      <Grid item key={index} sx={{mt: 0.15, mb: -0.15}}>        
+      <Grid key={index} sx={{mt: 0.15, mb: -0.15}}>        
         <Rating 
           name={`Humanity Bar ${index+1}`}
           readOnly
@@ -66,19 +69,46 @@ export default function V5Humanity(props)
     )
   }
 
+  function openPanelButton()
+  {
+    let render = <Typography>Humanity</Typography>;
+    const button = (
+      open ? <ExpandLessOutlinedIcon /> : <ExpandMoreOutlinedIcon />
+    )
+    const color = open ? 'primary' : 'inherit';
+
+    if (onOpen) render = (
+      <Button 
+        onClick={onOpen} 
+        size='small'
+        endIcon={button}
+        color={color}
+      >
+        <Typography sx={{ textTransform: "none" }}>Humanity</Typography>
+      </Button>
+    )
+    return render;
+  }
+
   return (
-    <Box>      
-      <Typography>Humanity {humanity.current} {humanity.stains ? `- Stains ${humanity.stains}` : ''}</Typography>
+    <Grid 
+      container      
+      direction='column'
+      justifyContent={justifyContent}
+      alignItems={textAlign}
+      textAlign={textAlign}
+    >
+      <Grid xs={12}>            
+        {openPanelButton()}
+      </Grid>
       <Grid      
         container 
         columnSpacing={1}
         direction="row"
-        justifyContent='flex-start'
-        alignItems='center'
-        sx={{ml: -0.9}}
+        justifyContent={justifyContent}       
       >
         {bars}
       </Grid>
-    </Box>
+    </Grid>
   )
 }

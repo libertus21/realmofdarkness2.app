@@ -1,4 +1,4 @@
-import { FormControl, Select, MenuItem, InputLabel, ListSubheader, FormControlLabel, Switch } from "@mui/material";
+import { FormControl, Select, MenuItem, InputLabel, ListSubheader, FormControlLabel, Switch, Container } from "@mui/material";
 import { OutlinedInput, Box, Chip, Alert, ListItemText } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import { useState, useMemo, Fragment } from "react";
@@ -75,24 +75,12 @@ export default function CharacterCardDisplay(props)
     if (!characters) return;    
     let canFilterStorytellerMode = false;
     let cards = [];
-    /*
-    // Filtering User only characters if toggled
-    const filteredCharacters = sortOptions.storytellerMode ? characters : {};
-    if (!sortOptions.storytellerMode)
-    {
-      for (const key of Object.keys(characters))
-      {
-        const value = characters[key];
-        if (value.user === user.id) filteredCharacters[key] = value;
-        else canFilterStorytellerMode = true;
-      }
-    }
-    */
+    
     // Sorting by last updated time
     const sortedChars = Object.values(characters).sort((a, b) => {
       if (sortOptions.sortBy === 'lastUpdated')
       {
-        return b.lastUpdated - a.lastUpdated;
+        return b.last_updated - a.last_updated;
       }
       const nameA = a.name.toUpperCase();
       const nameB = b.name.toUpperCase();
@@ -158,71 +146,73 @@ export default function CharacterCardDisplay(props)
   ), [characters, sortOptions.splats]);
   
   return (
-    <Grid    
-      container
-      direction="row"
-      justifyContent="center"
-      rowSpacing={3}
-      columnSpacing={2}
-      sx={{pl: 3}}
-    >
-      <Grid>
-        <FormControl sx={{minWidth: '150px'}}>
-          <InputLabel id="chronicle-select-label">Chronicles</InputLabel>
-          <Select 
-            labelId="chronicle-select-label" 
-            id="chronicle-select" 
-            label='Chronicles'
-            value={sortOptions.chronicle}
-            onChange={(event) => {handleSelectChange(event, 'chronicle')}}
-            onClose={onCloseSelect}
-          >
-            {chronicleMenus()}
-          </Select>          
-        </FormControl>
+    <Container maxWidth="xl">
+      <Grid    
+        container
+        direction="row"
+        justifyContent="center"
+        rowSpacing={3}
+        columnSpacing={2}
+        sx={{pl: 3}}
+      >
+        <Grid>
+          <FormControl sx={{minWidth: '150px'}}>
+            <InputLabel id="chronicle-select-label">Chronicles</InputLabel>
+            <Select 
+              labelId="chronicle-select-label" 
+              id="chronicle-select" 
+              label='Chronicles'
+              value={sortOptions.chronicle}
+              onChange={(event) => {handleSelectChange(event, 'chronicle')}}
+              onClose={onCloseSelect}
+            >
+              {chronicleMenus()}
+            </Select>          
+          </FormControl>
+        </Grid>
+        <Grid>
+          <FormControl sx={{minWidth: '150px'}}>
+            <InputLabel id="splat-select-label">Splats</InputLabel>
+            <Select 
+              labelId="splat-select-label" 
+              id="splat-select" 
+              label='Splats'
+              multiple
+              input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+              value={sortOptions.splats}
+              onChange={handleSplatChange}             
+              onClose={onCloseSelect}           
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </Box>
+              )}
+            >
+              {getSplatMenus}
+            </Select>          
+          </FormControl>
+        </Grid>
+        <Grid>
+          <FormControl sx={{minWidth: '150px'}}>
+            <InputLabel id="sortBy-select-label">Sort by</InputLabel>
+            <Select 
+              labelId="sortBy-select-label" 
+              id="sortBy-select" 
+              label='Sort by'
+              value={sortOptions.sortBy}
+              onChange={(event) => {handleSelectChange(event, 'sortBy')}}
+            >
+              <MenuItem value='lastUpdated'>Last Updated</MenuItem>
+              <MenuItem value='name'>Name</MenuItem>
+            </Select>          
+          </FormControl>
+        </Grid> 
+        <DashboardControls />
+        {renderCharacterCards()}
       </Grid>
-      <Grid>
-        <FormControl sx={{minWidth: '150px'}}>
-          <InputLabel id="splat-select-label">Splats</InputLabel>
-          <Select 
-            labelId="splat-select-label" 
-            id="splat-select" 
-            label='Splats'
-            multiple
-            input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-            value={sortOptions.splats}
-            onChange={handleSplatChange}             
-            onClose={onCloseSelect}           
-            renderValue={(selected) => (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {selected.map((value) => (
-                  <Chip key={value} label={value} />
-                ))}
-              </Box>
-            )}
-          >
-            {getSplatMenus}
-          </Select>          
-        </FormControl>
-      </Grid>
-      <Grid>
-        <FormControl sx={{minWidth: '150px'}}>
-          <InputLabel id="sortBy-select-label">Sort by</InputLabel>
-          <Select 
-            labelId="sortBy-select-label" 
-            id="sortBy-select" 
-            label='Sort by'
-            value={sortOptions.sortBy}
-            onChange={(event) => {handleSelectChange(event, 'sortBy')}}
-          >
-            <MenuItem value='lastUpdated'>Last Updated</MenuItem>
-            <MenuItem value='name'>Name</MenuItem>
-          </Select>          
-        </FormControl>
-      </Grid> 
-      <DashboardControls />
-      {renderCharacterCards()}
-    </Grid>
+    </Container>
   )
 }
 
