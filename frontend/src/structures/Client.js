@@ -1,10 +1,12 @@
 import GatewayManager from "./GatewayManager";
 import { GatewayEvents } from "../gateway/GatewayEvents";
+import GatewayMessage from "./GatewayMessage";
 
 
 export default class Client 
 {
-  constructor() {
+  constructor() 
+  {
     this.gatewayManager = new GatewayManager();        
     this.gatewayManager.connect()
   }
@@ -35,5 +37,11 @@ export default class Client
   refresh()
   {
     this.gatewayManager.refresh();
+  }
+
+  sheetSubscribe(id)
+  {
+    console.log()
+    this.gatewayManager.send(new GatewayMessage().sheetSubscribe(id))
   }
 }

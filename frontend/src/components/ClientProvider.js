@@ -14,6 +14,7 @@ export default function ClientProvider({ children })
   const [chronicles, setChronicles] = useState(null);  
   const [members, setMembers] = useState(null);
   const [connected, setConnection] = useState(false);
+  const [sheet, setSheet] = useState(null);
 
   useEffect(() =>{    
     client.handleGatewayEvents({
@@ -22,6 +23,7 @@ export default function ClientProvider({ children })
       setChronicles: setChronicles,
       setMembers: setMembers,
       setConnection: setConnection,
+      setSheet: setSheet,
     });
   }, []); // only happens on site load
 
@@ -33,6 +35,8 @@ export default function ClientProvider({ children })
     characters,
     chronicles,
     members,
+    sheet,
+    setSheet,
   }
 
   return (

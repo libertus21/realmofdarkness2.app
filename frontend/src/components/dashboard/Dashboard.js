@@ -1,48 +1,8 @@
-import { Grid, Fab, Box, CircularProgress } from "@mui/material";
-import { useState } from "react";
+import { Grid, Box } from "@mui/material";
 import { useClientContext } from "../ClientProvider";
-import RefreshIcon from '@mui/icons-material/Refresh';
 import CharacterCardDisplay from "../CharacterCards/CharacterCardDisplay";
 import Connecting from "../../routes/Connecting";
 
-function Refresh(props) {
-  const { client } = useClientContext();
-  const handleClick = (event) => {};
-  const [cooldown, setCooldown] = useState(false);
-
-  function timeout()
-  {
-    setCooldown(false);
-  }
-
-  return (
-    <Box
-      onClick={handleClick}
-      role="presentation"
-      sx={{ position: 'fixed', bottom: 16, left: 16 }}
-    >                      
-      <Fab 
-        color='primary'
-        disabled={cooldown}
-        onClick={() => 
-        {
-          if (!cooldown)
-          {                
-            client.refresh();
-            setCooldown(true);
-            setTimeout(timeout, 3000);
-          }
-        }}
-      >
-        {
-          cooldown ? 
-          <CircularProgress size='20px' color='inherit' /> : 
-          <RefreshIcon size='large' />
-        }
-      </Fab>
-    </Box>
-  );
-}
 
 export default function Dashboard(props) 
 {
@@ -64,7 +24,6 @@ export default function Dashboard(props)
             user={user}
           />
         </Grid>
-        <Refresh />
       </Box>
     ) : <Connecting />
   )

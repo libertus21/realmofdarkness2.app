@@ -22,7 +22,7 @@ def name_list(request):
     name_list.append({
       'id': str(char.id),
       'name': char.name,
-      'splat': char.splat.slug,
+      'splat': char.splat.slug if char.splat else None,
       'guildName': char.chronicle.name if char.chronicle else None
     })
 

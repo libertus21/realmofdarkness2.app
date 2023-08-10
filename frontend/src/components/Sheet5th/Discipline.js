@@ -36,8 +36,9 @@ export default function Discipline(props)
                 {props.name}
               </Typography>
             </Grid>
-            <Grid paddingRight={2}>            
+            <Grid paddingLeft={2}>            
               <Rating 
+                disabled
                 icon={<CircleIcon fontSize="inherit" />} 
                 emptyIcon={<CircleOutlinedIcon fontSize="inherit" />}            
                 sx={{

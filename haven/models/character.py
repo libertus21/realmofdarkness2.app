@@ -100,6 +100,21 @@ class Character(models.Model):
     unique_together = ('name', 'user')
     indexes = [models.Index(fields=['name', 'user'])]
 
+def get_derived_instance(character):
+  if hasattr(character, 'character5th'):
+    # Check if it's a Vampire5th
+    if hasattr(character.character5th, 'vampire5th'):
+        return character.character5th.vampire5th
+    else:
+      return character.character5th
+  elif hasattr(character, 'character20th'):
+    # Access Character20th fields
+    return character.character20th
+  # Add other derived model checks here
+
+  # If none of the derived models match, return the original Characterinstance
+  return character
+
 ########################## Create Version Specific Partials ###################
 def create_5th_partials(char, data):
   Damage5th.objects.create(
@@ -135,20 +150,6 @@ def create_20th_partials(char, data):
   )
 
 ######################## Create 5th edition partials ##########################
-'''
-def create_vampire5th_partial(char, data):
-  Humanity.objects.create(
-    character=char,
-    current=data['humanity']['total'],
-    stains=data['humanity']['stains']
-  )
-
-  Trackable.objects.create(
-    character=char, 
-    slug="hunger",
-    current=data['hunger'],
-  )
-'''
 
 def create_hunter5th_partial(char, data):
   Trackable.objects.create(
@@ -169,7 +170,6 @@ def create_mortal5th_partial(char, data):
     current=data['humanity']['total'],
     stains=data['humanity']['stains']
   )
-
 
 ########################## Create 20th edition paritals #######################
 def create_vampire20th_partial(char, data):
@@ -199,7 +199,7 @@ def create_human20th_partial(char, data):
     morality_info=humanity,
     current=data['morality'],
   )
-
+  
 
 def create_ghoul20th_partial(char, data):
   Trackable.objects.create(

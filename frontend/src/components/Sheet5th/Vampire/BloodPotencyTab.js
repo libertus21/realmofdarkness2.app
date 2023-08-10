@@ -29,6 +29,7 @@ export default function BloodPotencyTab(props)
         <Grid><Typography>Potency</Typography></Grid>
         <Grid>             
           <Rating 
+            disabled
             max={10}
             icon={<CircleIcon fontSize="inherit" />} 
             emptyIcon={<CircleOutlinedIcon fontSize="inherit" />}            
@@ -50,6 +51,7 @@ export default function BloodPotencyTab(props)
       >
         <Grid>                  
           <TextField 
+            disabled
             label="Blood Surge" 
             variant='outlined' 
             defaultValue=' ' 
@@ -59,6 +61,7 @@ export default function BloodPotencyTab(props)
         </Grid>
         <Grid>                  
           <TextField 
+            disabled
             label="Mend Amount" 
             variant='outlined' 
             defaultValue=' ' 
@@ -68,6 +71,7 @@ export default function BloodPotencyTab(props)
         </Grid>
         <Grid>                  
           <TextField 
+            disabled
             label="Power Bonus" 
             variant='outlined' 
             defaultValue=' ' 
@@ -77,6 +81,7 @@ export default function BloodPotencyTab(props)
         </Grid>
         <Grid>                  
           <TextField 
+            disabled
             label="Rouse Re-Roll" 
             variant='outlined' 
             defaultValue=' ' 
@@ -86,6 +91,7 @@ export default function BloodPotencyTab(props)
         </Grid>
         <Grid>                  
           <TextField 
+            disabled
             label="Feeding Penalty" 
             variant='outlined' 
             defaultValue=' ' 
@@ -95,6 +101,7 @@ export default function BloodPotencyTab(props)
         </Grid>
         <Grid>                  
           <TextField 
+            disabled
             label="Bane Severity" 
             variant='outlined' 
             defaultValue=' ' 

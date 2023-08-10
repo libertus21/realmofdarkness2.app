@@ -5,19 +5,8 @@ def serializeCharacter(character):
     'name': character.name,
     'id': str(character.id),
     'splat': character.splat.slug,
-    'user': {
-      'id': str(character.user.id),
-      'username': character.user.username,
-      'discriminator': character.user.discriminator,
-      'avatarURL': character.user.avatar_url,
-      'supporter': character.user.supporter,
-      'displayName': character.member.nickname if character.member else None
-    },
-    'guild': {
-      'id': str(character.chronicle.id) if character.chronicle else None,
-      'name': character.chronicle.name if character.chronicle else None,
-      'iconURL': character.chronicle.icon_url if character.chronicle else None
-    },
+    'user': str(character.user.id),
+    'guild': str(character.chronicle.id) if character.chronicle else None,
     'theme': character.theme,
     'thumbnail': character.faceclaim if character.user.supporter >= 0 else None,
     'exp': {'total': exp.total, 'current': exp.current},

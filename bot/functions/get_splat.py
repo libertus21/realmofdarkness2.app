@@ -1,20 +1,14 @@
-from haven.models import Character
+from haven.models import Character, get_derived_instance
 from bot.constants import Splats, Versions
 
 def get_splat(splat, id=None, name=None, user_id=None):  
   if id: 
     char = Character.objects.filter(pk=id)
-  elif not splat: 
-    char = Character.objects.filter(name__iexact=name, user=user_id)
   else: 
-    char = Character.objects.filter(
-      name__iexact=name, 
-      user=user_id, 
-      splat__slug=splat
-    )
+    char = Character.objects.filter(name__iexact=name, user=user_id)
 
-  select = ['user', 'chronicle', 'member']
-  prefetch = ['history', 'trackable']
+  select = ['user', 'chronicle', 'member', 'character5th__vampire5th']
+  prefetch = ['trackable']
 
   if splat and Versions.v20 in splat:
     prefetch.append('health')    
@@ -30,4 +24,4 @@ def get_splat(splat, id=None, name=None, user_id=None):
   char.select_related(*select)
   char.prefetch_related(*prefetch)
     
-  return char[0] if char else None
+  return get_derived_instance(char[0]) if char else None

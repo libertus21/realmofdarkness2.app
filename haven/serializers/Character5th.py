@@ -29,25 +29,81 @@ class Tracker5thSerializer(CharacterSerializer):
 class Character5thDeserializer(CharacterDeserializer):  
   class Meta(CharacterDeserializer.Meta):
     model = Character5th  
-  
-  def validate_stamina(self, value):
-    diff = value - self.instance.stamina
 
-    self.instance.health_total += diff
-    if self.instance.health_total > 15: self.instance.health_total = 15
-    elif self.instance.health_total < 1: self.instance.health_total = 1
+  def validate_willpower_total(self, value):
+    if value > 20 or value < 1:
+      raise serializers.ValidationError()
+    return value
+    
+  def validate_willpower_superficial(self, value):    
+    if value > 20 or value < 0:
+      raise serializers.ValidationError()
     return value
 
+  def validate_willpower_aggravated(self, value):
+    if value > 20 or value < 0:
+      raise serializers.ValidationError()
+    return value
+    
+  def validate_health_total(self, value):
+    if value > 20 or value < 1:
+      raise serializers.ValidationError()
+    return value
+    
+  def validate_health_superficial(self, value):    
+    if value > 20 or value < 0:
+      raise serializers.ValidationError()
+    return value
+
+  def validate_health_aggravated(self, value):
+    if value > 20 or value < 0:
+      raise serializers.ValidationError()
+    return value
   
   def validate(self, data):
     data = super().validate(data)
 
-    for field in ['strength', 'dexterity', 'stamina']:
+    # Validate Skills & Attributes
+    for field in [
+        'strength', 'dexterity', 'stamina',
+        'charisma', 'manipulation', 'composure',
+        'intelligence', 'wits', 'resolve',
+        'athletics', 'brawl', 'craft',
+        'drive', 'firearms', 'larcency',
+        'melee', 'stealth', 'survival',
+        'animal_ken', 'etiquette', 'insight',
+        'intimidation', 'leadership', 'performance',
+        'persuasion', 'streetwise', 'subterfuge',
+        'academics', 'awareness', 'finance',
+        'investigation', 'medicine', 'occult',
+        'politics', 'science', 'technology',     
+    ]:
       value = data.get(field)
       if value is not None and (value < 0 or value > 5):
-        raise serializers.ValidationError()
+        raise serializers.ValidationError() 
+      
+    # Validate Damage trackers    
+    self.damage_validation(data, 'willpower')
+    self.damage_validation(data, 'health')
     
     return data
+  
+  def damage_validation(self, data, damage_type):
+    # Validate Damage trackers    
+    if self.instance:           
+      total = data.get(f'{damage_type}_total', None)    
+      superficial = data.get(f'{damage_type}_superficial', None)
+      aggravated = data.get(f'{damage_type}_aggravated', None) 
+
+      if total == None: 
+        total = getattr(self.instance, f'{damage_type}_total')
+      if superficial == None: 
+        superficial = getattr(self.instance, f'{damage_type}_superficial')
+      if aggravated == None: 
+        aggravated = getattr(self.instance, f'{damage_type}_aggravated')
+        
+      if (superficial + aggravated) > total:
+        raise serializers.ValidationError(f'{damage_type} failed validation')
 
   
 ########################### Character Serializer ##############################

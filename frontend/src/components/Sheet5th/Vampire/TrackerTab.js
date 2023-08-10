@@ -79,9 +79,10 @@ function HumanityPanel(props)
 
   function handleChangeDamage(event, amount) {
     const value = event.currentTarget.value;
-    const change = sheet[value] + amount;
-
-    handleUpdate({[value]: change });
+    let tracker;
+    try { tracker = new HumanityTracker(value, sheet, amount) }
+    catch (error) { return } // Do nothing
+    handleUpdate(tracker.toUpdate());
   }
 
   return (
@@ -151,6 +152,46 @@ function HumanityPanel(props)
   )
 }
 
+class HumanityTracker
+{
+  constructor(changed, sheet, amount)
+  {
+    this.sheet = sheet;
+    this.amount = amount;
+    this.humanity = null;
+    this.stains = null;
+
+    if (changed === 'humanity')
+      this.updateHumanity();
+    else
+      this.updateStains();
+  }
+
+  updateHumanity()
+  {
+    const change = this.sheet.humanity + this.amount;
+    if (change < 0 || change > 10) throw new Error();
+
+    if ((10 - change) < this.sheet.stains) this.stains = 10 - change;
+    this.humanity = change;
+  }
+
+  updateStains()
+  {
+    this.stains = this.sheet.stains + this.amount;
+    if (this.stains < 0 || this.stains > 10 || this.stains > (10 - this.sheet.humanity))
+      throw new Error();
+  }
+
+  toUpdate()
+  {
+    const update = {}
+    if (this.humanity != null) update.humanity = this.humanity;
+    if (this.stains != null) update.stains = this.stains;
+    return update;
+  }
+}
+
 
 function DamagePanel(props)
 {
@@ -160,11 +201,10 @@ function DamagePanel(props)
 
   function handleChangeDamage(event, amount) {
     const value = event.currentTarget.value;
-    const oldStore = { ...sheet[slug] };
-    const change = oldStore[value] + amount;
-    oldStore[value] = change;
-
-    handleUpdate({ [`${slug}_${value}`]: change }, { [slug]: oldStore });
+    let tracker;    
+    try { tracker = new DamageTracker(slug, sheet[slug], value, amount) }
+    catch (error) { return } // Do nothing
+    handleUpdate(tracker.toUpdate(), tracker.toSheetUpdate());
   }
 
   const unlocked = (
@@ -261,4 +301,86 @@ function DamagePanel(props)
       </Paper>
     </Grid>
   )
+}
+
+class DamageTracker
+{
+  constructor(name, sheetTracker, changedValue, amount)
+  {
+    this.name = name;
+    this.tracker = { ...sheetTracker };
+    this.amount = amount;
+    this.total = null;
+    this.superficial = null;
+    this.aggravated = null;
+
+    if (changedValue === 'total')
+      this.updateTotal();
+    else this.updateDamage(changedValue);
+  }
+
+  updateDamage(name)
+  {
+    let current = name;
+    let other = name === 'superficial' ? 'aggravated' : 'superficial'
+    let change = this.tracker[current] + this.amount;
+    
+    if (change < 0 || change > 20) 
+      throw new Error();
+    
+    if ((change + this.tracker[other]) > this.tracker.total)
+    {
+      this.aggravated = this.tracker.aggravated + 1;
+      this.superficial = this.tracker.superficial - 1;
+      if (this.superficial < 0) this.superficial = 0;
+      if (this.aggravated + this.superficial > this.tracker.total)
+        throw new Error()
+    }
+    else
+      this[current] = change;
+  }
+
+  updateTotal()
+  {
+    let change = this.tracker.total + this.amount;
+    
+    if (this.name == 'willpower' && (change < 1 || change > 15)) 
+      throw new Error();
+    else if (change < 1 || change > 20) 
+      throw new Error();
+
+    if ((this.tracker.superficial + this.tracker.aggravated) > change)
+    {
+      if (this.tracker.superficial) 
+        this.superficial = this.tracker.superficial - 1;
+      else if (this.tracker.aggravated)
+        this.aggravated = this.tracker.aggravated - 1;
+    }
+    this.total = change;
+  }
+
+  toUpdate()
+  {
+    const update = {};
+    if (this.superficial != null) 
+      update[`${this.name}_superficial`] = this.superficial;
+    if (this.aggravated != null) 
+      update[`${this.name}_aggravated`] = this.aggravated;
+    if (this.total != null) 
+      update[`${this.name}_total`] = this.total; 
+    return update;
+  }
+
+  toSheetUpdate()
+  {
+    const sheetUpdate = {
+      superficial: 
+        this.superficial != null ? this.superficial : this.tracker.superficial,
+      aggravated: 
+        this.aggravated != null ? this.aggravated : this.tracker.aggravated,
+      total:
+        this.total != null ? this.total : this.tracker.total,
+    };
+    return {[this.name]: sheetUpdate}
+  }
 }

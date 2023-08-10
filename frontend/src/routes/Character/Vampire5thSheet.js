@@ -13,6 +13,7 @@ import { useState, useEffect, createContext, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import { getHost, getCSRFToken, getSerializerErrors } from '../../utility';
 import ErrorSnackbar from "../../components/ErrorSnackbar";
+import { useClientContext } from "../../components/ClientProvider";
 
 const SheetContext = createContext(null);
 export const useSheetContext = () => useContext(SheetContext);
@@ -26,11 +27,11 @@ export const SyncState =
 
 export default function Vampire5thSheet(props)
 {
-  const [sheet, setSheet] = useState(null);
   const [lock, setLock] = useState(true);
   const [alert, setAlert] = useState(null);
   const [syncState, setSyncState] = useState(SyncState.SYNC);
-  const { id } = useParams();  
+  const { client, sheet, setSheet } = useClientContext();
+  const { id } = useParams(); 
 
   /**
    * Sends an API update request for the sheet if successful apllies the changes to the sheet 
@@ -96,6 +97,7 @@ export default function Vampire5thSheet(props)
     setLock(!lock);
   }
   
+  ///////////////////////////// Fetch Sheet data /////////////////////////////
   useEffect(() => {
     const fetchSheetData = async () => {
       try {
@@ -111,10 +113,15 @@ export default function Vampire5thSheet(props)
         console.error('Error fetching sheet data:', error);
         // TODO: Handle error
       }
-    };
-  
+    };  
     fetchSheetData();
-  }, [id]);
+    return () => {setSheet(null)}
+  }, [id, setSheet]);
+
+  useEffect(() => {    
+    client.sheetSubscribe(id);
+    return () => {client.sheetSubscribe(null)}
+  }, [id, client])
 
   const sheetPage = (
     <Container maxWidth='false' sx={{ mt: 10 }}>      

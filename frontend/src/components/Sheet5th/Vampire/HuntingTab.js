@@ -26,6 +26,7 @@ export default function HuntingTab(props)
       >
         <Grid>                  
           <TextField 
+            disabled
             label="Hunting Roll" 
             variant='outlined' 
             defaultValue=' ' 
@@ -35,6 +36,7 @@ export default function HuntingTab(props)
         </Grid>
         <Grid>                  
           <TextField 
+            disabled
             label="Resonance" 
             variant='outlined' 
             defaultValue=' ' 

@@ -16,7 +16,7 @@ class Vampire5thSerializer(Character5thSerializer):
       'humanity',
       'stains',
       'hunger'
-    )
+    ) 
 
 ############################ Tracker Serializer ###############################
 class V5TrackerSerializer(Tracker5thSerializer):
@@ -35,6 +35,7 @@ class V5TrackerSerializer(Tracker5thSerializer):
     # Add the additional fields to the serialized data
     data['splat'] = 'vampire5th'
     data['version'] = '5th'
+    data['class'] = 'Vampire5th' # Temporary value to denote new type
 
     return data
 
@@ -43,13 +44,43 @@ class Vampire5thDeserializer(Character5thDeserializer):
   class Meta(Character5thDeserializer.Meta):
     model = Vampire5th
     fields = '__all__'
-  
+    
+  def validate_generation(self, value):
+    if value < 0 or value > 16:
+      raise serializers.ValidationError()
+    return value
+    
+  def validate_humanity(self, value):
+    if value < 0 or value > 10:
+      raise serializers.ValidationError()
+    return value
+    
+  def validate_stains(self, value):
+    if value < 0 or value > 10:
+      raise serializers.ValidationError()
+    return value
+    
+  def validate_hunger(self, value):
+    if value < 0 or value > 5:
+      raise serializers.ValidationError()
+    return value
+    
+  def validate_blood_potency(self, value):
+    if value < 0 or value > 10:
+      raise serializers.ValidationError()
+    return value
+    
   def validate(self, data):
     data = super().validate(data)
+    # Validate Humanity
+    if self.instance:
+      humanity = data.get('humanity', None)
+      stains = data.get('stains', None)
+      
+      if humanity == None: humanity = self.instance.humanity
+      if stains == None: stains = self.instance.stains
+      if (10 - humanity) < stains: 
+        raise serializers.ValidationError("Too many stains") 
 
-    for field in ['strength', 'dexterity', 'stamina']:
-      value = data.get(field)
-      if value is not None and (value < 0 or value > 5):
-        raise serializers.ValidationError()
-    
     return data
+  
