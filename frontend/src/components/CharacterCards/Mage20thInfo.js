@@ -12,7 +12,7 @@ export default function Mage20thInfo(props) {
   const { character, chronicle } = props;
 
   return (
-    <CardActionArea>
+    <CardActionArea disabled>
       <CardContent>
         <CardMedia 
           component="img"

@@ -344,7 +344,7 @@ class DamageTracker
   {
     let change = this.tracker.total + this.amount;
     
-    if (this.name == 'willpower' && (change < 1 || change > 15)) 
+    if (this.name === 'willpower' && (change < 1 || change > 15)) 
       throw new Error();
     else if (change < 1 || change > 20) 
       throw new Error();

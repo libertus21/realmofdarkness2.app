@@ -7,6 +7,7 @@ import Connecting from "../../routes/Connecting";
 export default function Dashboard(props) 
 {
   const { characters, chronicles, user, connected } = useClientContext();
+
   return (
     connected ? (
       <Box paddingTop={15} paddingX={3}>

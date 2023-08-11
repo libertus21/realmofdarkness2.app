@@ -1,5 +1,5 @@
-import { Card, CardHeader, Typography } from "@mui/material";
-import { Divider,Avatar } from "@mui/material";
+import { Card, CardHeader, CardActions, Typography } from "@mui/material";
+import { Divider, Avatar } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import Vampire5thInfo from './Vampire5thInfo';
 import Hunter5thInfo from './Hunter5thInfo';
@@ -14,6 +14,8 @@ import Demon20thInfo from "./Demon20thInfo";
 import Mage20thInfo from "./Mage20thInfo";
 import { useClientContext } from '../ClientProvider'
 import { useTheme } from '@mui/material/styles';
+
+import DeleteCharacterButton from "../Sheet/DeleteCharacterButton";
 
 const cardInfo = {
   'vampire5th': Vampire5thInfo,
@@ -72,7 +74,12 @@ export default function CharacterCard(props) {
         <CardInfo 
           character={character} 
           chronicle={chronicles[character.chronicle]} 
-        />            
+          user={user}
+        />          
+        <Divider />
+        <CardActions sx={{padding: 0}}>
+          <DeleteCharacterButton characterId={character.id} button />
+        </CardActions>            
       </Card>
     </Grid>    
   )

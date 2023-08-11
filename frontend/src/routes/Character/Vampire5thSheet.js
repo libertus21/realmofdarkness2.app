@@ -10,10 +10,11 @@ import BloodPotency from "../../components/Sheet5th/Vampire/BloodPotencyTab";
 import HuntingTab from "../../components/Sheet5th/Vampire/HuntingTab";
 import SheetSkeleton from "../../components/SheetSkeleton";
 import { useState, useEffect, createContext, useContext } from "react";
-import { useParams } from 'react-router-dom';
-import { getHost, getCSRFToken, getSerializerErrors } from '../../utility';
-import ErrorSnackbar from "../../components/ErrorSnackbar";
+import { useParams, useNavigate } from 'react-router-dom';
+
+import { getHost, getCSRFToken } from '../../utility';
 import { useClientContext } from "../../components/ClientProvider";
+import { useAlertContext } from "../../components/AlertProvider";
 
 const SheetContext = createContext(null);
 export const useSheetContext = () => useContext(SheetContext);
@@ -28,10 +29,11 @@ export const SyncState =
 export default function Vampire5thSheet(props)
 {
   const [lock, setLock] = useState(true);
-  const [alert, setAlert] = useState(null);
   const [syncState, setSyncState] = useState(SyncState.SYNC);
   const { client, sheet, setSheet } = useClientContext();
+  const { pushAlert } = useAlertContext();
   const { id } = useParams(); 
+  const navigate = useNavigate();
 
   /**
    * Sends an API update request for the sheet if successful apllies the changes to the sheet 
@@ -67,8 +69,8 @@ export default function Vampire5thSheet(props)
       if (!response.ok) 
       { 
         const data = await response.json();
-        const errorMessage = getSerializerErrors(data) ?? "There was an error with this request and the changes have not been applied."
-        setAlert(errorMessage);
+        const errorMessage = data ?? "There was an error with this request and the changes have not been applied."
+        pushAlert({title: 'API Error', message: errorMessage});
         setSheet(oldSheet);
         setSyncState(SyncState.ERROR)
         setTimeout(() => setSyncState(SyncState.SYNC), 5000);
@@ -77,7 +79,8 @@ export default function Vampire5thSheet(props)
     }
     catch (error)
     {
-      setAlert("There was an error with this request and the changes have not been applied.");      
+      const message = "There was an error with this request and the changes have not been applied.";      
+      pushAlert({title: 'API Error', message: message});
       setSheet(oldSheet);      
       setSyncState(SyncState.ERROR)
       setTimeout(() => setSyncState(SyncState.SYNC), 5000);
@@ -87,11 +90,6 @@ export default function Vampire5thSheet(props)
     setTimeout(() => setSyncState(SyncState.SYNC), 5000);   
   }
 
-  function closeAlert()
-  {
-    setAlert(false);
-  }
-
   function handleLockChange()
   {
     setLock(!lock);
@@ -99,35 +97,39 @@ export default function Vampire5thSheet(props)
   
   ///////////////////////////// Fetch Sheet data /////////////////////////////
   useEffect(() => {
-    const fetchSheetData = async () => {
-      try {
+    const fetchSheetData = async () => 
+    {
+      try 
+      {
         const response = 
           await fetch(`/api/character/get/v5?id=${id}&sheet=true`);
-        if (!response.ok) {
-          // Handle non-successful response
-          throw new Error('Error fetching sheet data');
-        }
         const data = await response.json();
+
+        if (!response.ok) 
+        {
+          pushAlert({title: 'API Error', message: data});
+          return navigate('/');
+        }
         setSheet(data);
-      } catch (error) {
-        console.error('Error fetching sheet data:', error);
-        // TODO: Handle error
+      } 
+      catch (error) 
+      { 
+        const message = 'There was an unknown error fetching this sheet.'       
+        pushAlert({title: 'API Error', message: message})
+        navigate('/');
       }
     };  
     fetchSheetData();
     return () => {setSheet(null)}
-  }, [id, setSheet]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {    
     client.sheetSubscribe(id);
     return () => {client.sheetSubscribe(null)}
-  }, [id, client])
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const sheetPage = (
-    <Container maxWidth='false' sx={{ mt: 10 }}>      
-      <ErrorSnackbar 
-        title='API Error' alert={alert} onClose={closeAlert} 
-      />
+    <Container maxWidth='false' sx={{ mt: 10 }}> 
       <GeneralInfo handleLockChange={handleLockChange} />
       <TrackerTab />
       <Grid container>

@@ -12,7 +12,7 @@ const defaultImage = 'https://media.discordapp.net/attachments/88698335392289181
 export default function Hunter5thInfo(props) {
   const { character, chronicle } = props;
   return (
-    <CardActionArea>
+    <CardActionArea disabled>
       <CardContent>
         <CardMedia 
           component="img"

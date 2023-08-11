@@ -61,6 +61,10 @@ class GatewayConsumer(AsyncWebsocketConsumer):
         
   
   async def character_update(self, event):
+    is_visiable = event['tracker'].get('chronicle', 0) in self.chronicles
+    if str(event['tracker']['user']) != str(self.user.id) and not is_visiable:
+      return await self.character_delete(event)
+
     sub = None
     if (self.sheetSubscription in self.subscribed_character_ids):
       sub = self.sheetSubscription
@@ -84,13 +88,12 @@ class GatewayConsumer(AsyncWebsocketConsumer):
         event, None))        
 
   async def character_delete(self, event):
-    id = event.get('id')
+    id = str(event.get('id'))
     if not id in self.subscribed_character_ids:
       return
     self.subscribed_character_ids.remove(id)
     self.subscriptions.remove(Group.character_update(id))
     await self.channel_layer.group_discard(Group.character_update(id), self.channel_name)
-
     await self.send(text_data=GatewayMessage().delete_character(id))    
 
   @database_sync_to_async

@@ -26,11 +26,9 @@ function PlaceHolderButton(props)
 {
   return (
     <Grid>
-      <Tooltip title="Place Holder" arrow> 
-        <IconButton>
+        <IconButton disabled>
           <BlurOnOutlinedIcon color="secondary" />
-        </IconButton>         
-      </Tooltip>
+        </IconButton>       
     </Grid>
   )
 }

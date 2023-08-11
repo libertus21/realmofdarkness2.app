@@ -4,10 +4,14 @@ from rest_framework.views import APIView
 from rest_framework import status
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from django.db.utils import IntegrityError
+from django.db.models import Q
 
 from gateway.constants import Group
+from gateway.serializers import serialize_character
 from constants import CharacterSheetLimit
-from haven.models import Vampire5th, Character, SheetStatus
+from chronicle.models import Member
+from haven.models import Vampire5th, Character, SheetStatus, get_derived_instance
 from haven.serializers import Vampire5thSerializer, Vampire5thDeserializer, V5TrackerSerializer
 
 channel_layer = get_channel_layer()
@@ -26,19 +30,22 @@ class CharacterSheetCreateV5(APIView):
     count = Character.objects.filter(user=user, is_sheet=True, status__lt=SheetStatus.DEAD).count()
     max_active_sheets = CharacterSheetLimit.get_amount(user.supporter)
     
-    if count > max_active_sheets:
-      m = {'Error': [
+    if count >= max_active_sheets:
+      m = {'error': [
         'You are at your character limit. You must delete or archive some characters before you can make a new one.',
         'Please look at our supporter tiers to access a higher limit.' 
       ]}
       return Response(m, status=status.HTTP_403_FORBIDDEN)
 
     # Create a new character instance with the given name
-    character = Vampire5th.objects.create(
-      user=user, 
-      name=name,
-      is_sheet=True,
-    )
+    try:
+      character = Vampire5th.objects.create(
+        user=user, 
+        name=name,
+        is_sheet=True,
+      )
+    except IntegrityError:
+      return Response("You already have a character with this name", status=status.HTTP_409_CONFLICT)
     
     async_to_sync(channel_layer.group_send)(
       Group.character_new(),
@@ -67,10 +74,10 @@ class GetV5Character(APIView):
       # TODO we need to extend this to Storyteller characters
       character = Vampire5th.objects.get(pk=id, user=user)
     except Vampire5th.DoesNotExist:
-      return Response({'message': ['Character does not exist!']}, status=404)
+      return Response('Character does not exist!', status=404)
     
     if not character.is_sheet and must_be_sheet: 
-      return Response(status=406)
+      return Response('This is not a Sheet', status=status.HTTP_406_NOT_ACCEPTABLE)
 
     serializer = Vampire5thSerializer(character)
     return Response(serializer.data)
@@ -85,7 +92,7 @@ class CharacterUpdateV5(APIView):
     except Vampire5th.DoesNotExist:
       return Response({"message": ["Character not found"]}, status=404)
 
-    serializer = Vampire5thDeserializer(character, data=request.data, partial=True, context=request)
+    serializer = Vampire5thDeserializer(character, data=request.data, partial=True, context=str(user.id))
     
     if not serializer.is_valid():
       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -103,3 +110,59 @@ class CharacterUpdateV5(APIView):
     )  
     
     return Response()
+  
+class DeleteCharacter(APIView):
+  permission_classes = [IsAuthenticated]
+
+  def delete(self, request):
+    user = request.user
+    pk = request.GET.get('id')
+
+    if not pk or not pk.isdigit():
+      return Response(status=status.HTTP_404_NOT_FOUND)
+
+    try: 
+      character = Character.objects.get(pk=pk)
+    except Character.DoesNotExist: 
+      return Response(status=status.HTTP_204_NO_CONTENT)
+      
+    if (character.user == user):
+      character.delete()
+      async_to_sync(channel_layer.group_send)(
+        Group.character_update(pk),
+        {
+          "type": "character.delete",
+          "id": pk
+        }
+      )  
+      return Response(status=status.HTTP_200_OK)
+    elif (is_admin_or_st(character, user)):
+      character.member = None
+      character.chronicle = None
+      character.save()      
+      sheet = None
+      if (character.is_sheet):
+        sheet = Vampire5thSerializer(get_derived_instance(character)).data
+      async_to_sync(channel_layer.group_send)(
+      Group.character_update(character.id),
+      {
+        "type": "character.update",
+        "id": character.id,
+        "tracker": serialize_character(character),
+        "sheet": sheet,
+        "class": "Vampire5th"
+      }
+    ) 
+      return Response(status=status.HTTP_200_OK)
+    else:
+      return Response("Invalid Permission", status=status.HTTP_403_FORBIDDEN)
+
+def is_admin_or_st(character, user):
+  if (character.chronicle and Member.objects.filter(
+      Q(user=user) & Q(chronicle=character.chronicle) & \
+      (Q(admin=True) | Q(storyteller=True))
+    ).exists()
+  ):
+    return True
+  else: 
+    return False

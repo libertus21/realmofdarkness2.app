@@ -25,6 +25,7 @@ import Character from "./routes/Character/Character";
 //import initAnalytics from "./functions/initAnalytics";
 import V5Dice from "./routes/v5/V5Dice";
 import ClientProvider from './components/ClientProvider';
+import AlertProvider from "./components/AlertProvider";
 
 const darkTheme = createTheme({
   components: {
@@ -81,34 +82,36 @@ function App() {
   return (     
     <ClientProvider>
       <ThemeProvider theme={darkTheme}>
-        <CssBaseline enableColorScheme />      
-        <BrowserRouter>
-          <ScrollToTop>
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Index />} />            
-                <Route path="v5" element={<V5 />}>
-                  <Route index element={<V5Index />} />
-                  <Route path='commands' element={<V5Commands />} />
-                  <Route path='dice' element={<V5Dice />} />
+        <AlertProvider>          
+          <CssBaseline enableColorScheme />      
+          <BrowserRouter>
+            <ScrollToTop>
+              <Routes>
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<Index />} />            
+                  <Route path="v5" element={<V5 />}>
+                    <Route index element={<V5Index />} />
+                    <Route path='commands' element={<V5Commands />} />
+                    <Route path='dice' element={<V5Dice />} />
+                  </Route>
+                  <Route path="20th" element={<Twentieth />}>
+                    <Route index element={<TwentiethIndex />} />
+                    <Route path='commands' element={<V20Commands />} />
+                  </Route>
+                  <Route path="cod" element={<CoD />}>
+                    <Route index element={<CodIndex />} />
+                    <Route path='commands' element={<CodCommands />} />
+                  </Route>
+                  <Route path="character" element={<Character />}>
+                    <Route index element={<NotFound />} />
+                    <Route path='v5/:id' element={<Vampire5thSheet />} />
+                  </Route>
+                  <Route path="*" element={<NotFound />} />
                 </Route>
-                <Route path="20th" element={<Twentieth />}>
-                  <Route index element={<TwentiethIndex />} />
-                  <Route path='commands' element={<V20Commands />} />
-                </Route>
-                <Route path="cod" element={<CoD />}>
-                  <Route index element={<CodIndex />} />
-                  <Route path='commands' element={<CodCommands />} />
-                </Route>
-                <Route path="character" element={<Character />}>
-                  <Route index element={<NotFound />} />
-                  <Route path='v5/:id' element={<Vampire5thSheet />} />
-                </Route>
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
-          </ScrollToTop>          
-        </BrowserRouter>         
+              </Routes>
+            </ScrollToTop>          
+          </BrowserRouter>  
+        </AlertProvider>       
       </ThemeProvider>
     </ClientProvider>    
   );

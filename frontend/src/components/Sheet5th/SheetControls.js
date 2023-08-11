@@ -3,9 +3,9 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useSheetContext, SyncState } from '../../routes/Character/Vampire5thSheet';
-import { pink } from '@mui/material/colors';
+import DeleteCharacterButton from '../Sheet/DeleteCharacterButton';
+import SheetPreviewNews from '../Sheet/SheetPreviewNews';
 
 import { CircularProgress } from '@mui/material';
 import CloudCircleIcon from '@mui/icons-material/CloudCircle';
@@ -15,7 +15,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 export default function SheetControls(props)
 {
-  const { lock, syncState } = useSheetContext();
+  const { lock, syncState, sheet } = useSheetContext();
   const { handleLockChange } = props;
 
   const unlockSheet = (    
@@ -34,8 +34,6 @@ export default function SheetControls(props)
     </Tooltip>
   )
 
-
-
   return (        
     <Grid 
       container 
@@ -51,6 +49,7 @@ export default function SheetControls(props)
       <Grid>
         {lock ? unlockSheet : lockSheet}
       </Grid>
+      <SheetPreviewNews />
       <Grid>
         <IconButton disabled>
           <BlurOnOutlinedIcon fontSize='large' color="secondary" />
@@ -71,18 +70,7 @@ export default function SheetControls(props)
           <BlurOnOutlinedIcon fontSize='large' color="secondary" />
         </IconButton>
       </Grid>
-      <Grid>
-        <IconButton disabled>
-          <BlurOnOutlinedIcon fontSize='large' color="secondary" />
-        </IconButton>
-      </Grid>
-      <Grid>
-        <Tooltip title="Delete" arrow> 
-          <IconButton>
-            <DeleteForeverIcon fontSize='large' sx={{ color: pink[500] }} />
-          </IconButton>         
-        </Tooltip>
-      </Grid>
+      <DeleteCharacterButton characterId={sheet.id} />
     </Grid>
   )
 }

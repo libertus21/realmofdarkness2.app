@@ -7,13 +7,17 @@ import PropTypes from 'prop-types';
 import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
 
+import { useAlertContext } from "../AlertProvider";
+
 export default function NewSheetDialogue(props)
 {
   const { onClose, open } = props;
-  const [type, setType] = useState(undefined);
+  const [type, setType] = useState('v5');
   const [name, setName] = useState('');
   const [error, setError] = useState(false);    
   const navigate = useNavigate();
+
+  const { pushAlert } = useAlertContext();
 
   const handleClose = () => {
     onClose();
@@ -37,8 +41,8 @@ export default function NewSheetDialogue(props)
       const response = await fetch(url);
       
       if (!response.ok) {
-        // Handle non-successful response
-        throw new Error('Error creating sheet');
+        const data = await response.json();
+        return pushAlert({title: 'API Error', message: data});
       }
       const data = await response.json();
       const sheetId = data.id;
@@ -46,8 +50,7 @@ export default function NewSheetDialogue(props)
       navigate(`/character/${type}/${sheetId}`);
 
     } catch (error) {
-      console.error('Error creating sheet:', error);
-      // TODO Handle error
+      return pushAlert({title: 'API Error', message: "Unknown Error"});
     }
   };
 
@@ -81,8 +84,10 @@ export default function NewSheetDialogue(props)
             <GameCards 
               name='Vampire' 
               value='v5'
-              onClick={handleTypeChange}
+              //onClick={handleTypeChange}
               selected={type}
+              // TODO Do not need to handle clicks right now as there is only
+              // one type 
             />
             <GameCards 
               name='Hunter' 

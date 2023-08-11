@@ -59,7 +59,7 @@ class CharacterDeserializer(serializers.ModelSerializer):
     if (self.instance): # Update a character   
       # We don't need to do anything if the name is the same
       if self.instance.name == value: return value
-      user_id = self.context.data['character']['user']
+      user_id = self.context
     
     else: # New Character
       user_id = self.initial_data.get('user')
@@ -114,7 +114,7 @@ class CharacterDeserializer(serializers.ModelSerializer):
 
     char_status = data.get('status')
     if char_status is None and self.instance and self.instance.status > 3:
-      raise serializers.ValidationError('This sheet cannot be edited',
+      raise serializers.ValidationError('This sheet is Archived and cannot be edited. To edit please set the Status to "Active" or "Draft"',
         code=status.HTTP_304_NOT_MODIFIED)
     
 
@@ -122,14 +122,16 @@ class CharacterDeserializer(serializers.ModelSerializer):
     chronicle = data.get('chronicle', None)
     if not self.instance and chronicle: 
       # New Character
-      data['member'] = Member.objects.get(chronicle=chronicle, user__id=data.get('user'))
+      user = data.get('user')
+      data['member'] = Member.objects.get(chronicle=chronicle, user=user)
 
     elif self.instance and self.instance.chronicle != chronicle:
       # Update character
       if chronicle:
-        user = self.context.user
+        user = self.context
         data['member'] = Member.objects.get(chronicle=chronicle, user=user)
       else:
         data['member'] = None
+      print(data['member'])
 
     return data
