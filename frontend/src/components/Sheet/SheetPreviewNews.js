@@ -47,7 +47,7 @@ export default function SheetPreviewNews() {
               <li>Top bar fields (Name, Clan, Sire, Predator type and so on)</li>
               <li>Trackers (Willpower, Health, Hunger and Humanity)</li>
               <li>Attributes</li>
-              <li>Skill (Not specialties)</li>
+              <li>Skills (Not specialties)</li>
             </ul>
           </DialogContentText>
         </DialogContent>
