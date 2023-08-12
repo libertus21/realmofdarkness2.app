@@ -6,7 +6,7 @@ from django.db.models import Count
 from django.utils import timezone
 
 from .get_post import get_post
-from haven.models import Character
+from haven.models import Character, Vampire5th
 from bot.models import CommandStat, Bot
 
 User = get_user_model()
@@ -62,10 +62,26 @@ def get_stats(request):
   
   char_stats = []
   for char in characters:
+    if not char.splat:
+      continue
     char_stats.append({
       "count": char['count'],
       "splat": char['splat__name'] + ' ' + char['splat__version']
     })
+
+  vampires_grouped = Vampire5th.objects.values('is_sheet').annotate(count=Count('id')).order_by('-count')
+
+  # Print the results
+  for vampire in vampires_grouped:
+    sheet = ''
+    if (vampire['is_sheet']): sheet = '(sheet)'   
+    char_stats.append({
+      "count": char['count'],
+      "splat": 'Vampire5th ' + f'{sheet}'
+    })
+  
+  # Sort char_stats by count in descending order
+  char_stats = sorted(char_stats, key=lambda x: x['count'], reverse=True)
 
   return JsonResponse({
     "users": user_stats, 
