@@ -7,7 +7,7 @@ def serializeCharacter(character):
     'user': str(character.user.id),
     'chronicle': str(character.chronicle.id) if character.chronicle else '',
     'theme': character.theme,
-    'thumbnail': character.faceclaim,
+    'faceclaim': character.faceclaim,
     'exp': {'total': exp.total, 'current': exp.current},
     'created_at': (character.created_at.timestamp() if character.created_at else ''),
     'last_updated': character.last_updated.timestamp(),

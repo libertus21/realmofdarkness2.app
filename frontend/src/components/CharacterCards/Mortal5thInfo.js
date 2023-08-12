@@ -15,7 +15,7 @@ export default function Mortal5thInfo(props) {
       <CardContent>
         <CardMedia 
           component="img"
-          image={character.thumbnail ? character.thumbnail : defaultImage}
+          image={character.faceclaim ? character.faceclaim : defaultImage}
           alt="Character Image"
           sx={{
             maxHeight: '250px', 
