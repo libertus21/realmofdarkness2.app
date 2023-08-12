@@ -46,7 +46,7 @@ def get_stats(request):
         'command': 'Total Users',
         'count': 1
         }
-  print(totals)
+  
   stats = []
 
   for stat in totals.values():
@@ -62,8 +62,10 @@ def get_stats(request):
   
   char_stats = []
   for char in characters:
-    if not char.get('splat', None):
+    if not char.get('splat__name', None):
       continue
+    elif char['splat__name'] == 'Vampire' and char['splat__version'] == '5th':
+      char['splat__version'] += ' (old)' 
     char_stats.append({
       "count": char['count'],
       "splat": char['splat__name'] + ' ' + char['splat__version']
@@ -71,13 +73,12 @@ def get_stats(request):
 
   vampires_grouped = Vampire5th.objects.values('is_sheet').annotate(count=Count('id')).order_by('-count')
 
-  # Print the results
   for vampire in vampires_grouped:
     sheet = ''
     if (vampire['is_sheet']): sheet = '(sheet)'   
     char_stats.append({
       "count": char['count'],
-      "splat": 'Vampire5th ' + f'{sheet}'
+      "splat": 'Vampire 5th ' + f'{sheet}'
     })
   
   # Sort char_stats by count in descending order
