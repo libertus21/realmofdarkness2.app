@@ -77,7 +77,7 @@ def get_stats(request):
     sheet = ''
     if (vampire['is_sheet']): sheet = '(sheet)'   
     char_stats.append({
-      "count": char['count'],
+      "count": vampire['count'],
       "splat": 'Vampire 5th ' + f'{sheet}'
     })
   
