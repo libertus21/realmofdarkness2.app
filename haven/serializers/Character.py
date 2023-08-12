@@ -48,7 +48,7 @@ class CharacterDeserializer(serializers.ModelSerializer):
     data.pop('last_updated', None)
 
     return super().to_internal_value(data)
-
+  
   def validate_name(self, value):
     if not value:
       raise serializers.ValidationError("You must input a Name.")
@@ -89,7 +89,8 @@ class CharacterDeserializer(serializers.ModelSerializer):
     return value
   
   def validate_faceclaim(self, value):
-    pass
+    # TODO Validate URL
+    return value
 
   def validate_theme(self, value):
     if not value: return value
