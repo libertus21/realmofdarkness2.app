@@ -62,7 +62,7 @@ def get_stats(request):
   
   char_stats = []
   for char in characters:
-    if not char['splat']:
+    if not char.get('splat', None):
       continue
     char_stats.append({
       "count": char['count'],
