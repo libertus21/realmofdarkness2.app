@@ -3,15 +3,23 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.contrib.auth import get_user_model
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from ..Authenticate import authenticate
 from ..get_post import get_post
-from haven.models import MoralityInfo
+from haven.models import MoralityInfo, Vampire5th
+from haven.serializers import Vampire5thDeserializer, V5TrackerSerializer, Vampire5thSerializer
 from bot.constants import Splats
 from bot.functions import get_splat
 from gateway.constants import Group
 from gateway.serializers import serialize_character
 
 channel_layer = get_channel_layer()
+User = get_user_model()
 
 @csrf_exempt
 @transaction.atomic
@@ -78,10 +86,45 @@ def save_character(request):
     {
       "type": "character.update",
       "id": char.id,
-      "character": serialize_character(char)
+      "tracker": serialize_character(char)
     }
   )  
   return HttpResponse(status=200)
+
+# This API handles both creation and saving
+class SaveCharacter(APIView):
+  @csrf_exempt
+  def post(self, request):
+    authenticate(request)
+    user_id = request.data['character']['user']
+    id = request.data['character']['id']
+    
+    try:
+      character = Vampire5th.objects.get(pk=id, user__id=user_id)
+    except Vampire5th.DoesNotExist:
+      return Response({"message": "Character not found"}, status=404)
+    
+    serializer = Vampire5thDeserializer(character, data=request.data['character'], context=request.data['character']['user'])
+    
+    if (serializer.is_valid()):
+      instance = serializer.save()
+    else:
+      code = serializer.errors.get('code', status.HTTP_400_BAD_REQUEST)
+      return Response(serializer.errors, status=code)
+        
+    async_to_sync(channel_layer.group_send)(
+      Group.character_update(instance.id),
+      {
+        "type": "character.update",
+        "id": instance.id,
+        "tracker":  V5TrackerSerializer(instance).data,
+        "sheet": Vampire5thSerializer(instance).data,
+        "class": "Vampire5th"
+      }
+    )  
+
+    return Response(status=200) 
+
 
 ################### Update Version Specific ##################################
 def update_5th(data, character):  
@@ -113,9 +156,9 @@ def update_20th(data, character):
 
 ######################## Update 5th Splats ###################################
 def update_vampire5th(data, character):
-  character.humanity.current = data['humanity']['total']
-  character.humanity.stains = data['humanity']['stains']
-  character.humanity.save()
+  character.old_humanity.current = data['humanity']
+  character.old_humanity.stains = data['stains']
+  character.old_humanity.save()
 
   hunger = character.trackable.get(slug='hunger')
   hunger.current = data['hunger']
@@ -134,9 +177,9 @@ def update_hunter5th(data, character):
 
 
 def update_mortal5th(data, character):
-  character.humanity.current = data['humanity']['total']
-  character.humanity.stains = data['humanity']['stains']
-  character.humanity.save()
+  character.old_humanity.current = data['humanity']
+  character.old_humanity.stains = data['stains']
+  character.old_humanity.save()
 
 
 ######################## Update 20th Splats ##################################

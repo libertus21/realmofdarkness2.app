@@ -1,0 +1,67 @@
+from django.db import models
+from .Character5th import Character5th
+
+class Clan(models.TextChoices):
+  CUSTOM = 'Custom'
+  BANU_HAQIM = 'Banu Haqim'
+  BRUJAH = 'Brujah'
+  GANGREL = 'Gangrel'
+  HECATA = 'Hecata'
+  LASOMBRA = 'Lasombra'
+  MALKAVIAN = 'Malkavian'
+  MINISTRY = 'Ministry'
+  NOSFERATU = 'Nosferatu'
+  RAVNOS = 'Ravnos'
+  SALUBRI = 'Salubri'
+  TOREADOR = 'Toreador'
+  TREMERE = 'Tremere'
+  TZIMISCE = 'Tzimisce'
+  VENTRUE = 'Ventrue'
+  CAITIFF = 'Caitiff'
+  THIN_BLOOD = 'Thin Blood'
+
+class PredatorType(models.TextChoices):
+  CUSTOM = 'Custom'
+  ALLEYCAT = 'Alleycat'
+  BLOOD_LEECH = 'Blood Leech'
+  CLEAVER = 'Cleaver'
+  CONSENSUALIST = 'Consensualist'
+  FARMER = 'Farmer'
+  OSIRIS = 'Osiris'
+  SANDMAN = 'Sandman'
+  SCENE_QUEEN = 'Scene Queen'
+  SIREN = 'Siren'
+  EXTORTIONIST = 'Extortionist'
+  GRAVEROBBER = 'Graverobber'
+  ROADSIDE_KILLER = 'Roadside Killer'
+  GRIM_REAPER = 'Grim Reaper'
+  MONTERO = 'Montero'
+  PURSUER = 'Pursuer'
+  TRAPDOOR = 'Trapdoor'
+
+
+class Vampire5th(Character5th):
+  # Core
+  clan = models.CharField(choices=Clan.choices, blank=True, max_length=15)
+  sire = models.CharField(max_length=50, blank=True)
+  generation = models.IntegerField(null=True)
+  predator_type = models.CharField(
+    choices=PredatorType.choices, blank=True, max_length=20)
+
+  # Humanity
+  humanity = models.IntegerField(default=7)
+  stains = models.IntegerField(default=0)
+
+  hunger = models.IntegerField(default=1)
+  blood_potency = models.IntegerField(default=1)
+
+
+class CustomClan(models.Model):
+  vampire = models.OneToOneField(Vampire5th, on_delete=models.CASCADE)
+  name = models.CharField(max_length=50)
+  description = models.TextField(blank=True)
+
+class CustomPredatorType(models.Model):
+  vampire = models.OneToOneField(Vampire5th, on_delete=models.CASCADE)
+  name = models.CharField(max_length=50)
+  description = models.TextField(blank=True)

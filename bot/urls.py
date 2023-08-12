@@ -4,11 +4,16 @@ from . import views
 app_name = 'bot'
 urlpatterns = [
   # Character
-  path('character/get', views.get_character),
-  path('character/new', views.new_character),
-  path('character/save', views.save_character),
+  path('character/get', views.GetCharacter.as_view()),
+  path('character/new_old', views.new_character),
+  path('character/save_old', views.save_character),
   path('character/name_list', views.name_list),
-  path('character/delete', views.delete_characters),
+  path('character/delete', views.DeleteCharacters.as_view()),
+
+  # New Characters API
+  path('character/new', views.NewCharacter.as_view()),
+  path('character/save', views.SaveCharacter.as_view()),
+
 
   # Chronicle
   path('chronicle/set', views.set_guild),

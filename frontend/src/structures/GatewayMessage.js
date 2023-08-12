@@ -1,10 +1,12 @@
-const { GATEWAY_OPCODE } = require('../constants');
+import { GATEWAY_OPCODE } from '../constants';
 
 /**
  * Represents a Gateway Message with utility functions
  */
-export default class GatewayMessage {
-  constructor() {
+export default class GatewayMessage 
+{
+  constructor() 
+  {
     this.data = {
       op: null, // opcode for the payload
       d: null, // Event data
@@ -13,19 +15,23 @@ export default class GatewayMessage {
     }
   }
 
-  getOpcode() {
+  getOpcode() 
+  {
     return this.data.op;
   }
 
-  getData() {
+  getData() 
+  {
     return this.data.d;
   }
 
-  getEventName() {
+  getEventName() 
+  {
     return this.data.t;
   }
 
-  identify() {
+  identify() 
+  {
     this.data.op = GATEWAY_OPCODE.identify;
     this.data.d = null;
     this.data.t = null;
@@ -33,7 +39,8 @@ export default class GatewayMessage {
     return this;
   }
 
-  refresh() {
+  refresh() 
+  {
     this.data.op = GATEWAY_OPCODE.refresh;
     this.data.d = null;
     this.data.t = null;
@@ -41,12 +48,22 @@ export default class GatewayMessage {
     return this;
   }
 
-  loadJson(data) {
+  sheetSubscribe(id)
+  {
+    this.data.op = GATEWAY_OPCODE.request;
+    this.data.t = 'sheet_subscribe';
+    this.data.d = {id: id};
+    return this;
+  }
+
+  loadJson(data) 
+  {
     this.data = JSON.parse(data);
     return this;
   }
 
-  toJson() {
+  toJson() 
+  {
     return JSON.stringify(this.data);
   }
 }

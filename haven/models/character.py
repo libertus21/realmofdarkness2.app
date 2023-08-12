@@ -3,13 +3,6 @@ from rod.settings import AUTH_USER_MODEL
 from . import Splat, Health20th, Morality, MoralityInfo, Damage5th, Humanity, Hunter5th
 from bot.constants import Splats
 
-class History(models.Model):
-  character = models.ForeignKey('haven.Character', on_delete=models.CASCADE,
-    related_name='history')
-  date = models.DateTimeField(auto_now_add=True)
-  args = models.CharField(max_length=250, blank=True)
-  notes = models.CharField(max_length=150, blank=True)
-  mode = models.CharField(max_length=50, blank=True)
 
 class Trackable(models.Model):
   character = models.ForeignKey('haven.Character', on_delete=models.CASCADE,
@@ -38,10 +31,7 @@ class CharacterManager(models.Manager):
       theme=data['theme']
     )
 
-    if (data['splatSlug'] == Splats.vampire5th.slug):      
-      create_5th_partials(char, data)
-      create_vampire5th_partial(char, data)
-    elif (data['splatSlug'] == Splats.hunter5th.slug):
+    if (data['splatSlug'] == Splats.hunter5th.slug):
       create_5th_partials(char, data)
       create_hunter5th_partial(char, data)
     elif (data['splatSlug'] == Splats.mortal5th.slug):
@@ -77,6 +67,14 @@ class CharacterManager(models.Manager):
       total=data['exp']['total'], current=data['exp']['current'])
     return char
 
+
+class SheetStatus(models.IntegerChoices):
+  DRAFT = 1, 'Draft'
+  REVIEW = 2, 'Review'
+  ACTIVE = 3, 'Active'
+  DEAD = 4, 'Dead'
+  ARCHIVE = 5, 'Archive'
+
 class Character(models.Model):
   name = models.CharField(max_length=50, blank=True)
   user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -85,18 +83,37 @@ class Character(models.Model):
   member = models.ForeignKey('chronicle.Member', on_delete=models.SET_NULL,
     null=True)
     
-  partial = models.BooleanField(default=True)
+  is_sheet = models.BooleanField(default=False)
+  status = models.IntegerField(choices=SheetStatus.choices, default=1)
   created_at = models.DateTimeField(auto_now_add=True)
   last_updated = models.DateTimeField(auto_now=True)
   faceclaim = models.URLField(blank=True)
-  theme = models.CharField(default='#000000', max_length=10)    
-  splat = models.ForeignKey(Splat, on_delete=models.CASCADE)
-  data = models.JSONField(null=True)
+  theme = models.CharField(default='#000000', max_length=10)  
+  exp_current = models.IntegerField(default=0)
+  exp_total = models.IntegerField(default=0)
+  
+  # Splat is a remenant of old system once all are converted splat should be deleted  
+  splat = models.ForeignKey(Splat, on_delete=models.CASCADE, null=True)
   objects = CharacterManager()
 
   class Meta:
     unique_together = ('name', 'user')
     indexes = [models.Index(fields=['name', 'user'])]
+
+def get_derived_instance(character):
+  if hasattr(character, 'character5th'):
+    # Check if it's a Vampire5th
+    if hasattr(character.character5th, 'vampire5th'):
+        return character.character5th.vampire5th
+    else:
+      return character.character5th
+  elif hasattr(character, 'character20th'):
+    # Access Character20th fields
+    return character.character20th
+  # Add other derived model checks here
+
+  # If none of the derived models match, return the original Characterinstance
+  return character
 
 ########################## Create Version Specific Partials ###################
 def create_5th_partials(char, data):
@@ -133,19 +150,6 @@ def create_20th_partials(char, data):
   )
 
 ######################## Create 5th edition partials ##########################
-def create_vampire5th_partial(char, data):
-  Humanity.objects.create(
-    character=char,
-    current=data['humanity']['total'],
-    stains=data['humanity']['stains']
-  )
-
-  Trackable.objects.create(
-    character=char, 
-    slug="hunger",
-    current=data['hunger'],
-  )
-
 
 def create_hunter5th_partial(char, data):
   Trackable.objects.create(
@@ -166,7 +170,6 @@ def create_mortal5th_partial(char, data):
     current=data['humanity']['total'],
     stains=data['humanity']['stains']
   )
-
 
 ########################## Create 20th edition paritals #######################
 def create_vampire20th_partial(char, data):
@@ -196,7 +199,7 @@ def create_human20th_partial(char, data):
     morality_info=humanity,
     current=data['morality'],
   )
-
+  
 
 def create_ghoul20th_partial(char, data):
   Trackable.objects.create(

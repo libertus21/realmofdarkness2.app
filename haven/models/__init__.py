@@ -1,2 +1,4 @@
 from .Splat import *
 from .character import *
+from .Vampire5th import Vampire5th
+from .Character5th import Character5th

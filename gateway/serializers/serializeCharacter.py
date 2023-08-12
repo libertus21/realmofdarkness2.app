@@ -9,9 +9,8 @@ def serializeCharacter(character):
     'theme': character.theme,
     'thumbnail': character.faceclaim,
     'exp': {'total': exp.total, 'current': exp.current},
-    'createdAt': (character.created_at.timestamp() if character.created_at else ''),
-    'lastUpdated': character.last_updated.timestamp(),
-    'history': serializeHistory(character),
+    'created_at': (character.created_at.timestamp() if character.created_at else ''),
+    'last_updated': character.last_updated.timestamp(),
   }
 
 def serialize20th(character):
@@ -49,25 +48,6 @@ def serialize5th(character):
   }
 
   return s
-
-from haven.models import History
-
-def serializeHistory(character):
-  history_list = []
-
-  history_qs = History.objects.filter(character=character).order_by('-date')
-
-  for history in history_qs:
-    history_list.append({
-      'id': history.pk,
-      'mode': history.mode,
-      'args': history.args,
-      'notes': history.notes,
-      'date': history.date.timestamp()
-    })
-    
-  return history_list
-
 
 def serializeChangeling20th(character):
   s = serialize20th(character)
@@ -132,9 +112,8 @@ def serializeMage20th(character):
   quint_paradox = character.trackable.get(slug='quint_paradox')
   s['arete'] = arete.current
   s['quint_paradox'] = {
-    # TODO Gonna have to do something about the way Paradox is stored
-    "paradox": (20 - quint_paradox.total),
-    "quintessence": quint_paradox.current
+    "paradox": quint_paradox.current,
+    "quintessence": quint_paradox.total
   }
 
   return s
@@ -183,18 +162,14 @@ def serializeVampire5th(character):
   s = serialize5th(character)
   hunger = character.trackable.get(slug='hunger')
   s['hunger'] = hunger.current
-  s['humanity'] = {
-      'current': character.humanity.current,
-      'stains': character.humanity.stains
-  }
+  s['humanity'] = character.old_humanity.current
+  s['stains'] = character.old_humanity.stains
   return s
 
 def serializeMortal5th(character):
   s = serialize5th(character)
-  s['humanity'] = {
-      'current': character.humanity.current,
-      'stains': character.humanity.stains
-  }
+  s['humanity'] = character.old_humanity.current
+  s['stains'] = character.old_humanity.stains
   return s
 
 def serializeHunter5th(character):

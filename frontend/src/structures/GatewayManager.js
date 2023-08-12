@@ -1,6 +1,6 @@
 import GatewayMessage  from './GatewayMessage';
+import { GATEWAY_OPCODE } from '../constants';
 const { EventEmitter } = require('events');
-const { GATEWAY_OPCODE } = require('../constants');
 
 const cooldownTimer = {
   0: 0,

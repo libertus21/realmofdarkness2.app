@@ -11,15 +11,15 @@ export default function Vampire20thInfo(props) {
   const { character, chronicle } = props;
 
   return (
-    <CardActionArea>
+    <CardActionArea disabled>
       <CardContent>
         <CardMedia 
           component="img"
           image={character.thumbnail ? character.thumbnail : defaultImage}
           alt="Character Image"
           sx={{
-            maxHeight: '200px', 
-            maxWidth: '100%', 
+            maxHeight: '250px', 
+            maxWidth: '250px',
             minHeight: '200px',
             minWidth: '100%',
             objectFit: 'contain',

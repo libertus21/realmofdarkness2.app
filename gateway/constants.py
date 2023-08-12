@@ -56,3 +56,9 @@ class Group():
   
   def chronicle_update(id):
     return f'chronicleUpdate_{id}'
+  
+  def character_new():
+    return f'characterNew'
+  
+  def character_delete():
+    return f'characterDelete'

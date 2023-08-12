@@ -19,6 +19,7 @@ class UserManager(BaseUserManager):
         
         return user
 
+
 class User(AbstractBaseUser):
     # Discord User Details
     id = models.BigIntegerField(primary_key=True)

@@ -12,15 +12,15 @@ const defaultImage = 'https://media.discordapp.net/attachments/88698335392289181
 export default function Hunter5thInfo(props) {
   const { character, chronicle } = props;
   return (
-    <CardActionArea>
+    <CardActionArea disabled>
       <CardContent>
         <CardMedia 
           component="img"
           image={character.thumbnail ? character.thumbnail : defaultImage}
           alt="Character Image"
           sx={{
-            maxHeight: '200px', 
-            maxWidth: '100%', 
+            maxHeight: '250px', 
+            maxWidth: '250px',
             minHeight: '200px',
             minWidth: '100%',
             objectFit: 'contain',
@@ -30,11 +30,9 @@ export default function Hunter5thInfo(props) {
         <Typography>Hunter - 5th Edition</Typography>
         <Typography>Server: {chronicle?.name ?? 'None'}</Typography>
         <Divider sx={{my: 1}} />
-        <Typography>Willpower</Typography>
-        <V5DamageTracker tracker={character.willpower} />
+        <V5DamageTracker label='Willpower' tracker={character.willpower} />
         <Divider sx={{my: 1}} />
-        <Typography>Health</Typography>
-        <V5DamageTracker tracker={character.health} />
+        <V5DamageTracker label='Health' tracker={character.health} />
         <Divider sx={{my: 1}} />
         <Typography>Desperation {character.desperation}</Typography>
         <ResponsiveRating tracker={{
