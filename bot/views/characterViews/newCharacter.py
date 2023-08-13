@@ -75,8 +75,8 @@ class NewCharacter(APIView):
     count = Character.objects.filter(user=character['user']).count()
     if (count > MAX_TRACKERS): # 409 Conflict - Too many Characters
       return HttpResponse(status=409)
-    
-    serializer = Vampire5thDeserializer(data=character)
+    user = User.objects.get(pk=character['user'])
+    serializer = Vampire5thDeserializer(data=character, context=user)
     if (serializer.is_valid()):
       instance = serializer.save()
     else:

@@ -100,10 +100,10 @@ class CharacterDeserializer(serializers.ModelSerializer):
   
   def validate_chronicle(self, value):
     # Add member
-    chronicle = value
+    chronicle = value    
+    user = self.context
     if not self.instance and chronicle: 
       # New Character
-      user = self.data.get('user')
       self.temp_member = Member.objects.get(chronicle=chronicle, user=user)
 
     elif self.instance and self.instance.chronicle != chronicle:
