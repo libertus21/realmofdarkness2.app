@@ -140,6 +140,7 @@ class GatewayConsumer(AsyncWebsocketConsumer):
         self.characters[character.id] = (serialize_character(character))
         self.character_subscribe(character.id)
         if not self.members[chronicle.id].get(character.user_id):
+          repair_character(character)
           self.members[chronicle.id][character.user_id] = serialize_member(
             character.member)          
           self.subscriptions.add(Group.member_update(character.member.id))
@@ -240,3 +241,9 @@ class GatewayMessage():
     self.data['d'] = {'chronicle': event['chronicle']}
 
     return self.toJson()
+  
+def repair_character(character):
+  if (character.chronicle and not character.member):
+    character.member = Member.objects.get(user=character.user,  chronicle=character.chronicle)
+    character.save()
+  return character

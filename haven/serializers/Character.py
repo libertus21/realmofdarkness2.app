@@ -49,6 +49,22 @@ class CharacterDeserializer(serializers.ModelSerializer):
 
     return super().to_internal_value(data)
   
+  def create(self, validated_data):
+    member = getattr(self, 'temp_member', None) 
+    if member is not None:
+      validated_data['member'] = member
+    instance = super().create(validated_data)
+    return instance
+  
+  def update(self, instance, validated_data):
+    member = getattr(self, 'temp_member', None)
+    if member is not None:
+      validated_data['member'] = member
+    instance = super().update(instance, validated_data)
+    print(instance.member)
+    print(instance.chronicle)
+    return instance
+  
   def validate_name(self, value):
     if not value:
       raise serializers.ValidationError("You must input a Name.")
@@ -80,6 +96,24 @@ class CharacterDeserializer(serializers.ModelSerializer):
       m = "You cannot change a user after creation"
       raise serializers.ValidationError(m)
 
+    return value
+  
+  def validate_chronicle(self, value):
+    # Add member
+    chronicle = value
+    if not self.instance and chronicle: 
+      # New Character
+      user = self.data.get('user')
+      self.temp_member = Member.objects.get(chronicle=chronicle, user=user)
+
+    elif self.instance and self.instance.chronicle != chronicle:
+      # Update character
+      if chronicle:
+        user = self.context
+        self.temp_member = Member.objects.get(chronicle=chronicle, user=user)
+      else:
+        print("None")
+        self.temp_member = None
     return value
 
   def validate_status(self, value):
@@ -117,22 +151,5 @@ class CharacterDeserializer(serializers.ModelSerializer):
     if char_status is None and self.instance and self.instance.status > 3:
       raise serializers.ValidationError('This sheet is Archived and cannot be edited. To edit please set the Status to "Active" or "Draft"',
         code=status.HTTP_304_NOT_MODIFIED)
-    
-
-    # Add member
-    chronicle = data.get('chronicle', None)
-    if not self.instance and chronicle: 
-      # New Character
-      user = data.get('user')
-      data['member'] = Member.objects.get(chronicle=chronicle, user=user)
-
-    elif self.instance and self.instance.chronicle != chronicle:
-      # Update character
-      if chronicle:
-        user = self.context
-        data['member'] = Member.objects.get(chronicle=chronicle, user=user)
-      else:
-        data['member'] = None
-      print(data['member'])
 
     return data
