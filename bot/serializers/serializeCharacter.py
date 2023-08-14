@@ -6,7 +6,7 @@ def serializeCharacter(character):
     'id': str(character.id),
     'splat': character.splat.slug,
     'user': str(character.user.id),
-    'guild': str(character.chronicle.id) if character.chronicle else None,
+    'chronicle': str(character.chronicle.id) if character.chronicle else None,
     'theme': character.theme,
     'faceclaim': character.faceclaim if character.user.supporter >= 0 else None,
     'exp': {'total': exp.total, 'current': exp.current},
