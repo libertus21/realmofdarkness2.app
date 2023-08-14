@@ -8,7 +8,7 @@ from bot.functions import get_splat
 from haven.models import Vampire5th
 from ..Authenticate import authenticate
 
-from haven.serializers import V5TrackerSerializer
+from haven.serializers import Vampire5thSerializer
 
 class GetCharacter(APIView):
   @csrf_exempt
@@ -24,7 +24,7 @@ class GetCharacter(APIView):
     if not character:
       return HttpResponse(status=204)
     if (isinstance(character, Vampire5th)):
-      return Response(data={'character': V5TrackerSerializer(character).data})
+      return Response(data={'character': Vampire5thSerializer(character).data})
 
     json = serialize(character.splat.slug, character) 
     return Response(data={'character': json})

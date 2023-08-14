@@ -14,6 +14,8 @@ urlpatterns = [
   path('character/new', views.NewCharacter.as_view()),
   path('character/save', views.SaveCharacter.as_view()),
 
+  # Sheet API
+  path('sheet/get', views.GetSheet.as_view()),
 
   # Chronicle
   path('chronicle/set', views.set_guild),
