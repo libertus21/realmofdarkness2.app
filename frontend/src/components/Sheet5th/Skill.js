@@ -1,9 +1,28 @@
-import { Typography, ListItem, IconButton, Tooltip } from "@mui/material";
+import { Typography, IconButton, Tooltip, Stack } from "@mui/material";
 import RatingInfo from './FiveDotRating';
 import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { slugify } from "../../utility";
 import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
+import { styled } from '@mui/system';
+
+const CustomStack = styled(Stack)(({ theme }) => ({
+  flexDirection: 'row', // Default direction
+
+  // Custom media query for a specific screen size
+  [`@media (max-width: 1900px)`]: {
+    flexDirection: 'column', // Set custom direction at the specified screen size
+  },
+
+  // Custom media query for a specific screen size
+  [`@media (max-width: 599px)`]: {
+    flexDirection: 'row', // Set custom direction at the specified screen size
+  },
+
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: theme.spacing(1),
+}));
 
 export default function Skill(props)
 {
@@ -63,20 +82,21 @@ export default function Skill(props)
     
 
   return (    
-    <ListItem 
-      sx={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center' 
-      }} 
+    <CustomStack 
+    direction={{xl: 'row', md: 'column', xs: 'row'}}
+    justifyContent="space-between"
+    alignItems="center"
+    padding={1}
     >
-      <Typography sx={{ marginRight: 'auto' }}>{name}</Typography>     
+      <Typography>{name}</Typography> 
+      <Stack direction='row'>        
       <RatingInfo  
         value={skill.value}
         locked={lock ?? false} 
         onChange={onChange}
       />
       {specIcon}
-    </ListItem>
+      </Stack>    
+    </CustomStack>
   )
 }

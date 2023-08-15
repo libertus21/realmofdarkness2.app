@@ -133,7 +133,7 @@ export default function Vampire5thSheet(props)
       <GeneralInfo handleLockChange={handleLockChange} />
       <TrackerTab />
       <Grid container>
-        <Grid container md={5} direction="column">
+        <Grid container xs={12} md={5} direction="column">
           <Attributes />
           <Skills />
         </Grid>

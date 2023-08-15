@@ -1,8 +1,8 @@
-import Grid from '@mui/material/Unstable_Grid2';
-import { Typography, ListItem } from "@mui/material";
+import { Typography, Stack } from "@mui/material";
 import RatingInfo from './FiveDotRating';
 import { slugify } from "../../utility";
 import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
+
 
 export default function Attribute(props)
 {
@@ -32,21 +32,20 @@ export default function Attribute(props)
 
 
   return (    
-    <ListItem>
-      <Grid container alignItems="center" sx={{width: '100%'}}>
-        <Grid>
-          <Typography>{name}</Typography>
-        </Grid>
-        <Grid xs={true} sx={{mr: -3}} />
-        <Grid >                  
-          <RatingInfo  
-            value={dots}
-            locked={lock ?? false} 
-            onChange={onChange}
-          />
-        </Grid>
-      </Grid>
-    </ListItem>
+      <Stack 
+        direction={{xl: 'row', sm: 'column', xs: 'row'}}
+        justifyContent="space-between"
+        alignItems="center"
+        padding={1}
+      >         
+        <Typography>{name}</Typography>
+
+        <RatingInfo  
+          value={dots}
+          locked={lock ?? false} 
+          onChange={onChange}
+        />    
+      </Stack>
   )
 }
 
