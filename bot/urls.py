@@ -5,6 +5,7 @@ app_name = 'bot'
 urlpatterns = [
   # Character
   path('character/get', views.GetCharacter.as_view()),
+  path('character/get/default', views.GetCharacterDefault.as_view()),
   path('character/new_old', views.new_character),
   path('character/save_old', views.save_character),
   path('character/name_list', views.name_list),

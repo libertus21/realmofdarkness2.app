@@ -1,11 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
 from bot.serializers import serialize
 from bot.functions import get_splat
-from haven.models import Vampire5th
+from haven.models import Vampire5th, Character, get_derived_instance
 from ..Authenticate import authenticate
 
 from haven.serializers import Vampire5thSerializer
@@ -28,3 +29,35 @@ class GetCharacter(APIView):
 
     json = serialize(character.splat.slug, character) 
     return Response(data={'character': json})
+  
+class GetCharacterDefault(APIView):
+  @csrf_exempt
+  def post(self, request):
+    authenticate(request)
+
+    name = request.data.get('name', None)
+    user = request.data.get('user', None)
+    chronicle = request.data.get('chronicle', None)
+    characters = None
+    select = ['character5th__vampire5th']
+
+    if not user:
+      return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    if (name):
+      characters = Character.objects.select_related(*select).filter(user=user, name=name)
+    else:
+      characters = Character.objects.select_related(*select).filter(user=user, chronicle=chronicle)
+
+    if not characters.exists():
+      return Response(status=status.HTTP_404_NOT_FOUND)
+    elif characters.count() > 1:
+      return Response(status=status.HTTP_300_MULTIPLE_CHOICES)
+
+    character = get_derived_instance(characters[0])
+
+    if (isinstance(character, Vampire5th)):
+      return Response(data=Vampire5thSerializer(character).data)
+
+    json = serialize(character.splat.slug, character) 
+    return Response(data=json)

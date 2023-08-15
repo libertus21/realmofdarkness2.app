@@ -21,7 +21,7 @@ class GetSheet(APIView):
 
     if (name):
       characters = Vampire5th.objects.filter(user=user, name=name)
-    elif not name or not character.exists():
+    else:
       characters = Vampire5th.objects.filter(user=user, chronicle=chronicle, is_sheet=True)
 
     if not characters.exists():
