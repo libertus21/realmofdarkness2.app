@@ -167,8 +167,8 @@ def create_hunter5th_partial(char, data):
 def create_mortal5th_partial(char, data):  
   Humanity.objects.create(
     character=char,
-    current=data['humanity']['total'],
-    stains=data['humanity']['stains']
+    current=data['humanity'],
+    stains=data['stains']
   )
 
 ########################## Create 20th edition paritals #######################
