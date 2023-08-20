@@ -11,7 +11,7 @@ from asgiref.sync import async_to_sync
 from ..get_post import get_post
 from ..Authenticate import authenticate
 from haven.models import Character
-from haven.serializers import Vampire5thDeserializer, V5TrackerSerializer
+from haven.serializers import Vampire5thDeserializer, V5TrackerSerializer, validation_error_handler
 from chronicle.models import Chronicle, Member
 from gateway.constants import Group
 from gateway.serializers import serialize_character
@@ -80,8 +80,7 @@ class NewCharacter(APIView):
     if (serializer.is_valid()):
       instance = serializer.save()
     else:
-      code = serializer.errors.get('code', status.HTTP_400_BAD_REQUEST)
-      return Response(serializer.errors, status=code)
+      return validation_error_handler(serializer.errors)
     
     async_to_sync(channel_layer.group_send)(
       Group.character_new(),

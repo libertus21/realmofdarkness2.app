@@ -5,7 +5,6 @@ from haven.models import Character, SheetStatus
 from chronicle.models import Member
 from constants import CharacterSheetLimit
 
-
 ########################### Character Serializer ##############################
 # Base serializer with common fields for Character
 class CharacterSerializer(serializers.ModelSerializer):
@@ -61,8 +60,6 @@ class CharacterDeserializer(serializers.ModelSerializer):
     if member is not None:
       validated_data['member'] = member
     instance = super().update(instance, validated_data)
-    print(instance.member)
-    print(instance.chronicle)
     return instance
   
   def validate_name(self, value):
@@ -79,7 +76,7 @@ class CharacterDeserializer(serializers.ModelSerializer):
     
     else: # New Character
       user_id = self.initial_data.get('user')
-      if not user_id: raise serializers.ValidationError()
+      if not user_id: raise serializers.ValidationError("Need Id")
     
     chars = Character.objects.filter(name=value, user=user_id)
     if chars:

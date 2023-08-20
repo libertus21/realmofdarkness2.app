@@ -12,7 +12,7 @@ from rest_framework import status
 from ..Authenticate import authenticate
 from ..get_post import get_post
 from haven.models import MoralityInfo, Vampire5th
-from haven.serializers import Vampire5thDeserializer, V5TrackerSerializer, Vampire5thSerializer
+from haven.serializers import Vampire5thDeserializer, V5TrackerSerializer, Vampire5thSerializer, validation_error_handler
 from bot.constants import Splats
 from bot.functions import get_splat
 from gateway.constants import Group
@@ -109,8 +109,7 @@ class SaveCharacter(APIView):
     if (serializer.is_valid()):
       instance = serializer.save()
     else:
-      code = serializer.errors.get('code', status.HTTP_400_BAD_REQUEST)
-      return Response(serializer.errors, status=code)
+      return validation_error_handler(serializer.errors)
         
     async_to_sync(channel_layer.group_send)(
       Group.character_update(instance.id),
