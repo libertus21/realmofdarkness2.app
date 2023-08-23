@@ -23,7 +23,10 @@ def member_delete(request):
   except Member.DoesNotExist:
     return HttpResponse(status=204)
 
-  member.character_set.update(chronicle=None)
+  for character in member.character_set.all():
+    character.chronicle = None
+    character.save()
+    
   member.delete()        
 
   return HttpResponse()
