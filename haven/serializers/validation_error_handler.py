@@ -4,7 +4,7 @@ from rest_framework import serializers, status
 
 def validation_error_handler(errors):
   error = errors.get('name', None)
-  if (len(error)): error = error[0]
+  if error is not None and len(error): error = error[0]
   else: Response(status=status.HTTP_400_BAD_REQUEST)
 
   if getattr(error, 'code', 'invalid') != 'invalid':
