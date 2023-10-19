@@ -1,12 +1,14 @@
 from rest_framework.response import Response
-from rest_framework import serializers, status
+from rest_framework import status
+import logging
 
+logger = logging.getLogger(__name__)
 
 def validation_error_handler(errors):
   error = errors.get('name', None)
   if error is not None and len(error): error = error[0]
   else: 
-    print(errors)
+    logger.error(f"Validation errors: {errors}")
     Response(status=status.HTTP_400_BAD_REQUEST)
 
   if getattr(error, 'code', 'invalid') != 'invalid':
