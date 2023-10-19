@@ -6,6 +6,8 @@ logger = logging.getLogger(__name__)
 
 def validation_error_handler(errors):
   error = errors.get('name', None)
+  if error is None: error = errors.get('non_field_errors', None)
+  
   if error is not None and len(error): error = error[0]
   else: 
     logger.error(f"Validation errors: {errors}")
