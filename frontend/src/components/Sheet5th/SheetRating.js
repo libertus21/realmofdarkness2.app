@@ -2,7 +2,7 @@ import { Rating } from "@mui/material";
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import CircleIcon from '@mui/icons-material/Circle';
 
-export default function FiveDotRating(props)
+export default function SheetRating(props)
 {
   const { 
     value,
@@ -10,18 +10,20 @@ export default function FiveDotRating(props)
     locked=false,
     hoverColor, 
     filledColor, 
-    sx
+    sx,
+    max,
+    size,
   } = props;
 
   return (     
       <Rating 
         readOnly={locked}
-        max={5}
+        max={max ?? 5}
         value={value}
         onChange={onChange}
         icon={<CircleIcon fontSize="inherit" />}
         emptyIcon={<CircleOutlinedIcon fontSize="inherit" />}
-        size='small'
+        size={size ?? 'small'}
         sx={{
           ...sx,
           '& .MuiRating-iconFilled': {color: (filledColor ?? '#ab074e')},

@@ -146,8 +146,10 @@ export default function Vampire5thSheet(props)
         > 
           <SheetNav />
           <Disciplines />
-          <BloodPotency />
-          <HuntingTab />
+          <Grid xs={12} container>
+            <BloodPotency />
+            <HuntingTab />
+          </Grid>
         </Grid>
       </Grid>
     </Container>
@@ -189,12 +191,12 @@ function SheetNav(props)
           scrollButtons
         >
           <Tab label="Core" value='Core' />
-          <Tab label="Advantages" />           
-          <Tab label="Haven" /> 
-          <Tab label="Exp" />     
-          <Tab label="Possessions" />   
-          <Tab label="Background" />
-          <Tab label="Gallery" />
+          <Tab label="Advantages" disabled />           
+          <Tab label="Haven" disabled /> 
+          <Tab label="Exp" disabled />     
+          <Tab label="Possessions" disabled />   
+          <Tab label="Background" disabled />
+          <Tab label="Gallery" disabled />
         </Tabs>
       </Box> 
     </Grid>

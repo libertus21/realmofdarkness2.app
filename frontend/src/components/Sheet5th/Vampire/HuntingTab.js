@@ -1,13 +1,20 @@
 import Grid from '@mui/material/Unstable_Grid2';
-import { Divider, Typography, TextField } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
+import ApiTextField from '../../Sheet/ApiTextField';
+import { useSheetContext } from '../../../routes/Character/Vampire5thSheet';
+
 
 export default function HuntingTab(props)
 {
+  const { sheet } = useSheetContext();
+  
   return (
     <Grid 
       container 
-      spacing={2} 
+      spacing={1} 
       xs={12}
+      md={4}
+      direction='column'
     >  
       <Grid xs={12}>                    
         <Divider variant="middle">
@@ -22,27 +29,17 @@ export default function HuntingTab(props)
         justifyContent="center"
         alignItems="center"
         xs={12}
-        paddingTop={2}
+        paddingTop={3}
       >
-        <Grid>                  
-          <TextField 
-            disabled
-            label="Hunting Roll" 
-            variant='outlined' 
-            defaultValue=' ' 
-            fullWidth
-            size='small'
+        <Grid>                    
+          <ApiTextField 
+            label="Hunting Roll" value={sheet.hunting_roll} maxLength={50} 
           />
         </Grid>
-        <Grid>                  
-          <TextField 
-            disabled
-            label="Resonance" 
-            variant='outlined' 
-            defaultValue=' ' 
-            fullWidth
-            size='small'
-          />
+        <Grid>                               
+          <ApiTextField 
+            label="Resonance" value={sheet.resonance} maxLength={50} 
+          />  
         </Grid>        
       </Grid>
     </Grid>

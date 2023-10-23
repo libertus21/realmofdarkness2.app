@@ -1,5 +1,5 @@
 import { Typography, IconButton, Tooltip, Stack } from "@mui/material";
-import RatingInfo from './FiveDotRating';
+import RatingInfo from './SheetRating';
 import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { slugify } from "../../utility";
@@ -78,8 +78,7 @@ export default function Skill(props)
         />
       </IconButton>
     )
-  }
-    
+  }    
 
   return (    
     <CustomStack 

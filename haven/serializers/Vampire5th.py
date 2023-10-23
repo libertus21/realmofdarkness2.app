@@ -15,7 +15,10 @@ class Vampire5thSerializer(Character5thSerializer):
       'predator_type',
       'humanity',
       'stains',
-      'hunger'
+      'hunger',
+      'resonance',
+      'hunting_roll',
+      'blood_potency',
     ) 
 
   def to_representation(self, instance):
@@ -54,31 +57,6 @@ class Vampire5thDeserializer(Character5thDeserializer):
   class Meta(Character5thDeserializer.Meta):
     model = Vampire5th
     fields = '__all__'
-    
-  def validate_generation(self, value):
-    if value < 0 or value > 16:
-      raise serializers.ValidationError()
-    return value
-    
-  def validate_humanity(self, value):
-    if value < 0 or value > 10:
-      raise serializers.ValidationError()
-    return value
-    
-  def validate_stains(self, value):
-    if value < 0 or value > 10:
-      raise serializers.ValidationError()
-    return value
-    
-  def validate_hunger(self, value):
-    if value < 0 or value > 5:
-      raise serializers.ValidationError()
-    return value
-    
-  def validate_blood_potency(self, value):
-    if value < 0 or value > 10:
-      raise serializers.ValidationError()
-    return value
     
   def validate(self, data):
     data = super().validate(data)

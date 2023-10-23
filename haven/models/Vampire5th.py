@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 from .Character5th import Character5th
 
 class Clan(models.TextChoices):
@@ -44,16 +45,23 @@ class Vampire5th(Character5th):
   # Core
   clan = models.CharField(choices=Clan.choices, blank=True, max_length=15)
   sire = models.CharField(max_length=50, blank=True)
-  generation = models.IntegerField(null=True)
+  generation = models.IntegerField(
+    null=True, validators=[MinValueValidator(1), MaxValueValidator(16)])
   predator_type = models.CharField(
     choices=PredatorType.choices, blank=True, max_length=20)
 
   # Humanity
-  humanity = models.IntegerField(default=7)
-  stains = models.IntegerField(default=0)
+  humanity = models.IntegerField(
+    default=7, validators=[MinValueValidator(0), MaxValueValidator(10)])
+  stains = models.IntegerField(
+    default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
 
-  hunger = models.IntegerField(default=1)
-  blood_potency = models.IntegerField(default=1)
+  hunger = models.IntegerField(
+    default=1, validators=[MinValueValidator(0), MaxValueValidator(5)])
+  blood_potency = models.IntegerField(
+    default=1, validators=[MinValueValidator(0), MaxValueValidator(10)])
+  hunting_roll = models.CharField(blank=True, max_length=100)
+  resonance = models.CharField(blank=True, max_length=50)
 
 
 class CustomClan(models.Model):

@@ -1,5 +1,5 @@
 import { Typography, Stack } from "@mui/material";
-import RatingInfo from './FiveDotRating';
+import RatingInfo from './SheetRating';
 import { slugify } from "../../utility";
 import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
 

@@ -1,15 +1,20 @@
 import Grid from '@mui/material/Unstable_Grid2';
-import { Divider, Rating, Typography, TextField } from "@mui/material";
-import CircleIcon from '@mui/icons-material/Circle';
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import { Divider, Typography, TextField } from "@mui/material";
+import BloodPotency from './BloodPotency';
+import { useSheetContext } from '../../../routes/Character/Vampire5thSheet';
 
 export default function BloodPotencyTab(props)
 {
+  const { lock, sheet, handleUpdate } = useSheetContext();
+  const potency = sheet.blood_potency;
+  let bpInfo = bpChart[potency];
+
   return (
     <Grid 
       container 
       spacing={2} 
       xs={12}
+      md={8}
     >  
       <Grid xs={12}>                    
         <Divider variant="middle">
@@ -26,90 +31,211 @@ export default function BloodPotencyTab(props)
         paddingTop={2}
         xs={12}
       >
-        <Grid><Typography>Potency</Typography></Grid>
-        <Grid>             
-          <Rating 
-            disabled
-            max={10}
-            icon={<CircleIcon fontSize="inherit" />} 
-            emptyIcon={<CircleOutlinedIcon fontSize="inherit" />}            
-            sx={{
-              paddingTop: 0.5,
-              '& .MuiRating-iconFilled': {color: '#ab074e'},
-              '& .MuiRating-iconHover': {color: '#ff3d47'},
-            }}
-          />
-        </Grid>
+        <BloodPotency 
+          lock={lock} potency={potency} handleUpdate={handleUpdate}
+        />
       </Grid>
       <Grid
         container
         direction="row"
         justifyContent="center"
-        alignItems="center"
+        alignItems="flex-start"
         xs={12}
         paddingTop={2}
       >
         <Grid>                  
           <TextField 
-            disabled
+            InputProps={{
+              readOnly: true,
+              disabled: true,
+            }}
             label="Blood Surge" 
             variant='outlined' 
-            defaultValue=' ' 
+            value={bpInfo.bloodSurge} 
             fullWidth
             size='small'
           />
         </Grid>
         <Grid>                  
           <TextField 
-            disabled
+            InputProps={{
+              readOnly: true,
+              disabled: true,
+            }}
             label="Mend Amount" 
             variant='outlined' 
-            defaultValue=' ' 
+            value={bpInfo.damageMended}
             fullWidth
             size='small'
           />
         </Grid>
         <Grid>                  
           <TextField 
-            disabled
+            InputProps={{
+              readOnly: true,
+              disabled: true,
+            }}
             label="Power Bonus" 
             variant='outlined' 
-            defaultValue=' ' 
+            value={bpInfo.powerBonus} 
             fullWidth
             size='small'
           />
         </Grid>
         <Grid>                  
           <TextField 
-            disabled
+            InputProps={{
+              readOnly: true,
+              disabled: true,
+            }}
             label="Rouse Re-Roll" 
             variant='outlined' 
-            defaultValue=' ' 
+            value={bpInfo.rouseCheck} 
             fullWidth
             size='small'
           />
         </Grid>
         <Grid>                  
           <TextField 
-            disabled
-            label="Feeding Penalty" 
-            variant='outlined' 
-            defaultValue=' ' 
-            fullWidth
-            size='small'
-          />
-        </Grid>
-        <Grid>                  
-          <TextField 
-            disabled
+            InputProps={{
+              readOnly: true,
+              disabled: true,
+            }}
             label="Bane Severity" 
             variant='outlined' 
-            defaultValue=' ' 
+            value={bpInfo.bane} 
             fullWidth
             size='small'
+          />
+        </Grid>
+        <Grid>                  
+          <TextField 
+            multiline
+            InputProps={{
+              readOnly: true,
+              disabled: true,
+            }}
+            label="Feeding Penalty" 
+            variant='outlined' 
+            value={bpInfo.feedingPenalty}
+            fullWidth
+            size='small'
+            sx={{marginRight: 4.375}}
           />
         </Grid>
       </Grid>
     </Grid>
   )
+}
+
+const bpChart = {
+  0: {
+    bloodPotency: 0,
+    bloodSurge: 'Add 1 die',
+    damageMended: '1 point of Superficial',
+    powerBonus: 'None',
+    rouseCheck: 'None',
+    bane: 0,
+    feedingPenalty: 'No Effect',
+  },
+
+  1: {
+    bloodPotency: 1,
+    bloodSurge: 'Add 2 dice',
+    damageMended: '1 point of Superficial',
+    powerBonus: 'None',
+    rouseCheck: 'Level 1',
+    bane: 2,
+    feedingPenalty: 'No Effect',
+  },
+
+  2: {
+    bloodPotency: 2,
+    bloodSurge: 'Add 2 dice',
+    damageMended: '2 points of Superficial',
+    powerBonus: 'Add 1 die',
+    rouseCheck: 'Level 1',
+    bane: 2,
+    feedingPenalty: 'Animal and bagged blood slakes half Hunger',
+  },
+  
+  3: {
+    bloodPotency: 3,
+    bloodSurge: 'Add 3 dice',
+    damageMended: '2 points of Superficial',
+    powerBonus: 'Add 1 die',
+    rouseCheck: 'Level 2 and below',
+    bane: 3,
+    feedingPenalty: 'Animal and bagged blood slakes no Hunger',
+  },
+
+  4: {
+    bloodPotency: 4,
+    bloodSurge: 'Add 3 dice',
+    damageMended: '3 points of Superficial',
+    powerBonus: 'Add 2 dice',
+    rouseCheck: 'Level 2 and below',
+    bane: 3,
+    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 1 less Hunger per human',
+  },
+
+  5: {
+    bloodPotency: 5,
+    bloodSurge: 'Add 4 dice',
+    damageMended: '3 points of Superficial',
+    powerBonus: 'Add 2 dice',
+    rouseCheck: 'Level 3 and below',
+    bane: 4,
+    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 1 less Hunger per human. Must drain and kill a human to reduce Hunger below 2.',
+  },
+
+  6: {
+    bloodPotency: 6,
+    bloodSurge: 'Add 4 dice',
+    damageMended: '3 points of Superficial',
+    powerBonus: 'Add 3 dice',
+    rouseCheck: 'Level 3 and below',
+    bane: 4,
+    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 2 less Hunger per human. Must drain and kill a human to reduce Hunger below 2.',
+  },
+
+  7: {
+    bloodPotency: 7,
+    bloodSurge: 'Add 4 dice',
+    damageMended: '3 points of Superficial',
+    powerBonus: 'Add 3 dice',
+    rouseCheck: 'Level 4 and below',
+    bane: 5,
+    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 2 less Hunger per human. Must drain and kill a human to reduce Hunger below 2.',
+  },
+
+  8: {
+    bloodPotency: 8,
+    bloodSurge: 'Add 5 dice',
+    damageMended: '4 points of Superficial',
+    powerBonus: 'Add 4 dice',
+    rouseCheck: 'Level 4 and below',
+    bane: 5,
+    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 2 less Hunger per human. Must drain and kill a human to reduce Hunger below 3.',
+  },
+
+  9: {
+    bloodPotency: 9,
+    bloodSurge: 'Add 6 dice',
+    damageMended: '4 points of Superficial',
+    powerBonus: 'Add 4 dice',
+    rouseCheck: 'Level 5 and below',
+    bane: 6,
+    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 2 less Hunger per human. Must drain and kill a human to reduce Hunger below 3.',
+  },
+
+  10: {
+    bloodPotency: 10,
+    bloodSurge: 'Add 6 dice',
+    damageMended: '5 points of Superficial',
+    powerBonus: 'Add 5 dice',
+    rouseCheck: 'Level 5 and below',
+    bane: 6,
+    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 3 less Hunger per human. Must drain and kill a human to reduce Hunger below 3.',
+  },
 }
