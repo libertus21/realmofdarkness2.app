@@ -59,7 +59,7 @@ class Vampire5th(Character5th):
   hunger = models.IntegerField(
     default=1, validators=[MinValueValidator(0), MaxValueValidator(5)])
   blood_potency = models.IntegerField(
-    default=1, validators=[MinValueValidator(0), MaxValueValidator(10)])
+    default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
   hunting_roll = models.CharField(blank=True, max_length=100)
   resonance = models.CharField(blank=True, max_length=50)
 

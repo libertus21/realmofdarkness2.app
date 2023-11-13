@@ -11,8 +11,9 @@ from rest_framework import status
 
 from ..Authenticate import authenticate
 from ..get_post import get_post
-from haven.models import MoralityInfo, Vampire5th
+from haven.models import MoralityInfo, Vampire5th, Werewolf5th
 from haven.serializers import Vampire5thDeserializer, V5TrackerSerializer, Vampire5thSerializer, validation_error_handler
+from haven.serializers import Werewolf5thDeserializer, W5TrackerSerializer, W5TrackerSerializer
 from bot.constants import Splats
 from bot.functions import get_splat
 from gateway.constants import Group

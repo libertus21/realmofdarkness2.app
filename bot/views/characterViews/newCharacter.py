@@ -12,6 +12,7 @@ from ..get_post import get_post
 from ..Authenticate import authenticate
 from haven.models import Character
 from haven.serializers import Vampire5thDeserializer, V5TrackerSerializer, validation_error_handler
+from haven.serializers import Werewolf5thDeserializer, W5TrackerSerializer
 from chronicle.models import Chronicle, Member
 from gateway.constants import Group
 from gateway.serializers import serialize_character
@@ -76,19 +77,32 @@ class NewCharacter(APIView):
     if (count > MAX_TRACKERS): # 409 Conflict - Too many Characters
       return HttpResponse(status=409)
     user = User.objects.get(pk=character['user'])
-    serializer = Vampire5thDeserializer(data=character, context=user)
+
+    if (character['class'] == 'Vampire5th'):
+      serializer = Vampire5thDeserializer(data=character, context=user)
+      splat = "Vampire5th"
+    else:    
+      serializer = Werewolf5thDeserializer(data=character, context=user)
+      splat = "Werewolf5th"
+      
     if (serializer.is_valid()):
       instance = serializer.save()
     else:
       return validation_error_handler(serializer.errors)
+    
+    if (splat == 'Vampire5th'):
+      tracker = V5TrackerSerializer(instance).data
+    else:
+      tracker = W5TrackerSerializer(instance).data
+
     
     async_to_sync(channel_layer.group_send)(
       Group.character_new(),
       {
         "type": "character.new",
         "id":  instance.id,
-        "tracker": V5TrackerSerializer(instance).data,
-        "class": "Vampire5th"
+        "tracker": tracker,
+        "class": splat
       }
     )  
     return Response(status=201)

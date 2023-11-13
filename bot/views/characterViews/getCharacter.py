@@ -7,9 +7,10 @@ from django.http import HttpResponse
 from bot.serializers import serialize
 from bot.functions import get_splat
 from haven.models import Vampire5th, Character, get_derived_instance
+from haven.models import Werewolf5th
+from haven.serializers import Vampire5thSerializer, Werewolf5thSerializer
 from ..Authenticate import authenticate
 
-from haven.serializers import Vampire5thSerializer
 
 class GetCharacter(APIView):
   @csrf_exempt
@@ -24,8 +25,11 @@ class GetCharacter(APIView):
 
     if not character:
       return HttpResponse(status=204)
+    
     if (isinstance(character, Vampire5th)):
       return Response(data={'character': Vampire5thSerializer(character).data})
+    elif (isinstance(character, Werewolf5th)):
+      return Response(data={'character': Werewolf5thSerializer(character).data})
 
     json = serialize(character.splat.slug, character) 
     return Response(data={'character': json})
@@ -58,6 +62,8 @@ class GetCharacterDefault(APIView):
 
     if (isinstance(character, Vampire5th)):
       return Response(data=Vampire5thSerializer(character).data)
+    elif (isinstance(character, Werewolf5th)):
+      return Response(data=Werewolf5thSerializer(character).data)
 
     json = serialize(character.splat.slug, character) 
     return Response(data=json)
