@@ -13,7 +13,6 @@ import ChronicleMenuItems from './ChronicleMenuItems';
 export default function GeneralInfoTab(props) {
   const { sheet } = useSheetContext();
   const { handleLockChange } = props;
-
   return (
     <Grid
       container

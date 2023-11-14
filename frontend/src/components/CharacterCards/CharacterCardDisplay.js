@@ -1,14 +1,26 @@
-import { FormControl, Select, MenuItem, InputLabel, ListSubheader, FormControlLabel, Switch, Container } from "@mui/material";
-import { OutlinedInput, Box, Chip, Alert, ListItemText } from "@mui/material";
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+  ListSubheader,
+  FormControlLabel,
+  Switch,
+  Container,
+  OutlinedInput,
+  Box,
+  Chip,
+  Alert,
+  ListItemText
+} from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import { useState, useMemo, Fragment } from "react";
 import CharacterCard from "./CharacterCard";
 import Checkbox from '@mui/material/Checkbox';
 import DashboardControls from "../dashboard/DashboardControls";
 
-export default function CharacterCardDisplay(props) 
-{
-  const {characters, chronicles, user} = props;
+export default function CharacterCardDisplay(props) {
+  const { characters, chronicles, user } = props;
   const [sortOptions, setSortOptions] = useState({
     chronicle: '',
     splats: [],
@@ -16,51 +28,44 @@ export default function CharacterCardDisplay(props)
     storytellerMode: true,
   });
 
-  function handleSelectChange(event, value)
-  {
-    const newSort = {...sortOptions};
+  function handleSelectChange(event, value) {
+    const newSort = { ...sortOptions };
     newSort[value] = event.target.value;
     setSortOptions(newSort);
   }
 
-  function handlestorytellerMode(event)
-  {
-    const newSort = {...sortOptions}
+  function handlestorytellerMode(event) {
+    const newSort = { ...sortOptions }
     newSort.storytellerMode = !newSort.storytellerMode;
     setSortOptions(newSort);
   }
 
-  function handleSplatChange(event)
-  {
-    const {target: { value }} = event;
-    const newSort = {...sortOptions};
-    
-    if (value.includes('all'))
-    {
+  function handleSplatChange(event) {
+    const { target: { value } } = event;
+    const newSort = { ...sortOptions };
+
+    if (value.includes('all')) {
       newSort.splats = [];
     }
     else newSort.splats = typeof value === 'string' ? value.split(',') : value;
     setSortOptions(newSort);
   }
 
-  function onCloseSelect()
-  {
-    setTimeout(() => {      
+  function onCloseSelect() {
+    setTimeout(() => {
       document.activeElement.blur();
     }, 0)
   }
 
-  function chronicleMenus() 
-  {
+  function chronicleMenus() {
     const menu = [
       <MenuItem key='all' value=''>All</MenuItem>,
       <MenuItem key='0' value='0'>No Server</MenuItem>
     ];
-    for (const chronicle of Object.values(chronicles))
-    {
+    for (const chronicle of Object.values(chronicles)) {
       menu.push(
-        <MenuItem 
-          key={chronicle.id} 
+        <MenuItem
+          key={chronicle.id}
           value={chronicle.id}
         >
           {chronicle.name}
@@ -70,16 +75,14 @@ export default function CharacterCardDisplay(props)
     return menu;
   }
 
-  function renderCharacterCards()
-  {        
-    if (!characters) return;    
+  function renderCharacterCards() {
+    if (!characters) return;
     let canFilterStorytellerMode = false;
     let cards = [];
-    
+
     // Sorting by last updated time
     const sortedChars = Object.values(characters).sort((a, b) => {
-      if (sortOptions.sortBy === 'lastUpdated')
-      {
+      if (sortOptions.sortBy === 'lastUpdated') {
         return b.last_updated - a.last_updated;
       }
       const nameA = a.name.toUpperCase();
@@ -87,24 +90,19 @@ export default function CharacterCardDisplay(props)
       return nameA.localeCompare(nameB);
     });
 
-    for (const character of sortedChars)
-    {
-      if (sortOptions.chronicle !== ''  && sortOptions.chronicle !== '0' &&
-        character.chronicle !== sortOptions.chronicle)
-      {
+    for (const character of sortedChars) {
+      if (sortOptions.chronicle !== '' && sortOptions.chronicle !== '0' &&
+        character.chronicle !== sortOptions.chronicle) {
         continue;
       }
-      else if (character.chronicle !== '' && sortOptions.chronicle === '0')
-      {
+      else if (character.chronicle !== '' && sortOptions.chronicle === '0') {
         continue;
       }
-      else if (sortOptions.splats.length && 
-        !sortOptions.splats.includes(character.splat)) 
-      {
+      else if (sortOptions.splats.length &&
+        !sortOptions.splats.includes(character.splat)) {
         continue;
-      }      
-      else if (character.user !== user.id && !sortOptions.storytellerMode)
-      {
+      }
+      else if (character.user !== user.id && !sortOptions.storytellerMode) {
         canFilterStorytellerMode = true;
         continue;
       }
@@ -113,75 +111,75 @@ export default function CharacterCardDisplay(props)
       cards.push((
         <CharacterCard key={character.id} character={character} />
       ))
-    }   
+    }
     const noChars = (
-      <Alert 
+      <Alert
         severity="warning"
         variant="outlined"
-        sx={{mt: 5}}
+        sx={{ mt: 5 }}
       >
         No Characters were found!
       </Alert>
     );
-      return (
-        <Fragment>
-          {renderStorytellerModeButton(sortOptions, handlestorytellerMode, 
-            canFilterStorytellerMode)}
-          <Grid          
-            container 
-            xs={12}
-            justifyContent="space-evenly"
-            alignItems="flex-start"
-            columnSpacing={3}
-            rowSpacing={3}
-          >        
-            {cards.length ? cards : noChars}
-          </Grid>
-        </Fragment>        
-      );
+    return (
+      <Fragment>
+        {renderStorytellerModeButton(sortOptions, handlestorytellerMode,
+          canFilterStorytellerMode)}
+        <Grid
+          container
+          xs={12}
+          justifyContent="space-evenly"
+          alignItems="flex-start"
+          columnSpacing={3}
+          rowSpacing={3}
+        >
+          {cards.length ? cards : noChars}
+        </Grid>
+      </Fragment>
+    );
   }
-  
+
   const getSplatMenus = useMemo(() => (
     renderSplatSelectFilter(characters, sortOptions.splats)
   ), [characters, sortOptions.splats]);
-  
+
   return (
     <Container maxWidth="xl">
-      <Grid    
+      <Grid
         container
         direction="row"
         justifyContent="center"
         rowSpacing={3}
         columnSpacing={2}
-        sx={{pl: 3}}
+        sx={{ pl: 3 }}
       >
         <Grid>
-          <FormControl sx={{minWidth: '150px'}}>
+          <FormControl sx={{ minWidth: '150px' }}>
             <InputLabel id="chronicle-select-label">Chronicles</InputLabel>
-            <Select 
-              labelId="chronicle-select-label" 
-              id="chronicle-select" 
+            <Select
+              labelId="chronicle-select-label"
+              id="chronicle-select"
               label='Chronicles'
               value={sortOptions.chronicle}
-              onChange={(event) => {handleSelectChange(event, 'chronicle')}}
+              onChange={(event) => { handleSelectChange(event, 'chronicle') }}
               onClose={onCloseSelect}
             >
               {chronicleMenus()}
-            </Select>          
+            </Select>
           </FormControl>
         </Grid>
         <Grid>
-          <FormControl sx={{minWidth: '150px'}}>
+          <FormControl sx={{ minWidth: '150px' }}>
             <InputLabel id="splat-select-label">Splats</InputLabel>
-            <Select 
-              labelId="splat-select-label" 
-              id="splat-select" 
+            <Select
+              labelId="splat-select-label"
+              id="splat-select"
               label='Splats'
               multiple
               input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
               value={sortOptions.splats}
-              onChange={handleSplatChange}             
-              onClose={onCloseSelect}           
+              onChange={handleSplatChange}
+              onClose={onCloseSelect}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                   {selected.map((value) => (
@@ -191,24 +189,24 @@ export default function CharacterCardDisplay(props)
               )}
             >
               {getSplatMenus}
-            </Select>          
+            </Select>
           </FormControl>
         </Grid>
         <Grid>
-          <FormControl sx={{minWidth: '150px'}}>
+          <FormControl sx={{ minWidth: '150px' }}>
             <InputLabel id="sortBy-select-label">Sort by</InputLabel>
-            <Select 
-              labelId="sortBy-select-label" 
-              id="sortBy-select" 
+            <Select
+              labelId="sortBy-select-label"
+              id="sortBy-select"
               label='Sort by'
               value={sortOptions.sortBy}
-              onChange={(event) => {handleSelectChange(event, 'sortBy')}}
+              onChange={(event) => { handleSelectChange(event, 'sortBy') }}
             >
               <MenuItem value='lastUpdated'>Last Updated</MenuItem>
               <MenuItem value='name'>Name</MenuItem>
-            </Select>          
+            </Select>
           </FormControl>
-        </Grid> 
+        </Grid>
         <DashboardControls />
         {renderCharacterCards()}
       </Grid>
@@ -216,52 +214,47 @@ export default function CharacterCardDisplay(props)
   )
 }
 
-function renderStorytellerModeButton(sortOptions, handleChange, render=true)
-{
+function renderStorytellerModeButton(sortOptions, handleChange, render = true) {
   if (!render) return null;
   return (
-    <Grid xs={12} sm={12} sx={{textAlign: 'center'}}>
-      <FormControlLabel 
-        sx={{minWidth: '150px'}}
-        label="Storyteller Mode" 
+    <Grid xs={12} sm={12} sx={{ textAlign: 'center' }}>
+      <FormControlLabel
+        sx={{ minWidth: '150px' }}
+        label="Storyteller Mode"
         control={
-          <Switch 
-          checked={sortOptions.storytellerMode}
-          onChange={(event) => {handleChange(event)}}
-          />   
+          <Switch
+            checked={sortOptions.storytellerMode}
+            onChange={(event) => { handleChange(event) }}
+          />
         }
-      />  
+      />
     </Grid>
   )
 }
 
-function renderSplatSelectFilter(characters, splats)
-{
+function renderSplatSelectFilter(characters, splats) {
   let v5;
   let v20;
   const tempV5 = {};
   const tempV20 = {};
-  for (const character of Object.values(characters))
-  {
+  for (const character of Object.values(characters)) {
     const splat = SplatLabels[character.splat];
     if (splat.version === '5th') tempV5[splat.key] = splat;
-    else tempV20[splat.key] = splat; 
-  }    
+    else tempV20[splat.key] = splat;
+  }
   v5 = Object.values(tempV5);
   v20 = Object.values(tempV20);
-  
+
   const menu = [<MenuItem key='all' value='all'>Clear Filter</MenuItem>];
-  if (v5.length) 
-  {
+  if (v5.length) {
     menu.push(<ListSubheader key='5th'>5th Edition</ListSubheader>);
-    v5.sort((a, b) => a.order - b.order);      
+    v5.sort((a, b) => a.order - b.order);
   }
 
-  for (const splat of v5)
-  {
+  for (const splat of v5) {
     menu.push(
-      <MenuItem 
-        key={splat.key} 
+      <MenuItem
+        key={splat.key}
         value={splat.key}
       >
         <Checkbox checked={splats.indexOf(splat.key) > -1} />
@@ -269,18 +262,16 @@ function renderSplatSelectFilter(characters, splats)
       </MenuItem>
     )
   }
-  
-  if (v20.length)
-  {
+
+  if (v20.length) {
     menu.push(<ListSubheader key='20th'>20th Edition</ListSubheader>);
     v20.sort((a, b) => a.order - b.order);
-  } 
+  }
 
-  for (const splat of v20)
-  {
+  for (const splat of v20) {
     menu.push(
-      <MenuItem 
-        key={splat.key} 
+      <MenuItem
+        key={splat.key}
         value={splat.key}
       >
         <Checkbox checked={splats.indexOf(splat.key) > -1} />
@@ -358,5 +349,5 @@ const SplatLabels = {
     name: 'Demon',
     version: '20th',
     order: '8'
-  }, 
+  },
 }

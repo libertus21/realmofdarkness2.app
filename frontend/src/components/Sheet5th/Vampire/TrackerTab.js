@@ -9,15 +9,16 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { slugify } from '../../../utility';
 import V5Humanity from '../../Trackers/V5Humanity';
 import Hunger from '../../Trackers/Hunger';
+import { useClientContext } from '../../ClientProvider';
 
-export default function Tracker(props)
-{
+export default function Tracker(props) {
   const { sheet } = useSheetContext();
+  const { user } = useClientContext();
   const [damagePanel, setDamagePanel] = useState(false);
   const [humanityPanel, setHumanityPanel] = useState(false);
 
   function handleOpenDamagePanel(label) {
-    if (humanityPanel) setHumanityPanel(false); 
+    if (humanityPanel) setHumanityPanel(false);
     setDamagePanel((prev) => (prev === label ? null : label));
   }
 
@@ -28,43 +29,47 @@ export default function Tracker(props)
 
   return (
     <>
-      <Grid  
+      <Grid
         container
-        paddingLeft={3} 
-        rowGap={3}     
+        paddingLeft={3}
+        rowGap={3}
         columnGap={2}
         justifyContent="space-around"
         alignItems="center"
         marginBottom={(damagePanel || humanityPanel) ? 0 : 3}
       >
-        <V5DamageTracker 
-          label="Willpower" 
+        <V5DamageTracker
+          label="Willpower"
           textAlign='center'
           justifyContent='center'
-          tracker={sheet.willpower} 
+          tracker={sheet.willpower}
           onOpen={handleOpenDamagePanel}
           open={damagePanel}
+          readOnly={sheet.user !== user.id}
         />
         <V5DamageTracker
           label='Health'
-          textAlign='center'           
+          textAlign='center'
           justifyContent='center'
-          tracker={sheet.health} 
+          tracker={sheet.health}
           onOpen={handleOpenDamagePanel}
           open={damagePanel}
+          readOnly={sheet.user !== user.id}
         />
-        <V5Humanity 
-          humanity={sheet.humanity} 
+        <V5Humanity
+          humanity={sheet.humanity}
           stains={sheet.stains}
           justifyContent='center'
           textAlign='center'
           open={humanityPanel}
           onOpen={handleOpenHumanityPanel}
+          readOnly={sheet.user !== user.id}
         />
-        <Hunger 
+        <Hunger
           hunger={sheet.hunger}
           justifyContent='center'
           textAlign='center'
+          readOnly={sheet.user !== user.id}
         />
       </Grid>
       {damagePanel ? <DamagePanel label={damagePanel} /> : ''}
@@ -73,9 +78,8 @@ export default function Tracker(props)
   )
 }
 
-function HumanityPanel(props)
-{
-  const { sheet, handleUpdate } = useSheetContext(); 
+function HumanityPanel(props) {
+  const { sheet, handleUpdate } = useSheetContext();
 
   function handleChangeDamage(event, amount) {
     const value = event.currentTarget.value;
@@ -87,13 +91,13 @@ function HumanityPanel(props)
 
   return (
 
-    <Grid 
+    <Grid
       container
       alignItems="center"
       justifyContent="center"
       paddingBottom={2}
     >
-      <Paper sx={{borderRadius: "10px"}}>
+      <Paper sx={{ borderRadius: "10px" }}>
         <Grid
           container
           justifyContent="center"
@@ -102,47 +106,47 @@ function HumanityPanel(props)
         >
           <Grid xs={12} md='auto'>
             <Tooltip arrow title="Remove Humanity">
-              <IconButton 
-                value='humanity' 
+              <IconButton
+                value='humanity'
                 onClick={(e) => handleChangeDamage(e, -1)}
               >
-                <RemoveCircleOutlineIcon style={{color: '#ac3757'}} />
+                <RemoveCircleOutlineIcon style={{ color: '#ac3757' }} />
               </IconButton>
             </Tooltip>
             Total
             <Tooltip arrow title="Add Humanity">
-              <IconButton 
-                value='humanity' 
+              <IconButton
+                value='humanity'
                 onClick={(e) => handleChangeDamage(e, 1)}
               >
-                <AddCircleOutlineOutlinedIcon style={{color: '#ab0934'}} />
+                <AddCircleOutlineOutlinedIcon style={{ color: '#ab0934' }} />
               </IconButton>
             </Tooltip>
           </Grid>
           <Grid xs={12} md='auto'>
             <Typography
-              color='primary' 
-              paddingTop={{xs: 0, md: 1}}
+              color='primary'
+              paddingTop={{ xs: 0, md: 1 }}
             >
               Humanity
             </Typography>
           </Grid>
           <Grid xs={12} md='auto'>
             <Tooltip arrow title="Remove Stain">
-              <IconButton 
-                value='stains' 
+              <IconButton
+                value='stains'
                 onClick={(e) => handleChangeDamage(e, -1)}
               >
-                <RemoveCircleOutlineIcon style={{color: '#cca454'}} />
+                <RemoveCircleOutlineIcon style={{ color: '#cca454' }} />
               </IconButton>
             </Tooltip>
             Stains
             <Tooltip arrow title="Take Stain">
-              <IconButton 
-                value='stains' 
+              <IconButton
+                value='stains'
                 onClick={(e) => handleChangeDamage(e, 1)}
               >
-                <AddCircleOutlineOutlinedIcon style={{color: '#cf9013'}} />
+                <AddCircleOutlineOutlinedIcon style={{ color: '#cf9013' }} />
               </IconButton>
             </Tooltip>
           </Grid>
@@ -152,10 +156,8 @@ function HumanityPanel(props)
   )
 }
 
-class HumanityTracker
-{
-  constructor(changed, sheet, amount)
-  {
+class HumanityTracker {
+  constructor(changed, sheet, amount) {
     this.sheet = sheet;
     this.amount = amount;
     this.humanity = null;
@@ -167,8 +169,7 @@ class HumanityTracker
       this.updateStains();
   }
 
-  updateHumanity()
-  {
+  updateHumanity() {
     const change = this.sheet.humanity + this.amount;
     if (change < 0 || change > 10) throw new Error();
 
@@ -176,15 +177,13 @@ class HumanityTracker
     this.humanity = change;
   }
 
-  updateStains()
-  {
+  updateStains() {
     this.stains = this.sheet.stains + this.amount;
     if (this.stains < 0 || this.stains > 10 || this.stains > (10 - this.sheet.humanity))
       throw new Error();
   }
 
-  toUpdate()
-  {
+  toUpdate() {
     const update = {}
     if (this.humanity != null) update.humanity = this.humanity;
     if (this.stains != null) update.stains = this.stains;
@@ -193,15 +192,14 @@ class HumanityTracker
 }
 
 
-function DamagePanel(props)
-{
+function DamagePanel(props) {
   const { label } = props;
   const slug = slugify(label);
   const { sheet, lock, handleUpdate } = useSheetContext();
 
   function handleChangeDamage(event, amount) {
     const value = event.currentTarget.value;
-    let tracker;    
+    let tracker;
     try { tracker = new DamageTracker(slug, sheet[slug], value, amount) }
     catch (error) { return } // Do nothing
     handleUpdate(tracker.toUpdate(), tracker.toSheetUpdate());
@@ -211,47 +209,47 @@ function DamagePanel(props)
     <>
       <Grid xs={12} md='auto'>
         <Tooltip arrow title="Remove Aggravated Damage">
-          <IconButton 
-            value='aggravated' 
+          <IconButton
+            value='aggravated'
             onClick={(e) => handleChangeDamage(e, -1)}
           >
-            <RemoveCircleOutlineIcon style={{color: '#ac3757'}} />
+            <RemoveCircleOutlineIcon style={{ color: '#ac3757' }} />
           </IconButton>
         </Tooltip>
         Aggravated Damage
         <Tooltip arrow title="Take Aggravated Damage">
-          <IconButton 
-            value='aggravated' 
+          <IconButton
+            value='aggravated'
             onClick={(e) => handleChangeDamage(e, 1)}
           >
-            <AddCircleOutlineOutlinedIcon style={{color: '#ab0934'}} />
+            <AddCircleOutlineOutlinedIcon style={{ color: '#ab0934' }} />
           </IconButton>
         </Tooltip>
       </Grid>
       <Grid xs={12} md='auto'>
         <Typography
-          color='primary' 
-          paddingTop={{xs: 0, md: 1}}
+          color='primary'
+          paddingTop={{ xs: 0, md: 1 }}
         >
           {label}
         </Typography>
       </Grid>
       <Grid xs={12} md='auto'>
         <Tooltip arrow title="Remove Superficial Damage">
-          <IconButton 
-            value='superficial' 
+          <IconButton
+            value='superficial'
             onClick={(e) => handleChangeDamage(e, -1)}
           >
-            <RemoveCircleOutlineIcon style={{color: '#cca454'}} />
+            <RemoveCircleOutlineIcon style={{ color: '#cca454' }} />
           </IconButton>
         </Tooltip>
         Superficial Damage
         <Tooltip arrow title="Take Superficial Damage">
-          <IconButton 
-            value='superficial' 
+          <IconButton
+            value='superficial'
             onClick={(e) => handleChangeDamage(e, 1)}
           >
-            <AddCircleOutlineOutlinedIcon style={{color: '#cf9013'}} />
+            <AddCircleOutlineOutlinedIcon style={{ color: '#cf9013' }} />
           </IconButton>
         </Tooltip>
       </Grid>
@@ -260,36 +258,36 @@ function DamagePanel(props)
 
   const locked = (
     <>
-      <Grid>            
+      <Grid>
         <Tooltip arrow title={`Remove ${label}`}>
           <IconButton value='total' onClick={(e) => handleChangeDamage(e, -1)}>
-            <RemoveCircleOutlineIcon style={{color: '#ac3757'}} />
+            <RemoveCircleOutlineIcon style={{ color: '#ac3757' }} />
           </IconButton>
         </Tooltip>
       </Grid>
       <Grid>
         <Typography color='primary' paddingTop={1}>
           {label}
-        </Typography> 
+        </Typography>
       </Grid>
-      <Grid>           
+      <Grid>
         <Tooltip arrow title={`Add ${label}`}>
-          <IconButton value='total'  onClick={(e) => handleChangeDamage(e, 1)}>
-            <AddCircleOutlineOutlinedIcon style={{color: '#ab0934'}} />
+          <IconButton value='total' onClick={(e) => handleChangeDamage(e, 1)}>
+            <AddCircleOutlineOutlinedIcon style={{ color: '#ab0934' }} />
           </IconButton>
         </Tooltip>
       </Grid>
     </>
   )
 
-  return (  
-    <Grid 
+  return (
+    <Grid
       container
       alignItems="center"
       justifyContent="center"
       paddingBottom={2}
     >
-      <Paper sx={{borderRadius: "10px"}} >
+      <Paper sx={{ borderRadius: "10px" }} >
         <Grid
           container
           justifyContent="center"
@@ -303,10 +301,8 @@ function DamagePanel(props)
   )
 }
 
-class DamageTracker
-{
-  constructor(name, sheetTracker, changedValue, amount)
-  {
+class DamageTracker {
+  constructor(name, sheetTracker, changedValue, amount) {
     this.name = name;
     this.tracker = { ...sheetTracker };
     this.amount = amount;
@@ -319,17 +315,15 @@ class DamageTracker
     else this.updateDamage(changedValue);
   }
 
-  updateDamage(name)
-  {
+  updateDamage(name) {
     let current = name;
     let other = name === 'superficial' ? 'aggravated' : 'superficial'
     let change = this.tracker[current] + this.amount;
-    
-    if (change < 0 || change > 20) 
+
+    if (change < 0 || change > 20)
       throw new Error();
-    
-    if ((change + this.tracker[other]) > this.tracker.total)
-    {
+
+    if ((change + this.tracker[other]) > this.tracker.total) {
       this.aggravated = this.tracker.aggravated + 1;
       this.superficial = this.tracker.superficial - 1;
       if (this.superficial < 0) this.superficial = 0;
@@ -340,18 +334,16 @@ class DamageTracker
       this[current] = change;
   }
 
-  updateTotal()
-  {
+  updateTotal() {
     let change = this.tracker.total + this.amount;
-    
-    if (this.name === 'willpower' && (change < 1 || change > 15)) 
+
+    if (this.name === 'willpower' && (change < 1 || change > 15))
       throw new Error();
-    else if (change < 1 || change > 20) 
+    else if (change < 1 || change > 20)
       throw new Error();
 
-    if ((this.tracker.superficial + this.tracker.aggravated) > change)
-    {
-      if (this.tracker.superficial) 
+    if ((this.tracker.superficial + this.tracker.aggravated) > change) {
+      if (this.tracker.superficial)
         this.superficial = this.tracker.superficial - 1;
       else if (this.tracker.aggravated)
         this.aggravated = this.tracker.aggravated - 1;
@@ -359,28 +351,26 @@ class DamageTracker
     this.total = change;
   }
 
-  toUpdate()
-  {
+  toUpdate() {
     const update = {};
-    if (this.superficial != null) 
+    if (this.superficial != null)
       update[`${this.name}_superficial`] = this.superficial;
-    if (this.aggravated != null) 
+    if (this.aggravated != null)
       update[`${this.name}_aggravated`] = this.aggravated;
-    if (this.total != null) 
-      update[`${this.name}_total`] = this.total; 
+    if (this.total != null)
+      update[`${this.name}_total`] = this.total;
     return update;
   }
 
-  toSheetUpdate()
-  {
+  toSheetUpdate() {
     const sheetUpdate = {
-      superficial: 
+      superficial:
         this.superficial != null ? this.superficial : this.tracker.superficial,
-      aggravated: 
+      aggravated:
         this.aggravated != null ? this.aggravated : this.tracker.aggravated,
       total:
         this.total != null ? this.total : this.tracker.total,
     };
-    return {[this.name]: sheetUpdate}
+    return { [this.name]: sheetUpdate }
   }
 }

@@ -65,6 +65,8 @@ class Vampire5th(Character5th):
   resonance = models.CharField(blank=True, max_length=50)
   disciplines = models.JSONField(default=dict)
 
+  
+
 
 class CustomClan(models.Model):
   vampire = models.OneToOneField(Vampire5th, on_delete=models.CASCADE)

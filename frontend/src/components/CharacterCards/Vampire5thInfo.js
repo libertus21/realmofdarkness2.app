@@ -12,23 +12,22 @@ const defaultImage = 'https://media.discordapp.net/attachments/88698335392289181
 export default function Vampire5thInfo(props) {
   const { character, chronicle, user } = props;
   const isSheet = character.is_sheet;
-  const isUserSheet = (character.user === user.id);
   const navigate = useNavigate();
-  
+
   function redirect(isSheet) {
     if (isSheet) navigate(`/character/v5/${character.id}`)
   }
 
   return (
-    <CardActionArea disabled={!isSheet || !isUserSheet} onClick={redirect}>
+    <CardActionArea disabled={!isSheet} onClick={redirect}>
       <CardContent>
-        <CardMedia 
+        <CardMedia
           component="img"
           image={character.faceclaim ? character.faceclaim : defaultImage}
           alt="Character Image"
           sx={{
-            maxHeight: '250px', 
-            maxWidth: '250px', 
+            maxHeight: '250px',
+            maxWidth: '250px',
             minHeight: '200px',
             minWidth: '100%',
             objectFit: 'contain',
@@ -37,18 +36,18 @@ export default function Vampire5thInfo(props) {
         />
         <Typography>Vampire - 5th Edition</Typography>
         <Typography>Server: {chronicle?.name ?? 'None'}</Typography>
-        <Divider sx={{my: 1}} />
+        <Divider sx={{ my: 1 }} />
         <V5DamageTracker label='Willpower' tracker={character.willpower} />
-        <Divider sx={{my: 1}} />
+        <Divider sx={{ my: 1 }} />
         <V5DamageTracker label='Health' tracker={character.health} />
-        <Divider sx={{my: 1}} />
-        <V5Humanity 
-          humanity={character.humanity} 
-          stains={character.stains} 
+        <Divider sx={{ my: 1 }} />
+        <V5Humanity
+          humanity={character.humanity}
+          stains={character.stains}
         />
-        <Divider sx={{my: 1}} />
+        <Divider sx={{ my: 1 }} />
         <Typography>Hunger {character.hunger}</Typography>
-        <ResponsiveRating tracker={{current: character.hunger, total: 5}} />
+        <ResponsiveRating tracker={{ current: character.hunger, total: 5 }} />
         <ExpBar exp={character.exp} />
       </CardContent>
     </CardActionArea>

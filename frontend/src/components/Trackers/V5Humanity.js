@@ -10,7 +10,7 @@ const fontSize = 'inherit'
 
 const FilledHumanityIcon =
 {
-  icon: <CircleIcon style={{color: '#ab074e'}} fontSize={fontSize} />,
+  icon: <CircleIcon style={{ color: '#ab074e' }} fontSize={fontSize} />,
   label: 'Filled Humanity'
 }
 
@@ -22,40 +22,35 @@ const EmptyHumanityIcon =
 
 const StainIcon =
 {
-  icon: <NotInterestedOutlinedIcon style={{color: '#a69912'}} fontSize={fontSize} />,
+  icon: <NotInterestedOutlinedIcon style={{ color: '#a69912' }} fontSize={fontSize} />,
   label: 'Stains'
 }
 
-export default function V5Humanity(props) 
-{
-  const { humanity, stains, justifyContent, textAlign, open, onOpen } = props;
+export default function V5Humanity(props) {
+  const { humanity, stains, justifyContent, textAlign, open, onOpen, readOnly } = props;
   let humanityCount = humanity;
   let emptyCount = (10 - humanity - stains);
 
   const bars = [];
-  for (let index = 0; index < 2; index++)
-  {
+  for (let index = 0; index < 2; index++) {
     const bar = {};
-    for (let i = 0; i < 5; i++)
-    {
+    for (let i = 0; i < 5; i++) {
       let icon = StainIcon;
-      if (humanityCount)
-      {
+      if (humanityCount) {
         icon = FilledHumanityIcon;
         humanityCount--;
       }
-      else if (emptyCount)
-      {
+      else if (emptyCount) {
         icon = EmptyHumanityIcon;
         emptyCount--;
       }
-      bar[i+1] = icon;
+      bar[i + 1] = icon;
     }
 
     bars.push(
-      <Grid key={index} sx={{mt: 0.15, mb: -0.15}}>        
-        <Rating 
-          name={`Humanity Bar ${index+1}`}
+      <Grid key={index} sx={{ mt: 0.15, mb: -0.15 }}>
+        <Rating
+          name={`Humanity Bar ${index + 1}`}
           readOnly
           IconContainerComponent={(props) => {
             const { value, ...other } = props;
@@ -69,8 +64,12 @@ export default function V5Humanity(props)
     )
   }
 
-  function openPanelButton()
-  {
+  function openPanelButton() {
+    if (readOnly) return (
+      <Grid xs={12} padding={0.6}>
+        <Typography>Hunger</Typography>
+      </Grid>
+    )
     let render = <Typography>Humanity</Typography>;
     const button = (
       open ? <ExpandLessOutlinedIcon /> : <ExpandMoreOutlinedIcon />
@@ -78,8 +77,8 @@ export default function V5Humanity(props)
     const color = open ? 'primary' : 'inherit';
 
     if (onOpen) render = (
-      <Button 
-        onClick={onOpen} 
+      <Button
+        onClick={onOpen}
         size='small'
         endIcon={button}
         color={color}
@@ -91,21 +90,21 @@ export default function V5Humanity(props)
   }
 
   return (
-    <Grid 
-      container      
+    <Grid
+      container
       direction='column'
       justifyContent={justifyContent}
       alignItems={textAlign}
       textAlign={textAlign}
     >
-      <Grid xs={12}>            
+      <Grid xs={12}>
         {openPanelButton()}
       </Grid>
-      <Grid      
-        container 
+      <Grid
+        container
         columnSpacing={1}
         direction="row"
-        justifyContent={justifyContent}       
+        justifyContent={justifyContent}
       >
         {bars}
       </Grid>

@@ -6,6 +6,7 @@ import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
 import { useSheetContext, SyncState } from '../../routes/Character/Vampire5thSheet';
 import DeleteCharacterButton from '../Sheet/DeleteCharacterButton';
 import SheetPreviewNews from '../Sheet/SheetPreviewNews';
+import { useClientContext } from '../ClientProvider';
 
 import { CircularProgress } from '@mui/material';
 import CloudCircleIcon from '@mui/icons-material/CloudCircle';
@@ -13,41 +14,50 @@ import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-export default function SheetControls(props)
-{
+export default function SheetControls(props) {
   const { lock, syncState, sheet } = useSheetContext();
+  const { user } = useClientContext();
   const { handleLockChange } = props;
 
-  const unlockSheet = (    
-    <Tooltip title="Edit Sheet" arrow> 
-      <IconButton onClick={handleLockChange}>
-        <LockIcon fontSize='large' color="secondary" />
-      </IconButton>         
-    </Tooltip>
-  )
+  function unlockSheet() {
+    if (user.id === sheet.user) {
+      return (
+        <Tooltip title="Edit Sheet" arrow>
+          <IconButton onClick={handleLockChange}>
+            <LockIcon fontSize='large' color="secondary" />
+          </IconButton>
+        </Tooltip>
+      )
+    }
+    else return (
+      <IconButton disabled onClick={handleLockChange}>
+        <LockIcon fontSize='large' color="disabled" />
+      </IconButton>
+    )
+  }
 
-  const lockSheet = (  
-    <Tooltip title="Lock Sheet" arrow> 
+  const lockSheet = (
+    <Tooltip title="Lock Sheet" arrow>
       <IconButton onClick={handleLockChange}>
         <LockOpenIcon fontSize='large' color="secondary" />
-      </IconButton>         
+      </IconButton>
     </Tooltip>
   )
 
-  return (        
-    <Grid 
-      container 
+  return (
+    <Grid
+      container
       direction="row"
       justifyContent="center"
       alignItems="center"
       rowSpacing={-3}
       spacing={2}
-      xs={12} 
+      xs={12}
       md={2}
     >
       <SyncStateIcon syncState={syncState} />
       <Grid>
-        {lock ? unlockSheet : lockSheet}
+        {lock ? unlockSheet() : lockSheet}
       </Grid>
       <SheetPreviewNews />
       <Grid>
@@ -76,37 +86,35 @@ export default function SheetControls(props)
 }
 
 
-function SyncStateIcon(props)
-{
+function SyncStateIcon(props) {
   const { syncState } = props;
 
   let icon;
   let paddingX = 2;
-  switch(syncState)
-  {
+  switch (syncState) {
     case SyncState.SYNC:
-      icon = <CloudCircleIcon fontSize='large' sx={{color: '#5da9ba'}} />
+      icon = <CloudCircleIcon fontSize='large' sx={{ color: '#5da9ba' }} />
       break;
-    
+
     case SyncState.UNSYNC:
       icon = (
-        <Box paddingX='0.25px' marginY='-2.5px'>        
-          <CloudUploadIcon 
-            color='warning' 
-            sx={{marginBottom: '9px', marginLeft: '7.5px'}} 
+        <Box paddingX='0.25px' marginY='-2.5px'>
+          <CloudUploadIcon
+            color='warning'
+            sx={{ marginBottom: '9px', marginLeft: '7.5px' }}
           />
-          <CircularProgress 
-            sx={{ 
+          <CircularProgress
+            sx={{
               position: 'relative',
-              marginY: '0px', 
+              marginY: '0px',
               marginLeft: '-32px',
               zIndex: 1,
-            }} 
-            color='warning' 
+            }}
+            color='warning'
           />
         </Box>
       );
-      paddingX= '13.5px';
+      paddingX = '13.5px';
       break;
 
     case SyncState.ERROR:
@@ -116,15 +124,15 @@ function SyncStateIcon(props)
     case SyncState.SYNC_COMPLETE:
       icon = <CheckCircleIcon fontSize='large' color='success' />
       break;
-    
-      default:
+
+    default:
       break;
   }
 
   return (
     <Grid paddingTop='9px' paddingX={paddingX}>
-      <Tooltip title={`Sheet ${syncState}`} arrow>   
-        {icon}  
+      <Tooltip title={`Sheet ${syncState}`} arrow>
+        {icon}
       </Tooltip>
     </Grid>
   );

@@ -17,7 +17,6 @@ export default function DisciplinesTab(props) {
   const [updateDiscipline, setUpdate] = useState(null);
   const { pushAlert } = useAlertContext();
 
-
   function openDialog() {
     setDialogOpen(true);
   }

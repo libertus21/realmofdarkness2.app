@@ -71,13 +71,18 @@ class GetV5Character(APIView):
     must_be_sheet = request.GET.get('sheet')
 
     try:
-      # TODO we need to extend this to Storyteller characters
-      character = Vampire5th.objects.get(pk=id, user=user)
+      character = Vampire5th.objects.get(pk=id)
     except Vampire5th.DoesNotExist:
       return Response('Character does not exist!', status=404)
     
+    is_owner = character.user == user
+    is_admin_or_storyteller = is_admin_or_st(character, user)
+    
     if not character.is_sheet and must_be_sheet: 
       return Response('This is not a Sheet', status=status.HTTP_406_NOT_ACCEPTABLE)
+    
+    if not (is_owner or is_admin_or_storyteller):
+      return Response('You do not have permission to view this character', status=403)
 
     serializer = Vampire5thSerializer(character)
     return Response(serializer.data)
