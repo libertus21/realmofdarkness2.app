@@ -10,82 +10,81 @@ import GenerationMenuItems from './GenerationMenuItems';
 import SheetStatusMenuItems from '../../Sheet/SheetStatusMenuItems';
 import ChronicleMenuItems from './ChronicleMenuItems';
 
-export default function GeneralInfoTab(props)
-{
+export default function GeneralInfoTab(props) {
   const { sheet } = useSheetContext();
   const { handleLockChange } = props;
 
   return (
-    <Grid 
-      container 
-      spacing={2} 
+    <Grid
+      container
+      spacing={2}
       xs={12}
     >
-      <Grid 
-        container 
-        md={10} 
-        paddingY={3} 
-        columnGap={1} 
+      <Grid
+        container
+        md={10}
+        paddingY={3}
+        columnGap={1}
         justifyContent='center'
+      >
+        <Grid
+          container minWidth={315} direction='column' xs={12} md='auto'
         >
-        <Grid 
-          container minWidth={315} direction='column' xs={12} md='auto' 
-        >          
           <ApiTextField label="Name" value={sheet.name} maxLength={50} />
-          <ApiSelect 
-            label="Chronicle" 
-            value={sheet.chronicle ?? ''} 
+          <ApiSelect
+            label="Chronicle"
+            value={sheet.chronicle ?? ''}
             getOptions={ChronicleMenuItems}
           />
         </Grid>
-        <Grid 
-          container 
-          minWidth={{xs: 315, lg: 415}} 
-          direction='column' 
-          xs={12} md='auto' 
-        >          
-          <ApiTextField label="Ambition" value={sheet.ambition} maxLength={100} /> 
+        <Grid
+          container
+          minWidth={{ xs: 315, lg: 415 }}
+          direction='column'
+          xs={12} md='auto'
+        >
+          <ApiTextField label="Ambition" value={sheet.ambition} maxLength={100} />
           <ApiTextField label="Desire" value={sheet.desire} maxLength={100} />
         </Grid>
-        <Grid 
-          container minWidth={315} direction='column' xs={12} md='auto' 
-        >          
-          <DialogueTextField 
-            label="Clan" 
-            value={sheet.clan} 
-            getData={getClans} 
-          />         
-          <ApiSelect 
+        <Grid
+          container minWidth={315} direction='column' xs={12} md='auto'
+        >
+          <DialogueTextField
+            label="Clan"
+            value={sheet.clan}
+            getData={getClans}
+          />
+          <ApiSelect
             label="Generation"
-            value={sheet.generation} 
-            getOptions={GenerationMenuItems} 
+            value={sheet.generation}
+            getOptions={GenerationMenuItems}
           />
         </Grid>
-        <Grid 
-          container minWidth={315} direction='column' xs={12} md='auto' 
-        >          
-          <ApiTextField label="Sire" value={sheet.sire} maxLength={50} />  
-          <DialogueTextField 
-            label="Predator Type" 
-            value={sheet.predator_type} 
-            getData={getPredatorTypes} 
-          /> 
+        <Grid
+          container minWidth={315} direction='column' xs={12} md='auto'
+        >
+          <ApiTextField label="Sire" value={sheet.sire} maxLength={50} />
+          <DialogueTextField
+            label="Predator Type"
+            value={sheet.predator_type}
+            getData={getPredatorTypes}
+          />
         </Grid>
-        <Grid 
-          container 
-          maxWidth={{xs: 'auto', md: 215}} 
-          direction={{xs: 'row', md: 'column'}} 
-          xs={12} 
-          md='auto' 
-        >          
-          <ApiSelect 
-            label="Sheet Status" 
-            value={sheet.status} 
+        <Grid
+          container
+          maxWidth={{ xs: 'auto', md: 215 }}
+          direction={{ xs: 'row', md: 'column' }}
+          xs={12}
+          md='auto'
+        >
+          <ApiSelect
+            label="Sheet Status"
+            value={sheet.status}
             slug='status'
-            getOptions={SheetStatusMenuItems} 
-            xs={6} 
-          />  
-          <ExpTextField label="Experiance" exp={sheet.exp} xs = {6} />
+            getOptions={SheetStatusMenuItems}
+            xs={6}
+          />
+          <ExpTextField label="Experience" exp={sheet.exp} xs={6} />
         </Grid>
       </Grid>
       <SheetControls handleLockChange={handleLockChange} />

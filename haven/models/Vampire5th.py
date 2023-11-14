@@ -25,6 +25,7 @@ class PredatorType(models.TextChoices):
   CUSTOM = 'Custom'
   ALLEYCAT = 'Alleycat'
   BLOOD_LEECH = 'Blood Leech'
+  BAGGER = 'Bagger'
   CLEAVER = 'Cleaver'
   CONSENSUALIST = 'Consensualist'
   FARMER = 'Farmer'
@@ -62,6 +63,7 @@ class Vampire5th(Character5th):
     default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
   hunting_roll = models.CharField(blank=True, max_length=100)
   resonance = models.CharField(blank=True, max_length=50)
+  disciplines = models.JSONField(default=dict)
 
 
 class CustomClan(models.Model):

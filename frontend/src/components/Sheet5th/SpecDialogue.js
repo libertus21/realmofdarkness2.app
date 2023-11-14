@@ -35,7 +35,7 @@ export default function SpecialtyDialogue({ name, spec, open, onClose, onSave })
 
   const updateSpecName = (spec) => {
     if (spec.length < newSpecialty.length) setNewSpecialty(spec);
-    else if (newSpecialty.length > 50) return;
+    else if (spec.length > 50) return;
     else setNewSpecialty(spec)
   }
 

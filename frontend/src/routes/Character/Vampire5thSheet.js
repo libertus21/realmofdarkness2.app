@@ -18,7 +18,7 @@ import { useAlertContext } from "../../components/AlertProvider";
 
 const SheetContext = createContext(null);
 export const useSheetContext = () => useContext(SheetContext);
-export const SyncState = 
+export const SyncState =
 {
   SYNC: 'Synced',
   UNSYNC: 'Uploading',
@@ -26,13 +26,12 @@ export const SyncState =
   SYNC_COMPLETE: 'Upload Complete',
 }
 
-export default function Vampire5thSheet(props)
-{
+export default function Vampire5thSheet(props) {
   const [lock, setLock] = useState(true);
   const [syncState, setSyncState] = useState(SyncState.SYNC);
   const { client, sheet, setSheet } = useClientContext();
   const { pushAlert } = useAlertContext();
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
 
   /**
@@ -40,8 +39,7 @@ export default function Vampire5thSheet(props)
    * @param {object} apiUpdate - Update in the ORM JSON format
    * @param {object} sheetUpdate - Sheet update in the Sheet JSON format
    */
-  async function handleUpdate(apiUpdate, update)
-  {
+  async function handleUpdate(apiUpdate, update) {
     // Creating a deep copy of Skills
     const oldSheet = JSON.parse(JSON.stringify(sheet));
     const sheetUpdate = update ?? apiUpdate;
@@ -51,85 +49,77 @@ export default function Vampire5thSheet(props)
     setSheet((prevSheet) => ({ ...prevSheet, ...sheetUpdate }));
 
     // API call to update server
-    try
-    {
+    try {
       // Make the API request to update the character's skills
       const response = await fetch(
-        `${getHost(true)}/api/character/update/v5/${sheet.id}`, 
+        `${getHost(true)}/api/character/update/v5/${sheet.id}`,
         {
           method: 'PUT',
-          headers: 
+          headers:
           {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCSRFToken(),
           },
           body: JSON.stringify(apiUpdate),
-      });
+        });
 
-      if (!response.ok) 
-      { 
+      if (!response.ok) {
         const data = await response.json();
         const errorMessage = data ?? "There was an error with this request and the changes have not been applied."
-        pushAlert({title: 'API Error', message: errorMessage});
+        pushAlert({ title: 'API Error', message: errorMessage });
         setSheet(oldSheet);
         setSyncState(SyncState.ERROR)
         setTimeout(() => setSyncState(SyncState.SYNC), 5000);
         return 'error'
       }
     }
-    catch (error)
-    {
-      const message = "There was an error with this request and the changes have not been applied.";      
-      pushAlert({title: 'API Error', message: message});
-      setSheet(oldSheet);      
+    catch (error) {
+      const message = "There was an error with this request and the changes have not been applied.";
+      pushAlert({ title: 'API Error', message: message });
+      setSheet(oldSheet);
       setSyncState(SyncState.ERROR)
       setTimeout(() => setSyncState(SyncState.SYNC), 5000);
       return 'error'
     }
-    setSyncState(SyncState.SYNC_COMPLETE); 
-    setTimeout(() => setSyncState(SyncState.SYNC), 5000);   
+    setSyncState(SyncState.SYNC_COMPLETE);
+    setTimeout(() => setSyncState(SyncState.SYNC), 5000);
   }
 
-  function handleLockChange()
-  {
+  function handleLockChange() {
     setLock(!lock);
   }
-  
+
   ///////////////////////////// Fetch Sheet data /////////////////////////////
   useEffect(() => {
-    const fetchSheetData = async () => 
-    {
-      try 
-      {
-        const response = 
+    const fetchSheetData = async () => {
+      try {
+        const response =
           await fetch(`/api/character/get/v5?id=${id}&sheet=true`);
         const data = await response.json();
 
-        if (!response.ok) 
-        {
-          pushAlert({title: 'API Error', message: data});
+        if (!response.ok) {
+          pushAlert({ title: 'API Error', message: data });
           return navigate('/');
         }
         setSheet(data);
-      } 
-      catch (error) 
-      { 
-        const message = 'There was an unknown error fetching this sheet.'       
-        pushAlert({title: 'API Error', message: message})
+      }
+      catch (error) {
+        const message = 'There was an unknown error fetching this sheet.'
+        pushAlert({ title: 'API Error', message: message })
         navigate('/');
       }
-    };  
+    };
     fetchSheetData();
-    return () => {setSheet(null)}
+    return () => { setSheet(null) }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {    
+  useEffect(() => {
     client.sheetSubscribe(id);
-    return () => {client.sheetSubscribe(null)}
+    return () => { client.sheetSubscribe(null) }
   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const sheetPage = (
-    <Container maxWidth='false' sx={{ mt: 10 }}> 
+    <Container maxWidth='false' sx={{ mt: 10 }}>
       <GeneralInfo handleLockChange={handleLockChange} />
       <TrackerTab />
       <Grid container>
@@ -137,13 +127,13 @@ export default function Vampire5thSheet(props)
           <Attributes />
           <Skills />
         </Grid>
-        <Grid 
-          container 
-          md={7} 
+        <Grid
+          container
+          md={7}
           direction="column"
           spacing={1}
           rowGap={3}
-        > 
+        >
           <SheetNav />
           <Disciplines />
           <Grid xs={12} container>
@@ -156,15 +146,14 @@ export default function Vampire5thSheet(props)
   )
 
   return (
-    <SheetContext.Provider value={{sheet, lock, handleUpdate, syncState}}>
+    <SheetContext.Provider value={{ sheet, lock, handleUpdate, syncState }}>
       {sheet ? sheetPage : (<SheetSkeleton />)}
     </SheetContext.Provider>
   )
 }
 
 
-function SheetNav(props)
-{
+function SheetNav(props) {
   const [value] = useState('Core');
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('xl'));
 
@@ -172,16 +161,16 @@ function SheetNav(props)
   const scrollable = isSmallScreen ? 'scrollable' : 'standard';
 
 
-  return (   
+  return (
     <Grid xs={12}>
-      <Box 
-        sx={{ 
-          borderRadius: '20px', 
-          marginBottom: '10px', 
+      <Box
+        sx={{
+          borderRadius: '20px',
+          marginBottom: '10px',
           maxWidth: '100%',
-          bgcolor: 'background.paper' 
+          bgcolor: 'background.paper'
         }}
-      >              
+      >
         <Tabs
           value={value}
           textColor="secondary"
@@ -191,14 +180,14 @@ function SheetNav(props)
           scrollButtons
         >
           <Tab label="Core" value='Core' />
-          <Tab label="Advantages" disabled />           
-          <Tab label="Haven" disabled /> 
-          <Tab label="Exp" disabled />     
-          <Tab label="Possessions" disabled />   
+          <Tab label="Advantages" disabled />
+          <Tab label="Haven" disabled />
+          <Tab label="Exp" disabled />
+          <Tab label="Possessions" disabled />
           <Tab label="Background" disabled />
           <Tab label="Gallery" disabled />
         </Tabs>
-      </Box> 
+      </Box>
     </Grid>
   )
 }

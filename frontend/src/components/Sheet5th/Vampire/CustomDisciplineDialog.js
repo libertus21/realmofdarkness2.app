@@ -1,0 +1,131 @@
+// NewDisciplineDialog.jsx
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Unstable_Grid2';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  Button,
+  IconButton,
+  DialogActions,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+
+export default function CustomDisciplineDialog({ open, onClose, onSave, update }) {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [characteristics, setCharacteristics] = useState('');
+  const [oldName, setOldName] = useState('')
+
+  const handleAddDiscipline = async () => {
+    let descriptionArray;
+    let characteristicsArray;
+    if (description !== '') descriptionArray = description?.split('\n');
+    if (characteristics !== '') characteristicsArray = characteristics?.split('\n');
+
+    await onSave({
+      name,
+      description: descriptionArray,
+      characteristics: characteristicsArray
+    }, update, oldName);
+    onClose();
+  };
+
+  useEffect(() => {
+    setName('');
+    setDescription('');
+    setCharacteristics('');
+  }, [open]);
+
+  useEffect(() => {
+    if (!update) {
+      setName('');
+      setOldName('');
+      setDescription('');
+      setCharacteristics('');
+    }
+    else {
+      setName(update.name);
+      setOldName(update.name);
+      setDescription(update.description?.join('\n') ?? '');
+      setCharacteristics(update.characteristics?.join('\n') ?? '');
+    }
+  }, [update]);
+
+  const updateText = (text, oldValue, set, max) => {
+    if (text.length < oldValue.length) set(text);
+    else if (text.length > max) return;
+    else set(text)
+  }
+
+  return (
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
+      <DialogTitle color="primary" sx={{ textAlign: 'center' }}>
+        {update ? 'Update' : "New"} Custom Discipline
+      </DialogTitle>
+      <IconButton
+        onClick={onClose}
+        sx={{
+          position: 'absolute',
+          right: 8,
+          top: 8,
+          color: (theme) => theme.palette.grey[500],
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
+      <DialogContent>
+        <Grid container spacing={2}>
+          <Grid xs={12}>
+            <TextField
+              label="Discipline Name"
+              variant="outlined"
+              fullWidth
+              value={name}
+              onChange={(e) => updateText(e.target.value, name, setName, 50)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleAddDiscipline();
+              }}
+              required
+            />
+          </Grid>
+          <Grid xs={12}>
+            <TextField
+              label="Discipline Description"
+              variant="outlined"
+              fullWidth
+              multiline
+              maxRows={10}
+              value={description}
+              onChange={(e) => updateText(e.target.value, description, setDescription, 4000)}
+            />
+          </Grid>
+          <Grid xs={12}>
+            <TextField
+              label="Discipline Characteristics"
+              variant="outlined"
+              fullWidth
+              multiline
+              maxRows={10}
+              value={characteristics}
+              onChange={(e) => updateText(e.target.value, characteristics, setCharacteristics, 3000)}
+            />
+          </Grid>
+          {/* Add other fields for the new discipline here */}
+        </Grid>
+      </DialogContent>
+      <DialogActions sx={{ paddingX: 3, paddingBottom: 2 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleAddDiscipline}
+          fullWidth
+          disabled={name ? false : true}
+        >
+          {update ? 'Update' : 'Add'} Discipline
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}

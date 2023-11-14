@@ -1,29 +1,28 @@
-export function getClans()
-{
+export function getClans() {
   return [
-    'Banu Haqim', 
-    'Brujah', 
-    'Gangrel', 
-    'Hecata', 
-    'Lasombra', 
-    'Malkavian', 
-    'Ministry', 
-    'Nosferatu', 
-    'Ravnos', 
-    'Salubri', 
-    'Toreador', 
-    'Tremere', 
-    'Tzimisce', 
-    'Ventrue', 
-    'Caitiff',  
+    'Banu Haqim',
+    'Brujah',
+    'Gangrel',
+    'Hecata',
+    'Lasombra',
+    'Malkavian',
+    'Ministry',
+    'Nosferatu',
+    'Ravnos',
+    'Salubri',
+    'Toreador',
+    'Tremere',
+    'Tzimisce',
+    'Ventrue',
+    'Caitiff',
     'Thin Blood'
   ];
 }
 
-export function getPredatorTypes()
-{
+export function getPredatorTypes() {
   return [
     'Alleycat',
+    'Bagger',
     'Blood Leech',
     'Cleaver',
     'Consensualist',
@@ -45,7 +44,7 @@ export function getPredatorTypes()
 /**
  * Gateway opcodes
  */
-export const GATEWAY_OPCODE = {  
+export const GATEWAY_OPCODE = {
   'dispatch': 0, // Recieve events
   'request': 1, // Send events
   'heartbeat': 2, // Send/Recieve heatbeats

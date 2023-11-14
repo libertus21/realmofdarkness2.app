@@ -45,7 +45,7 @@ export default function Skill(props) {
     const slug = slugify(name);
     const update = { [slug]: updateValue };
 
-    const newSkills = JSON.parse(JSON.stringify(sheet.skills));;
+    const newSkills = JSON.parse(JSON.stringify(sheet.skills));
     newSkills[slug].value = updateValue;
     const sheetUpdate = { skills: newSkills };
     handleUpdate(update, sheetUpdate);

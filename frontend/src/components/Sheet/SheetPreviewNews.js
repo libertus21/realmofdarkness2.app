@@ -50,6 +50,7 @@ export default function SheetPreviewNews() {
               <li>Skills</li>
               <li>Hunting</li>
               <li>Blood Potency</li>
+              <li>Custom Disciplines (Not including Powers)</li>
             </ul>
           </DialogContentText>
         </DialogContent>
