@@ -88,9 +88,12 @@ class Character(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   last_updated = models.DateTimeField(auto_now=True)
   faceclaim = models.URLField(blank=True)
-  theme = models.CharField(default='#000000', max_length=10)  
+  theme = models.CharField(default='#000000', max_length=10)
+
+  # Experiance  
   exp_current = models.IntegerField(default=0)
   exp_total = models.IntegerField(default=0)
+  exp_spends = models.JSONField(default=list)
   
   # Profile
   date_of_birth=models.CharField(blank=True, max_length=20)

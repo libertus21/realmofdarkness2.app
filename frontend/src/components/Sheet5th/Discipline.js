@@ -160,7 +160,7 @@ export default function Discipline(props) {
           {discipline.characteristics?.length ? (
             <>
               <Typography
-                variant="h4"
+                variant="h5"
                 component="h2"
                 color="secondary"
                 paddingTop={2}

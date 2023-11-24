@@ -8,6 +8,7 @@ import { useSheetContext } from "../../../routes/Character/Vampire5thSheet";
 
 import { useState } from "react";
 import ApiTextField from "../../Sheet/ApiTextField";
+import ExpTab from "../ExpTab";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -63,7 +64,7 @@ export default function SheetNav(props) {
             <Tab label="Core" value={0} />
             <Tab label="Advantages" value={1} disabled />
             <Tab label="Haven" value={2} disabled />
-            <Tab label="Exp" value={3} disabled />
+            <Tab label="Exp" value={3} />
             <Tab label="Profile" value={4} />
             <Tab label="Notes" value={5} />
             <Tab label="Gallery" value={6} disabled />
@@ -77,6 +78,11 @@ export default function SheetNav(props) {
           <BloodPotencyTab />
           <HuntingTab />
         </Grid>
+
+      </CustomTabPanel>
+      {/* Exp Tab */}
+      <CustomTabPanel value={value} index={3}>
+        <ExpTab />
       </CustomTabPanel>
       {/* Profile Tab */}
       <CustomTabPanel value={value} index={4}>
@@ -89,6 +95,7 @@ export default function SheetNav(props) {
           value={sheet.notes}
           noLock
           onEnter={false}
+          maxLength={6000}
           multiline
           rows={22}
         />

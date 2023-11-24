@@ -15,13 +15,18 @@ export default function ApiTextField(props) {
     variant = 'outlined',
     size = 'small',
     onEnter = true,
+    save,
     paddingX = 1,
+    xs = 12,
+    md = 'auto',
     ...other
   } = props;
 
   const { lock, handleUpdate, sheet } = useSheetContext();
   const { user } = useClientContext();
   const disable = ((sheet.user !== user.id) || (lock && !noLock))
+
+  const handleSave = save ? save : handleUpdate;
 
   const [field, setField] = useState(value);
   const [error, setError] = useState(false);
@@ -45,7 +50,7 @@ export default function ApiTextField(props) {
     const updatedValue = field ?? '';
     const response = { [name]: updatedValue };
 
-    const res = await handleUpdate(response);
+    const res = await handleSave(response);
     if (res === 'error') {
       setError(true);
       setColor('primary');
@@ -69,7 +74,7 @@ export default function ApiTextField(props) {
   }, [value]);
 
   return (
-    <Grid xs={12} md='auto' paddingX={paddingX} >
+    <Grid xs={xs} md={md} paddingX={paddingX} >
       <TextField
         focused={focused}
         onClick={onClick}

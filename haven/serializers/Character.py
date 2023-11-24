@@ -22,6 +22,7 @@ class CharacterSerializer(serializers.ModelSerializer):
       'age',
       'appearance',
       'notes',
+      'exp_spends',
     )
   
   def to_representation(self, instance):
@@ -137,6 +138,47 @@ class CharacterDeserializer(serializers.ModelSerializer):
       raise serializers.ValidationError("Invalid hex color value.")
     
     return value
+  
+  def validate_exp_current(self, value):
+    if (value > self.instance.exp_total):
+      raise serializers.ValidationError("Current cannot be more than Total")
+    elif (value < 0):
+      raise serializers.ValidationError("Cannot be less then 0")
+    return value
+  
+  def validate_exp_total(self, value):
+    if (value < self.instance.exp_current):
+      raise serializers.ValidationError("Current cannot be less than Current")
+    elif (value < 0):
+      raise serializers.ValidationError("Cannot be less then 0")
+    return value    
+
+  def validate_exp_spends(self, data):
+    print(data)
+    if not isinstance(data, list):
+      raise serializers.ValidationError()
+    
+    allowed_keys = ['description', 'cost']
+
+    for item in data:
+      if not isinstance(item, dict):
+        raise serializers.ValidationError()
+      if 'description' not in item:
+        raise serializers.ValidationError()
+      if 'cost' not in item:
+        raise serializers.ValidationError()
+      
+      unexpected_keys = set(item.keys()) - set(allowed_keys)
+      if unexpected_keys:
+        raise serializers.ValidationError(f"Unexpected keys found in set: {', '.join(unexpected_keys)}")
+      elif not isinstance(item['description'], str):
+        raise serializers.ValidationError()
+      elif len(item['description']) > 80:
+        raise serializers.ValidationError("Description too long")
+      elif not isinstance(item['cost'], int):
+        raise serializers.ValidationError("Cost must be a number")
+    
+    return data
   
   def validate(self, data):
     data = super().validate(data)
