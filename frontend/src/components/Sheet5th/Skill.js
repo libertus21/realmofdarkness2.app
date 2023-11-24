@@ -63,7 +63,7 @@ export default function Skill(props) {
   }
 
   let specIcon;
-  if (lock && skill.spec) {
+  if (lock && (skill.spec && skill.spec.length)) {
     specIcon = (
       <Tooltip arrow title={skill.spec.join(', ')}>
         <ExpandCircleDownIcon
@@ -75,7 +75,6 @@ export default function Skill(props) {
     )
   }
   else if (lock) {
-
     specIcon = (
       <ExpandCircleDownIcon
         fontSize='small'
@@ -84,7 +83,7 @@ export default function Skill(props) {
     )
   }
   else {
-    const color = skill.spec ? 'secondary' : 'primary'
+    const color = (skill.spec && skill.spec.length) ? 'secondary' : 'primary'
     specIcon = (
       <IconButton
         size='small'

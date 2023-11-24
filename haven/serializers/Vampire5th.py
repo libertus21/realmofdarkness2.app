@@ -20,7 +20,9 @@ class Vampire5thSerializer(Character5thSerializer):
       'resonance',
       'hunting_roll',
       'blood_potency',
-      'disciplines'
+      'disciplines',
+      'date_of_death',
+      'apparent_age'
     ) 
 
   def to_representation(self, instance):

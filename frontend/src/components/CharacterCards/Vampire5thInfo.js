@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const defaultImage = 'https://media.discordapp.net/attachments/886983353922891816/1024918662223769600/VampireLogo_xsmall_colour.png?width=1440&height=445'
 
 export default function Vampire5thInfo(props) {
-  const { character, chronicle, user } = props;
+  const { character, chronicle } = props;
   const isSheet = character.is_sheet;
   const navigate = useNavigate();
 

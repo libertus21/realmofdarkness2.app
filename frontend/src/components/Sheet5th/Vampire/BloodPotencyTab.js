@@ -3,27 +3,26 @@ import { Divider, Typography, TextField } from "@mui/material";
 import BloodPotency from './BloodPotency';
 import { useSheetContext } from '../../../routes/Character/Vampire5thSheet';
 
-export default function BloodPotencyTab(props)
-{
+export default function BloodPotencyTab(props) {
   const { lock, sheet, handleUpdate } = useSheetContext();
   const potency = sheet.blood_potency;
   let bpInfo = bpChart[potency];
 
   return (
-    <Grid 
-      container 
-      spacing={2} 
+    <Grid
+      container
+      spacing={2}
       xs={12}
       md={8}
-    >  
-      <Grid xs={12}>                    
+    >
+      <Grid xs={12}>
         <Divider variant="middle">
           <Typography variant="h4" component="h3" color='#80172f'>
             Blood Potency
           </Typography>
         </Divider>
       </Grid>
-      <Grid 
+      <Grid
         container
         direction="row"
         justifyContent="center"
@@ -31,7 +30,7 @@ export default function BloodPotencyTab(props)
         paddingTop={2}
         xs={12}
       >
-        <BloodPotency 
+        <BloodPotency
           lock={lock} potency={potency} handleUpdate={handleUpdate}
         />
       </Grid>
@@ -43,84 +42,84 @@ export default function BloodPotencyTab(props)
         xs={12}
         paddingTop={2}
       >
-        <Grid>                  
-          <TextField 
+        <Grid>
+          <TextField
             InputProps={{
               readOnly: true,
               disabled: true,
             }}
-            label="Blood Surge" 
-            variant='outlined' 
-            value={bpInfo.bloodSurge} 
+            label="Blood Surge"
+            variant='outlined'
+            value={bpInfo.bloodSurge}
             fullWidth
             size='small'
           />
         </Grid>
-        <Grid>                  
-          <TextField 
+        <Grid>
+          <TextField
             InputProps={{
               readOnly: true,
               disabled: true,
             }}
-            label="Mend Amount" 
-            variant='outlined' 
+            label="Mend Amount"
+            variant='outlined'
             value={bpInfo.damageMended}
             fullWidth
             size='small'
           />
         </Grid>
-        <Grid>                  
-          <TextField 
+        <Grid>
+          <TextField
             InputProps={{
               readOnly: true,
               disabled: true,
             }}
-            label="Power Bonus" 
-            variant='outlined' 
-            value={bpInfo.powerBonus} 
+            label="Power Bonus"
+            variant='outlined'
+            value={bpInfo.powerBonus}
             fullWidth
             size='small'
           />
         </Grid>
-        <Grid>                  
-          <TextField 
+        <Grid>
+          <TextField
             InputProps={{
               readOnly: true,
               disabled: true,
             }}
-            label="Rouse Re-Roll" 
-            variant='outlined' 
-            value={bpInfo.rouseCheck} 
+            label="Rouse Re-Roll"
+            variant='outlined'
+            value={bpInfo.rouseCheck}
             fullWidth
             size='small'
           />
         </Grid>
-        <Grid>                  
-          <TextField 
+        <Grid>
+          <TextField
             InputProps={{
               readOnly: true,
               disabled: true,
             }}
-            label="Bane Severity" 
-            variant='outlined' 
-            value={bpInfo.bane} 
+            label="Bane Severity"
+            variant='outlined'
+            value={bpInfo.bane}
             fullWidth
             size='small'
           />
         </Grid>
-        <Grid>                  
-          <TextField 
+        <Grid>
+          <TextField
             multiline
             InputProps={{
               readOnly: true,
               disabled: true,
             }}
-            label="Feeding Penalty" 
-            variant='outlined' 
+            label="Feeding Penalty"
+            variant='outlined'
             value={bpInfo.feedingPenalty}
             fullWidth
             size='small'
-            sx={{marginRight: 4.375}}
+            sx={{ marginRight: 4.375 }}
           />
         </Grid>
       </Grid>
@@ -158,7 +157,7 @@ const bpChart = {
     bane: 2,
     feedingPenalty: 'Animal and bagged blood slakes half Hunger',
   },
-  
+
   3: {
     bloodPotency: 3,
     bloodSurge: 'Add 3 dice',

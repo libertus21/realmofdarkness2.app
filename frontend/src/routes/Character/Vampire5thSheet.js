@@ -1,13 +1,11 @@
-import { Container, Tab, Tabs, Box, useMediaQuery } from "@mui/material";
+import { Container } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 
 import GeneralInfo from "../../components/Sheet5th/Vampire/GeneralInfoTab";
 import Attributes from "../../components/Sheet5th/AttributesTab";
+import SheetNav from "../../components/Sheet5th/Vampire/SheetNav";
 import Skills from "../../components/Sheet5th/SkillsTab";
 import TrackerTab from "../../components/Sheet5th/Vampire/TrackerTab";
-import Disciplines from "../../components/Sheet5th/DisciplinesTab";
-import BloodPotency from "../../components/Sheet5th/Vampire/BloodPotencyTab";
-import HuntingTab from "../../components/Sheet5th/Vampire/HuntingTab";
 import SheetSkeleton from "../../components/SheetSkeleton";
 import { useState, useEffect, createContext, useContext } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -131,15 +129,9 @@ export default function Vampire5thSheet(props) {
           container
           md={7}
           direction="column"
-          spacing={1}
-          rowGap={3}
+          rowGap={2}
         >
           <SheetNav />
-          <Disciplines />
-          <Grid xs={12} container>
-            <BloodPotency />
-            <HuntingTab />
-          </Grid>
         </Grid>
       </Grid>
     </Container>
@@ -149,45 +141,5 @@ export default function Vampire5thSheet(props) {
     <SheetContext.Provider value={{ sheet, lock, handleUpdate, syncState }}>
       {sheet ? sheetPage : (<SheetSkeleton />)}
     </SheetContext.Provider>
-  )
-}
-
-
-function SheetNav(props) {
-  const [value] = useState('Core');
-  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('xl'));
-
-  const centered = isSmallScreen ? false : true;
-  const scrollable = isSmallScreen ? 'scrollable' : 'standard';
-
-
-  return (
-    <Grid xs={12}>
-      <Box
-        sx={{
-          borderRadius: '20px',
-          marginBottom: '10px',
-          maxWidth: '100%',
-          bgcolor: 'background.paper'
-        }}
-      >
-        <Tabs
-          value={value}
-          textColor="secondary"
-          indicatorColor="secondary"
-          variant={scrollable}
-          centered={centered}
-          scrollButtons
-        >
-          <Tab label="Core" value='Core' />
-          <Tab label="Advantages" disabled />
-          <Tab label="Haven" disabled />
-          <Tab label="Exp" disabled />
-          <Tab label="Possessions" disabled />
-          <Tab label="Background" disabled />
-          <Tab label="Gallery" disabled />
-        </Tabs>
-      </Box>
-    </Grid>
   )
 }

@@ -71,7 +71,7 @@ export default function V5DamageTracker(props) {
   function openPanelButton() {
     if (readOnly) return (
       <Grid xs={12} padding={0.6}>
-        <Typography>Hunger</Typography>
+        <Typography>{label}</Typography>
       </Grid>
     )
     let render = <Typography>{label}</Typography>;

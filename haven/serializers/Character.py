@@ -17,6 +17,11 @@ class CharacterSerializer(serializers.ModelSerializer):
       'status',
       'faceclaim',
       'theme',
+      'history',
+      'date_of_birth',
+      'age',
+      'appearance',
+      'notes',
     )
   
   def to_representation(self, instance):
@@ -132,7 +137,6 @@ class CharacterDeserializer(serializers.ModelSerializer):
       raise serializers.ValidationError("Invalid hex color value.")
     
     return value
-
   
   def validate(self, data):
     data = super().validate(data)

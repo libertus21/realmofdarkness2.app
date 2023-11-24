@@ -84,7 +84,7 @@ export default function DisciplinesTab(props) {
         justifyContent="center"
         alignItems="center"
         xs={12}
-        paddingTop={2}
+        paddingTop={1}
         minHeight={80}
       >
         {sheet.disciplines &&

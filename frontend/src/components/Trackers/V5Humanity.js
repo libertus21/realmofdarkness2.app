@@ -67,7 +67,7 @@ export default function V5Humanity(props) {
   function openPanelButton() {
     if (readOnly) return (
       <Grid xs={12} padding={0.6}>
-        <Typography>Hunger</Typography>
+        <Typography>Humanity</Typography>
       </Grid>
     )
     let render = <Typography>Humanity</Typography>;

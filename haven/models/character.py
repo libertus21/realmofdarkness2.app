@@ -92,6 +92,14 @@ class Character(models.Model):
   exp_current = models.IntegerField(default=0)
   exp_total = models.IntegerField(default=0)
   
+  # Profile
+  date_of_birth=models.CharField(blank=True, max_length=20)
+  age=models.CharField(blank=True, max_length=20)
+  history = models.TextField(blank=True, max_length=6000)
+  appearance = models.TextField(blank=True, max_length=1000)
+
+  notes = models.TextField(blank=True, max_length=6000)
+  
   # Splat is a remenant of old system once all are converted splat should be deleted  
   splat = models.ForeignKey(Splat, on_delete=models.CASCADE, null=True)
   objects = CharacterManager()

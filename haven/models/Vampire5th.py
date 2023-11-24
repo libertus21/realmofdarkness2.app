@@ -65,6 +65,10 @@ class Vampire5th(Character5th):
   resonance = models.CharField(blank=True, max_length=50)
   disciplines = models.JSONField(default=dict)
 
+  # Profile
+  date_of_death = models.CharField(blank=True, max_length=20)
+  apparent_age = models.CharField(blank=True, max_length=20)
+
   
 
 
