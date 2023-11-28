@@ -10,6 +10,7 @@ import { useState } from "react";
 import ApiTextField from "../../Sheet/ApiTextField";
 import ExpTab from "../ExpTab";
 import BeliefsTab from "./BeliefsTab";
+import NotesTab from "../../Sheet/NotesTab";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -96,15 +97,7 @@ export default function SheetNav(props) {
       </CustomTabPanel>
       {/* Notes Tab */}
       <CustomTabPanel value={value} index={6}>
-        <ApiTextField
-          slug='notes'
-          value={sheet.notes}
-          noLock
-          onEnter={false}
-          maxLength={6000}
-          multiline
-          rows={22}
-        />
+        <NotesTab />
       </CustomTabPanel>
     </>
   )

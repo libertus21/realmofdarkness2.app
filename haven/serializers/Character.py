@@ -22,6 +22,7 @@ class CharacterSerializer(serializers.ModelSerializer):
       'age',
       'appearance',
       'notes',
+      'notes2',
       'exp_spends',
     )
   
