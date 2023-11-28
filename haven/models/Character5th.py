@@ -15,7 +15,10 @@ class Character5th(Character):
   health_aggravated = models.IntegerField(default=0)
   health_total = models.IntegerField(default=4)
 
-  chronicle_tenets = models.TextField(blank=True)
+  # Beliefs
+  tenets = models.TextField(blank=True, max_length=1000)
+  touchstones = models.TextField(blank=True, max_length=2000)
+  convictions = models.TextField(blank=True, max_length=2000)
 
   ################################## Attributes ###############################
   # Physical

@@ -114,6 +114,9 @@ class Character5thSerializer(CharacterSerializer):
     fields = CharacterSerializer.Meta.fields + (
       'ambition',
       'desire',
+      'tenets',
+      'touchstones',
+      'convictions',
     )
 
   def to_representation(self, instance):

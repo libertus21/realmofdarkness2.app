@@ -68,9 +68,7 @@ class Vampire5th(Character5th):
   # Profile
   date_of_death = models.CharField(blank=True, max_length=20)
   apparent_age = models.CharField(blank=True, max_length=20)
-
   
-
 
 class CustomClan(models.Model):
   vampire = models.OneToOneField(Vampire5th, on_delete=models.CASCADE)

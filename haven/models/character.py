@@ -102,6 +102,7 @@ class Character(models.Model):
   appearance = models.TextField(blank=True, max_length=1000)
 
   notes = models.TextField(blank=True, max_length=6000)
+  notes2 = models.TextField(blank=True, max_length=6000)
   
   # Splat is a remenant of old system once all are converted splat should be deleted  
   splat = models.ForeignKey(Splat, on_delete=models.CASCADE, null=True)

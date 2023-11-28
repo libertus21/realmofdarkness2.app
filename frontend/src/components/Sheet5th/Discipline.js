@@ -23,6 +23,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import SheetRating from "./SheetRating";
 
+
 export default function Discipline(props) {
   const { lock } = useSheetContext();
   const [expanded, setExpanded] = useState(false);
@@ -113,7 +114,12 @@ export default function Discipline(props) {
                       event.stopPropagation();
                     }}>
                       <Tooltip title='Info' arrow>
-                        <Typography>
+                        <Typography sx={{
+                          '&:hover': {
+                            color: '#d8bf31',
+                          }
+                        }}
+                        >
                           {discipline.name}
                         </Typography>
                       </Tooltip>
@@ -183,6 +189,6 @@ export default function Discipline(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </Grid>
+    </Grid >
   )
 }

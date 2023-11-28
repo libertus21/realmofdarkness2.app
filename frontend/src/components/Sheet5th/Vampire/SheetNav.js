@@ -9,6 +9,7 @@ import { useSheetContext } from "../../../routes/Character/Vampire5thSheet";
 import { useState } from "react";
 import ApiTextField from "../../Sheet/ApiTextField";
 import ExpTab from "../ExpTab";
+import BeliefsTab from "./BeliefsTab";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -62,12 +63,13 @@ export default function SheetNav(props) {
             onChange={handleChange}
           >
             <Tab label="Core" value={0} />
-            <Tab label="Advantages" value={1} disabled />
-            <Tab label="Haven" value={2} disabled />
-            <Tab label="Exp" value={3} />
-            <Tab label="Profile" value={4} />
-            <Tab label="Notes" value={5} />
-            <Tab label="Gallery" value={6} disabled />
+            <Tab label="Beliefs" value={1} />
+            <Tab label="Advantages" value={2} disabled />
+            <Tab label="Haven" value={3} disabled />
+            <Tab label="Exp" value={4} />
+            <Tab label="Profile" value={5} />
+            <Tab label="Notes" value={6} />
+            <Tab label="Gallery" value={7} disabled />
           </Tabs>
         </Box>
       </Grid>
@@ -80,16 +82,20 @@ export default function SheetNav(props) {
         </Grid>
 
       </CustomTabPanel>
+      {/* Beliefs Tab */}
+      <CustomTabPanel value={value} index={1}>
+        <BeliefsTab />
+      </CustomTabPanel>
       {/* Exp Tab */}
-      <CustomTabPanel value={value} index={3}>
+      <CustomTabPanel value={value} index={4}>
         <ExpTab />
       </CustomTabPanel>
       {/* Profile Tab */}
-      <CustomTabPanel value={value} index={4}>
+      <CustomTabPanel value={value} index={5}>
         <ProfileTab />
       </CustomTabPanel>
       {/* Notes Tab */}
-      <CustomTabPanel value={value} index={5}>
+      <CustomTabPanel value={value} index={6}>
         <ApiTextField
           slug='notes'
           value={sheet.notes}

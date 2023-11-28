@@ -3,17 +3,22 @@ import {
   Divider,
   Typography,
   Button,
-  IconButton
+  IconButton,
+  Tooltip
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ApiTextField from '../Sheet/ApiTextField';
 import { useState } from 'react';
+import TableChartIcon from '@mui/icons-material/TableChart';
 
 import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
+import ExpChart from './Vampire/ExpChart';
 
 export default function ExpTab() {
   const { lock, sheet, handleUpdate } = useSheetContext();
+
   const [exp_spends, setSpends] = useState(sheet.exp_spends);
+  const [chartOpen, setChartOpen] = useState(false);
 
   async function update(change) {
     const key = Object.keys(change)[0];
@@ -67,8 +72,8 @@ export default function ExpTab() {
 
   const renderSpends = () => {
     if (lock) return exp_spends.map((item, index) => (
-      <Grid container xs={12} key={index} paddingX={3}>
-        <Grid xs={9} lg={10} xl={11}>
+      <Grid container xs={12} xl={6} key={index} paddingX={1}>
+        <Grid xs={9} lg={10}>
           <ApiTextField
             slug={`${index}_description`}
             maxLength={80}
@@ -76,7 +81,7 @@ export default function ExpTab() {
             value={item.description}
           />
         </Grid>
-        <Grid xs={3} lg={2} xl={1}>
+        <Grid xs={3} lg={2}>
           <ApiTextField
             label="Cost"
             slug={`${index}_cost`}
@@ -88,8 +93,8 @@ export default function ExpTab() {
       </Grid>
     ))
     else return exp_spends.map((item, index) => (
-      <Grid container xs={12} key={index} paddingX={3}>
-        <Grid xs={8} lg={9} xl={10}>
+      <Grid container xs={12} xl={6} key={index} paddingX={0}>
+        <Grid xs={8} lg={9}>
           <ApiTextField
             slug={`${index}_description`}
             save={update}
@@ -97,7 +102,7 @@ export default function ExpTab() {
             maxLength={200}
           />
         </Grid>
-        <Grid xs={3} lg={2} xl={1}>
+        <Grid xs={3} lg={2}>
           <ApiTextField
             label="Cost"
             slug={`${index}_cost`}
@@ -142,10 +147,31 @@ export default function ExpTab() {
   const renderAddSpendButton = () => {
     if (lock) return null;
     else return (
-      <Grid >
+      <Grid sx={12} paddingTop={2}>
         <Button variant='outlined' onClick={handleAddRow}>
           Add Spend
         </Button>
+      </Grid>
+    )
+  }
+
+  const renderExpChat = () => {
+    if (!chartOpen) return null;
+    return (
+      <Grid
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        xs={12}>
+        <Grid xs={12} padding={2}>
+          <Divider variant="middle">
+            <Typography variant="h4" component="h2" color='#80172f'>
+              Exp Cost Chart
+            </Typography>
+          </Divider>
+        </Grid>
+        <ExpChart />
       </Grid>
     )
   }
@@ -181,6 +207,13 @@ export default function ExpTab() {
             value={sheet.exp.total}
             xs={6}
           />
+          <Grid>
+            <Tooltip title="Experiance Cost Chart">
+              <IconButton onClick={() => setChartOpen(!chartOpen)}>
+                <TableChartIcon color={chartOpen ? 'info' : "secondary"} />
+              </IconButton>
+            </Tooltip>
+          </Grid>
         </Grid>
         <Grid xs={12} padding={2}>
           <Divider variant="middle">
@@ -189,10 +222,11 @@ export default function ExpTab() {
             </Typography>
           </Divider>
         </Grid>
-        <Grid xs={12} container justifyContent='center' rowSpacing={2}>
+        <Grid xs={12} container justifyContent='flex-start' rowSpacing={2}>
           {renderSpends()}
-          {renderAddSpendButton()}
         </Grid>
+        {renderAddSpendButton()}
+        {renderExpChat()}
       </Grid>
     </Grid>
   )
