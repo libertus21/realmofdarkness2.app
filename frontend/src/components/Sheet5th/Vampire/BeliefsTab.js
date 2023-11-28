@@ -28,7 +28,7 @@ export default function BeliefsTab() {
           <ApiTextField
             slug='tenets'
             value={sheet.tenets}
-            maxLength={6000}
+            maxLength={1000}
             onEnter={false}
             rows={19}
             multiline
@@ -47,7 +47,7 @@ export default function BeliefsTab() {
           <ApiTextField
             slug='touchstones'
             value={sheet.touchstones}
-            maxLength={6000}
+            maxLength={2000}
             onEnter={false}
             rows={19}
             multiline
@@ -66,7 +66,7 @@ export default function BeliefsTab() {
           <ApiTextField
             slug='convictions'
             value={sheet.convictions}
-            maxLength={6000}
+            maxLength={2000}
             onEnter={false}
             rows={19}
             multiline

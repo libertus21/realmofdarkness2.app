@@ -34,7 +34,7 @@ export default function ExpTab() {
     }
     else {
       const c = change[key] === '0' ? 0 : parseInt(change[key]);
-      if (c === NaN) cost = NaN;
+      if (c === Number.isNaN()) cost = NaN;
       else {
         cost = c
         let current;

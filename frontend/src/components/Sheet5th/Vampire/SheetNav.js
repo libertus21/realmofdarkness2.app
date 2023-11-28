@@ -4,10 +4,8 @@ import DisciplinesTab from "../DisciplinesTab";
 import BloodPotencyTab from "./BloodPotencyTab";
 import HuntingTab from "./HuntingTab";
 import ProfileTab from "../ProfileTab";
-import { useSheetContext } from "../../../routes/Character/Vampire5thSheet";
 
 import { useState } from "react";
-import ApiTextField from "../../Sheet/ApiTextField";
 import ExpTab from "../ExpTab";
 import BeliefsTab from "./BeliefsTab";
 import NotesTab from "../../Sheet/NotesTab";
@@ -34,7 +32,6 @@ function CustomTabPanel(props) {
 
 export default function SheetNav(props) {
   const [value, setValue] = useState(0);
-  const { sheet } = useSheetContext();
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('xl'));
 
   const centered = isSmallScreen ? false : true;
