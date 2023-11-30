@@ -35,3 +35,21 @@ class GetSheet(APIView):
     
     json = Vampire5thSerializer(character).data 
     return Response(data=json)
+  
+class GetVampireSheetNames(APIView):
+  @csrf_exempt
+  def post(self, request):
+    authenticate(request)
+
+    user_id = request.data.get('user_id', None)
+    chronicle_id = request.data.get('guild_id', None)
+
+    if (chronicle_id):
+      sheets = Vampire5th.objects.filter(user=user_id, chronicle=chronicle_id, is_sheet=True)
+    else:
+      sheets = Vampire5th.objects.filter(user=user_id, is_sheet=True)
+    
+    names = []
+    for character in sheets:
+      names.append(character.name)
+    return Response(data={'names': names})

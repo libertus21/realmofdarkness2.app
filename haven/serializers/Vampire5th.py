@@ -43,7 +43,9 @@ class V5TrackerSerializer(Tracker5thSerializer):
       'clan',
       'humanity',
       'stains',
-      'hunger'
+      'hunger',
+      'disciplines',
+      'blood_potency'
     )
 
   def to_representation(self, instance):
