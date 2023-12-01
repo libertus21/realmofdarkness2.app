@@ -1,5 +1,5 @@
 import { Box, Slide, Paper } from "@mui/material";
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 
 export default function Slideshow(props) {
   const containerRef = useRef(null);
@@ -16,6 +16,17 @@ export default function Slideshow(props) {
 
     setMount(!mount);
   }, timer)
+
+  useEffect(() => {
+    const preloadImages = () => {
+      imageList.forEach((item) => {
+        const img = new Image();
+        img.src = item.img;
+      });
+    };
+
+    preloadImages();
+  }, [imageList]);
 
   return (
     <Paper
