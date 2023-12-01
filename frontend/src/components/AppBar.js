@@ -17,7 +17,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useClientContext } from './ClientProvider';
 
 let host;
-if (process.env.NODE_ENV === 'production') 
+if (process.env.NODE_ENV === 'production')
   host = 'https://realmofdarkness.app/';
 else
   host = 'http://localhost/';
@@ -26,39 +26,38 @@ const pages = {
   sm: [
     '5th Edition',
     '20th Anniversary',
-    'Chronicles of Darkness', 
+    'Chronicles of Darkness',
   ],
   games: [
     '5th Edition',
     '20th Anniversary',
-    'Chronicles of Darkness', 
+    'Chronicles of Darkness',
   ],
   user: [
 
   ]
 };
 const routes = {
-  "5th Edition": "v5/", 
-  "20th Anniversary": "20th/", 
+  "5th Edition": "v5/",
+  "20th Anniversary": "20th/",
   "Chronicles of Darkness": "cod/",
   Characters: 'characters/',
   Servers: 'servers/',
 }
 
-export default function ResponsiveAppBar (props) {
+export default function ResponsiveAppBar(props) {
   const { user } = useClientContext();
   const [scroll, setScroll] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [anchorElGames, setAnchorElGames] = React.useState(null);
-  const lowRezLogo = 'https://media.discordapp.net/attachments/886983353922891816/1002174848375734362/logo_trans_low.png'
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-  };  
+  };
 
   const handleOpenGamesMenu = (event) => {
     setAnchorElGames(event.currentTarget);
@@ -78,7 +77,7 @@ export default function ResponsiveAppBar (props) {
 
   const loginButton = (
     <Box sx={{ flexGrow: 0 }}>
-      <Button 
+      <Button
         color="primary"
         variant='contained'
         href={host + 'auth/login/'}
@@ -90,18 +89,18 @@ export default function ResponsiveAppBar (props) {
 
   const mdLinks = (
     <Box sx={{
-        gap: '10px', 
-        flexGrow: 1, 
-        display: { xs: 'none', md: 'flex'},
-        height: 64
-      }}>
+      gap: '10px',
+      flexGrow: 1,
+      display: { xs: 'none', md: 'flex' },
+      height: 64
+    }}>
       <Button
         size="large"
         endIcon={<KeyboardArrowDownIcon />}
         onClick={handleOpenGamesMenu}
         onMouseOver={handleOpenGamesMenu}
       >
-        Games            
+        Games
       </Button>
       <Menu
         id="menu-appbar"
@@ -120,8 +119,8 @@ export default function ResponsiveAppBar (props) {
         MenuListProps={{ onMouseLeave: handleCloseGamesMenu }}
       >
         {pages.games.map((page) => (
-          <MenuItem 
-            key={page} 
+          <MenuItem
+            key={page}
             onClick={handleCloseGamesMenu}
             component={Link}
             to={routes[page]}
@@ -135,17 +134,17 @@ export default function ResponsiveAppBar (props) {
         href="https://discord.gg/p82yc8sKx2"
         target="_blank"
       >
-        Discord Server                    
+        Discord Server
       </Button>
       <Button
         size="large"
         href="https://www.patreon.com/MiraiMiki"
         target="_blank"
       >
-        Patreon             
+        Patreon
       </Button>
     </Box>
-  )  
+  )
 
   function avatarMenu(user) {
     return (
@@ -172,16 +171,16 @@ export default function ResponsiveAppBar (props) {
           onClose={handleCloseUserMenu}
         >
           {pages.user.map((page) => (
-            <MenuItem 
-              key={page} 
+            <MenuItem
+              key={page}
               onClick={handleCloseUserMenu}
               component={Link}
               to={routes[page]}
             >
               <Typography textAlign="center">{page}</Typography>
             </MenuItem>
-          ))}          
-          <MenuItem 
+          ))}
+          <MenuItem
             onClick={handleCloseUserMenu}
             component="a"
             href={host + 'auth/logout/'}
@@ -190,19 +189,18 @@ export default function ResponsiveAppBar (props) {
           </MenuItem>
         </Menu>
       </Box>
-  )};
+    )
+  };
 
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 0,
   });
 
-  if (scroll && !trigger)
-  {
+  if (scroll && !trigger) {
     setScroll(false);
   }
-  else if (!scroll && trigger) 
-  {
+  else if (!scroll && trigger) {
     setScroll(true);
   }
 
@@ -211,36 +209,19 @@ export default function ResponsiveAppBar (props) {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to='/'>
-            <Box 
+            <Box
               component="img"
               alt="Realm of Darkness Logo"
               loading="lazy"
-              src={lowRezLogo}
-              sx={{ 
-                display: { xs: 'none', md: 'flex' }, 
+              src='https://res.cloudinary.com/dze64d7cr/image/upload/v1701412692/Logo/banner_navbar_pc.webp'
+              sx={{
+                display: { xs: 'none', md: 'flex' },
                 mr: 1,
                 height: '45px',
-                width: '45px'
-              }} 
+                width: '158px'
+              }}
             />
-          </Link>         
-          <Typography
-            variant="h6"
-            component={Link}
-            to="/"
-            sx={{
-              mr: 5,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.1rem',
-              wordSpacing: '-.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            REALM OF DARKNESS
-          </Typography>
+          </Link>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -272,8 +253,8 @@ export default function ResponsiveAppBar (props) {
               }}
             >
               {pages.sm.map((page) => (
-                <MenuItem 
-                  key={page} 
+                <MenuItem
+                  key={page}
                   onClick={handleCloseNavMenu}
                   component={Link}
                   to={routes[page]}
@@ -281,7 +262,7 @@ export default function ResponsiveAppBar (props) {
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
-              <MenuItem  
+              <MenuItem
                 onClick={handleCloseNavMenu}
                 component="a"
                 href="https://discord.gg/p82yc8sKx2"
@@ -289,7 +270,7 @@ export default function ResponsiveAppBar (props) {
               >
                 <Typography textAlign="center">Discord Server</Typography>
               </MenuItem>
-              <MenuItem 
+              <MenuItem
                 onClick={handleCloseNavMenu}
                 component="a"
                 href="https://www.patreon.com/MiraiMiki"
@@ -300,40 +281,27 @@ export default function ResponsiveAppBar (props) {
             </Menu>
           </Box>
           <Link to='/'>
-            <Box 
+            <Box
               component="img"
               alt="Realm of Darkness Logo"
               loading="lazy"
-              src={lowRezLogo}
-              sx={{ 
-                display: { xs: 'flex', md: 'none' }, 
-                mr: 1,
-                height: '45px',
-                width: '45px'
-              }}  
+              src='https://res.cloudinary.com/dze64d7cr/image/upload/v1701413470/Logo/banner_mobile.webp'
+              sx={{
+                display: { xs: 'flex', md: 'none' },
+                flexGrow: 1,
+              }}
             />
-          </Link>          
+          </Link>
           <Typography
-            variant="h5"
-            noWrap
-            component={Link}
-            to="/"
             sx={{
-              mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.1rem',
-              wordSpacing: '-.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
             }}
           >
-            RoD
+
           </Typography>
-          {mdLinks}     
-          {user ? avatarMenu(user) : loginButton}  
+          {mdLinks}
+          {user ? avatarMenu(user) : loginButton}
         </Toolbar>
       </Container>
     </AppBar>

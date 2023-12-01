@@ -3,65 +3,65 @@ import { Button, ButtonGroup } from '@mui/material';
 import { Link } from "react-router-dom";
 import Slideshow from '../components/Slideshow';
 
-const large_logo = "https://cdn.discordapp.com/attachments/886983353922891816/998131572601540638/unknown.png";
+const large_logo = "https://res.cloudinary.com/dze64d7cr/image/upload/v1701410603/Logo/banner_bg_index.webp";
 
 export default function WelcomePage(props) {
   return (
-    <Grid 
-      container spacing={{md: 0, xs: 4}} 
+    <Grid
+      container spacing={{ md: 0, xs: 4 }}
       direction="row"
       justifyContent="space-evenly"
       alignItems="flex-start"
       columnSpacing={3}
     >
       <Grid item md={7} xs={12}>
-        <Box sx={{pt: {xs: 0, md: 6}}}>
-          <Box 
+        <Box sx={{ pt: { xs: 0, md: 6 } }}>
+          <Box
             component="img"
-            sx={{borderRadius: 5, width: '100%', height: '100%'}}
+            sx={{ borderRadius: 5, width: '100%', height: '100%' }}
             alt="Realm of Darkness Logo"
             loading="eager"
             src={`${large_logo}`}
           >
           </Box>
-          <Box sx={{py: 2}}>
+          <Box sx={{ py: 2 }}>
             <Typography>
-              Realm of Darkness is redefining the way you play World of 
+              Realm of Darkness is redefining the way you play World of
               Darkness TTRPGs on Discord, with bots for all major versions of
               the game.
             </Typography>
-          </Box>   
-          <ButtonGroup 
-            variant="outlined" 
-            aria-label="outlined button group"   
-            sx={{textAlign: 'center'}}    
+          </Box>
+          <ButtonGroup
+            variant="outlined"
+            aria-label="outlined button group"
+            sx={{ textAlign: 'center' }}
           >
-            <Button 
+            <Button
               component={Link}
               to='v5/'
             >
               5th Edition
             </Button>
-            <Button 
+            <Button
               component={Link}
               to='20th/'
             >
               20th Anniversary
             </Button>
-            <Button 
+            <Button
               component={Link}
               to='cod/'
             >
               Chronicles of Darkness
             </Button>
-          </ButtonGroup>           
+          </ButtonGroup>
         </Box>
-      </Grid>        
-      <Grid item md={5} xs={12} sx={{height: {xs: '500px', lg: '600px'}}}>
-        <Slideshow 
-          imageList={itemData} 
-          timer={5000} 
-        />    
+      </Grid>
+      <Grid item md={5} xs={12} sx={{ height: { xs: '500px', lg: '600px' } }}>
+        <Slideshow
+          imageList={itemData}
+          timer={5000}
+        />
       </Grid>
     </Grid>
   )
@@ -69,31 +69,31 @@ export default function WelcomePage(props) {
 
 const itemData = [
   {
-    img: 'https://media.discordapp.net/attachments/719420620701564968/1007610254248398939/unknown.png',
+    img: 'https://res.cloudinary.com/dze64d7cr/image/upload/v1701412082/Slideshow/fzdxpkhieryxy8rlpazy.webp',
     title: 'Hunter Dice rolls',
   },
   {
-    img: 'https://media.discordapp.net/attachments/719420620701564968/1007610567567101952/unknown.png',
+    img: 'https://res.cloudinary.com/dze64d7cr/image/upload/v1701412083/Slideshow/bk1o4cjj0tmjnrw5ikju.webp',
     title: 'Resonance Rolls',
   },
   {
-    img: 'https://media.discordapp.net/attachments/719420620701564968/1007610980303380480/unknown.png',
+    img: 'https://res.cloudinary.com/dze64d7cr/image/upload/v1701412082/Slideshow/ye5at9dlrpibqpwh4l2p.webp',
     title: 'Trackers',
   },
   {
-    img: 'https://media.discordapp.net/attachments/719420620701564968/1007611135106756648/unknown.png',
+    img: 'https://res.cloudinary.com/dze64d7cr/image/upload/v1701412082/Slideshow/ww7jjnu69hlama2xlcjl.webp',
     title: 'Vampire v5 dice rolls',
   },
   {
-    img: 'https://media.discordapp.net/attachments/719420620701564968/1007611406906032158/unknown.png',
+    img: 'https://res.cloudinary.com/dze64d7cr/image/upload/v1701412082/Slideshow/gxfukmqf2d0rtaacgsjy.webp',
     title: 'Vampire v5 dice rolls',
   },
   {
-    img: 'https://media.discordapp.net/attachments/719420620701564968/1007610405985730621/unknown.png',
+    img: 'https://res.cloudinary.com/dze64d7cr/image/upload/v1701411461/Slideshow/pebptzzrnac7urujvmmf.webp',
     title: 'Vampire v5 dice rolls',
   },
   {
-    img: 'https://media.discordapp.net/attachments/719420620701564968/1007614265223561276/unknown.png',
+    img: 'https://res.cloudinary.com/dze64d7cr/image/upload/v1701411434/Slideshow/sxakjugtioeaosyi9owu.webp',
     title: '20th dice rolls',
   },
 ];
