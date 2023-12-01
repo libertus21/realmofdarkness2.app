@@ -53,7 +53,7 @@ export default function Slideshow(props) {
             height: 'auto'
           }}
           alt={!mount ? image.new.title : image.old.title}
-          loading="lazy"
+          loading="eager"
           src={`${!mount ? image.new.img : image.old.img}`}
         />
       </Slide>
