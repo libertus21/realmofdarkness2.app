@@ -289,6 +289,8 @@ export default function ResponsiveAppBar(props) {
               sx={{
                 display: { xs: 'flex', md: 'none' },
                 flexGrow: 1,
+                height: '42px',
+                width: '116px'
               }}
             />
           </Link>

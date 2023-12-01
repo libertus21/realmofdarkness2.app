@@ -3,22 +3,22 @@ import { useState, useRef } from "react"
 
 export default function Slideshow(props) {
   const containerRef = useRef(null);
-  const { imageList, timer} = props;
+  const { imageList, timer } = props;
   const [index, setIndex] = useState(0)
-  const [image, setImage] = useState({new: imageList[0], old: imageList[0]});
+  const [image, setImage] = useState({ new: imageList[0], old: imageList[0] });
   const [mount, setMount] = useState(false);
 
   setTimeout(() => {
     let i = index + 1;
     if (i >= imageList.length) i = 0;
-    setImage({new: imageList[i], old: imageList[index]})
+    setImage({ new: imageList[i], old: imageList[index] })
     setIndex(i);
-    
+
     setMount(!mount);
   }, timer)
 
   return (
-    <Paper 
+    <Paper
       elevation={20}
       sx={{
         height: '100%',
@@ -30,7 +30,7 @@ export default function Slideshow(props) {
       ref={containerRef}
     >
       <Slide direction="left" in={mount} container={containerRef.current}>
-        <Box 
+        <Box
           component="img"
           sx={{
             position: 'absolute',
@@ -39,12 +39,12 @@ export default function Slideshow(props) {
             height: 'auto'
           }}
           alt={mount ? image.new.title : image.old.title}
-          loading="lazy"
+          loading='eager'
           src={`${mount ? image.new.img : image.old.img}`}
         />
       </Slide>
       <Slide direction="left" in={!mount} container={containerRef.current}>
-        <Box 
+        <Box
           component="img"
           sx={{
             position: 'absolute',
@@ -57,6 +57,6 @@ export default function Slideshow(props) {
           src={`${!mount ? image.new.img : image.old.img}`}
         />
       </Slide>
-    </Paper>     
+    </Paper>
   )
 }
