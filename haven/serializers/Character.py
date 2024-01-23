@@ -143,18 +143,18 @@ class CharacterDeserializer(serializers.ModelSerializer):
   def validate_exp_current(self, value):
     if (value < 0):
       raise serializers.ValidationError("Cannot be less then 0")
-    elif self.instance == None:
-      return value
-    elif (value > self.instance.exp_total):
+    
+    exp_total = self.initial_data.get('exp_total', self.instance.exp_total if self.instance else None)
+    if exp_total is not None and value > exp_total:
       raise serializers.ValidationError("Current cannot be more than Total")
     return value
   
   def validate_exp_total(self, value):
     if (value < 0):
       raise serializers.ValidationError("Cannot be less then 0")
-    elif self.instance == None:
-      return value
-    elif (value < self.instance.exp_current):
+    
+    exp_current = self.initial_data.get('exp_current', self.instance.exp_current if self.instance else None)
+    if exp_current is not None and value < exp_current:
       raise serializers.ValidationError("Current cannot be less than Current")
     return value    
 
