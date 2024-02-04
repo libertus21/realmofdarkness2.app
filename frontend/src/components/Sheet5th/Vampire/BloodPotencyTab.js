@@ -1,7 +1,8 @@
-import Grid from '@mui/material/Unstable_Grid2';
-import { Divider, Typography, TextField } from "@mui/material";
-import BloodPotency from './BloodPotency';
-import { useSheetContext } from '../../../routes/Character/Vampire5thSheet';
+import Grid from "@mui/material/Unstable_Grid2";
+import { TextField } from "@mui/material";
+import BloodPotency from "./BloodPotency";
+import { useSheetContext } from "../../../routes/Character/Vampire5thSheet";
+import Header from "../../Sheet/Header";
 
 export default function BloodPotencyTab(props) {
   const { lock, sheet, handleUpdate } = useSheetContext();
@@ -9,19 +10,8 @@ export default function BloodPotencyTab(props) {
   let bpInfo = bpChart[potency];
 
   return (
-    <Grid
-      container
-      spacing={2}
-      xs={12}
-      md={8}
-    >
-      <Grid xs={12}>
-        <Divider variant="middle">
-          <Typography variant="h4" component="h3" color='#80172f'>
-            Blood Potency
-          </Typography>
-        </Divider>
-      </Grid>
+    <Grid container spacing={2} xs={12} md={8}>
+      <Header>Blood Potency</Header>
       <Grid
         container
         direction="row"
@@ -31,7 +21,9 @@ export default function BloodPotencyTab(props) {
         xs={12}
       >
         <BloodPotency
-          lock={lock} potency={potency} handleUpdate={handleUpdate}
+          lock={lock}
+          potency={potency}
+          handleUpdate={handleUpdate}
         />
       </Grid>
       <Grid
@@ -49,10 +41,10 @@ export default function BloodPotencyTab(props) {
               disabled: true,
             }}
             label="Blood Surge"
-            variant='outlined'
+            variant="outlined"
             value={bpInfo.bloodSurge}
             fullWidth
-            size='small'
+            size="small"
           />
         </Grid>
         <Grid>
@@ -62,10 +54,10 @@ export default function BloodPotencyTab(props) {
               disabled: true,
             }}
             label="Mend Amount"
-            variant='outlined'
+            variant="outlined"
             value={bpInfo.damageMended}
             fullWidth
-            size='small'
+            size="small"
           />
         </Grid>
         <Grid>
@@ -75,10 +67,10 @@ export default function BloodPotencyTab(props) {
               disabled: true,
             }}
             label="Power Bonus"
-            variant='outlined'
+            variant="outlined"
             value={bpInfo.powerBonus}
             fullWidth
-            size='small'
+            size="small"
           />
         </Grid>
         <Grid>
@@ -88,10 +80,10 @@ export default function BloodPotencyTab(props) {
               disabled: true,
             }}
             label="Rouse Re-Roll"
-            variant='outlined'
+            variant="outlined"
             value={bpInfo.rouseCheck}
             fullWidth
-            size='small'
+            size="small"
           />
         </Grid>
         <Grid>
@@ -101,10 +93,10 @@ export default function BloodPotencyTab(props) {
               disabled: true,
             }}
             label="Bane Severity"
-            variant='outlined'
+            variant="outlined"
             value={bpInfo.bane}
             fullWidth
-            size='small'
+            size="small"
           />
         </Grid>
         <Grid>
@@ -115,126 +107,133 @@ export default function BloodPotencyTab(props) {
               disabled: true,
             }}
             label="Feeding Penalty"
-            variant='outlined'
+            variant="outlined"
             value={bpInfo.feedingPenalty}
             fullWidth
-            size='small'
+            size="small"
             sx={{ marginRight: 4.375 }}
           />
         </Grid>
       </Grid>
     </Grid>
-  )
+  );
 }
 
 const bpChart = {
   0: {
     bloodPotency: 0,
-    bloodSurge: 'Add 1 die',
-    damageMended: '1 point of Superficial',
-    powerBonus: 'None',
-    rouseCheck: 'None',
+    bloodSurge: "Add 1 die",
+    damageMended: "1 point of Superficial",
+    powerBonus: "None",
+    rouseCheck: "None",
     bane: 0,
-    feedingPenalty: 'No Effect',
+    feedingPenalty: "No Effect",
   },
 
   1: {
     bloodPotency: 1,
-    bloodSurge: 'Add 2 dice',
-    damageMended: '1 point of Superficial',
-    powerBonus: 'None',
-    rouseCheck: 'Level 1',
+    bloodSurge: "Add 2 dice",
+    damageMended: "1 point of Superficial",
+    powerBonus: "None",
+    rouseCheck: "Level 1",
     bane: 2,
-    feedingPenalty: 'No Effect',
+    feedingPenalty: "No Effect",
   },
 
   2: {
     bloodPotency: 2,
-    bloodSurge: 'Add 2 dice',
-    damageMended: '2 points of Superficial',
-    powerBonus: 'Add 1 die',
-    rouseCheck: 'Level 1',
+    bloodSurge: "Add 2 dice",
+    damageMended: "2 points of Superficial",
+    powerBonus: "Add 1 die",
+    rouseCheck: "Level 1",
     bane: 2,
-    feedingPenalty: 'Animal and bagged blood slakes half Hunger',
+    feedingPenalty: "Animal and bagged blood slakes half Hunger",
   },
 
   3: {
     bloodPotency: 3,
-    bloodSurge: 'Add 3 dice',
-    damageMended: '2 points of Superficial',
-    powerBonus: 'Add 1 die',
-    rouseCheck: 'Level 2 and below',
+    bloodSurge: "Add 3 dice",
+    damageMended: "2 points of Superficial",
+    powerBonus: "Add 1 die",
+    rouseCheck: "Level 2 and below",
     bane: 3,
-    feedingPenalty: 'Animal and bagged blood slakes no Hunger',
+    feedingPenalty: "Animal and bagged blood slakes no Hunger",
   },
 
   4: {
     bloodPotency: 4,
-    bloodSurge: 'Add 3 dice',
-    damageMended: '3 points of Superficial',
-    powerBonus: 'Add 2 dice',
-    rouseCheck: 'Level 2 and below',
+    bloodSurge: "Add 3 dice",
+    damageMended: "3 points of Superficial",
+    powerBonus: "Add 2 dice",
+    rouseCheck: "Level 2 and below",
     bane: 3,
-    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 1 less Hunger per human',
+    feedingPenalty:
+      "Animal and bagged blood slakes no Hunger. Slake 1 less Hunger per human",
   },
 
   5: {
     bloodPotency: 5,
-    bloodSurge: 'Add 4 dice',
-    damageMended: '3 points of Superficial',
-    powerBonus: 'Add 2 dice',
-    rouseCheck: 'Level 3 and below',
+    bloodSurge: "Add 4 dice",
+    damageMended: "3 points of Superficial",
+    powerBonus: "Add 2 dice",
+    rouseCheck: "Level 3 and below",
     bane: 4,
-    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 1 less Hunger per human. Must drain and kill a human to reduce Hunger below 2.',
+    feedingPenalty:
+      "Animal and bagged blood slakes no Hunger. Slake 1 less Hunger per human. Must drain and kill a human to reduce Hunger below 2.",
   },
 
   6: {
     bloodPotency: 6,
-    bloodSurge: 'Add 4 dice',
-    damageMended: '3 points of Superficial',
-    powerBonus: 'Add 3 dice',
-    rouseCheck: 'Level 3 and below',
+    bloodSurge: "Add 4 dice",
+    damageMended: "3 points of Superficial",
+    powerBonus: "Add 3 dice",
+    rouseCheck: "Level 3 and below",
     bane: 4,
-    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 2 less Hunger per human. Must drain and kill a human to reduce Hunger below 2.',
+    feedingPenalty:
+      "Animal and bagged blood slakes no Hunger. Slake 2 less Hunger per human. Must drain and kill a human to reduce Hunger below 2.",
   },
 
   7: {
     bloodPotency: 7,
-    bloodSurge: 'Add 4 dice',
-    damageMended: '3 points of Superficial',
-    powerBonus: 'Add 3 dice',
-    rouseCheck: 'Level 4 and below',
+    bloodSurge: "Add 4 dice",
+    damageMended: "3 points of Superficial",
+    powerBonus: "Add 3 dice",
+    rouseCheck: "Level 4 and below",
     bane: 5,
-    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 2 less Hunger per human. Must drain and kill a human to reduce Hunger below 2.',
+    feedingPenalty:
+      "Animal and bagged blood slakes no Hunger. Slake 2 less Hunger per human. Must drain and kill a human to reduce Hunger below 2.",
   },
 
   8: {
     bloodPotency: 8,
-    bloodSurge: 'Add 5 dice',
-    damageMended: '4 points of Superficial',
-    powerBonus: 'Add 4 dice',
-    rouseCheck: 'Level 4 and below',
+    bloodSurge: "Add 5 dice",
+    damageMended: "4 points of Superficial",
+    powerBonus: "Add 4 dice",
+    rouseCheck: "Level 4 and below",
     bane: 5,
-    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 2 less Hunger per human. Must drain and kill a human to reduce Hunger below 3.',
+    feedingPenalty:
+      "Animal and bagged blood slakes no Hunger. Slake 2 less Hunger per human. Must drain and kill a human to reduce Hunger below 3.",
   },
 
   9: {
     bloodPotency: 9,
-    bloodSurge: 'Add 6 dice',
-    damageMended: '4 points of Superficial',
-    powerBonus: 'Add 4 dice',
-    rouseCheck: 'Level 5 and below',
+    bloodSurge: "Add 6 dice",
+    damageMended: "4 points of Superficial",
+    powerBonus: "Add 4 dice",
+    rouseCheck: "Level 5 and below",
     bane: 6,
-    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 2 less Hunger per human. Must drain and kill a human to reduce Hunger below 3.',
+    feedingPenalty:
+      "Animal and bagged blood slakes no Hunger. Slake 2 less Hunger per human. Must drain and kill a human to reduce Hunger below 3.",
   },
 
   10: {
     bloodPotency: 10,
-    bloodSurge: 'Add 6 dice',
-    damageMended: '5 points of Superficial',
-    powerBonus: 'Add 5 dice',
-    rouseCheck: 'Level 5 and below',
+    bloodSurge: "Add 6 dice",
+    damageMended: "5 points of Superficial",
+    powerBonus: "Add 5 dice",
+    rouseCheck: "Level 5 and below",
     bane: 6,
-    feedingPenalty: 'Animal and bagged blood slakes no Hunger. Slake 3 less Hunger per human. Must drain and kill a human to reduce Hunger below 3.',
+    feedingPenalty:
+      "Animal and bagged blood slakes no Hunger. Slake 3 less Hunger per human. Must drain and kill a human to reduce Hunger below 3.",
   },
-}
+};

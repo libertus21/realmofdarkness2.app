@@ -1,32 +1,19 @@
-import Grid from '@mui/material/Unstable_Grid2';
-import {
-  Divider,
-  Typography,
-} from "@mui/material";
-import ApiTextField from '../Sheet/ApiTextField';
+import Grid from "@mui/material/Unstable_Grid2";
+import ApiTextField from "../Sheet/ApiTextField";
+import Header from "../Sheet/Header";
 
-import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
+import { useSheetContext } from "../../routes/Character/Vampire5thSheet";
 
 export default function ProfileTab() {
   const { sheet } = useSheetContext();
 
   return (
-    <Grid
-      spacing={2}
-      container
-      xs={12}
-    >
+    <Grid spacing={2} container xs={12}>
       <Grid container xs={12} md={7}>
-        <Grid xs={12}>
-          <Divider variant="middle">
-            <Typography variant="h4" component="h2" color='#80172f'>
-              History
-            </Typography>
-          </Divider>
-        </Grid>
+        <Header>History</Header>
         <Grid xs={12}>
           <ApiTextField
-            slug='history'
+            slug="history"
             value={sheet.history}
             maxLength={6000}
             onEnter={false}
@@ -40,21 +27,17 @@ export default function ProfileTab() {
         md={5}
         container
         justifyContent="flex-start"
-        direction='column'
+        direction="column"
         spacing={0}
       >
-        <Grid xs={12} paddingBottom={2}>
-          <Divider variant="middle">
-            <Typography variant="h4" component="h2" color='#80172f'>
-              Profile
-            </Typography>
-          </Divider>
-        </Grid>
+        <Header paddingTop={0} paddingBottom={2}>
+          Profile
+        </Header>
         <Grid xs={12} container>
           <Grid xs={12} md={6}>
             <ApiTextField
               label="Date of Birth"
-              slug='date_of_birth'
+              slug="date_of_birth"
               value={sheet.date_of_birth}
               maxLength={20}
             />
@@ -62,7 +45,7 @@ export default function ProfileTab() {
           <Grid xs={12} md={6}>
             <ApiTextField
               label="Date of Death"
-              slug='date_of_death'
+              slug="date_of_death"
               value={sheet.date_of_death}
               maxLength={20}
             />
@@ -72,7 +55,7 @@ export default function ProfileTab() {
           <Grid xs={12} md={6}>
             <ApiTextField
               label="Age"
-              slug='age'
+              slug="age"
               value={sheet.age}
               maxLength={20}
             />
@@ -80,7 +63,7 @@ export default function ProfileTab() {
           <Grid xs={12} md={6}>
             <ApiTextField
               label="Apparent Age"
-              slug='apparent_age'
+              slug="apparent_age"
               value={sheet.apparent_age}
               maxLength={20}
             />
@@ -89,7 +72,7 @@ export default function ProfileTab() {
         <Grid xs={12}>
           <ApiTextField
             label="Appearance"
-            slug='appearance'
+            slug="appearance"
             value={sheet.appearance}
             maxLength={1000}
             multiline
@@ -98,5 +81,5 @@ export default function ProfileTab() {
         </Grid>
       </Grid>
     </Grid>
-  )
+  );
 }

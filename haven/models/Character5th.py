@@ -20,6 +20,14 @@ class Character5th(Character):
   touchstones = models.TextField(blank=True, max_length=2000)
   convictions = models.TextField(blank=True, max_length=2000)
 
+  # Advantages
+  merits = models.JSONField(default=list)
+  flaws = models.JSONField(default=list)
+  haven = models.JSONField(default=list)
+  backgrounds = models.JSONField(default=list)
+  loresheets = models.JSONField(default=list)
+
+
   ################################## Attributes ###############################
   # Physical
   strength = models.IntegerField(default=1)
@@ -97,9 +105,3 @@ class Character5th(Character):
   politics_spec = models.JSONField(null=True)
   science_spec = models.JSONField(null=True)
   technology_spec = models.JSONField(null=True)
-
-
-class Morals(models.Model):
-  character = models.ForeignKey(Character5th, on_delete=models.CASCADE)
-  conviction = models.TextField(blank=True)
-  touchstone = models.TextField(blank=True)

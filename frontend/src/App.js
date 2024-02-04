@@ -1,18 +1,10 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { Container } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
-import darkScrollbar from '@mui/material/darkScrollbar';
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { Container } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import darkScrollbar from "@mui/material/darkScrollbar";
 import Layout from "./routes/Layout";
 import Index from "./routes/Index";
-import V5Index from "./routes/v5/V5Index";
-import V5 from "./routes/v5/V5";
-import V5Commands from "./routes/v5/V5Commands";
 import V20Commands from "./routes/20th/20thCommands";
 import Twentieth from "./routes/20th/20th";
 import CoD from "./routes/CoD/CoD";
@@ -24,7 +16,7 @@ import Vampire5thSheet from "./routes/Character/Vampire5thSheet";
 import Character from "./routes/Character/Character";
 //import initAnalytics from "./functions/initAnalytics";
 import V5Dice from "./routes/v5/V5Dice";
-import ClientProvider from './components/ClientProvider';
+import ClientProvider from "./components/ClientProvider";
 import AlertProvider from "./components/AlertProvider";
 
 const darkTheme = createTheme({
@@ -33,7 +25,7 @@ const darkTheme = createTheme({
       styleOverrides: {
         body: {
           ...darkScrollbar(),
-          backgroundColor: '#0a070a',
+          backgroundColor: "#0a070a",
           backgroundImage: `linear-gradient(360deg, #0a070a 40%, 80%, #190821 95%)`,
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
@@ -42,78 +34,74 @@ const darkTheme = createTheme({
     },
     MuiListSubheader: {
       defaultProps: {
-        color: 'primary'
-      }
-    }
+        color: "primary",
+      },
+    },
   },
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
-      main: '#d8bf31',
+      main: "#d8bf31",
     },
     secondary: {
-      main: '#c089fa',
+      main: "#c089fa",
     },
     background: {
-      default: '#0a070a',
+      default: "#0a070a",
     },
     error: {
-      main: '#ef2056',
+      main: "#ef2056",
     },
     warning: {
-      main: '#e45f15',
+      main: "#e45f15",
     },
     success: {
-      main: '#5ee28a',
+      main: "#5ee28a",
     },
   },
 });
 
-function ScrollToTop({children}) {
+function ScrollToTop({ children }) {
   const location = useLocation();
   useLayoutEffect(() => {
     document.documentElement.scrollTo(0, 0);
   }, [location.pathname]);
-  return children
+  return children;
 }
 
 function App() {
-  //initAnalytics()  
-  return (     
+  //initAnalytics()
+  return (
     <ClientProvider>
       <ThemeProvider theme={darkTheme}>
-        <AlertProvider>          
-          <CssBaseline enableColorScheme />      
+        <AlertProvider>
+          <CssBaseline enableColorScheme />
           <BrowserRouter>
             <ScrollToTop>
               <Routes>
                 <Route path="/" element={<Layout />}>
-                  <Route index element={<Index />} />            
-                  <Route path="v5" element={<V5 />}>
-                    <Route index element={<V5Index />} />
-                    <Route path='commands' element={<V5Commands />} />
-                    <Route path='dice' element={<V5Dice />} />
-                  </Route>
+                  <Route index element={<Index />} />
+                  <Route path="v5/dice" element={<V5Dice />} />
                   <Route path="20th" element={<Twentieth />}>
                     <Route index element={<TwentiethIndex />} />
-                    <Route path='commands' element={<V20Commands />} />
+                    <Route path="commands" element={<V20Commands />} />
                   </Route>
                   <Route path="cod" element={<CoD />}>
                     <Route index element={<CodIndex />} />
-                    <Route path='commands' element={<CodCommands />} />
+                    <Route path="commands" element={<CodCommands />} />
                   </Route>
                   <Route path="character" element={<Character />}>
                     <Route index element={<NotFound />} />
-                    <Route path='v5/:id' element={<Vampire5thSheet />} />
+                    <Route path="v5/:id" element={<Vampire5thSheet />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Route>
               </Routes>
-            </ScrollToTop>          
-          </BrowserRouter>  
-        </AlertProvider>       
+            </ScrollToTop>
+          </BrowserRouter>
+        </AlertProvider>
       </ThemeProvider>
-    </ClientProvider>    
+    </ClientProvider>
   );
 }
 
@@ -121,8 +109,8 @@ export default App;
 
 function NotFound(props) {
   return (
-    <Container sx={{ my: 13 }}>   
+    <Container sx={{ my: 13 }}>
       <h1>Sorry, no page here</h1>
-    </Container> 
+    </Container>
   );
 }

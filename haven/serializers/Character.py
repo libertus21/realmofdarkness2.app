@@ -116,7 +116,6 @@ class CharacterDeserializer(serializers.ModelSerializer):
         user = self.context
         self.temp_member = Member.objects.get(chronicle=chronicle, user=user)
       else:
-        print("None")
         self.temp_member = None
     return value
 
@@ -159,7 +158,6 @@ class CharacterDeserializer(serializers.ModelSerializer):
     return value    
 
   def validate_exp_spends(self, data):
-    print(data)
     if not isinstance(data, list):
       raise serializers.ValidationError()
     

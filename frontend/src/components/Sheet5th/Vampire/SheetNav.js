@@ -1,14 +1,15 @@
 import { Tab, Tabs, Box, useMediaQuery } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from "@mui/material/Unstable_Grid2";
 import DisciplinesTab from "../DisciplinesTab";
 import BloodPotencyTab from "./BloodPotencyTab";
 import HuntingTab from "./HuntingTab";
 import ProfileTab from "../ProfileTab";
-
-import { useState } from "react";
 import ExpTab from "../ExpTab";
 import BeliefsTab from "./BeliefsTab";
 import NotesTab from "../../Sheet/NotesTab";
+import AdvantagesTab from "../AdvantagesTab";
+
+import { useState } from "react";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -21,21 +22,17 @@ function CustomTabPanel(props) {
       aria-labelledby={`tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <>
-          {children}
-        </>
-      )}
+      {value === index && <>{children}</>}
     </div>
   );
 }
 
 export default function SheetNav(props) {
   const [value, setValue] = useState(0);
-  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('xl'));
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("xl"));
 
   const centered = isSmallScreen ? false : true;
-  const scrollable = isSmallScreen ? 'scrollable' : 'standard';
+  const scrollable = isSmallScreen ? "scrollable" : "standard";
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -46,9 +43,9 @@ export default function SheetNav(props) {
       <Grid xs={12}>
         <Box
           sx={{
-            borderRadius: '20px',
-            maxWidth: '100%',
-            bgcolor: 'background.paper'
+            borderRadius: "20px",
+            maxWidth: "100%",
+            bgcolor: "background.paper",
           }}
         >
           <Tabs
@@ -62,7 +59,7 @@ export default function SheetNav(props) {
           >
             <Tab label="Core" value={0} />
             <Tab label="Beliefs" value={1} />
-            <Tab label="Advantages" value={2} disabled />
+            <Tab label="Advantages" value={2} />
             <Tab label="Haven" value={3} disabled />
             <Tab label="Exp" value={4} />
             <Tab label="Profile" value={5} />
@@ -74,15 +71,18 @@ export default function SheetNav(props) {
       {/* Core Tab */}
       <CustomTabPanel value={value} index={0}>
         <DisciplinesTab />
-        <Grid container paddingTop={2} >
+        <Grid container paddingTop={2}>
           <BloodPotencyTab />
           <HuntingTab />
         </Grid>
-
       </CustomTabPanel>
       {/* Beliefs Tab */}
       <CustomTabPanel value={value} index={1}>
         <BeliefsTab />
+      </CustomTabPanel>
+      {/* Advantages Tab */}
+      <CustomTabPanel value={value} index={2}>
+        <AdvantagesTab />
       </CustomTabPanel>
       {/* Exp Tab */}
       <CustomTabPanel value={value} index={4}>
@@ -97,5 +97,5 @@ export default function SheetNav(props) {
         <NotesTab />
       </CustomTabPanel>
     </>
-  )
+  );
 }

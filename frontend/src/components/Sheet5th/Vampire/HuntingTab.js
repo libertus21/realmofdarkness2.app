@@ -1,27 +1,14 @@
-import Grid from '@mui/material/Unstable_Grid2';
-import { Divider, Typography } from "@mui/material";
-import ApiTextField from '../../Sheet/ApiTextField';
-import { useSheetContext } from '../../../routes/Character/Vampire5thSheet';
-
+import Grid from "@mui/material/Unstable_Grid2";
+import ApiTextField from "../../Sheet/ApiTextField";
+import { useSheetContext } from "../../../routes/Character/Vampire5thSheet";
+import Header from "../../Sheet/Header";
 
 export default function HuntingTab(props) {
   const { sheet } = useSheetContext();
 
   return (
-    <Grid
-      container
-      spacing={1}
-      xs={12}
-      md={4}
-      direction='column'
-    >
-      <Grid xs={12}>
-        <Divider variant="middle">
-          <Typography variant="h4" component="h3" color='#80172f'>
-            Hunting
-          </Typography>
-        </Divider>
-      </Grid>
+    <Grid container spacing={1} xs={12} md={4} direction="column">
+      <Header>Hunting</Header>
       <Grid
         container
         direction="row"
@@ -32,15 +19,19 @@ export default function HuntingTab(props) {
       >
         <Grid>
           <ApiTextField
-            label="Hunting Roll" value={sheet.hunting_roll} maxLength={50}
+            label="Hunting Roll"
+            value={sheet.hunting_roll}
+            maxLength={50}
           />
         </Grid>
         <Grid>
           <ApiTextField
-            label="Resonance" value={sheet.resonance} maxLength={50}
+            label="Resonance"
+            value={sheet.resonance}
+            maxLength={50}
           />
         </Grid>
       </Grid>
     </Grid>
-  )
+  );
 }

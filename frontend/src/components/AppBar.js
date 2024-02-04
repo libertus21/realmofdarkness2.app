@@ -1,49 +1,37 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
-import useScrollTrigger from '@mui/material/useScrollTrigger';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { useClientContext } from './ClientProvider';
+import useScrollTrigger from "@mui/material/useScrollTrigger";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useClientContext } from "./ClientProvider";
 
 let host;
-if (process.env.NODE_ENV === 'production')
-  host = 'https://realmofdarkness.app/';
-else
-  host = 'http://localhost/';
+if (process.env.NODE_ENV === "production")
+  host = "https://realmofdarkness.app/";
+else host = "http://localhost/";
 
 const pages = {
-  sm: [
-    '5th Edition',
-    '20th Anniversary',
-    'Chronicles of Darkness',
-  ],
-  games: [
-    '5th Edition',
-    '20th Anniversary',
-    'Chronicles of Darkness',
-  ],
-  user: [
-
-  ]
+  sm: ["20th Anniversary", "Chronicles of Darkness"],
+  games: ["20th Anniversary", "Chronicles of Darkness"],
+  user: [],
 };
 const routes = {
-  "5th Edition": "v5/",
   "20th Anniversary": "20th/",
   "Chronicles of Darkness": "cod/",
-  Characters: 'characters/',
-  Servers: 'servers/',
-}
+  Characters: "characters/",
+  Servers: "servers/",
+};
 
 export default function ResponsiveAppBar(props) {
   const { user } = useClientContext();
@@ -77,23 +65,21 @@ export default function ResponsiveAppBar(props) {
 
   const loginButton = (
     <Box sx={{ flexGrow: 0 }}>
-      <Button
-        color="primary"
-        variant='contained'
-        href={host + 'auth/login/'}
-      >
+      <Button color="primary" variant="contained" href={host + "auth/login/"}>
         Login
       </Button>
     </Box>
   );
 
   const mdLinks = (
-    <Box sx={{
-      gap: '10px',
-      flexGrow: 1,
-      display: { xs: 'none', md: 'flex' },
-      height: 64
-    }}>
+    <Box
+      sx={{
+        gap: "10px",
+        flexGrow: 1,
+        display: { xs: "none", md: "flex" },
+        height: 64,
+      }}
+    >
       <Button
         size="large"
         endIcon={<KeyboardArrowDownIcon />}
@@ -106,18 +92,21 @@ export default function ResponsiveAppBar(props) {
         id="menu-appbar"
         anchorEl={anchorElGames}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
+          vertical: "top",
+          horizontal: "center",
         }}
         keepMounted
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
+          vertical: "top",
+          horizontal: "center",
         }}
         open={Boolean(anchorElGames)}
         onClose={handleCloseGamesMenu}
         MenuListProps={{ onMouseLeave: handleCloseGamesMenu }}
       >
+        <MenuItem component="a" href="https://v5.realmofdarkness.app/">
+          <Typography textAlign="center">5th Edition</Typography>
+        </MenuItem>
         {pages.games.map((page) => (
           <MenuItem
             key={page}
@@ -129,11 +118,7 @@ export default function ResponsiveAppBar(props) {
           </MenuItem>
         ))}
       </Menu>
-      <Button
-        size="large"
-        href="https://discord.gg/p82yc8sKx2"
-        target="_blank"
-      >
+      <Button size="large" href="https://discord.gg/p82yc8sKx2" target="_blank">
         Discord Server
       </Button>
       <Button
@@ -144,7 +129,7 @@ export default function ResponsiveAppBar(props) {
         Patreon
       </Button>
     </Box>
-  )
+  );
 
   function avatarMenu(user) {
     return (
@@ -155,17 +140,17 @@ export default function ResponsiveAppBar(props) {
           </IconButton>
         </Tooltip>
         <Menu
-          sx={{ mt: '45px' }}
+          sx={{ mt: "45px" }}
           id="menu-appbar"
           anchorEl={anchorElUser}
           anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
+            vertical: "top",
+            horizontal: "right",
           }}
           keepMounted
           transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
+            vertical: "top",
+            horizontal: "right",
           }}
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
@@ -183,14 +168,14 @@ export default function ResponsiveAppBar(props) {
           <MenuItem
             onClick={handleCloseUserMenu}
             component="a"
-            href={host + 'auth/logout/'}
+            href={host + "auth/logout/"}
           >
             <Typography textAlign="center">Logout</Typography>
           </MenuItem>
         </Menu>
       </Box>
-    )
-  };
+    );
+  }
 
   const trigger = useScrollTrigger({
     disableHysteresis: true,
@@ -199,8 +184,7 @@ export default function ResponsiveAppBar(props) {
 
   if (scroll && !trigger) {
     setScroll(false);
-  }
-  else if (!scroll && trigger) {
+  } else if (!scroll && trigger) {
     setScroll(true);
   }
 
@@ -208,22 +192,22 @@ export default function ResponsiveAppBar(props) {
     <AppBar>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Link to='/'>
+          <Link to="/">
             <Box
               component="img"
               alt="Realm of Darkness Logo"
               loading="lazy"
-              src='https://res.cloudinary.com/dze64d7cr/image/upload/v1701412692/Logo/banner_navbar_pc.webp'
+              src="https://res.cloudinary.com/dze64d7cr/image/upload/v1701412692/Logo/banner_navbar_pc.webp"
               sx={{
-                display: { xs: 'none', md: 'flex' },
+                display: { xs: "none", md: "flex" },
                 mr: 1,
-                height: '45px',
-                width: '158px'
+                height: "45px",
+                width: "158px",
               }}
             />
           </Link>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -238,20 +222,23 @@ export default function ResponsiveAppBar(props) {
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: 'block', md: 'none' },
+                display: { xs: "block", md: "none" },
               }}
             >
+              <MenuItem component="a" href="https://v5.realmofdarkness.app/">
+                <Typography textAlign="center">5th Edition</Typography>
+              </MenuItem>
               {pages.sm.map((page) => (
                 <MenuItem
                   key={page}
@@ -280,32 +267,30 @@ export default function ResponsiveAppBar(props) {
               </MenuItem>
             </Menu>
           </Box>
-          <Link to='/'>
+          <Link to="/">
             <Box
               component="img"
               alt="Realm of Darkness Logo"
               loading="lazy"
-              src='https://res.cloudinary.com/dze64d7cr/image/upload/v1701413470/Logo/banner_mobile.webp'
+              src="https://res.cloudinary.com/dze64d7cr/image/upload/v1701413470/Logo/banner_mobile.webp"
               sx={{
-                display: { xs: 'flex', md: 'none' },
+                display: { xs: "flex", md: "none" },
                 flexGrow: 1,
-                height: '42px',
-                width: '116px'
+                height: "42px",
+                width: "116px",
               }}
             />
           </Link>
           <Typography
             sx={{
-              display: { xs: 'flex', md: 'none' },
+              display: { xs: "flex", md: "none" },
               flexGrow: 1,
             }}
-          >
-
-          </Typography>
+          ></Typography>
           {mdLinks}
           {user ? avatarMenu(user) : loginButton}
         </Toolbar>
       </Container>
     </AppBar>
   );
-};
+}

@@ -60,6 +60,67 @@ class Character5thDeserializer(CharacterDeserializer):
       raise serializers.ValidationError()
     return value
   
+  def validate_advantages(self, data):
+    if not isinstance(data, list):
+      raise serializers.ValidationError()
+    
+    allowed_keys = ['name', 'description', 'notes', 'rating', 'flaw', 'modifier']
+    
+    for item in data:
+      if not isinstance(item, dict):
+        raise serializers.ValidationError()
+      if 'name' not in item:
+        raise serializers.ValidationError()
+      if 'description' not in item:
+        raise serializers.ValidationError()
+      if 'notes' not in item:
+        raise serializers.ValidationError()
+      if 'rating' not in item:
+        raise serializers.ValidationError()
+      if 'flaw' not in item:
+        raise serializers.ValidationError()   
+      if 'modifier' not in item:
+        raise serializers.ValidationError()
+      
+      unexpected_keys = set(item.keys()) - set(allowed_keys)
+      if unexpected_keys:
+        raise serializers.ValidationError(f"Unexpected keys found in set: {', '.join(unexpected_keys)}")
+      elif not isinstance(item['name'], str):
+        raise serializers.ValidationError()
+      elif len(item['name']) > 80:
+        raise serializers.ValidationError("name too long")
+      elif not isinstance(item['description'], str):
+        raise serializers.ValidationError()
+      elif len(item['description']) > 500:
+        raise serializers.ValidationError("Description too long")
+      elif not isinstance(item['rating'], int):
+        raise serializers.ValidationError("Rating must be a number")
+      elif not isinstance(item['notes'], str):
+        raise serializers.ValidationError()
+      elif len(item['notes']) > 500:
+        raise serializers.ValidationError("Notes must be less then 500 characters")
+      elif not isinstance(item['flaw'], bool):
+        raise serializers.ValidationError()
+      elif not isinstance(item['modifier'], int):
+        raise serializers.ValidationError()
+    
+    return data
+  
+  def validate_merits(self, data):
+    return self.validate_advantages(data)
+  
+  def validate_flaws(self, data):
+    return self.validate_advantages(data)
+  
+  def validate_haven(self, data):
+    return self.validate_advantages(data)
+  
+  def validate_backgrounds(self, data):
+    return self.validate_advantages(data)
+  
+  def validate_loresheets(self, data):
+    return self.validate_advantages(data)
+  
   def validate(self, data):
     data = super().validate(data)
 
@@ -117,6 +178,11 @@ class Character5thSerializer(CharacterSerializer):
       'tenets',
       'touchstones',
       'convictions',
+      'merits',
+      'flaws',
+      'backgrounds',
+      'haven',
+      'loresheets',
     )
 
   def to_representation(self, instance):

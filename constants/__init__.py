@@ -7,11 +7,11 @@ class Supporter():
   METHUSELAH = 5
 
 class CharacterSheetLimit():
-  BASE = 1
-  MORTAL = 3
-  FLEDGLING = 6
-  NEONATE = 15
-  ANCILLA = 100
+  BASE = 2
+  MORTAL = 4
+  FLEDGLING = 8
+  NEONATE = 30
+  ANCILLA = 200
 
   @staticmethod
   def get_amount(supporterLevel):
