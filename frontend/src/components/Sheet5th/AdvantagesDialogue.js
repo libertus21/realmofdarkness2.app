@@ -125,6 +125,7 @@ export default function AdvantagesDialogue(props) {
         <Stack paddingTop={1} spacing={2}>
           <Stack direction="row" spacing={2}>
             <AdvantagesAutocomplete
+              value={name}
               optionSet={optionsSet}
               onChange={handleAutocompleteChange}
               id={slug + "autocomplete"}
@@ -200,11 +201,12 @@ export default function AdvantagesDialogue(props) {
 }
 
 function AdvantagesAutocomplete(props) {
-  const { optionSet, onChange, id } = props;
+  const { optionSet, onChange, id, value } = props;
 
   return (
     <Autocomplete
       freeSolo
+      inputValue={value}
       id={id}
       options={optionSet}
       groupBy={(option) => option.group}

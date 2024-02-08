@@ -14,7 +14,7 @@ export default function AdvantagesTab() {
 
   return (
     <Grid rowSpacing={2} container xs={12}>
-      <Grid xs={12} md={6}>
+      <Grid md={12} lg={6}>
         <Stack
           justifyContent="flex-start"
           sx={{ width: "100%" }}
@@ -36,7 +36,7 @@ export default function AdvantagesTab() {
           <Advantages name="haven" handleOpenView={handleOpenView} />
         </Stack>
       </Grid>
-      <Grid xs={12} md={6}>
+      <Grid md={12} lg={6}>
         <Stack
           justifyContent="flex-start"
           sx={{ width: "100%" }}
