@@ -182,6 +182,9 @@ class Character5thSerializer(CharacterSerializer):
       'flaws',
       'backgrounds',
       'haven',
+      'haven_name',
+      'haven_location',
+      'haven_description',
       'loresheets',
     )
 

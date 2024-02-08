@@ -10,6 +10,7 @@ import NotesTab from "../../Sheet/NotesTab";
 import AdvantagesTab from "../AdvantagesTab";
 
 import { useState } from "react";
+import HavenTab from "../HavenTab";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -60,7 +61,7 @@ export default function SheetNav(props) {
             <Tab label="Core" value={0} />
             <Tab label="Beliefs" value={1} />
             <Tab label="Advantages" value={2} />
-            <Tab label="Haven" value={3} disabled />
+            <Tab label="Haven" value={3} />
             <Tab label="Exp" value={4} />
             <Tab label="Profile" value={5} />
             <Tab label="Notes" value={6} />
@@ -83,6 +84,10 @@ export default function SheetNav(props) {
       {/* Advantages Tab */}
       <CustomTabPanel value={value} index={2}>
         <AdvantagesTab />
+      </CustomTabPanel>
+      {/* Haven Tab */}
+      <CustomTabPanel value={value} index={3}>
+        <HavenTab />
       </CustomTabPanel>
       {/* Exp Tab */}
       <CustomTabPanel value={value} index={4}>

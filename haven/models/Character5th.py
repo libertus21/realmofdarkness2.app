@@ -27,6 +27,11 @@ class Character5th(Character):
   backgrounds = models.JSONField(default=list)
   loresheets = models.JSONField(default=list)
 
+  # Haven
+  haven_name = models.CharField(blank=True, max_length=50)
+  haven_location = models.TextField(blank=True, max_length=500)
+  haven_description = models.TextField(blank=True, max_length=1000)
+
 
   ################################## Attributes ###############################
   # Physical
