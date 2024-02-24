@@ -94,7 +94,7 @@ def save_character(request):
   if image_file: 
     if char.avatar:
       char.avatar.delete()
-    char.avatar.save(f"{char.id}_{int(time())}", image_file)
+    char.avatar.save(image_file.name.replace("downloaded_image", f"{char.id}_{int(time())}"), image_file)
 
   async_to_sync(channel_layer.group_send)(
     Group.character_update(char.id),
@@ -135,7 +135,7 @@ class SaveCharacter(APIView):
     if image_file: 
       if instance.avatar:
         instance.avatar.delete()
-      instance.avatar.save(f"{instance.id}_{int(time())}", image_file)
+      instance.avatar.save(image_file.name.replace("downloaded_image", f"{instance.id}_{int(time())}"), image_file)
         
     async_to_sync(channel_layer.group_send)(
       Group.character_update(instance.id),

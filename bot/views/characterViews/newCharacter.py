@@ -62,7 +62,7 @@ def new_character(request):
     guild=guild, 
     data=character
   )
-  if image_file: character.avatar.save(f"{character.id}_{int(time())}", image_file)
+  if image_file: character.avatar.save(image_file.name.replace("downloaded_image", f"{character.id}_{int(time())}"), image_file)
       
   async_to_sync(channel_layer.group_send)(
     Group.character_new(),
@@ -99,7 +99,8 @@ class NewCharacter(APIView):
       
     if (serializer.is_valid()):
       instance = serializer.save()
-      if image_file: instance.avatar.save(f"{instance.id}_{int(time())}", image_file)
+      print(image_file)
+      if image_file: instance.avatar.save(image_file.name.replace("downloaded_image", f"{instance.id}_{int(time())}"), image_file)
     else:
       return validation_error_handler(serializer.errors)
     
