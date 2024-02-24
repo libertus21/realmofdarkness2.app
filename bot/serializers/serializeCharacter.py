@@ -8,7 +8,7 @@ def serializeCharacter(character):
     'user': str(character.user.id),
     'chronicle': str(character.chronicle.id) if character.chronicle else None,
     'theme': character.theme,
-    'faceclaim': character.faceclaim if character.user.supporter >= 0 else None,
+    'faceclaim': character.avatar.url if character.avatar and character.user.supporter >= 0 else None,
     'exp': {'total': exp.total, 'current': exp.current},
     #'history': serializeHistory(character),
   }

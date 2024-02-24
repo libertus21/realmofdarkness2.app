@@ -27,7 +27,6 @@ class CharacterManager(models.Manager):
       member=member,
       splat=splat,
       name=data['name'],
-      faceclaim=data.get('thumbnail', ''),
       theme=data['theme']
     )
 
@@ -87,7 +86,7 @@ class Character(models.Model):
   status = models.IntegerField(choices=SheetStatus.choices, default=1)
   created_at = models.DateTimeField(auto_now_add=True)
   last_updated = models.DateTimeField(auto_now=True)
-  faceclaim = models.URLField(blank=True)
+  avatar = models.ImageField(upload_to='char_avatars/', blank=True)
   theme = models.CharField(default='#000000', max_length=10)
 
   # Experiance  

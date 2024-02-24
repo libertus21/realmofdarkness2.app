@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from time import time
 
 from ..get_post import get_post
 from ..Authenticate import authenticate
@@ -16,6 +17,7 @@ from haven.serializers import Werewolf5thDeserializer, W5TrackerSerializer
 from chronicle.models import Chronicle, Member
 from gateway.constants import Group
 from gateway.serializers import serialize_character
+from bot.util import download_and_verify_image
 
 
 channel_layer = get_channel_layer()
@@ -24,10 +26,15 @@ User = get_user_model()
 MAX_TRACKERS = 50
 
 @csrf_exempt
-@transaction.atomic
 def new_character(request):
   data = get_post(request)
   character = data['character']
+  
+  image_url = character.get('avatar', None)
+  image_file = None
+  if image_url: image_file = download_and_verify_image(image_url)
+  if image_url and not image_file: return HttpResponse(status=406)
+
 
   if not character['id']:
     char = Character.objects.filter(
@@ -55,6 +62,7 @@ def new_character(request):
     guild=guild, 
     data=character
   )
+  if image_file: character.avatar.save(f"{character.id}_{int(time())}", image_file)
       
   async_to_sync(channel_layer.group_send)(
     Group.character_new(),
@@ -64,7 +72,6 @@ def new_character(request):
       "tracker": serialize_character(character),
     }
   )
-  # character is all saved and ready to go
   return HttpResponse(status=201)
 
 class NewCharacter(APIView):  
@@ -72,6 +79,11 @@ class NewCharacter(APIView):
   def post(self, request):
     authenticate(request)
     character = request.data['character']
+    image_url = character.get('avatar', None)
+    image_file = None
+    if image_url: image_file = download_and_verify_image(image_url)
+    if image_url and not image_file: return HttpResponse(status=406)
+
     
     count = Character.objects.filter(user=character['user']).count()
     if (count > MAX_TRACKERS): # 409 Conflict - Too many Characters
@@ -87,6 +99,7 @@ class NewCharacter(APIView):
       
     if (serializer.is_valid()):
       instance = serializer.save()
+      if image_file: instance.avatar.save(f"{instance.id}_{int(time())}", image_file)
     else:
       return validation_error_handler(serializer.errors)
     
@@ -106,3 +119,4 @@ class NewCharacter(APIView):
       }
     )  
     return Response(status=201)
+  

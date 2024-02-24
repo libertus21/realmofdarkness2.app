@@ -4,11 +4,13 @@ from django.http import HttpResponse
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.contrib.auth import get_user_model
+from time import time
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from re import match
 from ..Authenticate import authenticate
 from ..get_post import get_post
 from haven.models import MoralityInfo, Vampire5th, Werewolf5th
@@ -18,6 +20,7 @@ from bot.constants import Splats
 from bot.functions import get_splat
 from gateway.constants import Group
 from gateway.serializers import serialize_character
+from bot.util import download_and_verify_image
 
 channel_layer = get_channel_layer()
 User = get_user_model()
@@ -28,6 +31,13 @@ def save_character(request):
   data = get_post(request)
   char_data = data['character']
   splatSlug = char_data['splatSlug']
+  image_url = data['character'].get('avatar', None)
+  image_file = None
+  
+  if image_url and match(r"^https:\/\/realmofdarkness\.app", image_url): image_url = None
+  elif image_url: 
+    image_file = download_and_verify_image(image_url)
+  if image_url and not image_file: return HttpResponse(status=406)
   
   if (char_data['id']):
     char = get_splat(splatSlug, id=char_data['id'])
@@ -37,7 +47,6 @@ def save_character(request):
 
   # Update character relations
   char.name = char_data['name']
-  char.faceclaim = char_data.get('thumbnail', '')
   # Character Vanity Colour
   char.theme = char_data['theme']
   
@@ -81,7 +90,12 @@ def save_character(request):
     update_20th(char_data, char)
     update_demon20th(char_data, char)   
 
-  char.save()
+  char.save()  
+  if image_file: 
+    if char.avatar:
+      char.avatar.delete()
+    char.avatar.save(f"{char.id}_{int(time())}", image_file)
+
   async_to_sync(channel_layer.group_send)(
     Group.character_update(char.id),
     {
@@ -92,13 +106,20 @@ def save_character(request):
   )  
   return HttpResponse(status=200)
 
-# This API handles both creation and saving
+
 class SaveCharacter(APIView):
   @csrf_exempt
   def post(self, request):
     authenticate(request)
     user_id = request.data['character']['user']
-    id = request.data['character']['id']
+    id = request.data['character']['id']    
+    image_url = request.data['character'].get('avatar', None)
+    image_file = None
+    
+    if image_url and match(r"^https:\/\/realmofdarkness\.app", image_url): 
+      image_url = None
+    elif image_url: image_file = download_and_verify_image(image_url)
+    if image_url and not image_file: return HttpResponse(status=406)
     
     try:
       character = Vampire5th.objects.get(pk=id, user__id=user_id)
@@ -111,6 +132,10 @@ class SaveCharacter(APIView):
       instance = serializer.save()
     else:
       return validation_error_handler(serializer.errors)
+    if image_file: 
+      if instance.avatar:
+        instance.avatar.delete()
+      instance.avatar.save(f"{instance.id}_{int(time())}", image_file)
         
     async_to_sync(channel_layer.group_send)(
       Group.character_update(instance.id),

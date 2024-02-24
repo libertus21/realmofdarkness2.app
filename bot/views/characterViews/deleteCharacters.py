@@ -37,6 +37,7 @@ class DeleteCharacters(APIView):
         )  
 
       else:
+        if char.avatar: char.avatar.delete()
         char.delete()
         async_to_sync(channel_layer.group_send)(
           Group.character_update(id),

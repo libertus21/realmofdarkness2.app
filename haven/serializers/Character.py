@@ -15,7 +15,6 @@ class CharacterSerializer(serializers.ModelSerializer):
       'id', 
       'is_sheet',
       'status',
-      'faceclaim',
       'theme',
       'history',
       'date_of_birth',
@@ -40,6 +39,7 @@ class CharacterSerializer(serializers.ModelSerializer):
     }
     data['created_at'] = instance.created_at.timestamp()
     data['last_updated'] = instance.last_updated.timestamp()
+    data['faceclaim'] = instance.avatar.url if instance.avatar else None
     return data
 
 ############################ Character Deserializer ###########################
@@ -52,6 +52,7 @@ class CharacterDeserializer(serializers.ModelSerializer):
     data.pop('member', None)
     data.pop('created_at', None)
     data.pop('last_updated', None)
+    data.pop('avatar', None)
 
     return super().to_internal_value(data)
   
@@ -123,10 +124,6 @@ class CharacterDeserializer(serializers.ModelSerializer):
     if not value: return value
     elif value < SheetStatus.DRAFT or value > SheetStatus.ARCHIVE:
       raise serializers.ValidationError("Invalid Sheet Status.")
-    return value
-  
-  def validate_faceclaim(self, value):
-    # TODO Validate URL
     return value
 
   def validate_theme(self, value):

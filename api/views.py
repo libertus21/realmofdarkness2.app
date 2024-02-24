@@ -132,6 +132,7 @@ class DeleteCharacter(APIView):
       return Response(status=status.HTTP_204_NO_CONTENT)
       
     if (character.user == user):
+      if (character.avatar): character.avatar.delete()
       character.delete()
       async_to_sync(channel_layer.group_send)(
         Group.character_update(pk),
