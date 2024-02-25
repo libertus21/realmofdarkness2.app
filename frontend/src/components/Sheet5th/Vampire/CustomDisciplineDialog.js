@@ -29,15 +29,18 @@ export default function CustomDisciplineDialog({
     if (characteristics !== "")
       characteristicsArray = characteristics?.split("\n");
 
-    await onSave(
-      {
-        name,
-        description: descriptionArray,
-        characteristics: characteristicsArray,
-      },
-      update,
-      oldName
-    );
+    let newDisc = {
+      name,
+      description: descriptionArray,
+      characteristics: characteristicsArray,
+      value: 0,
+    };
+    if (update) newDisc = JSON.parse(JSON.stringify(update));
+    newDisc.name = name;
+    newDisc.description = descriptionArray;
+    newDisc.characteristics = characteristicsArray;
+
+    await onSave(newDisc, update, oldName);
     onClose();
   };
 
