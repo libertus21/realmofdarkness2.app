@@ -75,7 +75,7 @@ class Vampire5thDeserializer(Character5thDeserializer):
         raise serializers.ValidationError(f"Data for '{name}' should be a dictionary.")
       unexpected_keys = set(data.keys()) - set(allowed_discipline_keys)
       if unexpected_keys:
-        raise serializers.ValidationError(f"Unexpected keys found in '{name}': {', '.join(unexpected_keys)}")
+        raise serializers.ValidationError(f"Unexpected keys found in Discipline '{name}': {', '.join(unexpected_keys)}")
 
       # Validate Name
       if 'name' not in data:
@@ -128,10 +128,72 @@ class Vampire5thDeserializer(Character5thDeserializer):
       # Validate powers
       if 'powers' not in data:
         raise serializers.ValidationError("No Powers input")
-      elif not isinstance(data['powers'], list):
-        raise serializers.ValidationError("Powers not a list")
-      elif len(data['powers']) != 0:
-        raise serializers.ValidationError("Invalid value for powers")
+      elif not isinstance(data['powers'], dict):
+        raise serializers.ValidationError("Powers not a dict")
+      
+      allowed_powers_keys = ['1', '2', '3', '4', '5']
+      allowed_power_keys = ['name', 'amalgam', 'description', 'cost', 'dice_pool', 'system', 'duration']
+      unexpected_keys = set(data['powers'].keys()) - set(allowed_powers_keys)
+      if unexpected_keys:
+        raise serializers.ValidationError(f"Unexpected keys found in {name} Powers dict: {', '.join(unexpected_keys)}")
+      
+      ##################### Validate Each power ############################
+      for power_name, power_data in data['powers'].items():
+        if power_data is None: continue
+        if not isinstance(power_data, dict):
+          raise serializers.ValidationError(f"Data for Power '{power_name}' should be a dictionary.")
+        unexpected_keys = set(power_data) - set(allowed_power_keys)
+        if unexpected_keys:
+          raise serializers.ValidationError(f"Unexpected keys found in {name} Powers {power_name} dict: {', '.join(unexpected_keys)}")
+        
+        if 'name' not in power_data:
+          raise serializers.ValidationError("No Power name input")
+        elif not isinstance(power_data['name'], str):
+          raise serializers.ValidationError("Power Name not a String")
+        elif len(power_data['name']) > 50:
+          raise serializers.ValidationError("Power Name too long")
+        
+        if 'amalgam' not in power_data:
+          raise serializers.ValidationError("No Power amalgam input")
+        elif not isinstance(power_data['amalgam'], str):
+          raise serializers.ValidationError("Power amalgam not a String")
+        elif len(power_data['amalgam']) > 50:
+          raise serializers.ValidationError("Power amalgam too long")
+        
+        if 'description' not in power_data:
+          raise serializers.ValidationError("No Power description input")
+        elif not isinstance(power_data['description'], str):
+          raise serializers.ValidationError("Power description not a String")
+        elif len(power_data['description']) > 1000:
+          raise serializers.ValidationError("Power description too long")
+        
+        if 'cost' not in power_data:
+          raise serializers.ValidationError("No Power cost input")
+        elif not isinstance(power_data['cost'], str):
+          raise serializers.ValidationError("Power cost not a String")
+        elif len(power_data['cost']) > 50:
+          raise serializers.ValidationError("Power cost too long")
+        
+        if 'dice_pool' not in power_data:
+          raise serializers.ValidationError("No Power dice_pool input")
+        elif not isinstance(power_data['dice_pool'], str):
+          raise serializers.ValidationError("Power dice_pool not a String")
+        elif len(power_data['dice_pool']) > 200:
+          raise serializers.ValidationError("Power dice_pool too long")
+        
+        if 'system' not in power_data:
+          raise serializers.ValidationError("No Power system input")
+        elif not isinstance(power_data['system'], str):
+          raise serializers.ValidationError("Power system not a String")
+        elif len(power_data['system']) > 1000:
+          raise serializers.ValidationError("Power system too long")
+        
+        if 'duration' not in power_data:
+          raise serializers.ValidationError("No Power duration input")
+        elif not isinstance(power_data['duration'], str):
+          raise serializers.ValidationError("Power duration not a String")
+        elif len(power_data['duration']) > 50:
+          raise serializers.ValidationError("Power duration too long")      
 
     return disciplines
     

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   IconButton,
   Dialog,
@@ -7,9 +7,9 @@ import {
   DialogContentText,
   Button,
   Tooltip,
-} from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
-import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
+} from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
+import AnnouncementOutlinedIcon from "@mui/icons-material/AnnouncementOutlined";
 
 export default function SheetPreviewNews() {
   const [open, setOpen] = useState(false);
@@ -24,35 +24,22 @@ export default function SheetPreviewNews() {
 
   return (
     <Grid>
-      <Tooltip title='Sheet News' arrow>
+      <Tooltip title="Sheet News" arrow>
         <IconButton onClick={handleOpen}>
           <AnnouncementOutlinedIcon fontSize="large" color="secondary" />
         </IconButton>
       </Tooltip>
 
       <Dialog open={open} onClose={handleClose} maxWidth="md">
-        <DialogTitle color='primary'>Sheet Early Access Preview</DialogTitle>
+        <DialogTitle color="primary">Sheet News</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Welcome to the Vampire 5th edition full sheet preview. This is
-            currently a work in progress and will be updated over time until all
-            the features are implemented. As this is a work in progress it may
-            be necessary to delete parts of any stored data, I will try to avoid
-            this but please make sure to keep backups of any data in case it
-            needs to happen.
-          </DialogContentText>
-          <DialogContentText paddingTop={2} component='div'>
-            The current features that have been released are:
-            <ul>
-              <li>Top bar fields (Name, Clan, Sire, Predator type and so on)</li>
-              <li>Trackers (Willpower, Health, Hunger and Humanity)</li>
-              <li>Attributes</li>
-              <li>Skills</li>
-              <li>Hunting</li>
-              <li>Blood Potency</li>
-              <li>Custom Disciplines (Not including Powers)</li>
-              <li>Profile Tab</li>
-            </ul>
+            Welcome to the Vampire 5th edition full sheet. The sheet is now
+            considered in a baseline feature complete state with everything you
+            would expect from a PDF sheet and more! There are still some things
+            that need to be improved upon such as autocompleting for a lot of
+            fields and that will be worked on over time. For now Enjoy the
+            sheet!
           </DialogContentText>
         </DialogContent>
         <Button onClick={handleClose} color="primary">

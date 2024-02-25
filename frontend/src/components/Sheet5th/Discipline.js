@@ -13,16 +13,16 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Stack,
 } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useState } from 'react';
-import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
+import Grid from "@mui/material/Unstable_Grid2";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useState } from "react";
+import { useSheetContext } from "../../routes/Character/Vampire5thSheet";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import SheetRating from "./SheetRating";
-
+import { Power } from "./DisciplinePower";
 
 export default function Discipline(props) {
   const { lock } = useSheetContext();
@@ -32,9 +32,10 @@ export default function Discipline(props) {
     discipline,
     updateCustomDiscipline,
     updateDiscipline,
-    deleteDiscipline
+    deleteDiscipline,
+    openPowerDialog,
+    openPowerDialogView,
   } = props;
-
 
   const handleDialogOpen = () => {
     setDialogOpen(true);
@@ -58,17 +59,37 @@ export default function Discipline(props) {
     updateDiscipline(newDiscipline, true);
   }
 
+  function renderPowers() {
+    const powers = [];
+    const divider = <Divider />;
+
+    for (let i = 1; i <= 5; i++) {
+      if (discipline.powers[i] === null) break;
+      powers.push(
+        <div key={i}>
+          {i !== 1 ? divider : null}
+          <Power
+            level={i}
+            power={discipline.powers[i]}
+            lock={lock}
+            openDialogue={() => openPowerDialog(discipline, i)}
+            openView={() => openPowerDialogView(discipline, i)}
+          />
+        </div>
+      );
+    }
+
+    return (
+      <Stack direction="column" spacing={1}>
+        {powers}
+      </Stack>
+    );
+  }
+
   const cardActions = (
     <>
       <Divider />
       <CardActions>
-        {discipline.powers?.length <= 5 && (
-          <Tooltip title="Add Power" arrow>
-            <IconButton>
-              <AddIcon color="primary" />
-            </IconButton>
-          </Tooltip>
-        )}
         {discipline.custom === 0 && (
           <Tooltip title="Edit Discipline" arrow>
             <IconButton onClick={handleUpdate}>
@@ -86,11 +107,11 @@ export default function Discipline(props) {
   );
 
   return (
-    <Grid minWidth='300px'>
-      <Card elevation={0} sx={{ borderRadius: '12px' }}>
+    <Grid minWidth="300px">
+      <Card elevation={0} sx={{ borderRadius: "12px" }}>
         <Accordion
-          expanded={expanded === 'panel1'}
-          onChange={handleChange('panel1')}
+          expanded={expanded === "panel1"}
+          onChange={handleChange("panel1")}
           elevation={0}
         >
           <AccordionSummary
@@ -105,33 +126,37 @@ export default function Discipline(props) {
               alignItems="center"
             >
               <Grid>
-                {
-                  discipline.description?.length || discipline.characteristics?.length ? (
-                    <div onClick={(event) => {
+                {discipline.description?.length ||
+                discipline.characteristics?.length ? (
+                  <div
+                    onClick={(event) => {
                       // Call the function to show details
                       handleDialogOpen();
                       // Stop the propagation to prevent Accordion from expanding
                       event.stopPropagation();
-                    }}>
-                      <Tooltip title='Info' arrow>
-                        <Typography sx={{
-                          '&:hover': {
-                            color: '#d8bf31',
-                          }
+                    }}
+                  >
+                    <Tooltip title="Info" arrow>
+                      <Typography
+                        sx={{
+                          "&:hover": {
+                            color: "#d8bf31",
+                          },
                         }}
-                        >
-                          {discipline.name}
-                        </Typography>
-                      </Tooltip>
-                    </div>
-                  ) : (
-                    <Typography onClick={(event) => {
+                      >
+                        {discipline.name}
+                      </Typography>
+                    </Tooltip>
+                  </div>
+                ) : (
+                  <Typography
+                    onClick={(event) => {
                       event.stopPropagation();
-                    }}>
-                      {discipline.name}
-                    </Typography>
-                  )
-                }
+                    }}
+                  >
+                    {discipline.name}
+                  </Typography>
+                )}
               </Grid>
               <Grid paddingLeft={2} paddingTop={0.5}>
                 <SheetRating
@@ -143,26 +168,22 @@ export default function Discipline(props) {
               </Grid>
             </Grid>
           </AccordionSummary>
-          <AccordionDetails>
-
-          </AccordionDetails>
+          <AccordionDetails>{renderPowers()}</AccordionDetails>
         </Accordion>
         {!lock ? cardActions : null}
       </Card>
 
-      {/* Dialog for displaying details */}
+      {/* Dialog for displaying Discipline details */}
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
-        <DialogTitle color="primary" sx={{ textAlign: 'center' }}>
+        <DialogTitle color="primary" sx={{ textAlign: "center" }}>
           {discipline.name}
         </DialogTitle>
         <DialogContent>
-          {
-            discipline.description?.map((item, index) => (
-              <Typography key={index} sx={{ marginBottom: '20px' }}>
-                {item}
-              </Typography>
-            ))
-          }
+          {discipline.description?.map((item, index) => (
+            <Typography key={index} sx={{ marginBottom: "20px" }}>
+              {item}
+            </Typography>
+          ))}
           {discipline.characteristics?.length ? (
             <>
               <Typography
@@ -173,13 +194,11 @@ export default function Discipline(props) {
               >
                 Characteristics
               </Typography>
-              {
-                discipline.characteristics?.map((item, index) => (
-                  <Typography key={index} sx={{ marginBottom: '20px' }}>
-                    {item}
-                  </Typography>
-                ))
-              }
+              {discipline.characteristics?.map((item, index) => (
+                <Typography key={index} sx={{ marginBottom: "20px" }}>
+                  {item}
+                </Typography>
+              ))}
             </>
           ) : null}
         </DialogContent>
@@ -189,6 +208,6 @@ export default function Discipline(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </Grid >
-  )
+    </Grid>
+  );
 }
