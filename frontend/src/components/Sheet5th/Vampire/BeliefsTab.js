@@ -9,44 +9,38 @@ export default function BeliefsTab() {
 
   return (
     <Grid spacing={2} container xs={12}>
-      <Grid container xs={12} lg={6} xl={4}>
+      <Grid xs={12} lg={6} xl={4}>
         <Header>Chronicle Tenets</Header>
-        <Grid xs={12}>
-          <ApiTextField
-            slug="tenets"
-            value={sheet.tenets}
-            maxLength={1000}
-            onEnter={false}
-            rows={19}
-            multiline
-          />
-        </Grid>
+        <ApiTextField
+          slug="tenets"
+          value={sheet.tenets}
+          maxLength={1000}
+          onEnter={false}
+          rows={19}
+          multiline
+        />
       </Grid>
-      <Grid container xs={12} lg={6} xl={4}>
+      <Grid xs={12} lg={6} xl={4}>
         <Header>Touchstones</Header>
-        <Grid xs={12}>
-          <ApiTextField
-            slug="touchstones"
-            value={sheet.touchstones}
-            maxLength={2000}
-            onEnter={false}
-            rows={19}
-            multiline
-          />
-        </Grid>
+        <ApiTextField
+          slug="touchstones"
+          value={sheet.touchstones}
+          maxLength={2000}
+          onEnter={false}
+          rows={19}
+          multiline
+        />
       </Grid>
-      <Grid container xs={12} lg={12} xl={4}>
+      <Grid xs={12} lg={12} xl={4}>
         <Header>Convictions</Header>
-        <Grid xs={12}>
-          <ApiTextField
-            slug="convictions"
-            value={sheet.convictions}
-            maxLength={2000}
-            onEnter={false}
-            rows={19}
-            multiline
-          />
-        </Grid>
+        <ApiTextField
+          slug="convictions"
+          value={sheet.convictions}
+          maxLength={2000}
+          onEnter={false}
+          rows={19}
+          multiline
+        />
       </Grid>
     </Grid>
   );
