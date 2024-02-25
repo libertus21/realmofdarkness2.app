@@ -8,7 +8,7 @@ class Command(BaseCommand):
         for vampire in Vampire5th.objects.all():
             updated_disciplines = {}
             for discipline, data in vampire.disciplines.items():
-                self.stdout.write(f"{discipline} - {data.powers}")
+                self.stdout.write(f"{discipline} - {data['powers']}")
 
             self.stdout.write(f"Updated disciplines for {vampire.name}")
 
