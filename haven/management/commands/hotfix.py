@@ -11,5 +11,6 @@ class Command(BaseCommand):
                 updated_disciplines[discipline] = data
                 updated_disciplines[discipline]['powers'] = {'1': None, '2': None, '3': None, '4': None, '5': None}
             vampire.disciplines = updated_disciplines
-            self.stdout.write(f"Updated disciplines for {vampire.name}\n{vampire.disciplines}")
+            vampire.save()
+            self.stdout.write(f"Updated disciplines for {vampire.name}")
 
