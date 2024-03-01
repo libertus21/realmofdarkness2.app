@@ -89,6 +89,13 @@ class NewCharacter(APIView):
     if (count > MAX_TRACKERS): # 409 Conflict - Too many Characters
       return HttpResponse(status=409)
     user = User.objects.get(pk=character['user'])
+    
+    print(request.data)
+    char = Character.objects.filter(
+      name__iexact=character['name'], user=character['user'])
+    if char:
+      # 304 Not Modified - Character exists
+      return HttpResponse(status=304)
 
     if (character['class'] == 'Vampire5th'):
       serializer = Vampire5thDeserializer(data=character, context=user)
