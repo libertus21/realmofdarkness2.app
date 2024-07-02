@@ -1,9 +1,9 @@
-import { TextField } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
-import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
-import { useClientContext } from '../ClientProvider';
-import { useState, useEffect } from 'react';
-import { slugify } from '../../utility';
+import { TextField } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
+import { useSheetContext } from "../../routes/Character/Vampire5thSheet";
+import { useClientContext } from "../ClientProvider";
+import { useState, useEffect } from "react";
+import { slugify } from "../../utility";
 
 export default function ApiTextField(props) {
   const {
@@ -12,25 +12,24 @@ export default function ApiTextField(props) {
     slug,
     maxLength,
     noLock = false,
-    variant = 'outlined',
-    size = 'small',
+    variant = "outlined",
+    size = "small",
     onEnter = true,
     save,
     paddingX = 1,
     xs = 12,
-    md = 'auto',
+    md = "auto",
     ...other
   } = props;
 
-  const { lock, handleUpdate, sheet } = useSheetContext();
-  const { user } = useClientContext();
-  const disable = ((sheet.user !== user.id) || (lock && !noLock))
+  const { lock, handleUpdate } = useSheetContext();
+  const disable = lock && !noLock;
 
   const handleSave = save ? save : handleUpdate;
 
   const [field, setField] = useState(value);
   const [error, setError] = useState(false);
-  const [color, setColor] = useState('primary');
+  const [color, setColor] = useState("primary");
   const [focused, setFocused] = useState(false);
 
   function onChange(event) {
@@ -45,26 +44,28 @@ export default function ApiTextField(props) {
 
   async function onBlur() {
     if (value === field) return setFocused(false);
-    setColor('secondary');
+    setColor("secondary");
     const name = slug ?? slugify(label);
-    const updatedValue = field ?? '';
+    const updatedValue = field ?? "";
     const response = { [name]: updatedValue };
 
     const res = await handleSave(response);
-    if (res === 'error') {
+    if (res === "error") {
       setError(true);
-      setColor('primary');
+      setColor("primary");
       setFocused(false);
       setTimeout(() => setError(false), 5000);
-    }
-    else {
-      setColor('success');
-      setTimeout(() => { setColor('primary'); setFocused(false) }, 2000);
+    } else {
+      setColor("success");
+      setTimeout(() => {
+        setColor("primary");
+        setFocused(false);
+      }, 2000);
     }
   }
 
   function onKeyDown(event) {
-    if (onEnter && event.key === 'Enter') {
+    if (onEnter && event.key === "Enter") {
       event.target.blur();
     }
   }
@@ -74,14 +75,14 @@ export default function ApiTextField(props) {
   }, [value]);
 
   return (
-    <Grid xs={xs} md={md} paddingX={paddingX} >
+    <Grid xs={xs} md={md} paddingX={paddingX}>
       <TextField
         focused={focused}
         onClick={onClick}
         color={color}
         error={error}
         disabled={disable}
-        value={field ?? ''}
+        value={field ?? ""}
         onChange={onChange}
         onBlur={onBlur}
         label={label}
@@ -92,5 +93,5 @@ export default function ApiTextField(props) {
         {...other}
       />
     </Grid>
-  )
+  );
 }

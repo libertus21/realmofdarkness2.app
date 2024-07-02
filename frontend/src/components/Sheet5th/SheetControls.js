@@ -20,10 +20,20 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 export default function SheetControls(props) {
   const { lock, syncState, sheet } = useSheetContext();
   const { user } = useClientContext();
-  const { handleLockChange } = props;
+  const { handleLockChange, handleStLockChange } = props;
 
-  function unlockSheet() {
-    if (user.id === sheet.user) {
+  function renderLockButton() {
+    if (user.id === sheet.user && sheet.st_lock === true) {
+      return (
+        <Tooltip title="Edit Sheet" arrow>
+          <LockIcon
+            fontSize="large"
+            color="disabled"
+            sx={{ marginX: 1, marginTop: 1 }}
+          />
+        </Tooltip>
+      );
+    } else if (lock) {
       return (
         <Tooltip title="Edit Sheet" arrow>
           <IconButton onClick={handleLockChange}>
@@ -31,21 +41,56 @@ export default function SheetControls(props) {
           </IconButton>
         </Tooltip>
       );
-    } else
+    } else if (!lock) {
       return (
-        <IconButton disabled onClick={handleLockChange}>
-          <LockIcon fontSize="large" color="disabled" />
-        </IconButton>
+        <Tooltip title="Lock Sheet" arrow>
+          <IconButton onClick={handleLockChange}>
+            <LockOpenIcon fontSize="large" color="secondary" />
+          </IconButton>
+        </Tooltip>
       );
+    }
   }
 
-  const lockSheet = (
-    <Tooltip title="Lock Sheet" arrow>
-      <IconButton onClick={handleLockChange}>
-        <LockOpenIcon fontSize="large" color="secondary" />
-      </IconButton>
-    </Tooltip>
-  );
+  function renderStLockButton() {
+    if (user.id === sheet.user && sheet.st_lock === false) {
+      return (
+        <Tooltip title="Storyteller Unlocked" arrow>
+          <LockOpenIcon
+            fontSize="large"
+            color="primary"
+            sx={{ marginX: 1, marginTop: 1 }}
+          />
+        </Tooltip>
+      );
+    } else if (user.id === sheet.user && sheet.st_lock === true) {
+      return (
+        <Tooltip title="Storyteller Locked" arrow>
+          <LockIcon
+            fontSize="large"
+            color="warning"
+            sx={{ marginX: 1, marginTop: 1 }}
+          />
+        </Tooltip>
+      );
+    } else if (user.id !== sheet.user && sheet.st_lock === true) {
+      return (
+        <Tooltip title="ST Unlock Sheet" arrow>
+          <IconButton onClick={handleStLockChange}>
+            <LockIcon fontSize="large" color="primary" />
+          </IconButton>
+        </Tooltip>
+      );
+    } else if (user.id !== sheet.user && sheet.st_lock === false) {
+      return (
+        <Tooltip title="ST Lock" arrow>
+          <IconButton onClick={handleStLockChange}>
+            <LockOpenIcon fontSize="large" color="warning" />
+          </IconButton>
+        </Tooltip>
+      );
+    }
+  }
 
   return (
     <Grid
@@ -59,13 +104,9 @@ export default function SheetControls(props) {
       md={2}
     >
       <SyncStateIcon syncState={syncState} />
-      <Grid>{lock ? unlockSheet() : lockSheet}</Grid>
+      <Grid>{renderLockButton()}</Grid>
+      <Grid>{renderStLockButton()}</Grid>
       <SheetPreviewNews />
-      <Grid>
-        <IconButton disabled>
-          <BlurOnOutlinedIcon fontSize="large" color="secondary" />
-        </IconButton>
-      </Grid>
       <Grid>
         <IconButton disabled>
           <BlurOnOutlinedIcon fontSize="large" color="secondary" />

@@ -92,12 +92,31 @@ class CharacterUpdateV5(APIView):
 
   def put(self, request, id): 
     user = request.user
+    
     try:
-      character = Vampire5th.objects.get(pk=id, user=user)
+      character = Vampire5th.objects.get(pk=id)
     except Vampire5th.DoesNotExist:
       return Response({"message": ["Character not found"]}, status=404)
+    
+    if not character.is_sheet: 
+      return Response('This is not a Sheet', status=status.HTTP_406_NOT_ACCEPTABLE)
+    
+    is_owner = character.user == user
+    is_admin_or_storyteller = is_admin_or_st(character, user)
+    if not (is_owner or is_admin_or_storyteller):
+      return Response('You do not have permission to edit this character', status=403)
 
-    serializer = Vampire5thDeserializer(character, data=request.data, partial=True, context=str(user.id))
+    serializer = Vampire5thDeserializer(
+      character, 
+      data=request.data, 
+      partial=True, 
+      context={
+        "user_id": str(user.id), 
+        "is_owner": is_owner, 
+        "is_admin_or_storyteller": is_admin_or_storyteller,
+        "chronicles": Member.objects.filter(user=user).values_list('chronicle', flat=True)
+      }
+    )
     
     if not serializer.is_valid():
       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -145,6 +164,7 @@ class DeleteCharacter(APIView):
     elif (is_admin_or_st(character, user)):
       character.member = None
       character.chronicle = None
+      character.st_lock = False
       character.save()      
       sheet = None
       if (character.is_sheet):

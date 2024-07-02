@@ -7,7 +7,7 @@ from chronicle.models import Chronicle, Member, StorytellerRole
 from .get_post import get_post
 from bot.models import Bot
 from haven.models import Character
-from gateway.serializers import serialize_chronicle
+from gateway.serializers import serialize_chronicle, serialize_character
 from gateway.constants import Group
 
 channel_layer = get_channel_layer()
@@ -25,7 +25,18 @@ def member_delete(request):
 
   for character in member.character_set.all():
     character.chronicle = None
+    if (character.st_lock):
+      character.st_lock = False
+    
     character.save()
+    async_to_sync(channel_layer.group_send)(
+      Group.character_update(character.id),
+      {
+        "type": "character.update",
+        "id": character.id,
+        "tracker": serialize_character(character)
+      }
+    ) 
     
   member.delete()        
 

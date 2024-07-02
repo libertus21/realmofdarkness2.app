@@ -26,6 +26,7 @@ class DeleteCharacters(APIView):
 
       if disconnect:
         char.chronicle = None
+        if (char.st_lock): char.st_lock = False
         char.save()      
         async_to_sync(channel_layer.group_send)(
           Group.character_update(char.id),

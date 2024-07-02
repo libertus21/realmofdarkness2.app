@@ -1,5 +1,5 @@
 import { Container } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from "@mui/material/Unstable_Grid2";
 
 import GeneralInfo from "../../components/Sheet5th/Vampire/GeneralInfoTab";
 import Attributes from "../../components/Sheet5th/AttributesTab";
@@ -8,21 +8,20 @@ import Skills from "../../components/Sheet5th/SkillsTab";
 import TrackerTab from "../../components/Sheet5th/Vampire/TrackerTab";
 import SheetSkeleton from "../../components/SheetSkeleton";
 import { useState, useEffect, createContext, useContext } from "react";
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from "react-router-dom";
 
-import { getHost, getCSRFToken } from '../../utility';
+import { getHost, getCSRFToken } from "../../utility";
 import { useClientContext } from "../../components/ClientProvider";
 import { useAlertContext } from "../../components/AlertProvider";
 
 const SheetContext = createContext(null);
 export const useSheetContext = () => useContext(SheetContext);
-export const SyncState =
-{
-  SYNC: 'Synced',
-  UNSYNC: 'Uploading',
-  ERROR: 'Error',
-  SYNC_COMPLETE: 'Upload Complete',
-}
+export const SyncState = {
+  SYNC: "Synced",
+  UNSYNC: "Uploading",
+  ERROR: "Error",
+  SYNC_COMPLETE: "Upload Complete",
+};
 
 export default function Vampire5thSheet(props) {
   const [lock, setLock] = useState(true);
@@ -33,7 +32,7 @@ export default function Vampire5thSheet(props) {
   const navigate = useNavigate();
 
   /**
-   * Sends an API update request for the sheet if successful apllies the changes to the sheet 
+   * Sends an API update request for the sheet if successful apllies the changes to the sheet
    * @param {object} apiUpdate - Update in the ORM JSON format
    * @param {object} sheetUpdate - Sheet update in the Sheet JSON format
    */
@@ -52,38 +51,41 @@ export default function Vampire5thSheet(props) {
       const response = await fetch(
         `${getHost(true)}/api/character/update/v5/${sheet.id}`,
         {
-          method: 'PUT',
-          headers:
-          {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken(),
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken(),
           },
           body: JSON.stringify(apiUpdate),
-        });
+        }
+      );
 
       if (!response.ok) {
         const data = await response.json();
-        const errorMessage = data ?? "There was an error with this request and the changes have not been applied."
-        pushAlert({ title: 'API Error', message: errorMessage });
+        const errorMessage =
+          data ??
+          "There was an error with this request and the changes have not been applied.";
+        pushAlert({ title: "API Error", message: errorMessage });
         setSheet(oldSheet);
-        setSyncState(SyncState.ERROR)
+        setSyncState(SyncState.ERROR);
         setTimeout(() => setSyncState(SyncState.SYNC), 5000);
-        return 'error'
+        return "error";
       }
-    }
-    catch (error) {
-      const message = "There was an error with this request and the changes have not been applied.";
-      pushAlert({ title: 'API Error', message: message });
+    } catch (error) {
+      const message =
+        "There was an error with this request and the changes have not been applied.";
+      pushAlert({ title: "API Error", message: message });
       setSheet(oldSheet);
-      setSyncState(SyncState.ERROR)
+      setSyncState(SyncState.ERROR);
       setTimeout(() => setSyncState(SyncState.SYNC), 5000);
-      return 'error'
+      return "error";
     }
     setSyncState(SyncState.SYNC_COMPLETE);
     setTimeout(() => setSyncState(SyncState.SYNC), 5000);
   }
 
   function handleLockChange() {
+    if (sheet.st_lock) return setLock(false);
     setLock(!lock);
   }
 
@@ -91,33 +93,41 @@ export default function Vampire5thSheet(props) {
   useEffect(() => {
     const fetchSheetData = async () => {
       try {
-        const response =
-          await fetch(`/api/character/get/v5?id=${id}&sheet=true`);
+        const response = await fetch(
+          `/api/character/get/v5?id=${id}&sheet=true`
+        );
         const data = await response.json();
 
         if (!response.ok) {
-          pushAlert({ title: 'API Error', message: data });
-          return navigate('/');
+          pushAlert({ title: "API Error", message: data });
+          return navigate("/");
         }
         setSheet(data);
-      }
-      catch (error) {
-        const message = 'There was an unknown error fetching this sheet.'
-        pushAlert({ title: 'API Error', message: message })
-        navigate('/');
+      } catch (error) {
+        const message = "There was an unknown error fetching this sheet.";
+        pushAlert({ title: "API Error", message: message });
+        navigate("/");
       }
     };
     fetchSheetData();
-    return () => { setSheet(null) }
+    return () => {
+      setSheet(null);
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     client.sheetSubscribe(id);
-    return () => { client.sheetSubscribe(null) }
-  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
+    return () => {
+      client.sheetSubscribe(null);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (sheet && sheet.st_lock) setLock(true);
+  }, [sheet]);
 
   const sheetPage = (
-    <Container maxWidth='false' sx={{ mt: 10 }}>
+    <Container maxWidth="false" sx={{ mt: 10 }}>
       <GeneralInfo handleLockChange={handleLockChange} />
       <TrackerTab />
       <Grid container>
@@ -125,21 +135,16 @@ export default function Vampire5thSheet(props) {
           <Attributes />
           <Skills />
         </Grid>
-        <Grid
-          container
-          md={7}
-          direction="column"
-          rowGap={2}
-        >
+        <Grid container md={7} direction="column" rowGap={2}>
           <SheetNav />
         </Grid>
       </Grid>
     </Container>
-  )
+  );
 
   return (
     <SheetContext.Provider value={{ sheet, lock, handleUpdate, syncState }}>
-      {sheet ? sheetPage : (<SheetSkeleton />)}
+      {sheet ? sheetPage : <SheetSkeleton />}
     </SheetContext.Provider>
-  )
+  );
 }

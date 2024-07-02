@@ -107,6 +107,9 @@ class Character(models.Model):
   splat = models.ForeignKey(Splat, on_delete=models.CASCADE, null=True)
   objects = CharacterManager()
 
+  # Story Teller Lock will stop the player from making non-tracker edits to their sheet.
+  st_lock = models.BooleanField(default=False)
+
   class Meta:
     unique_together = ('name', 'user')
     indexes = [models.Index(fields=['name', 'user'])]

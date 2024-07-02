@@ -23,6 +23,7 @@ class CharacterSerializer(serializers.ModelSerializer):
       'notes',
       'notes2',
       'exp_spends',
+      'st_lock'
     )
   
   def to_representation(self, instance):
@@ -71,6 +72,9 @@ class CharacterDeserializer(serializers.ModelSerializer):
     return instance
   
   def validate_name(self, value):
+    if not self.context.get('is_owner', False):
+      raise serializers.ValidationError("This field can only be changed by the Owner");
+  
     if not value:
       raise serializers.ValidationError("You must input a Name.")
     elif len(value) > 50:
@@ -80,7 +84,7 @@ class CharacterDeserializer(serializers.ModelSerializer):
     if (self.instance): # Update a character   
       # We don't need to do anything if the name is the same
       if self.instance.name == value: return value
-      user_id = self.context
+      user_id = self.context.get('user_id')
     
     else: # New Character
       user_id = self.initial_data.get('user')
@@ -104,9 +108,17 @@ class CharacterDeserializer(serializers.ModelSerializer):
     return value
   
   def validate_chronicle(self, value):
+    # Can only be changed by the Owner
+    if not self.context.get('is_owner', False):
+      raise serializers.ValidationError("This field can only be changed by the Owner");
+
+    # Must be in the chronicle
+    if not self.context.get('chronicles', False) and value not in self.context['chronicles']:
+      raise serializers.ValidationError("You must be a member of the Chronicle to add that chronicle.")
+
     # Add member
     chronicle = value    
-    user = self.context
+    user = self.context.get('user_id')
     if not self.instance and chronicle: 
       # New Character
       self.temp_member = Member.objects.get(chronicle=chronicle, user=user)
@@ -114,13 +126,16 @@ class CharacterDeserializer(serializers.ModelSerializer):
     elif self.instance and self.instance.chronicle != chronicle:
       # Update character
       if chronicle:
-        user = self.context
+        user = self.context.get('user_id')
         self.temp_member = Member.objects.get(chronicle=chronicle, user=user)
       else:
         self.temp_member = None
     return value
 
   def validate_status(self, value):
+    if not self.context.get('is_owner', False):
+      raise serializers.ValidationError("This field can only be changed by the Owner");
+  
     if not value: return value
     elif value < SheetStatus.DRAFT or value > SheetStatus.ARCHIVE:
       raise serializers.ValidationError("Invalid Sheet Status.")
@@ -179,6 +194,15 @@ class CharacterDeserializer(serializers.ModelSerializer):
         raise serializers.ValidationError("Cost must be a number")
     
     return data
+  
+  # We need to make sure the user cannot change this value only an ST
+  def validate_st_lock(self, value):
+      if not isinstance(value, bool):
+          raise serializers.ValidationError("This field must be a boolean value")
+      
+      if self.context.get('is_owner', True) or not self.context.get('is_admin_or_storyteller', False):
+        raise serializers.ValidationError("This field can only be changed by the ST")
+      return value
   
   def validate(self, data):
     data = super().validate(data)
