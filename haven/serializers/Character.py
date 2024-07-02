@@ -113,7 +113,7 @@ class CharacterDeserializer(serializers.ModelSerializer):
       raise serializers.ValidationError("This field can only be changed by the Owner");
 
     # Must be in the chronicle
-    if not self.context.get('chronicles', False) and value not in self.context['chronicles']:
+    if not self.context.get('from_bot', False) and not self.context.get('chronicles', False) and value not in self.context['chronicles']:
       raise serializers.ValidationError("You must be a member of the Chronicle to add that chronicle.")
 
     # Add member

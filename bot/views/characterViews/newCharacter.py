@@ -98,10 +98,20 @@ class NewCharacter(APIView):
       return HttpResponse(status=304)
 
     if (character['class'] == 'Vampire5th'):
-      serializer = Vampire5thDeserializer(data=character, context=user)  
+      serializer = Vampire5thDeserializer(
+        data=character, 
+        context={
+          'user_id': user,
+          'is_owner': True,
+        }
+      )  
       splat = "Vampire5th"
     elif (character['class'] == 'Werewolf5th'):    
-      serializer = Werewolf5thDeserializer(data=character, context=user)
+      serializer = Werewolf5thDeserializer(data=character, context={
+          'user_id': user,
+          'is_owner': True,          
+          'from_bot': True,
+        })
       
     if (serializer.is_valid()):
       instance = serializer.save()

@@ -126,7 +126,15 @@ class SaveCharacter(APIView):
     except Vampire5th.DoesNotExist:
       return Response({"message": "Character not found"}, status=404)
     
-    serializer = Vampire5thDeserializer(character, data=request.data['character'], context=request.data['character']['user'])
+    serializer = Vampire5thDeserializer(
+      character, 
+      data=request.data['character'], 
+      context={
+          'user_id': user_id,
+          'is_owner': True,
+          'from_bot': True,
+        }
+    )
     
     if (serializer.is_valid()):
       instance = serializer.save()
