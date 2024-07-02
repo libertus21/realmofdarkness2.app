@@ -98,11 +98,10 @@ class NewCharacter(APIView):
       return HttpResponse(status=304)
 
     if (character['class'] == 'Vampire5th'):
-      serializer = Vampire5thDeserializer(data=character, context=user)      
-      tracker = V5TrackerSerializer(instance).data
+      serializer = Vampire5thDeserializer(data=character, context=user)  
+      splat = "Vampire5th"
     elif (character['class'] == 'Werewolf5th'):    
       serializer = Werewolf5thDeserializer(data=character, context=user)
-      tracker = W5TrackerSerializer(instance).data
       
     if (serializer.is_valid()):
       instance = serializer.save()
@@ -110,6 +109,11 @@ class NewCharacter(APIView):
       if image_file: instance.avatar.save(image_file.name.replace("downloaded_image", f"{instance.id}_{int(time())}"), image_file)
     else:
       return validation_error_handler(serializer.errors)
+    
+    if (splat == 'Vampire5th'):
+      tracker = V5TrackerSerializer(instance).data
+    else:
+      tracker = W5TrackerSerializer(instance).data
     
     async_to_sync(channel_layer.group_send)(
       Group.character_new(),
