@@ -98,11 +98,11 @@ class NewCharacter(APIView):
       return HttpResponse(status=304)
 
     if (character['class'] == 'Vampire5th'):
-      serializer = Vampire5thDeserializer(data=character, context=user)
-      splat = "Vampire5th"
-    else:    
+      serializer = Vampire5thDeserializer(data=character, context=user)      
+      tracker = V5TrackerSerializer(instance).data
+    elif (character['class'] == 'Werewolf5th'):    
       serializer = Werewolf5thDeserializer(data=character, context=user)
-      splat = "Werewolf5th"
+      tracker = W5TrackerSerializer(instance).data
       
     if (serializer.is_valid()):
       instance = serializer.save()
@@ -111,19 +111,13 @@ class NewCharacter(APIView):
     else:
       return validation_error_handler(serializer.errors)
     
-    if (splat == 'Vampire5th'):
-      tracker = V5TrackerSerializer(instance).data
-    else:
-      tracker = W5TrackerSerializer(instance).data
-
-    
     async_to_sync(channel_layer.group_send)(
       Group.character_new(),
       {
         "type": "character.new",
         "id":  instance.id,
         "tracker": tracker,
-        "class": splat
+        "class": character['class']
       }
     )  
     return Response(status=201)

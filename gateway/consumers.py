@@ -61,8 +61,9 @@ class GatewayConsumer(AsyncWebsocketConsumer):
         
   
   async def character_update(self, event):
-    is_visiable = event['tracker'].get('chronicle', 0) in self.chronicles
-    if str(event['tracker']['user']) != str(self.user.id) and not is_visiable:
+    chronicle = event['tracker'].get('chronicle', None)
+    is_visible = (int(chronicle) if chronicle else 0) in self.chronicles
+    if str(event['tracker']['user']) != str(self.user.id) and not is_visible:
       return await self.character_delete(event)
 
     sub = None
