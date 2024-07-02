@@ -102,7 +102,8 @@ class NewCharacter(APIView):
         data=character, 
         context={
           'user_id': user,
-          'is_owner': True,
+          'is_owner': True,          
+          'from_bot': True,
         }
       )  
       splat = "Vampire5th"
