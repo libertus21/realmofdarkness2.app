@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
-from haven.models import Vampire5th, Character
+from haven.models import Vampire5th, Character, Splat
 from ..Authenticate import authenticate
 
 class GetNames(APIView):
@@ -12,15 +12,14 @@ class GetNames(APIView):
     user_id = request.data.get('user_id', None)
     chronicle_id = request.data.get('guild_id', None)
     splat = request.data.get('splat', None)
-    sheet_only = request.data.get('splat', False)
-
+    sheet_only = request.data.get('sheet_only', False)
     filter_args = {'user': user_id}
     if (sheet_only):
       filter_args['is_sheet'] = True
     if (chronicle_id):
       filter_args['chronicle'] = chronicle_id
     if splat != "vampire5th" and not None:
-      filter_args['splat'] = splat
+      filter_args['splat'] = Splat.objects.get(slug=splat)
 
     if (splat == 'vampire5th'):
       characters = Vampire5th.objects.filter(**filter_args)
