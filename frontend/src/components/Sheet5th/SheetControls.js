@@ -10,6 +10,7 @@ import {
 import DeleteCharacterButton from "../Sheet/DeleteCharacterButton";
 import SheetPreviewNews from "../Sheet/SheetPreviewNews";
 import { useClientContext } from "../ClientProvider";
+import ExportCharacterJSON from "../Sheet/ExportCharacterJSON";
 
 import { CircularProgress } from "@mui/material";
 import CloudCircleIcon from "@mui/icons-material/CloudCircle";
@@ -108,9 +109,7 @@ export default function SheetControls(props) {
       <Grid>{renderStLockButton()}</Grid>
       <SheetPreviewNews />
       <Grid>
-        <IconButton disabled>
-          <BlurOnOutlinedIcon fontSize="large" color="secondary" />
-        </IconButton>
+        <ExportCharacterJSON sheet={sheet} />
       </Grid>
       <Grid>
         <IconButton disabled>
