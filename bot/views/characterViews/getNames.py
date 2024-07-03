@@ -18,15 +18,29 @@ class GetNames(APIView):
       filter_args['is_sheet'] = True
     if (chronicle_id):
       filter_args['chronicle'] = chronicle_id
-    if splat != "vampire5th" and not None:
-      filter_args['splat'] = Splat.objects.get(slug=splat)
 
-    if (splat == 'vampire5th'):
-      characters = Vampire5th.objects.filter(**filter_args)
+
+    if splat:
+      if isinstance(splat, str):
+        splat_list = [splat]
+      elif isinstance(splat, list):
+        splat_list = splat
+      else:
+        splat_list = []
+
+      vampire5th_names = []
+      other_names = []
+
+      if "vampire5th" in splat_list:
+        vampire5th_names = Vampire5th.objects.filter(**filter_args).values_list('name', flat=True)
+        splat_list.remove("vampire5th")
+            
+      if splat_list:
+        filter_args['splat__slug__in'] = splat_list
+        other_names = Character.objects.filter(**filter_args).values_list('name', flat=True)
+
+      names = list(vampire5th_names) + list(other_names)
     else:
-      characters = Character.objects.filter(**filter_args)
-    
-    names = []
-    for character in characters:
-      names.append(character.name)
+      names = Character.objects.filter(**filter_args).values_list('name', flat=True)
+      
     return Response(data={'names': names})
