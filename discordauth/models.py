@@ -7,7 +7,7 @@ class UserManager(BaseUserManager):
         user = self.model(
             id=int(discord_user['id']), #Req
             username=discord_user['username'], #Req
-            discriminator=discord_user['discriminator'], #Req
+            discriminator=discord_user['discriminator'],
             avatar_url=discord_user.get('avatarURL', ''),
             email=discord_user.get('email', ''),
             verified=discord_user.get('verified', False),
@@ -24,7 +24,7 @@ class User(AbstractBaseUser):
     # Discord User Details
     id = models.BigIntegerField(primary_key=True)
     username = models.CharField(max_length=80)
-    discriminator = models.CharField(max_length=50)
+    discriminator = models.CharField(max_length=50, default='0')
     avatar_url = models.URLField(blank=True)
     email = models.EmailField(max_length=100, blank=True, null=True)
     verified = models.BooleanField()

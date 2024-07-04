@@ -13,12 +13,12 @@ class GetNames(APIView):
     chronicle_id = request.data.get('guild_id', None)
     splat = request.data.get('splat', None)
     sheet_only = request.data.get('sheet_only', False)
+    
     filter_args = {'user': user_id}
     if (sheet_only):
       filter_args['is_sheet'] = True
     if (chronicle_id):
       filter_args['chronicle'] = chronicle_id
-
 
     if splat:
       if isinstance(splat, str):
