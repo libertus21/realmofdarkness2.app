@@ -4,6 +4,7 @@ from django.contrib.auth import (authenticate,
 from .models import User
 import requests
 from .config import settings
+import hashlib
 
 class Oauth(object):
     client_id = settings['id']
@@ -27,7 +28,6 @@ class Oauth(object):
         headers = {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
-
         access_token = requests.post(Oauth.token_url, data=payload, headers=headers)
         access_token.raise_for_status()
         return access_token.json()
@@ -54,7 +54,7 @@ class Oauth(object):
 
 
 def login(request):
-    client_state = "14" #TODO make state a hash of client cookie
+    client_state = hashlib.sha256(str(request.COOKIES).encode()).hexdigest()
     return redirect(Oauth.login_url + f"&state={client_state}")
 
 def logout(request):
@@ -62,7 +62,14 @@ def logout(request):
     return redirect(settings['final_redirect'])
 
 def login_success(request):
-    #TODO validate the state making sure it is the same as what we sent
+    # Validate the state making sure it is the same as what we sent
+    client_state = request.GET.get('state')
+    server_state = hashlib.sha256(str(request.COOKIES).encode()).hexdigest()
+    
+    if client_state != server_state:
+        # Invalid state, handle accordingly
+        return redirect(settings['final_redirect'])
+    
     code = request.GET.get('code', 'no code found')
     access_token = Oauth.get_access_token(code)
     discord_user = Oauth.get_user(access_token['access_token'])
@@ -90,4 +97,4 @@ def login_success(request):
 
     auth_login(request, user, backend='discordauth.backends.DiscordAuthBackend')
     # Enter redirect Page
-    return redirect("/")
+    return redirect(settings['final_redirect'])

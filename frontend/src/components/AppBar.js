@@ -19,7 +19,7 @@ import { useClientContext } from "./ClientProvider";
 let host;
 if (process.env.NODE_ENV === "production")
   host = "https://realmofdarkness.app/";
-else host = "http://localhost/";
+else host = "http://localhost:8080/";
 
 const pages = {
   sm: ["20th Anniversary", "Chronicles of Darkness"],
