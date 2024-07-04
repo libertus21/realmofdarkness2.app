@@ -1,10 +1,10 @@
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 module.exports = function (app) {
   app.use(
-    '/api',
+    "/api",
     createProxyMiddleware({
-      target: 'http://localhost', // Replace with your Django server URL
+      target: "http://localhost:8080", // Replace with your Django server URL
       changeOrigin: true,
       secure: false,
     })

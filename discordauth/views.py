@@ -2,9 +2,11 @@ from django.shortcuts import redirect
 from django.contrib.auth import (authenticate, 
     login as auth_login, logout as auth_logout)
 from .models import User
+from chronicle.models import Chronicle, Member
 import requests
 from .config import settings
 import hashlib
+import json
 
 class Oauth(object):
     client_id = settings['id']
@@ -73,8 +75,7 @@ def login_success(request):
     code = request.GET.get('code', 'no code found')
     access_token = Oauth.get_access_token(code)
     discord_user = Oauth.get_user(access_token['access_token'])
-    # Uncomment if you would like the guilds as well. Needs guilds scope
-    #guilds = Oauth.get_guilds(access_token['access_token'])
+    guilds = Oauth.get_guilds(access_token['access_token'])
     
     user = authenticate(request, user_id=discord_user['id'])
     if (user != None):
@@ -94,6 +95,23 @@ def login_success(request):
         avatar_id = discord_user["avatar"]
         discord_user['avatarURL'] = f'https://cdn.discordapp.com/avatars/{user_id}/{avatar_id}.png'
         user = User.objects.create_user(discord_user, is_registered=True)
+
+    for guild in guilds:        
+        guild_id = int(guild['id'])
+        permissions = guild['permissions']
+        name = guild['name']
+        admin = False
+        try:
+            guild = Chronicle.objects.get(id=guild_id)
+        except Chronicle.DoesNotExist:
+            continue
+        
+        if not Member.objects.filter(chronicle=guild, user=user).exists():
+            print(f'User already exists in guild {name}')
+            if permissions & (1 << 3) != 0:
+                admin = True
+            Member.objects.create(chronicle=guild, user=user, admin=admin)
+        
 
     auth_login(request, user, backend='discordauth.backends.DiscordAuthBackend')
     # Enter redirect Page

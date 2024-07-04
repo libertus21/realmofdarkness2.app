@@ -154,3 +154,5 @@ frontend/build
 media/
 rod/management/
 haven/management/
+
+.vscode

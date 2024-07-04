@@ -8,10 +8,26 @@ With this application, users can easily create and update character sheets, trac
 
 Feel free to explore the code and contribute to the development of this exciting project!
 
+## Required Files
+
+rod/settings.py
+
+discordauth/config.py
+
+```py
+settings = {
+    'id': 'DISCORD_APP_ID',
+    'secret': 'DISCORD_APP_SECRET',
+    'scope': 'identify%20email%20guilds',
+    'loginURL': 'https://discord.com/api/oauth2/authorize?client_id=776358453701771275&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Flogin%2Fsuccess%2F&response_type=code&scope=identify%20email&prompt=none',
+    'redirect': 'http://localhost:8080/auth/login/success/',
+    'final_redirect': 'http://localhost:3000/'
+}
+```
+
 ## Known Issues
 
 - Updated sheets with a chronicle change will not automatically be added to another person's home page even if they should be able to see it.
-- Chronicles will not automatically be added to a person's chronicle list without using a bot command in the server first. A fix would be to update chronicles every time a user logs in.
 - A character sheet is not setting the chronicle to None when a member leaves a server.
 - Pressing enter when creating a new sheet should work as well
 - "No Server" filter on the Dashboard is not working with sheets
