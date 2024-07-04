@@ -9,7 +9,6 @@ import hashlib
 class Oauth(object):
     client_id = settings['id']
     client_secret = settings['secret']
-    client_scope = settings['scope']
     #Discord redirect URL
     redirect_uri = settings['redirect']
     login_url = settings['loginURL']

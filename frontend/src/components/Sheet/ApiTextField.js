@@ -1,7 +1,6 @@
 import { TextField } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useSheetContext } from "../../routes/Character/Vampire5thSheet";
-import { useClientContext } from "../ClientProvider";
 import { useState, useEffect } from "react";
 import { slugify } from "../../utility";
 
