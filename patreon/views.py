@@ -60,7 +60,7 @@ class PatreonWebhookView(APIView):
                 return Response(status=204)
             
             tier_ids = currently_entitled_tiers['data']
-            tier_id = currently_entitled_tiers['data'][0] if len(currently_entitled_tiers['data']) else None
+            tier_id = currently_entitled_tiers['data'][0].get('id') if len(currently_entitled_tiers['data']) else None
 
             tier = Supporter.convert_patreon_id(tier_id)
             
@@ -78,11 +78,12 @@ class PatreonWebhookView(APIView):
             '''
             with open('patreon_test.txt', 'a') as f:
                 f.write(f"Header x-patreon-event: {event}\n")
-                f.write(f"Discord ID: {discord_id}\n")
-                f.write(f"name: {name}\n")
-                f.write(f"email: {email}\n")
-                f.write(f"Tier IDs: {tier_ids} || Tier: {tier}\n")
-                f.write(f"\n\n")
+                # ...
+
+                with open('patreon_test.txt', 'a') as f:
+                    f.write(f"Header x-patreon-event: {event}\n")
+                    f.write(json.dumps(json.loads(request.body.decode('utf-8')), indent=4))
+                    f.write(f"\n\n")
 
             # Send a message to Discord
             discord_token = settings.DISCORD_BOT_TOKEN

@@ -19,7 +19,7 @@ settings = {
     'id': 'DISCORD_APP_ID',
     'secret': 'DISCORD_APP_SECRET',
     'scope': 'identify%20email%20guilds',
-    'loginURL': 'https://discord.com/api/oauth2/authorize?client_id=776358453701771275&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Flogin%2Fsuccess%2F&response_type=code&scope=identify%20email&prompt=none',
+    'loginURL': 'https://discord.com/api/oauth2/authorize?client_id=CLIENT_ID&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Flogin%2Fsuccess%2F&response_type=code&scope=identify%20email&prompt=none',
     'redirect': 'http://localhost:8080/auth/login/success/',
     'final_redirect': 'http://localhost:3000/'
 }
