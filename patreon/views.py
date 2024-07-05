@@ -35,16 +35,18 @@ class PatreonWebhookView(APIView):
         if serializer.is_valid():
             data = serializer.validated_data['data']
             included = serializer.validated_data['included']
-            
+            attributes = data.get('attributes', {})
+            email = attributes.get('email', None)    
             
             discord_id = None
             for item in included:
                 if item['type'] == 'user':
-                    discord_id = item['attributes'].get('discord_id')
-                    email = item['attributes'].get('email')
+                    social_connections = item['attributes'].get('social_connections', {})
+                    discord = social_connections.get('discord', {})
+                    discord_id = discord.get('user_id', None)
                     if item['attributes'].get('vanity'):
                         name = item['attributes']['vanity']
-                    else: name = item['attributes'].get('full_name')
+                    else: name = item['attributes'].get('full_name', '')
                     break
             
             #if not discord_id:
