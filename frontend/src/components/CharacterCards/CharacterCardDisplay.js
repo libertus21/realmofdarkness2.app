@@ -18,7 +18,7 @@ import Checkbox from "@mui/material/Checkbox";
 import DashboardControls from "../dashboard/DashboardControls";
 
 export default function CharacterCardDisplay(props) {
-  const { characters, chronicles } = props;
+  const { characters, chronicles, user } = props;
   const [sortOptions, setSortOptions] = useState({
     chronicle: "",
     splats: [],
@@ -108,8 +108,9 @@ export default function CharacterCardDisplay(props) {
         !sortOptions.splats.includes(character.splat)
       ) {
         continue;
+      } else if (character.user !== user.id && !sortOptions.storytellerMode) {
+        continue;
       }
-
       cards.push(<CharacterCard key={character.id} character={character} />);
     }
     const noChars = (
