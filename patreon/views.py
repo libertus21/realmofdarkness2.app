@@ -54,7 +54,8 @@ class PatreonWebhookView(APIView):
                         "social_connections", {}
                     )
                     discord = social_connections.get("discord", {})
-                    discord_id = discord.get("user_id", None)
+                    if discord:
+                        discord_id = discord.get("user_id", None)
                     if item["attributes"].get("vanity"):
                         name = item["attributes"]["vanity"]
                     else:

@@ -1,11 +1,9 @@
 import { Tooltip, IconButton } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
-import { useState } from 'react';
-import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
+import { useState } from "react";
+import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
 import NewSheetDialogue from "./NewSheetDialogue";
 
-export default function NewSheetControl(props)
-{
+export default function NewSheetControl(props) {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -17,16 +15,13 @@ export default function NewSheetControl(props)
   };
 
   return (
-    <Grid>
-      <Tooltip title="New Sheet" arrow> 
+    <>
+      <Tooltip title="New Sheet" arrow>
         <IconButton onClick={handleClickOpen}>
           <FeedOutlinedIcon color="secondary" />
-        </IconButton>         
+        </IconButton>
       </Tooltip>
-      <NewSheetDialogue 
-        open={open} 
-        onClose={handleClose}
-      />
-    </Grid>
-  )
+      <NewSheetDialogue open={open} onClose={handleClose} />
+    </>
+  );
 }
