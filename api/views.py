@@ -54,6 +54,7 @@ class CharacterSheetCreateV5(APIView):
                 user=user,
                 name=name,
                 is_sheet=True,
+                splat_new="vampire5th",
             )
         except IntegrityError:
             return Response(
