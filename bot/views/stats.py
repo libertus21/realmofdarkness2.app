@@ -79,24 +79,21 @@ def get_stats(request):
                 "splat": char["splat__name"] + " " + char["splat__version"],
             }
         )
-
-    vampires_grouped = (
-        Vampire5th.objects.values("is_sheet")
-        .annotate(count=Count("id"))
+    sheets = (
+        Character.objects.filter(last_updated__gt=timestamp_30days, is_sheet=True)
+        .values("splat_new")
+        .annotate(count=Count("splat_new"))
         .order_by("-count")
     )
 
-    for vampire in vampires_grouped:
-        sheet = ""
-        if vampire["is_sheet"]:
-            sheet = "(sheet)"
+    for sheet in sheets:
         char_stats.append(
-            {"count": vampire["count"], "splat": "Vampire 5th " + f"{sheet}"}
+            {"count": sheet["count"], "splat": sheet["splat_new"] + " (sheet)"}
         )
 
     new_characters = (
         Character.objects.filter(
-            last_updated__gt=timestamp_30days, splat_new__isnull=False
+            last_updated__gt=timestamp_30days, splat_new__isnull=False, is_sheet=False
         )
         .values("splat_new")
         .annotate(count=Count("splat_new"))
