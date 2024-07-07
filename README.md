@@ -27,6 +27,7 @@ settings = {
 
 ## Known Issues
 
+- On sheet update from another user the nickname changes to your own and clicking on the sheet will bring up a nickame error and fail to load.
 - Updated sheets with a chronicle change will not automatically be added to another person's home page even if they should be able to see it.
 - A character sheet is not setting the chronicle to None when a member leaves a server.
 - Pressing enter when creating a new sheet should work as well

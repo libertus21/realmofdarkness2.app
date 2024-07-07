@@ -66,7 +66,7 @@ class GetCharacterDefault(APIView):
         character = get_derived_instance(characters[0])
         Serializer = get_serializer(character.splat_new)
 
-        if isinstance(character, Character):
+        if character.splat:
             json = serialize(character.splat.slug, character)
             return Response(data=json)
         else:
