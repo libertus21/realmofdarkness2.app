@@ -40,8 +40,9 @@ Feel free to explore the code and contribute to the development of this exciting
 ## Running the server
 
 - You will need a Redis server running on the default port. Windows users can use WSL to run it.
-- If you require the frontend then you can either build the frontend by running npm run build from the frontend directory. Or the recommended way while developing is npm start and that will launch the react dev page which auto updates on file saves.
-- To start the server is py ./manage.py runserver 8080 (make sure you are running on 8080 for dev)
+- You will need to create the Database tables before you start the server. run `py ./manage.py makemigrations` and then `py ./manage.py migrate`
+- If you require the frontend then you can either build the frontend by running `npm run build` from the frontend directory. Or the recommended way while developing is `npm start` and that will launch the react dev page which auto updates on file saves.
+- To start the server is `py ./manage.py runserver 8080` (make sure you are running on 8080 for dev)
 
 ## Required Files
 
