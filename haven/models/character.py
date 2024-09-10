@@ -37,9 +37,6 @@ class CharacterManager(models.Manager):
             create_5th_partials(char, data)
             create_mortal5th_partial(char, data)
 
-        elif data["splatSlug"] == Splats.vampire20th.slug:
-            create_20th_partials(char, data)
-            create_vampire20th_partial(char, data)
         elif data["splatSlug"] == Splats.human20th.slug:
             create_20th_partials(char, data)
             create_human20th_partial(char, data)
@@ -158,8 +155,6 @@ def create_20th_partials(char, data):
 
 
 ######################## Create 5th edition partials ##########################
-
-
 def create_hunter5th_partial(char, data):
     Trackable.objects.create(
         character=char,
@@ -181,19 +176,6 @@ def create_mortal5th_partial(char, data):
 
 
 ########################## Create 20th edition paritals #######################
-def create_vampire20th_partial(char, data):
-    Trackable.objects.create(
-        character=char,
-        slug="blood",
-        total=data["blood"]["total"],
-        current=data["blood"]["current"],
-    )
-    morality = MoralityInfo.objects.get(slug=data["morality"]["name"])
-    Morality.objects.create(
-        character=char, morality_info=morality, current=data["morality"]["current"]
-    )
-
-
 def create_human20th_partial(char, data):
     Trackable.objects.create(
         character=char,
