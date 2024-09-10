@@ -8,23 +8,16 @@ from .Character20th import (
 )
 
 
-########################### Character Serializer ##############################
-class Vampire20thSerializer(Character20thSerializer):
-    # Define SerializerMethodField for skills
-
-    class Meta(Character20thSerializer.Meta):
+############################ Tracker Serializer ###############################
+class V20TrackerSerializer(Tracker20thSerializer):
+    class Meta(Tracker20thSerializer.Meta):
         model = Vampire20th
-        fields = Character20thSerializer.Meta.fields + (
+        fields = Tracker20thSerializer.Meta.fields + (
             "clan",
-            "clan_description",
-            "sire",
             "morality_name",
-            "morality_description",
             "morality_value",
             "blood_total",
             "blood_current",
-            "date_of_death",
-            "apparent_age",
         )
 
     def to_representation(self, instance):
@@ -38,16 +31,21 @@ class Vampire20thSerializer(Character20thSerializer):
         return data
 
 
-############################ Tracker Serializer ###############################
-class V20TrackerSerializer(Tracker20thSerializer):
-    class Meta(Tracker20thSerializer.Meta):
+########################### Character Serializer ##############################
+class Vampire20thSerializer(Character20thSerializer):
+    class Meta(Character20thSerializer.Meta):
         model = Vampire20th
-        fields = Tracker20thSerializer.Meta.fields + (
+        fields = Character20thSerializer.Meta.fields + (
             "clan",
+            "clan_description",
+            "sire",
             "morality_name",
+            "morality_description",
             "morality_value",
             "blood_total",
             "blood_current",
+            "date_of_death",
+            "apparent_age",
         )
 
     def to_representation(self, instance):

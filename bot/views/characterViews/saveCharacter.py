@@ -245,7 +245,7 @@ def update_vampire20th(data, character):
     blood.current = data["blood"]["current"]
     blood.save()
 
-    character.morality.current = data["morality"]["current"]
+    character.morality.current = data["morality"]["value"]
     character.morality.morality_info = MoralityInfo.objects.get(
         slug=data["morality"]["name"]
     )

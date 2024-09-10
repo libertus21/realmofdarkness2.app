@@ -119,7 +119,6 @@ class NewCharacter(APIView):
         if deserializer.is_valid():
 
             instance = deserializer.save()
-            print(instance.splat_new)
             if image_file:
                 instance.avatar.save(
                     image_file.name.replace(
@@ -131,7 +130,6 @@ class NewCharacter(APIView):
             return validation_error_handler(deserializer.errors)
 
         tracker = TrackerSerializer(instance).data
-
         async_to_sync(channel_layer.group_send)(
             Group.character_new(),
             {

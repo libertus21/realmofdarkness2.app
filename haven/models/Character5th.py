@@ -33,7 +33,7 @@ class Character5th(Character):
     haven_location = models.TextField(blank=True, max_length=500)
     haven_description = models.TextField(blank=True, max_length=1000)
 
-    ################################## Attributes ###############################
+    ################################# Attributes ###############################
     # Physical
     strength = models.IntegerField(default=1)
     dexterity = models.IntegerField(default=1)
@@ -47,7 +47,7 @@ class Character5th(Character):
     wits = models.IntegerField(default=1)
     resolve = models.IntegerField(default=1)
 
-    #################################### Skills #################################
+    ################################### Skills #################################
     # Physical
     athletics = models.IntegerField(default=0)
     brawl = models.IntegerField(default=0)
@@ -79,7 +79,7 @@ class Character5th(Character):
     science = models.IntegerField(default=0)
     technology = models.IntegerField(default=0)
 
-    ################################## Specialties ##############################
+    ################################# Specialties ##############################
     # Physical
     athletics_spec = models.JSONField(null=True)
     brawl_spec = models.JSONField(null=True)

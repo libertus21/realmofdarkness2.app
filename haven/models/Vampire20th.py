@@ -1,9 +1,9 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from .Character5th import Character5th
+from .Character20th import Character20th
 
 
-class Vampire20th(Character5th):
+class Vampire20th(Character20th):
     # Core
     clan = models.CharField(blank=True, max_length=50)
     clan_description = models.CharField(blank=True, max_length=2000)
@@ -17,7 +17,7 @@ class Vampire20th(Character5th):
     )
 
     blood_total = models.IntegerField(
-        default=10, validators=[MinValueValidator(0), MaxValueValidator(10)]
+        default=10, validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
     blood_current = models.IntegerField(
         default=1, validators=[MinValueValidator(0), MaxValueValidator(100)]

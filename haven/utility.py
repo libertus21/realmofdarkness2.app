@@ -1,7 +1,15 @@
-from haven.models import Vampire5th, Werewolf5th, Character
-from haven.serializers import Vampire5thDeserializer, Werewolf5thDeserializer
-from haven.serializers import Vampire5thSerializer, Werewolf5thSerializer
-from haven.serializers import V5TrackerSerializer, W5TrackerSerializer
+from haven.models import Vampire5th, Werewolf5th, Character, Vampire20th
+from haven.serializers import (
+    Vampire5thDeserializer,
+    Werewolf5thDeserializer,
+    Vampire5thSerializer,
+    Werewolf5thSerializer,
+    V5TrackerSerializer,
+    W5TrackerSerializer,
+    Vampire20thSerializer,
+    Vampire20thDeserializer,
+    V20TrackerSerializer,
+)
 
 
 def get_derived_instance(character):
@@ -24,6 +32,8 @@ def get_derived_instance(character):
         else:
             return character.character5th
     elif hasattr(character, "character20th"):
+        if hasattr(character.character20th, "vampire20th"):
+            return character.character20th.vampire20th
         return character.character20th
     # Add other derived model checks here
 
@@ -47,6 +57,8 @@ def get_character_model(splat):
         return Vampire5th
     elif splat == "werewolf5th":
         return Werewolf5th
+    elif splat == "vampire20th":
+        return Vampire20th
     else:
         return Character
 
@@ -67,6 +79,8 @@ def get_deserializer(splat):
         return Vampire5thDeserializer
     elif splat == "werewolf5th":
         return Werewolf5thDeserializer
+    elif splat == "vampire20th":
+        return Vampire20thDeserializer
     else:
         return None
 
@@ -87,6 +101,8 @@ def get_serializer(splat):
         return Vampire5thSerializer
     elif splat == "werewolf5th":
         return Werewolf5thSerializer
+    elif splat == "vampire20th":
+        return Vampire20thSerializer
     else:
         return None
 
@@ -107,5 +123,7 @@ def get_tracker_serializer(splat):
         return V5TrackerSerializer
     elif splat == "werewolf5th":
         return W5TrackerSerializer
+    elif splat == "vampire20th":
+        return V20TrackerSerializer
     else:
         return None

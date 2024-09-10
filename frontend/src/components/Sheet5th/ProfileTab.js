@@ -72,8 +72,8 @@ export default function ProfileTab() {
         <Grid xs={12}>
           <ApiTextField
             label="Appearance"
-            slug="appearance"
-            value={sheet.appearance}
+            slug="appearance_description"
+            value={sheet.appearance_description}
             maxLength={1000}
             multiline
             rows={14}

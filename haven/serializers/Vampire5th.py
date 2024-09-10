@@ -8,6 +8,30 @@ from .Character5th import (
 )
 
 
+############################ Tracker Serializer ###############################
+class V5TrackerSerializer(Tracker5thSerializer):
+    class Meta(Tracker5thSerializer.Meta):
+        model = Vampire5th
+        fields = Tracker5thSerializer.Meta.fields + (
+            "clan",
+            "humanity",
+            "stains",
+            "hunger",
+            "disciplines",
+            "blood_potency",
+        )
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        # Add the additional fields to the serialized data
+        data["splat"] = "vampire5th"
+        data["version"] = "5th"
+        data["class"] = "vampire5th"  # Temporary value to denote new type
+
+        return data
+
+
 ########################### Character Serializer ##############################
 class Vampire5thSerializer(Character5thSerializer):
     # Define SerializerMethodField for skills
@@ -28,30 +52,6 @@ class Vampire5thSerializer(Character5thSerializer):
             "disciplines",
             "date_of_death",
             "apparent_age",
-        )
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-
-        # Add the additional fields to the serialized data
-        data["splat"] = "vampire5th"
-        data["version"] = "5th"
-        data["class"] = "vampire5th"  # Temporary value to denote new type
-
-        return data
-
-
-############################ Tracker Serializer ###############################
-class V5TrackerSerializer(Tracker5thSerializer):
-    class Meta(Tracker5thSerializer.Meta):
-        model = Vampire5th
-        fields = Tracker5thSerializer.Meta.fields + (
-            "clan",
-            "humanity",
-            "stains",
-            "hunger",
-            "disciplines",
-            "blood_potency",
         )
 
     def to_representation(self, instance):

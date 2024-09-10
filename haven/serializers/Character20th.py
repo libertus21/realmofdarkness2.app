@@ -1,13 +1,13 @@
 from rest_framework import serializers
 from .Character import CharacterSerializer, CharacterDeserializer
-from haven.models import Character5th
+from haven.models import Character20th
 
 
 ############################ Tracker Serializer ###############################
 class Tracker20thSerializer(CharacterSerializer):
 
     class Meta(CharacterSerializer.Meta):
-        model = Character5th
+        model = Character20th
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -31,7 +31,7 @@ class Tracker20thSerializer(CharacterSerializer):
 # Base serializer with common fields for Character20th
 class Character20thSerializer(CharacterSerializer):
     class Meta(CharacterSerializer.Meta):
-        model = Character5th
+        model = Character20th
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -42,7 +42,7 @@ class Character20thSerializer(CharacterSerializer):
         }
 
         data["health"] = {
-            "bashing": instance.health_superficial,
+            "bashing": instance.health_bashing,
             "lethal": instance.health_lethal,
             "aggravated": instance.health_aggravated,
             "total": instance.health_total,
@@ -215,7 +215,7 @@ class Character20thSerializer(CharacterSerializer):
 ############################ Character Deserializer ###########################
 class Character20thDeserializer(CharacterDeserializer):
     class Meta(CharacterDeserializer.Meta):
-        model = Character5th
+        model = Character20th
 
     def validate_willpower_total(self, value):
         if value > 10 or value < 1:
@@ -298,7 +298,7 @@ class Character20thDeserializer(CharacterDeserializer):
 
         # Validate Damage trackers
         self.willpower_validation(data)
-        self.health_validation(data)
+        self.damage_validation(data)
 
         return data
 
