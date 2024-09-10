@@ -10,13 +10,12 @@ class Vampire20th(Character5th):
     sire = models.CharField(max_length=50, blank=True)
 
     # Morality
-    morality = models.CharField(default="Humanity", max_length=100)
+    morality_name = models.CharField(default="Humanity", max_length=100)
     morality_description = models.CharField(blank=True, max_length=1000)
-
-    # Humanity
-    humanity = models.IntegerField(
+    morality_value = models.IntegerField(
         default=7, validators=[MinValueValidator(0), MaxValueValidator(10)]
     )
+
     blood_total = models.IntegerField(
         default=10, validators=[MinValueValidator(0), MaxValueValidator(10)]
     )

@@ -1,69 +1,161 @@
 from django.db import models
 from .character import Character
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Character20th(Character):
 
     # Willpower
-    willpower_current = models.IntegerField(default=0)
-    willpower_total = models.IntegerField(default=2)
+    willpower_current = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(10)]
+    )
+    willpower_total = models.IntegerField(
+        default=2, validators=[MinValueValidator(1), MaxValueValidator(10)]
+    )
 
     # Health
-    health_bashing = models.IntegerField(default=0)
-    health_lethal = models.IntegerField(default=0)
-    health_aggravated = models.IntegerField(default=0)
-    health_total = models.IntegerField(default=4)
+    health_bashing = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(15)]
+    )
+    health_lethal = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(15)]
+    )
+    health_aggravated = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(15)]
+    )
+    health_total = models.IntegerField(
+        default=4, validators=[MinValueValidator(7), MaxValueValidator(15)]
+    )
 
     ################################# Attributes ###############################
     # Physical
-    strength = models.IntegerField(default=1)
-    dexterity = models.IntegerField(default=1)
-    stamina = models.IntegerField(default=1)
+    strength = models.IntegerField(
+        default=1, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    dexterity = models.IntegerField(
+        default=1, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    stamina = models.IntegerField(
+        default=1, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+
     # Social
-    charisma = models.IntegerField(default=1)
-    manipulation = models.IntegerField(default=1)
-    appearance = models.IntegerField(default=1)
+    charisma = models.IntegerField(
+        default=1, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    manipulation = models.IntegerField(
+        default=1, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    appearance = models.IntegerField(
+        default=1, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
     # Mental
-    perception = models.IntegerField(default=1)
-    intelligence = models.IntegerField(default=1)
-    wits = models.IntegerField(default=1)
+    perception = models.IntegerField(
+        default=1, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    intelligence = models.IntegerField(
+        default=1, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    wits = models.IntegerField(
+        default=1, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
 
     ################################### Skills #################################
     # Talents
-    alertness = models.IntegerField(default=0)
-    athletics = models.IntegerField(default=0)
-    awareness = models.IntegerField(default=0)
-    brawl = models.IntegerField(default=0)
-    empathy = models.IntegerField(default=0)
-    expression = models.IntegerField(default=0)
-    intimidation = models.IntegerField(default=0)
-    leadership = models.IntegerField(default=0)
-    streetwise = models.IntegerField(default=0)
-    subterfuge = models.IntegerField(default=0)
+    alertness = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    athletics = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    awareness = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    brawl = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    empathy = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    expression = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    intimidation = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    leadership = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    streetwise = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    subterfuge = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
 
     # Skills
-    animal_ken = models.IntegerField(default=0)
-    crafts = models.IntegerField(default=0)
-    drive = models.IntegerField(default=0)
-    etiquette = models.IntegerField(default=0)
-    firearms = models.IntegerField(default=0)
-    larceny = models.IntegerField(default=0)
-    melee = models.IntegerField(default=0)
-    performance = models.IntegerField(default=0)
-    stealth = models.IntegerField(default=0)
-    survival = models.IntegerField(default=0)
+    animal_ken = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    crafts = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    drive = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    etiquette = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    firearms = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    larceny = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    melee = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    performance = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    stealth = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    survival = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
 
     # Knowledges
-    academics = models.IntegerField(default=0)
-    computer = models.IntegerField(default=0)
-    finance = models.IntegerField(default=0)
-    investigation = models.IntegerField(default=0)
-    law = models.IntegerField(default=0)
-    medicine = models.IntegerField(default=0)
-    occult = models.IntegerField(default=0)
-    politics = models.IntegerField(default=0)
-    science = models.IntegerField(default=0)
-    technology = models.IntegerField(default=0)
+    academics = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    computer = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    finance = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    investigation = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    law = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    medicine = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    occult = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    politics = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    science = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    technology = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
 
     ################################# Specialties ##############################
     # Physical
