@@ -306,9 +306,9 @@ class Character20thDeserializer(CharacterDeserializer):
         # Validate Damage trackers
         if self.instance:
             total = data.get("health_total", None)
-            bashing = data.get("health_bashing", None)
-            lethal = data.get("health_lethal", None)
-            aggravated = data.get("health_aggravated", None)
+            bashing = data.get("health_bashing", 0)
+            lethal = data.get("health_lethal", 0)
+            aggravated = data.get("health_aggravated", 0)
 
             if total is not None and total < bashing + lethal + aggravated:
                 raise serializers.ValidationError(

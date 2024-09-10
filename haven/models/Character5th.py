@@ -1,5 +1,5 @@
 from django.db import models
-from .character import Character
+from .Character import Character
 
 
 class Character5th(Character):
