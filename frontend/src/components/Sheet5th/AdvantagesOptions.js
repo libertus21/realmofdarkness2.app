@@ -104,7 +104,8 @@ module.exports.meritsOptions = [
   },
   {
     name: "Bloodhound",
-    description: "Able to sniff out resonances without tasting them.",
+    description:
+      "Able to sniff out resonances without tasting them. Resolve + Awareness test at Diffiuculty 3. Adjust up or down based on how close and other factors such as perfume.",
     rating: 1,
     flaw: false,
     modifier: 0,

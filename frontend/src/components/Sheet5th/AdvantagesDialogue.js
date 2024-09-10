@@ -172,7 +172,7 @@ export default function AdvantagesDialogue(props) {
             multiline
             minRows={3}
             maxRows={5}
-            onChange={(e) => parseText(e, 500, setDescription)}
+            onChange={(e) => parseText(e, 1000, setDescription)}
             fullWidth
           />
           <TextField
@@ -183,7 +183,7 @@ export default function AdvantagesDialogue(props) {
             multiline
             minRows={3}
             maxRows={5}
-            onChange={(e) => parseText(e, 500, setNotes)}
+            onChange={(e) => parseText(e, 1000, setNotes)}
             fullWidth
           />
         </Stack>
