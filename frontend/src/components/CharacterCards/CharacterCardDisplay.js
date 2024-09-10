@@ -16,15 +16,28 @@ import { useState, useMemo } from "react";
 import CharacterCard from "./CharacterCard";
 import Checkbox from "@mui/material/Checkbox";
 import DashboardControls from "../dashboard/DashboardControls";
+import { useEffect } from "react";
 
 export default function CharacterCardDisplay(props) {
   const { characters, chronicles, user } = props;
-  const [sortOptions, setSortOptions] = useState({
-    chronicle: "",
-    splats: [],
-    sortBy: "lastUpdated",
-    storytellerMode: true,
-  });
+
+  const loadSortOptions = () => {
+    const savedSortOptions = localStorage.getItem("dashboardSortOptions");
+    return savedSortOptions
+      ? JSON.parse(savedSortOptions)
+      : {
+          chronicle: "",
+          splats: [],
+          sortBy: "lastUpdated",
+          storytellerMode: true,
+        };
+  };
+
+  const [sortOptions, setSortOptions] = useState(loadSortOptions);
+
+  useEffect(() => {
+    localStorage.setItem("dashboardSortOptions", JSON.stringify(sortOptions));
+  }, [sortOptions]);
 
   function handleSelectChange(event, value) {
     const newSort = { ...sortOptions };
