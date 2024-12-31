@@ -53,9 +53,9 @@ class Character(models.Model):
     notes = models.TextField(blank=True, max_length=6000)
     notes2 = models.TextField(blank=True, max_length=6000)
 
-    # Splat is a remenant of old system once all are converted splat should be replaced with splat_new
-    splat = models.ForeignKey(Splat, on_delete=models.CASCADE, null=True)
-    splat_new = models.CharField(max_length=50, blank=True, null=True)
+    # splat_old is used to store the old splat name for the character. It should be removed after all characters are updated.
+    splat_old = models.ForeignKey(Splat, on_delete=models.CASCADE, null=True)
+    splat = models.CharField(max_length=50, blank=True, null=True)
 
     # Story Teller Lock will stop the player from making non-tracker edits to their sheet.
     st_lock = models.BooleanField(default=False)

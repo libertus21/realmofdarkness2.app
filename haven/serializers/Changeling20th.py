@@ -69,7 +69,7 @@ class Changeling20thDeserializer(Character20thDeserializer):
         fields = "__all__"
 
     def create(self, validated_data):
-        validated_data["splat_new"] = Splats.changeling20th.slug
+        validated_data["splat"] = Splats.changeling20th.slug
         return super().create(validated_data)
 
     def validate(self, data):

@@ -1,6 +1,5 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from haven.models import Character
 from ..Authenticate import authenticate
@@ -43,11 +42,8 @@ class GetNames(APIView):
                 splat_list = []
 
             if splat_list:
-                splat_query = Q(splat__slug__in=splat_list) | Q(
-                    splat_new__in=splat_list
-                )
                 names = Character.objects.filter(
-                    splat_query, **filter_args
+                    splat__in=splat_list, **filter_args
                 ).values_list("name", flat=True)
         else:
             names = Character.objects.filter(**filter_args).values_list(

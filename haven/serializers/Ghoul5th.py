@@ -53,7 +53,7 @@ class Ghoul5thDeserializer(Character5thDeserializer):
         fields = "__all__"
 
     def create(self, validated_data):
-        validated_data["splat_new"] = Splats.ghoul5th.slug
+        validated_data["splat"] = Splats.ghoul5th.slug
         return super().create(validated_data)
 
     def validate(self, data):

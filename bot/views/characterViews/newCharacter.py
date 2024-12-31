@@ -45,7 +45,7 @@ class NewCharacter(APIView):
             # 304 Not Modified - Character exists
             return HttpResponse(status=304)
 
-        splat = character["class"]
+        splat = character["splat"]
         Deserializer = get_deserializer(splat)
         TrackerSerializer = get_tracker_serializer(splat)
 
@@ -81,4 +81,5 @@ class NewCharacter(APIView):
                 "class": splat,
             },
         )
+
         return Response(status=201)

@@ -55,7 +55,7 @@ class W5TrackerSerializer(Tracker5thSerializer):
 ############################ Character Deserializer ###########################
 class Werewolf5thDeserializer(Character5thDeserializer):
     def create(self, validated_data):
-        validated_data["splat_new"] = Splats.werewolf5th.slug
+        validated_data["splat"] = Splats.werewolf5th.slug
         return super().create(validated_data)
 
     class Meta(Character5thDeserializer.Meta):

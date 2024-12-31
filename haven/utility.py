@@ -1,5 +1,20 @@
-from haven.models import *
 from haven.serializers import *
+from haven.models import (
+    Vampire5th,
+    Werewolf5th,
+    Hunter5th,
+    Human5th,
+    Ghoul5th,
+    Vampire20th,
+    Werewolf20th,
+    Mage20th,
+    Changeling20th,
+    Wraith20th,
+    Human20th,
+    Ghoul20th,
+    DemonTF,
+    Character,
+)
 from django.contrib.contenttypes.models import ContentType
 
 

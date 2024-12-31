@@ -55,6 +55,7 @@ class CharacterDeserializer(serializers.ModelSerializer):
         data.pop("created_at", None)
         data.pop("last_updated", None)
         data.pop("avatar", None)
+        data.pop("splat", None)
 
         return super().to_internal_value(data)
 

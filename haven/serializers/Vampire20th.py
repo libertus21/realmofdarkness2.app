@@ -64,7 +64,7 @@ class Vampire20thDeserializer(Character20thDeserializer):
         fields = "__all__"
 
     def create(self, validated_data):
-        validated_data["splat_new"] = Splats.vampire20th.slug
+        validated_data["splat"] = Splats.vampire20th.slug
         return super().create(validated_data)
 
     def validate_morality_name(self, value):

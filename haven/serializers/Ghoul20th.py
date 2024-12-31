@@ -55,7 +55,7 @@ class Ghoul20thDeserializer(Character20thDeserializer):
         fields = "__all__"
 
     def create(self, validated_data):
-        validated_data["splat_new"] = Splats.ghoul20th.slug
+        validated_data["splat"] = Splats.ghoul20th.slug
         return super().create(validated_data)
 
     def validate(self, data):

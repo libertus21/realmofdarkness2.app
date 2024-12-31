@@ -40,7 +40,7 @@ class SaveCharacter(APIView):
         if image_url and not image_file:
             return HttpResponse(status=406)
 
-        splat = request.data["character"]["class"]
+        splat = request.data["character"]["splat"]
         Character = get_character_model(splat)
         Serializer = get_serializer(splat)
         Deserializer = get_deserializer(splat)

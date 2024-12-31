@@ -57,7 +57,7 @@ class DemonTFDeserializer(Character20thDeserializer):
         fields = "__all__"
 
     def create(self, validated_data):
-        validated_data["splat_new"] = Splats.demon20th.slug
+        validated_data["splat"] = Splats.demon20th.slug
         return super().create(validated_data)
 
     def validate_morality_name(self, value):

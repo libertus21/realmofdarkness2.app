@@ -70,7 +70,7 @@ class Vampire5thDeserializer(Character5thDeserializer):
         fields = "__all__"
 
     def create(self, validated_data):
-        validated_data["splat_new"] = Splats.vampire5th.slug
+        validated_data["splat"] = Splats.vampire5th.slug
         return super().create(validated_data)
 
     def validate_disciplines(self, disciplines):
