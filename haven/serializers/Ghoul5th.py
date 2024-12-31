@@ -23,7 +23,6 @@ class Ghoul5thTrackerSerializer(Tracker5thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.ghoul5th.slug
         data["version"] = Splats.ghoul5th.version
-        data["class"] = Splats.ghoul5th.slug
 
         return data
 
@@ -43,7 +42,6 @@ class Ghoul5thSerializer(Character5thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.ghoul5th.slug
         data["version"] = Splats.ghoul5th.version
-        data["class"] = Splats.ghoul5th.slug
 
         return data
 

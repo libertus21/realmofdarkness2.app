@@ -24,7 +24,6 @@ class Wraith20thTrackerSerializer(Tracker20thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.wraith20th.slug
         data["version"] = Splats.wraith20th.version
-        data["class"] = Splats.wraith20th.slug
 
         return data
 
@@ -45,7 +44,6 @@ class Wraith20thSerializer(Character20thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.wraith20th.slug
         data["version"] = Splats.wraith20th.version
-        data["class"] = Splats.wraith20th.slug
 
         return data
 

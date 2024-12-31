@@ -24,7 +24,6 @@ class Hunter5thTrackerSerializer(Tracker5thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.hunter5th.slug
         data["version"] = Splats.hunter5th.version
-        data["class"] = Splats.hunter5th.slug
 
         return data
 
@@ -45,7 +44,6 @@ class Hunter5thSerializer(Character5thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.hunter5th.slug
         data["version"] = Splats.hunter5th.version
-        data["class"] = Splats.hunter5th.slug
 
         return data
 

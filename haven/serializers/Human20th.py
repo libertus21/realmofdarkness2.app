@@ -23,7 +23,6 @@ class Human20thTrackerSerializer(Tracker20thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.human20th.slug
         data["version"] = Splats.human20th.version
-        data["class"] = Splats.human20th.slug
 
         return data
 
@@ -43,7 +42,6 @@ class Human20thSerializer(Character20thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.human20th.slug
         data["version"] = Splats.human20th.version
-        data["class"] = Splats.human20th.slug
 
         return data
 

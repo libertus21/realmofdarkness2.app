@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
-from haven.models import Vampire5th, Werewolf5th, Character
+from haven.models import Character
 from ..Authenticate import authenticate
 
 

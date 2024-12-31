@@ -24,7 +24,6 @@ class Mage20thTrackerSerializer(Tracker20thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.mage20th.slug
         data["version"] = Splats.mage20th.version
-        data["class"] = Splats.mage20th.slug
 
         return data
 
@@ -45,7 +44,6 @@ class Mage20thSerializer(Character20thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.mage20th.slug
         data["version"] = Splats.mage20th.version
-        data["class"] = Splats.mage20th.slug
 
         return data
 
@@ -69,5 +67,9 @@ class Mage20thDeserializer(Character20thDeserializer):
             raise serializers.ValidationError("Paradox must be between 0 and 20")
         if data.get("quintessence", 0) < 0 or data.get("quintessence", 0) > 20:
             raise serializers.ValidationError("Quintessence must be between 0 and 20")
+        if data.get("paradox", 0) + data.get("quintessence", 0) > 20:
+            raise serializers.ValidationError(
+                "The combined total of Paradox and Quintessence cannot exceed 20"
+            )
 
         return data

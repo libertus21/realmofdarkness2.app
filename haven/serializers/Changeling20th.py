@@ -31,7 +31,6 @@ class C20TrackerSerializer(Tracker20thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.changeling20th.slug
         data["version"] = Splats.changeling20th.version
-        data["class"] = Splats.changeling20th.slug
 
         return data
 
@@ -59,7 +58,6 @@ class Changeling20thSerializer(Character20thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.changeling20th.slug
         data["version"] = Splats.changeling20th.version
-        data["class"] = Splats.changeling20th.slug
 
         return data
 

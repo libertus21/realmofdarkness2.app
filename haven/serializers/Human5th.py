@@ -23,7 +23,6 @@ class Human5thTrackerSerializer(Tracker5thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.human5th.slug
         data["version"] = Splats.human5th.version
-        data["class"] = Splats.human5th.slug
 
         return data
 

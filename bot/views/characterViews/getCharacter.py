@@ -4,7 +4,6 @@ from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
-from bot.serializers import serialize
 from bot.functions import get_splat
 from haven.models import Character
 from haven.utility import get_serializer, get_derived_instance
@@ -25,12 +24,8 @@ class GetCharacter(APIView):
         if not character:
             return HttpResponse(status=204)
 
-        if character.splat_new:
-            Serializer = get_serializer(character.splat_new)
-            return Response(data={"character": Serializer(character).data})
-
-        json = serialize(character.splat.slug, character)
-        return Response(data={"character": json})
+        Serializer = get_serializer(character.splat_new)
+        return Response(data={"character": Serializer(character).data})
 
 
 class GetCharacterDefault(APIView):
@@ -64,8 +59,4 @@ class GetCharacterDefault(APIView):
         character = get_derived_instance(characters[0])
         Serializer = get_serializer(character.splat_new)
 
-        if character.splat:
-            json = serialize(character.splat.slug, character)
-            return Response(data=json)
-        else:
-            return Response(data=Serializer(character).data)
+        return Response(data=Serializer(character).data)
