@@ -27,7 +27,6 @@ class V5TrackerSerializer(Tracker5thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = "vampire5th"
         data["version"] = "5th"
-        data["class"] = "vampire5th"  # Temporary value to denote new type
 
         return data
 
@@ -60,7 +59,6 @@ class Vampire5thSerializer(Character5thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = "vampire5th"
         data["version"] = "5th"
-        data["class"] = "vampire5th"  # Temporary value to denote new type
 
         return data
 

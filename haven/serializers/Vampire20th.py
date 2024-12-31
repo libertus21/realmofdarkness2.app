@@ -26,7 +26,6 @@ class V20TrackerSerializer(Tracker20thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = "vampire20th"
         data["version"] = "20th"
-        data["class"] = "vampire20th"  # Temporary value to denote new type
 
         return data
 
@@ -54,7 +53,6 @@ class Vampire20thSerializer(Character20thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = "vampire20th"
         data["version"] = "20th"
-        data["class"] = "vampire20th"  # Temporary value to denote new type
 
         return data
 

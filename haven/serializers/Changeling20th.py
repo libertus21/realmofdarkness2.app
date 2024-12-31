@@ -31,7 +31,6 @@ class C20TrackerSerializer(Tracker20thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = "changeling20th"
         data["version"] = "20th"
-        data["class"] = "changeling20th"  # Temporary value to denote new type
 
         return data
 
@@ -59,7 +58,6 @@ class Changeling20thSerializer(Character20thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = "changeling20th"
         data["version"] = "20th"
-        data["class"] = "changeling20th"  # Temporary value to denote new type
 
         return data
 
