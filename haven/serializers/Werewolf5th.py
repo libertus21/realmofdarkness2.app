@@ -27,6 +27,7 @@ class Werewolf5thSerializer(Character5thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.werewolf5th.slug
         data["version"] = Splats.werewolf5th.version
+        data["class"] = Splats.werewolf5th.slug
 
         return data
 
@@ -48,6 +49,7 @@ class W5TrackerSerializer(Tracker5thSerializer):
         # Add the additional fields to the serialized data
         data["splat"] = Splats.werewolf5th.slug
         data["version"] = Splats.werewolf5th.version
+        data["class"] = Splats.werewolf5th.slug
 
         return data
 

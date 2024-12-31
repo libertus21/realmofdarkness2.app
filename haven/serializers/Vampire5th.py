@@ -25,8 +25,9 @@ class V5TrackerSerializer(Tracker5thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = "vampire5th"
-        data["version"] = "5th"
+        data["splat"] = Splats.vampire5th.slug
+        data["version"] = Splats.vampire5th.version
+        data["class"] = Splats.vampire5th.slug
 
         return data
 
@@ -57,8 +58,9 @@ class Vampire5thSerializer(Character5thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = "vampire5th"
-        data["version"] = "5th"
+        data["splat"] = Splats.vampire5th.slug
+        data["version"] = Splats.vampire5th.version
+        data["class"] = Splats.vampire5th.slug
 
         return data
 

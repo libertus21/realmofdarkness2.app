@@ -21,8 +21,9 @@ class Human5thTrackerSerializer(Tracker5thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = "human5th"
-        data["version"] = "5th"
+        data["splat"] = Splats.human5th.slug
+        data["version"] = Splats.human5th.version
+        data["class"] = Splats.human5th.slug
 
         return data
 
@@ -40,8 +41,8 @@ class Human5thSerializer(Character5thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = "human5th"
-        data["version"] = "5th"
+        data["splat"] = Splats.human5th.slug
+        data["version"] = Splats.human5th.version
 
         return data
 

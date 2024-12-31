@@ -23,8 +23,9 @@ class DtfTrackerSerializer(Tracker20thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = "demon20th"
-        data["version"] = "20th"
+        data["splat"] = Splats.demon20th.slug
+        data["version"] = Splats.demon20th.version
+        data["class"] = Splats.demon20th.slug
 
         return data
 
@@ -44,8 +45,9 @@ class DemonTFSerializer(Character20thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = "demon20th"
-        data["version"] = "20th"
+        data["splat"] = Splats.demon20th.slug
+        data["version"] = Splats.demon20th.version
+        data["class"] = Splats.demon20th.slug
 
         return data
 

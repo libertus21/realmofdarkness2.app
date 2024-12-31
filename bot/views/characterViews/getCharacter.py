@@ -6,9 +6,7 @@ from django.http import HttpResponse
 
 from bot.serializers import serialize
 from bot.functions import get_splat
-from haven.models import Vampire5th, Character
-from haven.models import Werewolf5th
-from haven.serializers import Vampire5thSerializer, Werewolf5thSerializer
+from haven.models import Character
 from haven.utility import get_serializer, get_derived_instance
 from ..Authenticate import authenticate
 

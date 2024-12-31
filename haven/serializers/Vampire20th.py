@@ -24,8 +24,9 @@ class V20TrackerSerializer(Tracker20thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = "vampire20th"
-        data["version"] = "20th"
+        data["splat"] = Splats.vampire20th.slug
+        data["version"] = Splats.vampire20th.version
+        data["class"] = Splats.vampire20th.slug
 
         return data
 
@@ -51,8 +52,9 @@ class Vampire20thSerializer(Character20thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = "vampire20th"
-        data["version"] = "20th"
+        data["splat"] = Splats.vampire20th.slug
+        data["version"] = Splats.vampire20th.version
+        data["class"] = Splats.vampire20th.slug
 
         return data
 
