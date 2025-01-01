@@ -12,7 +12,7 @@ from re import match
 from ..Authenticate import authenticate
 from haven.serializers import validation_error_handler
 from gateway.constants import Group
-from bot.util import download_and_verify_image
+from bot.downloadAndVerifyImage import download_and_verify_image
 from haven.utility import (
     get_character_model,
     get_deserializer,

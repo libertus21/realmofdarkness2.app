@@ -7,7 +7,7 @@ from ..Authenticate import authenticate
 
 class GetNames(APIView):
     """
-    API view for retrieving character names based on specified filters.
+    API view for retrieving character names, IDs, and splats based on specified filters.
 
     This view accepts a POST request and expects the following parameters in the request data:
     - user_id: The ID of the user.
@@ -15,7 +15,7 @@ class GetNames(APIView):
     - splat: The splat (character type) to filter by.
     - sheet_only: A boolean indicating whether to filter only characters with a character sheet.
 
-    The view returns a JSON response containing a list of character names that match the specified filters.
+    The view returns a JSON response containing a list of character names, IDs, and splats that match the specified filters.
     """
 
     @csrf_exempt
@@ -42,12 +42,12 @@ class GetNames(APIView):
                 splat_list = []
 
             if splat_list:
-                names = Character.objects.filter(
+                characters = Character.objects.filter(
                     splat__in=splat_list, **filter_args
-                ).values_list("name", flat=True)
+                ).values("id", "name", "splat")
         else:
-            names = Character.objects.filter(**filter_args).values_list(
-                "name", flat=True
+            characters = Character.objects.filter(**filter_args).values(
+                "id", "name", "splat"
             )
 
-        return Response(data={"names": names})
+        return Response(data={"characters": list(characters)})

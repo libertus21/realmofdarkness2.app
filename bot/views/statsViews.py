@@ -1,13 +1,14 @@
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from datetime import date, timedelta
 from django.db.models import Count
 from django.utils import timezone
 
 from .get_post import get_post
-from haven.models import Character, Vampire5th
+from haven.models import Character
 from bot.models import CommandStat, Bot
+from bot.serializers import CommandStatSerializer, CommandStatDeserializer
 
 User = get_user_model()
 
@@ -123,11 +124,18 @@ def command_used(request):
 
     try:
         stat = CommandStat.objects.get(user=user, command=command, bot=bot)
-        stat.used += 1
+        stat_serializer = CommandStatDeserializer(
+            stat, data={"used": stat.used + 1}, partial=True
+        )
     except CommandStat.DoesNotExist:
-        stat = CommandStat(user=user, command=command, bot=bot)
+        stat_serializer = CommandStatDeserializer(
+            data={"user": user.id, "command": command, "bot": bot.id}
+        )
 
-    stat.save()
-    user.last_active = timezone.now()
-    user.save()
-    return HttpResponse()
+    if stat_serializer.is_valid():
+        stat = stat_serializer.save()
+        user.last_active = timezone.now()
+        user.save()
+        return JsonResponse(CommandStatSerializer(stat).data, status=200)
+    else:
+        return JsonResponse(stat_serializer.errors, status=400)

@@ -28,20 +28,15 @@ def get_derived_instance(character):
     Returns:
         The derived instance of the character. If none of the derived models match,
         the original character instance is returned.
-
     """
     # Check if the character is already the derived instance
     if character._meta.model == character.__class__:
         return character
 
     # Use ContentType to get the specific instance of the derived class
-    try:
-        content_type = ContentType.objects.get_for_model(character)
-        derived_instance = content_type.get_object_for_this_type(pk=character.pk)
-        return derived_instance
-    except ContentType.DoesNotExist:
-        # Fallback to the base character model if no content type exists
-        return character
+    content_type = ContentType.objects.get_for_model(character)
+    derived_instance = content_type.get_object_for_this_type(pk=character.pk)
+    return derived_instance
 
 
 # Define a dictionary mapping each splat to its corresponding configuration
