@@ -59,9 +59,11 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+*.sqlite3
 settings.py
 config.py
 */migrations/*
+*/migrations_backup/*
 !*/migrations/__init__.py
 
 # Flask stuff:
