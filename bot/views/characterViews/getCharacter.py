@@ -38,44 +38,7 @@ class GetCharacter(APIView):
         elif character.count() > 1:
             return Response(status=status.HTTP_300_MULTIPLE_CHOICES)
 
-        if not splat:
-            splat = character[0].splat
-            model = get_character_model(splat)
-            character = model.objects.filter(pk=character[0].pk)
+        character_instance = get_derived_instance(character[0])
 
-        Serializer = get_serializer(splat)
-        return Response(data=Serializer(character[0]).data)
-
-
-class GetCharacterDefault(APIView):
-    @csrf_exempt
-    def post(self, request):
-        authenticate(request)
-
-        name = request.data.get("name", None)
-        user = request.data.get("user", None)
-        chronicle = request.data.get("chronicle", None)
-        characters = None
-        select = ["character5th__vampire5th"]
-
-        if not user:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        if name:
-            characters = Character.objects.select_related(*select).filter(
-                user=user, name=name
-            )
-        else:
-            characters = Character.objects.select_related(*select).filter(
-                user=user, chronicle=chronicle
-            )
-
-        if not characters.exists():
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        elif characters.count() > 1:
-            return Response(status=status.HTTP_300_MULTIPLE_CHOICES)
-
-        character = get_derived_instance(characters[0])
-        Serializer = get_serializer(character.splat)
-
-        return Response(data=Serializer(character).data)
+        Serializer = get_serializer(character_instance.splat)
+        return Response(data=Serializer(character_instance).data)

@@ -2,7 +2,6 @@ from django.urls import path
 from . import views
 from .views.characterViews import (
     GetCharacter,
-    GetCharacterDefault,
     GetDisciplineNames,
     GetNames,
     DeleteCharacters,
@@ -35,7 +34,6 @@ app_name = "bot"
 urlpatterns = [
     # Character
     path("character/get", GetCharacter.as_view()),
-    path("character/get/default", GetCharacterDefault.as_view()),
     path("character/get/discipline/names", GetDisciplineNames.as_view()),
     path("character/get/names", GetNames.as_view()),
     path("character/delete", DeleteCharacters.as_view()),

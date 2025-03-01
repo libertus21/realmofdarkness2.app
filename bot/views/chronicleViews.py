@@ -267,6 +267,8 @@ class GetDefaultsView(View):
 
     def post(self, request):
         data = get_post(request)
+        splat_filter = data.get("splats", None)
+
         try:
             member = Member.objects.get(
                 user_id=data["user_id"], chronicle_id=data["guild_id"]
@@ -277,7 +279,16 @@ class GetDefaultsView(View):
         if not member.default_character:
             return HttpResponse(status=204)
 
-        character = get_derived_instance(member.default_character)
+        character = member.default_character
+        if character._meta.model == Character:
+            character = get_derived_instance(character)
+
+        if splat_filter:
+            if isinstance(splat_filter, str):
+                splat_filter = [splat_filter]
+            if character.splat not in splat_filter:
+                return HttpResponse(status=204)
+
         character_serializer = get_serializer(character.splat)
         defaults = {
             "character": character_serializer(character).data,

@@ -15,7 +15,6 @@ from haven.models import (
     DemonTF,
     Character,
 )
-from django.contrib.contenttypes.models import ContentType
 
 
 def get_derived_instance(character):
@@ -29,14 +28,14 @@ def get_derived_instance(character):
         The derived instance of the character. If none of the derived models match,
         the original character instance is returned.
     """
-    # Check if the character is already the derived instance
-    if character._meta.model == character.__class__:
-        return character
+    # Check if the instance is a base Character model
+    if type(character) == Character:
+        # Use the splat to get the specific instance of the derived class
+        model = get_character_model(character.splat)
+        derived_instance = model.objects.get(pk=character.pk)
+        return derived_instance
 
-    # Use ContentType to get the specific instance of the derived class
-    content_type = ContentType.objects.get_for_model(character)
-    derived_instance = content_type.get_object_for_this_type(pk=character.pk)
-    return derived_instance
+    return character
 
 
 # Define a dictionary mapping each splat to its corresponding configuration
