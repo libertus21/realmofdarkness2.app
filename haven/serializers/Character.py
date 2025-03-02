@@ -85,6 +85,13 @@ class CharacterDeserializer(serializers.ModelSerializer):
             m = "Name cannot be longer than 50 characters."
             raise serializers.ValidationError(m, code=status.HTTP_409_CONFLICT)
 
+        # Add validation to prevent names starting with ~
+        if value.startswith("~"):
+            m = "Character name cannot start with '~'."
+            raise serializers.ValidationError(
+                m, code=status.HTTP_422_UNPROCESSABLE_ENTITY
+            )
+
         if self.instance:  # Update a character
             # We don't need to do anything if the name is the same
             if self.instance.name == value:

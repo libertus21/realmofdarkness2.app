@@ -112,7 +112,7 @@ SPLAT_CLASSES = {
         "serializer": Ghoul20thSerializer,
         "deserializer": Ghoul20thDeserializer,
     },
-    "demonTF": {
+    "demon20th": {
         "model": DemonTF,
         "trackerSerializer": DtfTrackerSerializer,
         "serializer": DemonTFSerializer,

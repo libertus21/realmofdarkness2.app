@@ -45,7 +45,6 @@ class SaveCharacter(APIView):
         Serializer = get_serializer(splat)
         Deserializer = get_deserializer(splat)
         TrackerSerializer = get_tracker_serializer(splat)
-
         try:
             character = Character.objects.get(pk=id, user__id=user_id)
         except Character.DoesNotExist:
@@ -64,6 +63,7 @@ class SaveCharacter(APIView):
         if deserializer.is_valid():
             instance = deserializer.save()
         else:
+            # 304 Not Modified for Character with the same name on name change
             return validation_error_handler(deserializer.errors)
         if image_file:
             if instance.avatar:
