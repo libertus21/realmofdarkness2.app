@@ -1,4 +1,4 @@
-# Realm of Darkness
+# Realm of Darkness App
 
 ![Project Banner](https://res.cloudinary.com/dze64d7cr/image/upload/v1701410603/Logo/banner_bg_index.webp)
 
