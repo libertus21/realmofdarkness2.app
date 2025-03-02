@@ -1,39 +1,22 @@
-# realmofdarkness.app
+# Realm of Darkness
 
-Welcome to the realmofdarkness.app codebase! This repository contains the source code for a web application built with Django framework.
+![Project Banner](https://res.cloudinary.com/dze64d7cr/image/upload/v1701410603/Logo/banner_bg_index.webp)
 
-The realmofdarkness.app is a platform designed for role-playing game enthusiasts, providing a space to create and manage character sheets, chronicles, and more within the World of Darkness setting.
+Welcome to the https://github.com/Mirai-Miki/realmofdarkness.app codebase! This repository contains the source code for a web application built with Django framework and React frontend.
+
+The Realm of Darkness is a platform designed for World of Darkness tabletop roleplaying enthusiasts, providing a space to create and manage character sheets, chronicles, and more within the World of Darkness setting.
 
 With this application, users can easily create and update character sheets, track their progress in various chronicles, and interact with other players in a collaborative environment.
 
-Feel free to explore the code and contribute to the development of this exciting project!
+## ✨ Features
 
-## Known Issues
+- **Discord Integration**: Seamless login and server synchronization
+- **Character Sheets**: Create and manage World of Darkness character sheets
+- **Chronicles**: Organize characters into shared storytelling environments
+- **Real-time Updates**: Live notifications and character sheet changes
+- **Responsive Design**: Works on both desktop and mobile devices
 
-- On sheet update from another user the nickname changes to your own and clicking on the sheet will bring up a nickame error and fail to load.
-- Updated sheets with a chronicle change will not automatically be added to another person's home page even if they should be able to see it.
-- A character sheet is not setting the chronicle to None when a member leaves a server.
-- Pressing enter when creating a new sheet should work as well
-- "No Server" filter on the Dashboard is not working with sheets
-- Being in a sheet when the character is deleted should redirect the user back home
-- leaving a server does not automatically update a sheet you need to refresh the page
-
-## Things to Implement
-
-- Put a timer on returning Archived/Dead character to Active
-- Impletment Draft/Active/Dead/Retired features more thoughroughly
-- Server pages. Should include things like Settings/Exp Management/Server stats(clan stats ect)
-- Make Character profiles Public (Add settings to allow what is shown)
-
-## Features
-
-- Discord Integration: Seamless login and server synchronization
-- Character Sheets: Create and manage World of Darkness character sheets
-- Chronicles: Organize characters into shared storytelling environments
-- Real-time Updates: Live notifications and character sheet changes
-- Responsive Design: Works on both desktop and mobile devices
-
-## Installation and Setup
+## 🚀 Installation and Setup
 
 ### Prerequisites
 
@@ -59,7 +42,7 @@ We provide automated setup scripts to create your environment configuration:
 3. Run the setup script: `./setup.sh`
 4. Follow the prompts to configure your environment
 
-This will create a `.env` file with your configuration settings. The setup process will ask for:
+This will create a .env file with your configuration settings. The setup process will ask for:
 
 - Environment type (development or production)
 - Database configuration (for production)
@@ -97,39 +80,39 @@ This will:
 - Ensure Redis is running
 - Restart Gunicorn and reload services
 
-## Project Structure
+## 🔧 Project Structure
 
 ### Core Components
 
-- `rod/` - Core Django project settings, configuration, and URL routing
-- `main/` - Main application views, templates, and site-wide functionality
-- `manage.py` - Django command-line utility for administrative tasks
+- rod - Core Django project settings, configuration, and URL routing
+- main - Main application views, templates, and site-wide functionality
+- manage.py - Django command-line utility for administrative tasks
 
 ### Authentication & Integration
 
-- `discordauth/` - Discord OAuth2 authentication and server integration
-- `patreon/` - Patreon integration for premium features and webhooks
+- discordauth - Discord OAuth2 authentication and server integration
+- patreon - Patreon integration for premium features and webhooks
 
 ### Game Content & Logic
 
-- `haven/` - Character sheet models, views, and game mechanics
-- `chronicle/` - Chronicle/campaign management and Discord server connections
-- `constants/` - Game constants, configuration, and reference data
-- `bot/` - Discord bot functionality and command handling
+- haven - Character sheet models, views, and game mechanics
+- chronicle - Chronicle/campaign management and Discord server connections
+- constants - Game constants, configuration, and reference data
+- bot - Discord bot functionality and command handling
 
 ### API & Frontend
 
-- `api/` - RESTful API endpoints for frontend communication
-- `gateway/` - WebSocket-based real-time communication services
-- `frontend/` - React-based single page application (SPA) with component structure
-- `media/` - User-uploaded content and static media files
+- api - RESTful API endpoints for frontend communication
+- gateway - WebSocket-based real-time communication services
+- frontend - React-based single page application (SPA) with component structure
+- media - User-uploaded content and static media files
 
 ### Utilities & Deployment
 
-- `scripts/` - Setup, deployment, and maintenance automation scripts
-- `.env` - Environment variable configuration (not tracked in git)
+- scripts - Setup, deployment, and maintenance automation scripts
+- .env - Environment variable configuration (not tracked in git)
 
-## Contributing
+## 🤝 Contributing
 
 We welcome contributions to improve realmofdarkness.app! Here's how you can help:
 
@@ -141,7 +124,24 @@ We welcome contributions to improve realmofdarkness.app! Here's how you can help
 
 Please ensure your code follows our coding standards and includes appropriate tests.
 
-## Troubleshooting
+## 🐛 Known Issues
+
+- On sheet update from another user the nickname changes to your own and clicking on the sheet will bring up a nickname error and fail to load
+- Updated sheets with a chronicle change will not automatically be added to another person's home page even if they should be able to see it
+- A character sheet is not setting the chronicle to None when a member leaves a server
+- Pressing enter when creating a new sheet should work as well
+- "No Server" filter on the Dashboard is not working with sheets
+- Being in a sheet when the character is deleted should redirect the user back home
+- Leaving a server does not automatically update a sheet; you need to refresh the page
+
+## 🗺️ Roadmap
+
+- Put a timer on returning Archived/Dead character to Active
+- Implement Draft/Active/Dead/Retired features more thoroughly
+- Server pages: Settings, Exp Management, Server stats (clan stats etc.)
+- Make Character profiles Public (Add settings to allow what is shown)
+
+## 🔍 Troubleshooting
 
 ### Redis Connection Issues
 
@@ -154,7 +154,7 @@ Please ensure your code follows our coding standards and includes appropriate te
 - Remove node_modules: `rm -rf node_modules/`
 - Reinstall dependencies: `npm install`
 
-## Environment Variables
+## ⚙️ Environment Variables
 
 Key environment variables used by the application:
 
@@ -170,6 +170,19 @@ Key environment variables used by the application:
 
 **Note:** The API_KEY value must match the API key configured in the companion Discord bot repository for proper integration. See the [Realm of Darkness Bot Repository](https://github.com/Mirai-Miki/Realm-of-Darkness-Bot) for more information.
 
-## License
+## 🔄 Connect
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+- **Website**: [Realm of Darkness](https://realmofdarkness.app)
+- **Discord**: [Join our community](https://discord.com/invite/p82yc8sKx2)
+- **Issues**: [Report bugs](https://github.com/Mirai-Miki/realm-of-darkness-site/issues)
+- **Bot Repository**: [Discord Bot Companion](https://github.com/Mirai-Miki/Realm-of-Darkness-Bot)
+
+## 📄 License
+
+This project is licensed under the AGPL License. See the LICENSE file for details.
+
+---
+
+Made with ❤️ for the World of Darkness community
+
+Similar code found with 1 license type

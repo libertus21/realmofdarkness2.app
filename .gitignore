@@ -64,6 +64,7 @@ config.py
 */migrations/*
 */migrations copy/*
 !*/migrations/__init__.py
+dump.rdb
 
 # Flask stuff:
 instance/

@@ -90,7 +90,7 @@ def update_user(request):
         member_serializer = MemberDeserializer(member, data=member_data, partial=True)
     except Member.DoesNotExist:
         member_serializer = MemberDeserializer(data=member_data)
-
+    print(member_data)
     if member_serializer.is_valid():
         member = member_serializer.save()
         async_to_sync(channel_layer.group_send)(
