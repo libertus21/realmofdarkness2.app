@@ -1,9 +1,16 @@
 #!/bin/bash
+# filepath: /f:/programming/Django/realm-of-darkness-site/scripts/setup.sh
 
+# Enable better error handling
+set -e
+
+# Navigate to project root directory
 cd "$(dirname "$0")"
 cd ..
 
 echo "===== Realm of Darkness Configuration Setup ====="
+echo
+echo "This script will create a .env file with your configuration settings."
 echo
 
 # Check if .env already exists
@@ -71,14 +78,14 @@ echo "=== Django Settings ==="
 read -p "Enter Django SECRET_KEY (leave blank for auto-generated): " secret_key
 if [ -z "$secret_key" ]; then
     secret_key="django-insecure-dev-environment-key-change-in-production"
-    echo "(using default development key)"
+    echo "Using default development key"
 fi
 echo "SECRET_KEY=$secret_key" >> .env
 
 read -p "Enter API_KEY (leave blank for auto-generated): " api_key
 if [ -z "$api_key" ]; then
     api_key="dev-api-key-for-testing"
-    echo "(using default development key)"
+    echo "Using default development key"
 fi
 echo "API_KEY=$api_key" >> .env
 echo "" >> .env
@@ -106,3 +113,6 @@ echo "Configuration complete! Environment settings saved to .env"
 echo
 echo "Run 'scripts/run.sh' to start the application."
 echo "Run 'scripts/dev.sh' to start in development mode."
+
+# Pause at the end (Unix equivalent of Windows pause)
+read -p "Press Enter to continue..."
