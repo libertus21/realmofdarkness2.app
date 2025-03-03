@@ -263,11 +263,16 @@ class SetDefaultsView(View):
 class GetDefaultsView(View):
     """
     View to get default character and auto hunger for a member.
+    First checks for default character, then falls back to single character matching criteria.
     """
 
     def post(self, request):
         data = get_post(request)
         splat_filter = data.get("splats", None)
+
+        # Normalize splat_filter to list if it's a string
+        if splat_filter and isinstance(splat_filter, str):
+            splat_filter = [splat_filter]
 
         try:
             member = Member.objects.get(
@@ -276,23 +281,46 @@ class GetDefaultsView(View):
         except Member.DoesNotExist:
             return HttpResponse(status=404)
 
-        if not member.default_character:
-            return HttpResponse(status=204)
+        # Case 1: Check if default character exists and matches filters
+        if member.default_character:
+            character = member.default_character
+            if character._meta.model == Character:
+                character = get_derived_instance(character)
 
-        character = member.default_character
-        if character._meta.model == Character:
-            character = get_derived_instance(character)
+            # If splat filter is provided, check if default character's splat matches
+            if not splat_filter or character.splat in splat_filter:
+                character_serializer = get_serializer(character.splat)
+                defaults = {
+                    "character": character_serializer(character).data,
+                    "auto_hunger": member.default_auto_hunger,
+                }
+                return JsonResponse(defaults)
+
+        # Case 2: No default character or default doesn't match splat filter
+        # Query directly with splat filter if provided
+        chronicle_characters = Character.objects.filter(
+            user_id=data["user_id"], chronicle_id=data["guild_id"]
+        )
 
         if splat_filter:
-            if isinstance(splat_filter, str):
-                splat_filter = [splat_filter]
-            if character.splat not in splat_filter:
-                return HttpResponse(status=204)
+            chronicle_characters = chronicle_characters.filter(splat__in=splat_filter)
 
-        character_serializer = get_serializer(character.splat)
-        defaults = {
-            "character": character_serializer(character).data,
-            "auto_hunger": member.default_auto_hunger,
-        }
+        if not chronicle_characters.exists():
+            return HttpResponse(status=204)  # No characters found
 
-        return JsonResponse(defaults)
+        # If exactly one character matches our criteria, return it
+        if chronicle_characters.count() == 1:
+            base_character = chronicle_characters.first()
+            selected_character = get_derived_instance(base_character)
+            character_serializer = get_serializer(selected_character.splat)
+            defaults = {
+                "character": character_serializer(selected_character).data,
+                # Use default auto hunger if set, otherwise default to False
+                "auto_hunger": (
+                    member.default_auto_hunger if member.default_character else False
+                ),
+            }
+            return JsonResponse(defaults)
+
+        # Multiple characters match criteria
+        return HttpResponse(status=204)

@@ -184,5 +184,3 @@ This project is licensed under the AGPL License. See the LICENSE file for detail
 ---
 
 Made with ❤️ for the World of Darkness community
-
-Similar code found with 1 license type

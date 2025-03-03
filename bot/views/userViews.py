@@ -85,12 +85,20 @@ def update_user(request):
 
     member_data = user_data["member"]
     guild = Chronicle.objects.get(pk=member_data["guild_id"])
+
     try:
         member = Member.objects.get(chronicle=guild, user=user)
         member_serializer = MemberDeserializer(member, data=member_data, partial=True)
     except Member.DoesNotExist:
-        member_serializer = MemberDeserializer(data=member_data)
-    print(member_data)
+        # Add the required fields to the data for new member creation
+        member_data_complete = member_data.copy()
+        member_data_complete["chronicle"] = member_data[
+            "guild_id"
+        ]  # Set chronicle to guild_id
+        member_data_complete["user"] = user.id  # Set user to the user ID
+
+        member_serializer = MemberDeserializer(data=member_data_complete)
+
     if member_serializer.is_valid():
         member = member_serializer.save()
         async_to_sync(channel_layer.group_send)(
