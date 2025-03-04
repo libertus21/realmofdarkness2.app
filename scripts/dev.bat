@@ -28,8 +28,8 @@ cd ..
 echo      - Frontend dependencies updated successfully.
 
 echo [3/6] Applying database migrations...
-py manage.py makemigrations --verbosity 0
-py manage.py migrate --verbosity 0
+py manage.py makemigrations
+py manage.py migrate
 echo      - Database migration complete.
 
 echo [4/6] Starting Redis in WSL...

@@ -14,14 +14,20 @@ from chronicle.models import Chronicle
 def init_set(request):
     data = get_post(request)
 
-    chronicle = Chronicle.objects.get(pk=data["chronicle_id"])
+    # Map the request fields to what the serializer expects
+    serializer_data = {
+        "id": data["channel_id"],  # Map channel_id to id (primary key)
+        "chronicle": data["chronicle_id"],  # Map chronicle_id to chronicle
+        "data": data["tracker"],  # Map tracker object to data field
+    }
+
     try:
         tracker = InitiativeTracker20th.objects.get(pk=data["channel_id"])
         tracker_serializer = InitiativeTracker20thDeserializer(
-            tracker, data=data, partial=True
+            tracker, data=serializer_data, partial=True
         )
     except InitiativeTracker20th.DoesNotExist:
-        tracker_serializer = InitiativeTracker20thDeserializer(data=data)
+        tracker_serializer = InitiativeTracker20thDeserializer(data=serializer_data)
 
     if tracker_serializer.is_valid():
         tracker = tracker_serializer.save()
