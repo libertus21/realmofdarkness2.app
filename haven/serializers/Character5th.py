@@ -1,12 +1,16 @@
 from rest_framework import serializers
-from .Character import CharacterSerializer, CharacterDeserializer
+from .Character import (
+    CharacterSerializer,
+    CharacterDeserializer,
+    CharacterTrackerSerializer,
+)
 from haven.models import Character5th
 
 
 ############################ Tracker Serializer ###############################
-class Tracker5thSerializer(CharacterSerializer):
+class Tracker5thSerializer(CharacterTrackerSerializer):
 
-    class Meta(CharacterSerializer.Meta):
+    class Meta(CharacterTrackerSerializer.Meta):
         model = Character5th
 
     def to_representation(self, instance):

@@ -6,6 +6,45 @@ from chronicle.models import Member
 from constants import CharacterSheetLimit
 
 
+class CharacterTrackerSerializer(serializers.ModelSerializer):
+    """
+    Base serializer for character tracker data.
+    Only includes fields necessary for tracking and displaying character cards.
+    """
+
+    class Meta:
+        model = Character
+        fields = (
+            "name",
+            "id",
+            "is_sheet",
+            "status",
+            "theme",
+            "splat",
+        )
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        # Essential relationships
+        data["user"] = str(instance.user.id)
+        data["chronicle"] = str(instance.chronicle.id) if instance.chronicle else None
+        data["member"] = str(instance.member.id) if instance.member else None
+
+        # Essential metadata
+        data["created_at"] = instance.created_at.timestamp()
+        data["last_updated"] = instance.last_updated.timestamp()
+        data["faceclaim"] = instance.avatar.url if instance.avatar else None
+
+        # Experience points
+        data["exp"] = {
+            "current": instance.exp_current,
+            "total": instance.exp_total,
+        }
+
+        return data
+
+
 ########################### Character Serializer ##############################
 # Base serializer with common fields for Character
 class CharacterSerializer(serializers.ModelSerializer):
@@ -25,6 +64,7 @@ class CharacterSerializer(serializers.ModelSerializer):
             "notes2",
             "exp_spends",
             "st_lock",
+            "splat",
         )
 
     def to_representation(self, instance):

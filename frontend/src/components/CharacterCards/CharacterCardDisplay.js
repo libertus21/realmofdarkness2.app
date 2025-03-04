@@ -233,11 +233,20 @@ function renderSplatSelectFilter(characters, splats) {
   let v20;
   const tempV5 = {};
   const tempV20 = {};
+
+  // Skip processing if characters is undefined or empty
+  if (!characters) return [];
+
   for (const character of Object.values(characters)) {
-    const splat = SplatLabels[character.splat];
-    if (splat.version === "5th") tempV5[splat.key] = splat;
-    else tempV20[splat.key] = splat;
+    // Make sure character has a valid splat that exists in SplatLabels
+    if (character.splat && SplatLabels[character.splat]) {
+      const splat = SplatLabels[character.splat];
+      if (splat.version === "5th") tempV5[splat.key] = splat;
+      else tempV20[splat.key] = splat;
+    }
+    // Skip characters with invalid splat values (no warning needed to avoid console spam)
   }
+
   v5 = Object.values(tempV5);
   v20 = Object.values(tempV20);
 
@@ -246,6 +255,7 @@ function renderSplatSelectFilter(characters, splats) {
       Clear Filter
     </MenuItem>,
   ];
+
   if (v5.length) {
     menu.push(<ListSubheader key="5th">5th Edition</ListSubheader>);
     v5.sort((a, b) => a.order - b.order);
@@ -295,11 +305,17 @@ const SplatLabels = {
     version: "5th",
     order: "3",
   },
-  mortal5th: {
-    key: "mortal5th",
-    name: "Mortal",
+  human5th: {
+    key: "human5th",
+    name: "Human",
     version: "5th",
     order: "4",
+  },
+  ghoul5th: {
+    key: "ghoul5th",
+    name: "Ghoul",
+    version: "5th",
+    order: "5",
   },
   vampire20th: {
     key: "vampire20th",

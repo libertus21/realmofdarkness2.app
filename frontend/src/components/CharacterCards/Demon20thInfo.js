@@ -41,29 +41,29 @@ export default function Demon20thInfo(props) {
         />
         <Divider sx={{ my: 1 }} />
         <Typography>
-          Faith {`${character.faith.current} / ${character.faith.total}`}
+          Faith {`${character.faith_current} / ${character.faith_total}`}
         </Typography>
         <ResponsiveRating
           tracker={{
-            current: character.faith.current,
-            total: character.faith.total,
+            current: character.faith_current,
+            total: character.faith_total,
           }}
         />
         <Divider sx={{ my: 1 }} />
-        <Typography>Torment - Permenent: {character.torment.total}</Typography>
+        <Typography>Torment - Permenent: {character.torment_total}</Typography>
         <ResponsiveRating
           tracker={{
-            current: character.torment.total,
+            current: character.torment_total,
             total: 10,
           }}
         />
         <Divider sx={{ my: 1 }} />
         <Typography>
-          Torment - Temporary: {character.torment.current}
+          Torment - Temporary: {character.torment_current}
         </Typography>
         <ResponsiveRating
           tracker={{
-            current: character.torment.current,
+            current: character.torment_current,
             total: 10,
           }}
         />

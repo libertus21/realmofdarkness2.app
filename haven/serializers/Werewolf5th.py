@@ -25,7 +25,6 @@ class Werewolf5thSerializer(Character5thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = Splats.werewolf5th.slug
         data["version"] = Splats.werewolf5th.version
 
         return data
@@ -46,7 +45,6 @@ class W5TrackerSerializer(Tracker5thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = Splats.werewolf5th.slug
         data["version"] = Splats.werewolf5th.version
 
         return data

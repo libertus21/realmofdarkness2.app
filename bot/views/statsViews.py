@@ -82,27 +82,25 @@ def get_stats(request):
         )
     sheets = (
         Character.objects.filter(last_updated__gt=timestamp_30days, is_sheet=True)
-        .values("splat_new")
-        .annotate(count=Count("splat_new"))
+        .values("splat")
+        .annotate(count=Count("splat"))
         .order_by("-count")
     )
 
     for sheet in sheets:
         char_stats.append(
-            {"count": sheet["count"], "splat": sheet["splat_new"] + " (sheet)"}
+            {"count": sheet["count"], "splat": sheet["splat"] + " (sheet)"}
         )
 
     new_characters = (
-        Character.objects.filter(
-            last_updated__gt=timestamp_30days, splat_new__isnull=False, is_sheet=False
-        )
-        .values("splat_new")
-        .annotate(count=Count("splat_new"))
+        Character.objects.filter(last_updated__gt=timestamp_30days, is_sheet=False)
+        .values("splat")
+        .annotate(count=Count("splat"))
         .order_by("-count")
     )
 
     for char in new_characters:
-        char_stats.append({"count": char["count"], "splat": char["splat_new"]})
+        char_stats.append({"count": char["count"], "splat": char["splat"]})
 
     # Sort char_stats by count in descending order
     char_stats = sorted(char_stats, key=lambda x: x["count"], reverse=True)
