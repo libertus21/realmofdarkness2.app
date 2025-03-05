@@ -185,7 +185,12 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         # Other authentication classes...
     ],
-    # Other DRF settings...
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "10/day",  # Anonymous users - restricted
+        "standard_user": "300/day",  # Regular authenticated users
+        "supporter_user": "600/day",  # Supporters (tier 1-2)
+        "premium_user": "1200/day",  # Premium supporters (tier 3+)
+    },
 }
 
 

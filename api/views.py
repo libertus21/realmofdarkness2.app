@@ -7,6 +7,7 @@ from asgiref.sync import async_to_sync
 from django.db.utils import IntegrityError
 from django.db.models import Q
 
+from api.throttling import get_throttles
 from gateway.constants import Group
 from gateway.serializers import serialize_character
 from constants import CharacterSheetLimit
@@ -24,6 +25,9 @@ channel_layer = get_channel_layer()
 
 class CharacterSheetCreateV5(APIView):
     permission_classes = [IsAuthenticated]
+
+    def get_throttles(self):
+        return get_throttles(self.request.user)
 
     def get(self, request):
         # Get the current user
@@ -80,6 +84,9 @@ class CharacterSheetCreateV5(APIView):
 class GetV5Character(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get_throttles(self):
+        return get_throttles(self.request.user)
+
     def get(self, request):
         user = request.user
         id = request.GET.get("id")
@@ -109,6 +116,9 @@ class GetV5Character(APIView):
 
 class CharacterUpdateV5(APIView):
     permission_classes = [IsAuthenticated]
+
+    def get_throttles(self):
+        return get_throttles(self.request.user)
 
     def put(self, request, id):
         user = request.user
@@ -164,6 +174,9 @@ class CharacterUpdateV5(APIView):
 
 class DeleteCharacter(APIView):
     permission_classes = [IsAuthenticated]
+
+    def get_throttles(self):
+        return get_throttles(self.request.user)
 
     def delete(self, request):
         user = request.user
