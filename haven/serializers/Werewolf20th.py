@@ -23,7 +23,6 @@ class Werewolf20thTrackerSerializer(Tracker20thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = Splats.werewolf20th.slug
         data["version"] = Splats.werewolf20th.version
 
         return data
@@ -44,7 +43,6 @@ class Werewolf20thSerializer(Character20thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = Splats.werewolf20th.slug
         data["version"] = Splats.werewolf20th.version
 
         return data

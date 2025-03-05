@@ -43,9 +43,9 @@ export default function Human20thInfo(props) {
         <Typography>Blood {`${character.blood} / 10`}</Typography>
         <ResponsiveRating tracker={{ current: character.blood, total: 10 }} />
         <Divider sx={{ my: 1 }} />
-        <Typography>Humanity {character.morality}</Typography>
+        <Typography>Humanity {character.humanity}</Typography>
         <ResponsiveRating
-          tracker={{ current: character.morality, total: 10 }}
+          tracker={{ current: character.humanity, total: 10 }}
         />
         <Divider sx={{ my: 1 }} />
         <Typography>Health</Typography>

@@ -22,7 +22,6 @@ class Mage20thTrackerSerializer(Tracker20thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = Splats.mage20th.slug
         data["version"] = Splats.mage20th.version
 
         return data
@@ -42,7 +41,6 @@ class Mage20thSerializer(Character20thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = Splats.mage20th.slug
         data["version"] = Splats.mage20th.version
 
         return data

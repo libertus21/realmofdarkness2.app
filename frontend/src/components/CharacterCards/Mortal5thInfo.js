@@ -9,6 +9,7 @@ const defaultImage =
 
 export default function Mortal5thInfo(props) {
   const { character, chronicle } = props;
+  const splat = character.splat.slug === "ghoul5th" ? "Ghoul" : "Human";
 
   return (
     <CardActionArea disabled>
@@ -26,7 +27,7 @@ export default function Mortal5thInfo(props) {
             mb: 2,
           }}
         />
-        <Typography>Mortal - 5th Edition</Typography>
+        <Typography>{splat} - 5th Edition</Typography>
         <Typography>Server: {chronicle?.name ?? "None"}</Typography>
         <Divider sx={{ my: 1 }} />
         <V5DamageTracker label="Willpower" tracker={character.willpower} />

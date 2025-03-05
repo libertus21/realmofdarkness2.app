@@ -21,7 +21,6 @@ class Human20thTrackerSerializer(Tracker20thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = Splats.human20th.slug
         data["version"] = Splats.human20th.version
 
         return data
@@ -40,7 +39,6 @@ class Human20thSerializer(Character20thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = Splats.human20th.slug
         data["version"] = Splats.human20th.version
 
         return data

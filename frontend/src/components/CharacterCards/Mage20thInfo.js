@@ -45,10 +45,13 @@ export default function Mage20thInfo(props) {
         <ResponsiveRating tracker={{ current: character.arete, total: 10 }} />
         <Divider sx={{ my: 1 }} />
         <Typography>
-          Quintessence {`${character.quint_paradox.quintessence} `}& Paradox{" "}
-          {character.quint_paradox.paradox}
+          Quintessence {`${character.quintessence} `}& Paradox{" "}
+          {character.paradox}
         </Typography>
-        <MageQuintTracker tracker={character.quint_paradox} />
+        <MageQuintTracker
+          quintessence={character.quintessence}
+          paradox={character.paradox}
+        />
         <Divider sx={{ my: 1 }} />
         <Typography>Health</Typography>
         <V20HealthTracker tracker={character.health} />
