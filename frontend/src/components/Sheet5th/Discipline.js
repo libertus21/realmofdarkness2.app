@@ -14,8 +14,8 @@ import {
   DialogActions,
   Button,
   Stack,
+  Grid2,
 } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState } from "react";
 import { useSheetContext } from "../../routes/Character/Vampire5thSheet";
@@ -107,7 +107,7 @@ export default function Discipline(props) {
   );
 
   return (
-    <Grid minWidth="300px">
+    <Grid2 minWidth="300px">
       <Card elevation={0} sx={{ borderRadius: "12px" }}>
         <Accordion
           expanded={expanded === "panel1"}
@@ -119,13 +119,13 @@ export default function Discipline(props) {
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-            <Grid
+            <Grid2
               container
               direction="row"
               justifyContent="center"
               alignItems="center"
             >
-              <Grid>
+              <Grid2>
                 {discipline.description?.length ||
                 discipline.characteristics?.length ? (
                   <div
@@ -157,16 +157,16 @@ export default function Discipline(props) {
                     {discipline.name}
                   </Typography>
                 )}
-              </Grid>
-              <Grid paddingLeft={2} paddingTop={0.5}>
+              </Grid2>
+              <Grid2 paddingLeft={2} paddingTop={0.5}>
                 <SheetRating
                   locked={lock}
                   size="medium"
                   value={discipline.value}
                   onChange={handleValueChange}
                 />
-              </Grid>
-            </Grid>
+              </Grid2>
+            </Grid2>
           </AccordionSummary>
           <AccordionDetails>{renderPowers()}</AccordionDetails>
         </Accordion>
@@ -208,6 +208,6 @@ export default function Discipline(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </Grid>
+    </Grid2>
   );
 }

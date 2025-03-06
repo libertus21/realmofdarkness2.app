@@ -1,5 +1,4 @@
-import { IconButton } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
+import { IconButton, Grid2 } from "@mui/material";
 import BlurOnOutlinedIcon from "@mui/icons-material/BlurOnOutlined";
 import * as React from "react";
 import NewSheetControl from "./NewSheetControl";
@@ -8,7 +7,7 @@ import StorytellerModeButton from "./StorytellerModeButton";
 export default function DashboardControls(props) {
   const { sortOptions, handleStorytellerMode } = props;
   return (
-    <Grid
+    <Grid2
       container
       columnSpacing={0}
       justifyContent="center"
@@ -21,16 +20,16 @@ export default function DashboardControls(props) {
       />
       <PlaceHolderButton />
       <PlaceHolderButton />
-    </Grid>
+    </Grid2>
   );
 }
 
 function PlaceHolderButton(props) {
   return (
-    <Grid>
+    <Grid2>
       <IconButton disabled>
         <BlurOnOutlinedIcon color="secondary" />
       </IconButton>
-    </Grid>
+    </Grid2>
   );
 }

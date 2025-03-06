@@ -10,8 +10,8 @@ import {
   Chip,
   Alert,
   ListItemText,
+  Grid2,
 } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
 import { useState, useMemo } from "react";
 import CharacterCard from "./CharacterCard";
 import Checkbox from "@mui/material/Checkbox";
@@ -132,16 +132,16 @@ export default function CharacterCardDisplay(props) {
       </Alert>
     );
     return (
-      <Grid
+      <Grid2
         container
-        xs={12}
-        justifyContent="space-evenly"
+        justifyContent="center"
         alignItems="flex-start"
         columnSpacing={3}
         rowSpacing={3}
+        paddingBottom={3}
       >
         {cards.length ? cards : noChars}
-      </Grid>
+      </Grid2>
     );
   }
 
@@ -152,15 +152,16 @@ export default function CharacterCardDisplay(props) {
 
   return (
     <Container maxWidth="xl">
-      <Grid
+      {/* Filter Controls Section */}
+      <Grid2
         container
         direction="row"
         justifyContent="center"
         rowSpacing={3}
         columnSpacing={2}
-        sx={{ pl: 3 }}
+        sx={{ mb: 3 }}
       >
-        <Grid>
+        <Grid2>
           <FormControl sx={{ minWidth: "150px" }}>
             <InputLabel id="chronicle-select-label">Chronicles</InputLabel>
             <Select
@@ -176,8 +177,8 @@ export default function CharacterCardDisplay(props) {
               {chronicleMenus()}
             </Select>
           </FormControl>
-        </Grid>
-        <Grid>
+        </Grid2>
+        <Grid2>
           <FormControl sx={{ minWidth: "150px" }}>
             <InputLabel id="splat-select-label">Splats</InputLabel>
             <Select
@@ -200,8 +201,8 @@ export default function CharacterCardDisplay(props) {
               {getSplatMenus}
             </Select>
           </FormControl>
-        </Grid>
-        <Grid>
+        </Grid2>
+        <Grid2>
           <FormControl sx={{ minWidth: "150px" }}>
             <InputLabel id="sortBy-select-label">Sort by</InputLabel>
             <Select
@@ -217,13 +218,15 @@ export default function CharacterCardDisplay(props) {
               <MenuItem value="name">Name</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
+        </Grid2>
         <DashboardControls
           sortOptions={sortOptions}
           handleStorytellerMode={handleStorytellerMode}
         />
-        {renderCharacterCards()}
-      </Grid>
+      </Grid2>
+
+      {/* Character Cards Section - Always on a new line */}
+      {renderCharacterCards()}
     </Container>
   );
 }

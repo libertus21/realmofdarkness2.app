@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Unstable_Grid2";
+import { Grid2 } from "@mui/material";
 import ApiTextField from "../Sheet/ApiTextField";
 import Header from "../Sheet/Header";
 
@@ -8,10 +8,16 @@ export default function ProfileTab() {
   const { sheet } = useSheetContext();
 
   return (
-    <Grid spacing={2} container xs={12}>
-      <Grid container xs={12} md={7}>
+    <Grid2 spacing={2} container size={12} paddingBottom={2}>
+      <Grid2
+        container
+        size={{
+          xs: 12,
+          md: 7,
+        }}
+      >
         <Header>History</Header>
-        <Grid xs={12}>
+        <Grid2 size={12}>
           <ApiTextField
             slug="history"
             value={sheet.history}
@@ -20,56 +26,76 @@ export default function ProfileTab() {
             rows={19}
             multiline
           />
-        </Grid>
-      </Grid>
-      <Grid
-        xs={12}
-        md={5}
+        </Grid2>
+      </Grid2>
+      <Grid2
         container
         justifyContent="flex-start"
         direction="column"
-        spacing={0}
+        spacing={2}
+        size={{
+          xs: 12,
+          md: 5,
+        }}
       >
-        <Header paddingTop={0} paddingBottom={2}>
-          Profile
-        </Header>
-        <Grid xs={12} container>
-          <Grid xs={12} md={6}>
+        <Header>Profile</Header>
+        <Grid2 container size={12}>
+          <Grid2
+            size={{
+              xs: 12,
+              md: 6,
+            }}
+          >
             <ApiTextField
               label="Date of Birth"
               slug="date_of_birth"
               value={sheet.date_of_birth}
               maxLength={20}
             />
-          </Grid>
-          <Grid xs={12} md={6}>
+          </Grid2>
+          <Grid2
+            size={{
+              xs: 12,
+              md: 6,
+            }}
+          >
             <ApiTextField
               label="Date of Death"
               slug="date_of_death"
               value={sheet.date_of_death}
               maxLength={20}
             />
-          </Grid>
-        </Grid>
-        <Grid xs={12} container>
-          <Grid xs={12} md={6}>
+          </Grid2>
+        </Grid2>
+        <Grid2 container size={12}>
+          <Grid2
+            size={{
+              xs: 12,
+              md: 6,
+            }}
+          >
             <ApiTextField
               label="Age"
               slug="age"
               value={sheet.age}
               maxLength={20}
             />
-          </Grid>
-          <Grid xs={12} md={6}>
+          </Grid2>
+          <Grid2
+            size={{
+              xs: 12,
+              md: 6,
+            }}
+          >
             <ApiTextField
               label="Apparent Age"
               slug="apparent_age"
               value={sheet.apparent_age}
               maxLength={20}
             />
-          </Grid>
-        </Grid>
-        <Grid xs={12}>
+          </Grid2>
+        </Grid2>
+        <Grid2 size={12}>
           <ApiTextField
             label="Appearance"
             slug="appearance_description"
@@ -78,8 +104,8 @@ export default function ProfileTab() {
             multiline
             rows={14}
           />
-        </Grid>
-      </Grid>
-    </Grid>
+        </Grid2>
+      </Grid2>
+    </Grid2>
   );
 }

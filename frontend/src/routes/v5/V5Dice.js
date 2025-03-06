@@ -1,4 +1,4 @@
-import { Grid, Typography, Button, Divider, Container } from "@mui/material";
+import { Grid2, Typography, Button, Divider, Container } from "@mui/material";
 import { Link } from "react-router-dom";
 import SendIcon from "@mui/icons-material/Send";
 import { useState } from "react";
@@ -116,29 +116,27 @@ export default function V5Dice() {
 
   return (
     <Container sx={{ my: 13 }}>
-      <Grid
+      <Grid2
         container
         spacing={4}
         direction="row"
         justifyContent="space-evenly"
         alignItems="center"
       >
-        <Grid
-          item
+        <Grid2
           container
-          xs={12}
           direction="row"
           justifyContent="space-evenly"
           alignItems="center"
           rowSpacing={3}
           columnSpacing={3}
-        >
-          <Grid item xs={12} sx={{ textAlign: "center" }}>
+          size={12}>
+          <Grid2 sx={{ textAlign: "center" }} size={12}>
             <Typography variant="h3" component="h1" color="primary">
               Dice Probability
             </Typography>
-          </Grid>
-          <Grid item xs>
+          </Grid2>
+          <Grid2 size="grow">
             <IntInput
               label="Pool"
               variant="filled"
@@ -149,8 +147,8 @@ export default function V5Dice() {
               required
               onChange={(event) => setPool(event)}
             />
-          </Grid>
-          <Grid item xs>
+          </Grid2>
+          <Grid2 size="grow">
             <IntInput
               label="Hunger"
               variant="filled"
@@ -160,8 +158,8 @@ export default function V5Dice() {
               error={hunger.error}
               onChange={(event) => setHunger(event)}
             />
-          </Grid>
-          <Grid item xs>
+          </Grid2>
+          <Grid2 size="grow">
             <IntInput
               label="Difficulty"
               variant="filled"
@@ -171,8 +169,13 @@ export default function V5Dice() {
               error={difficulty.error}
               onChange={(event) => setDifficulty(event)}
             />
-          </Grid>
-          <Grid item xs={12} md={2} sx={{ textAlign: "center" }}>
+          </Grid2>
+          <Grid2
+            sx={{ textAlign: "center" }}
+            size={{
+              xs: 12,
+              md: 2
+            }}>
             <Button
               variant="contained"
               disabled={pool.error || hunger.error || difficulty.error}
@@ -187,9 +190,9 @@ export default function V5Dice() {
             >
               Calulate
             </Button>
-          </Grid>
-          <Grid container item columnSpacing={3} rowSpacing={2} xs={12}>
-            <Grid item xs={6} sx={{ textAlign: "center" }}>
+          </Grid2>
+          <Grid2 container columnSpacing={3} rowSpacing={2} size={12}>
+            <Grid2 sx={{ textAlign: "center" }} size={6}>
               <Typography
                 variant="h4"
                 component="h2"
@@ -202,8 +205,8 @@ export default function V5Dice() {
               <Typography sx={{ pt: 1 }}>Pass: {results.pass}</Typography>
               <Typography>Critical: {results.crit}</Typography>
               <Typography>Messy Critical: {results.messyCrit}</Typography>
-            </Grid>
-            <Grid item xs={6} sx={{ textAlign: "center" }}>
+            </Grid2>
+            <Grid2 sx={{ textAlign: "center" }} size={6}>
               <Typography
                 variant="h4"
                 component="h2"
@@ -218,18 +221,22 @@ export default function V5Dice() {
               </Typography>
               <Typography>Total Fail: {results.totalFail}</Typography>
               <Typography>Fail: {results.fail}</Typography>
-            </Grid>
-            <Grid item xs={12} sx={{ textAlign: "center" }}>
+            </Grid2>
+            <Grid2 sx={{ textAlign: "center" }} size={12}>
               <Typography>
                 Highest Possible Success: {results.highest}
               </Typography>
               <Typography>
                 Average Successes Rolled: {results.average}
               </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} md={4}>
+            </Grid2>
+          </Grid2>
+        </Grid2>
+        <Grid2
+          size={{
+            xs: 12,
+            md: 4
+          }}>
           <Button
             color="primary"
             variant="outlined"
@@ -240,8 +247,12 @@ export default function V5Dice() {
           >
             Home
           </Button>
-        </Grid>
-        <Grid item xs={12} md={4}>
+        </Grid2>
+        <Grid2
+          size={{
+            xs: 12,
+            md: 4
+          }}>
           <Button
             color="primary"
             variant="outlined"
@@ -252,8 +263,12 @@ export default function V5Dice() {
           >
             Bot Invite Link
           </Button>
-        </Grid>
-        <Grid item xs={12} md={4}>
+        </Grid2>
+        <Grid2
+          size={{
+            xs: 12,
+            md: 4
+          }}>
           <Button
             color="primary"
             variant="outlined"
@@ -263,14 +278,14 @@ export default function V5Dice() {
           >
             Bot Command Docs
           </Button>
-        </Grid>
-        <Grid item xs={12}>
+        </Grid2>
+        <Grid2 size={12}>
           <Typography color="secondary">
             * This algorithm rolls 1 million times to work out the probability
             of rolls. Each calculation will be slightly different.
           </Typography>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Container>
   );
 }

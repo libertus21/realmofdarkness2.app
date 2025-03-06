@@ -1,5 +1,4 @@
-import { Tab, Tabs, Box, useMediaQuery } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
+import { Tab, Tabs, Box, useMediaQuery, Grid2 } from "@mui/material";
 import DisciplinesTab from "../DisciplinesTab";
 import BloodPotencyTab from "./BloodPotencyTab";
 import HuntingTab from "./HuntingTab";
@@ -41,7 +40,7 @@ export default function SheetNav(props) {
 
   return (
     <>
-      <Grid xs={12}>
+      <Grid2 size={12}>
         <Box
           sx={{
             borderRadius: "20px",
@@ -68,14 +67,14 @@ export default function SheetNav(props) {
             <Tab label="Gallery" value={7} disabled />
           </Tabs>
         </Box>
-      </Grid>
+      </Grid2>
       {/* Core Tab */}
       <CustomTabPanel value={value} index={0}>
         <DisciplinesTab />
-        <Grid container paddingTop={2}>
+        <Grid2 container paddingTop={2}>
           <BloodPotencyTab />
           <HuntingTab />
-        </Grid>
+        </Grid2>
       </CustomTabPanel>
       {/* Beliefs Tab */}
       <CustomTabPanel value={value} index={1}>

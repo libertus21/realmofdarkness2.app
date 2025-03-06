@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid2, Typography } from "@mui/material";
 import { Button, ButtonGroup } from "@mui/material";
 import { Link } from "react-router-dom";
 import Slideshow from "../components/Slideshow";
@@ -8,7 +8,7 @@ const large_logo =
 
 export default function WelcomePage(props) {
   return (
-    <Grid
+    <Grid2
       container
       spacing={{ md: 0, xs: 4 }}
       direction="row"
@@ -16,7 +16,11 @@ export default function WelcomePage(props) {
       alignItems="flex-start"
       columnSpacing={3}
     >
-      <Grid item md={7} xs={12}>
+      <Grid2
+        size={{
+          md: 7,
+          xs: 12
+        }}>
         <Box sx={{ pt: { xs: 0, md: 6 } }}>
           <Box
             component="img"
@@ -45,11 +49,16 @@ export default function WelcomePage(props) {
             </Button>
           </ButtonGroup>
         </Box>
-      </Grid>
-      <Grid item md={5} xs={12} sx={{ height: { xs: "500px", lg: "600px" } }}>
+      </Grid2>
+      <Grid2
+        sx={{ height: { xs: "500px", lg: "600px" } }}
+        size={{
+          md: 5,
+          xs: 12
+        }}>
         <Slideshow imageList={itemData} timer={5000} />
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
   );
 }
 

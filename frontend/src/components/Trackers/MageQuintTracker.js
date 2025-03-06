@@ -1,4 +1,4 @@
-import { Rating, Grid } from "@mui/material";
+import { Rating, Grid2 } from "@mui/material";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import CircleIcon from "@mui/icons-material/Circle";
 
@@ -40,7 +40,7 @@ export default function MageQuintTracker(props) {
     }
 
     bars.push(
-      <Grid item key={index} sx={{ mt: 0.15, mb: -0.15 }}>
+      <Grid2 key={index} sx={{ mt: 0.15, mb: -0.15 }}>
         <Rating
           name={`Quintessence - Paradox Bar ${index + 1}`}
           readOnly
@@ -54,12 +54,12 @@ export default function MageQuintTracker(props) {
           defaultValue={5}
           size="small"
         />
-      </Grid>
+      </Grid2>
     );
   }
 
   return (
-    <Grid
+    <Grid2
       container
       columnSpacing={1.5}
       direction="row"
@@ -68,6 +68,6 @@ export default function MageQuintTracker(props) {
       sx={{ ml: -1.8 }}
     >
       {bars}
-    </Grid>
+    </Grid2>
   );
 }

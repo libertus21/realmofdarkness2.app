@@ -1,22 +1,20 @@
-import { CircularProgress, Container, Typography } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
+import { CircularProgress, Container, Typography, Grid2 } from "@mui/material";
 import { useState, useEffect } from "react";
 
-export default function Connecting(props) 
-{
-  const [dots, setDots] = useState('');
+export default function Connecting(props) {
+  const [dots, setDots] = useState("");
 
   useEffect(() => {
     const interval = setInterval(() => {
       setDots((prevDots) => (prevDots === "..." ? "." : prevDots + "."));
     }, 500);
-    
+
     return () => clearInterval(interval);
   }, []);
 
   return (
     <Container>
-      <Grid
+      <Grid2
         container
         direction="column"
         justifyContent="center"
@@ -24,18 +22,15 @@ export default function Connecting(props)
         spacing={2}
         paddingTop={15}
       >
-        <Grid minWidth='136px'>
+        <Grid2 minWidth="136px">
           <Typography variant="h6" color="textSecondary">
             Connecting{dots}
           </Typography>
-        </Grid>
-        <Grid>
+        </Grid2>
+        <Grid2>
           <CircularProgress />
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Container>
   );
 }
-
-
-

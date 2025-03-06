@@ -7,8 +7,8 @@ import {
   DialogContentText,
   Button,
   Tooltip,
+  Grid2,
 } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
 import AnnouncementOutlinedIcon from "@mui/icons-material/AnnouncementOutlined";
 
 export default function SheetPreviewNews() {
@@ -23,7 +23,7 @@ export default function SheetPreviewNews() {
   };
 
   return (
-    <Grid>
+    <Grid2>
       <Tooltip title="Sheet News" arrow>
         <IconButton onClick={handleOpen}>
           <AnnouncementOutlinedIcon fontSize="large" color="secondary" />
@@ -46,6 +46,6 @@ export default function SheetPreviewNews() {
           Close
         </Button>
       </Dialog>
-    </Grid>
+    </Grid2>
   );
 }
