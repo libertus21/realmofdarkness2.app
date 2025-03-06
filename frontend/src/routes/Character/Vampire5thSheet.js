@@ -1,5 +1,4 @@
-import { Container } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
+import { Container, Grid2 } from "@mui/material";
 
 import GeneralInfo from "../../components/Sheet5th/Vampire/GeneralInfoTab";
 import Attributes from "../../components/Sheet5th/AttributesTab";
@@ -130,15 +129,23 @@ export default function Vampire5thSheet(props) {
     <Container maxWidth="false" sx={{ mt: 10 }}>
       <GeneralInfo handleLockChange={handleLockChange} />
       <TrackerTab />
-      <Grid container>
-        <Grid container xs={12} md={5} direction="column">
+      <Grid2 container>
+        <Grid2
+          container
+          direction="column"
+          size={{
+            xs: 12,
+            md: 5
+          }}>
           <Attributes />
           <Skills />
-        </Grid>
-        <Grid container md={7} direction="column" rowGap={2}>
+        </Grid2>
+        <Grid2 container direction="column" rowGap={2} size={{
+          md: 7
+        }}>
           <SheetNav />
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Container>
   );
 

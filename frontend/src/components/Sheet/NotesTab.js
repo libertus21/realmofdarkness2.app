@@ -1,21 +1,21 @@
-import Grid from '@mui/material/Unstable_Grid2';
-import ApiTextField from '../Sheet/ApiTextField';
+import { Grid2 } from "@mui/material";
+import ApiTextField from "../Sheet/ApiTextField";
 
-import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
+import { useSheetContext } from "../../routes/Character/Vampire5thSheet";
 
 export default function NotesTab() {
   const { sheet } = useSheetContext();
 
   return (
-    <Grid
-      spacing={0}
-      container
-      xs={12}
-      rowSpacing={1}
-    >
-      <Grid xs={12} lg={6}>
+    <Grid2 container size={12} spacing={2} paddingBottom={2}>
+      <Grid2
+        size={{
+          xs: 12,
+          lg: 6,
+        }}
+      >
         <ApiTextField
-          slug='notes'
+          slug="notes"
           value={sheet.notes}
           noLock
           onEnter={false}
@@ -23,10 +23,15 @@ export default function NotesTab() {
           multiline
           rows={22}
         />
-      </Grid>
-      <Grid xs={12} lg={6}>
+      </Grid2>
+      <Grid2
+        size={{
+          xs: 12,
+          lg: 6,
+        }}
+      >
         <ApiTextField
-          slug='notes2'
+          slug="notes2"
           value={sheet.notes2}
           noLock
           onEnter={false}
@@ -34,7 +39,7 @@ export default function NotesTab() {
           multiline
           rows={22}
         />
-      </Grid>
-    </Grid>
-  )
+      </Grid2>
+    </Grid2>
+  );
 }

@@ -1,5 +1,4 @@
-import { Tooltip, IconButton, Box } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
+import { Tooltip, IconButton, Box, Grid2 } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import BlurOnOutlinedIcon from "@mui/icons-material/BlurOnOutlined";
@@ -94,35 +93,26 @@ export default function SheetControls(props) {
   }
 
   return (
-    <Grid
-      container
-      direction="row"
-      justifyContent="center"
-      alignItems="center"
-      rowSpacing={-3}
-      spacing={2}
-      xs={12}
-      md={2}
-    >
+    <>
       <SyncStateIcon syncState={syncState} />
-      <Grid>{renderLockButton()}</Grid>
-      <Grid>{renderStLockButton()}</Grid>
+      <Grid2>{renderLockButton()}</Grid2>
+      <Grid2>{renderStLockButton()}</Grid2>
       <SheetPreviewNews />
-      <Grid>
+      <Grid2>
         <ExportCharacterJSON sheet={sheet} />
-      </Grid>
-      <Grid>
+      </Grid2>
+      <Grid2>
         <IconButton disabled>
           <BlurOnOutlinedIcon fontSize="large" color="secondary" />
         </IconButton>
-      </Grid>
-      <Grid>
+      </Grid2>
+      <Grid2>
         <IconButton disabled>
           <BlurOnOutlinedIcon fontSize="large" color="secondary" />
         </IconButton>
-      </Grid>
+      </Grid2>
       <DeleteCharacterButton characterId={sheet.id} />
-    </Grid>
+    </>
   );
 }
 
@@ -170,10 +160,10 @@ function SyncStateIcon(props) {
   }
 
   return (
-    <Grid paddingTop="9px" paddingX={paddingX}>
+    <Grid2 paddingTop="9px" paddingX={paddingX}>
       <Tooltip title={`Sheet ${syncState}`} arrow>
         {icon}
       </Tooltip>
-    </Grid>
+    </Grid2>
   );
 }

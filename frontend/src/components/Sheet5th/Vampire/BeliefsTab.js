@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Unstable_Grid2";
+import { Grid2 } from "@mui/material";
 import ApiTextField from "../../Sheet/ApiTextField";
 import Header from "../../Sheet/Header";
 
@@ -8,8 +8,14 @@ export default function BeliefsTab() {
   const { sheet } = useSheetContext();
 
   return (
-    <Grid spacing={2} container xs={12}>
-      <Grid xs={12} lg={6} xl={4}>
+    <Grid2 spacing={2} container size={12} paddingBottom={2}>
+      <Grid2
+        size={{
+          xs: 12,
+          lg: 6,
+          xl: 4,
+        }}
+      >
         <Header>Chronicle Tenets</Header>
         <ApiTextField
           slug="tenets"
@@ -19,8 +25,14 @@ export default function BeliefsTab() {
           rows={19}
           multiline
         />
-      </Grid>
-      <Grid xs={12} lg={6} xl={4}>
+      </Grid2>
+      <Grid2
+        size={{
+          xs: 12,
+          lg: 6,
+          xl: 4,
+        }}
+      >
         <Header>Touchstones</Header>
         <ApiTextField
           slug="touchstones"
@@ -30,8 +42,14 @@ export default function BeliefsTab() {
           rows={19}
           multiline
         />
-      </Grid>
-      <Grid xs={12} lg={12} xl={4}>
+      </Grid2>
+      <Grid2
+        size={{
+          xs: 12,
+          lg: 12,
+          xl: 4,
+        }}
+      >
         <Header>Convictions</Header>
         <ApiTextField
           slug="convictions"
@@ -41,7 +59,7 @@ export default function BeliefsTab() {
           rows={19}
           multiline
         />
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
   );
 }

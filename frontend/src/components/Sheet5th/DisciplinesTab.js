@@ -1,5 +1,4 @@
-import Grid from "@mui/material/Unstable_Grid2";
-import { Button } from "@mui/material";
+import { Button, Grid2 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Discipline from "./Discipline";
 import NewDisciplineDialog from "./Vampire/CustomDisciplineDialog";
@@ -96,25 +95,25 @@ export default function DisciplinesTab(props) {
   }
 
   const addNewButton = (
-    <Grid minWidth="300px">
+    <Grid2 minWidth="300px">
       <Button fullWidth variant="outlined" onClick={openDialog}>
         <AddIcon fontSize="small" />
         New Discipline
       </Button>
-    </Grid>
+    </Grid2>
   );
 
   return (
-    <Grid container spacing={2} xs={12}>
+    <Grid2 container spacing={2} size={12}>
       <Header>Disciplines</Header>
-      <Grid
+      <Grid2
         container
         direction="row"
         justifyContent="center"
         alignItems="center"
-        xs={12}
         paddingTop={1}
         minHeight={80}
+        size={12}
       >
         {sheet.disciplines &&
           Object.entries(sheet.disciplines).map(
@@ -131,7 +130,7 @@ export default function DisciplinesTab(props) {
             )
           )}
         {!lock ? addNewButton : null}
-      </Grid>
+      </Grid2>
       <NewDisciplineDialog
         open={dialogOpen}
         onClose={closeDialog}
@@ -148,6 +147,6 @@ export default function DisciplinesTab(props) {
         info={powerDialogView}
         onClose={closePowerDialogView}
       />
-    </Grid>
+    </Grid2>
   );
 }

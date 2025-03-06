@@ -1,11 +1,9 @@
-import { Button, TextField } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
-import { useSheetContext } from '../../routes/Character/Vampire5thSheet';
-import { useState } from 'react';
-import SelectionDialogue from './SelectionDialogue';
+import { Button, TextField, Grid2 } from "@mui/material";
+import { useSheetContext } from "../../routes/Character/Vampire5thSheet";
+import { useState } from "react";
+import SelectionDialogue from "./SelectionDialogue";
 
-export default function DialogueTextField(props)
-{
+export default function DialogueTextField(props) {
   const { label, value, xs, getData } = props;
   const { lock } = useSheetContext();
   const [open, setOpen] = useState(false);
@@ -21,37 +19,42 @@ export default function DialogueTextField(props)
   const textField = (
     <TextField
       disabled
-      value={value ?? ''}
-      label={label} 
-      variant='outlined' 
+      value={value ?? ""}
+      label={label}
+      variant="outlined"
       fullWidth
-      size='small'
+      size="small"
     />
-  )
+  );
 
   const button = (
-    <Button 
-      fullWidth 
-      variant='outlined' 
-      sx={{paddingBottom: '8.5px'}}
+    <Button
+      fullWidth
+      variant="outlined"
+      sx={{ paddingBottom: "8.5px" }}
       onClick={handleClickOpen}
     >
-      {`${label}${value ? ': ' + value : ''}`}
+      {`${label}${value ? ": " + value : ""}`}
     </Button>
-  )
+  );
 
-  return ( 
+  return (
     <>
-      <SelectionDialogue 
+      <SelectionDialogue
         label={label}
-        selected={value}        
-        open={open} 
+        selected={value}
+        open={open}
         onClose={handleClose}
         getData={getData}
       />
-      <Grid xs={xs ?? 12} md='auto' >
+      <Grid2
+        size={{
+          xs: xs ?? 12,
+          md: "auto",
+        }}
+      >
         {lock ? textField : button}
-      </Grid>  
-    </> 
-  )
+      </Grid2>
+    </>
+  );
 }

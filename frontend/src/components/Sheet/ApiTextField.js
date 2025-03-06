@@ -1,5 +1,4 @@
-import { TextField } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
+import { TextField, Grid2 } from "@mui/material";
 import { useSheetContext } from "../../routes/Character/Vampire5thSheet";
 import { useState, useEffect } from "react";
 import { slugify } from "../../utility";
@@ -15,7 +14,7 @@ export default function ApiTextField(props) {
     size = "small",
     onEnter = true,
     save,
-    paddingX = 1,
+    paddingX = 0,
     xs = 12,
     md = "auto",
     ...other
@@ -74,7 +73,13 @@ export default function ApiTextField(props) {
   }, [value]);
 
   return (
-    <Grid xs={xs} md={md} paddingX={paddingX}>
+    <Grid2
+      paddingX={paddingX}
+      size={{
+        xs: xs,
+        md: md,
+      }}
+    >
       <TextField
         focused={focused}
         onClick={onClick}
@@ -91,6 +96,6 @@ export default function ApiTextField(props) {
         size={size}
         {...other}
       />
-    </Grid>
+    </Grid2>
   );
 }

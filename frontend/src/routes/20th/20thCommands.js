@@ -1,4 +1,4 @@
-import { Container, Grid, Tab, Tabs, Box } from "@mui/material";
+import { Container, Grid2, Tab, Tabs, Box } from "@mui/material";
 import { Button, ButtonGroup } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -48,14 +48,14 @@ export default function V20Commands(props) {
   };
 
   return (
-    <Grid
+    <Grid2
       container
       spacing={4}
       direction="row"
       justifyContent="space-evenly"
       alignItems="center"
     >
-      <Grid item xs={12} sx={{ textAlign: "center" }}>
+      <Grid2 sx={{ textAlign: "center" }} size={12}>
         <ButtonGroup>
           <Button href="https://v5.realmofdarkness.app/">5th Edition</Button>
           <Button variant="contained">20th Edition</Button>
@@ -63,8 +63,8 @@ export default function V20Commands(props) {
             Chronicles of Darkness
           </Button>
         </ButtonGroup>
-      </Grid>
-      <Grid item xs={12}>
+      </Grid2>
+      <Grid2 size={12}>
         <Container disableGutters sx={{ px: 2 }}>
           <Tabs
             value={tabValue}
@@ -89,8 +89,12 @@ export default function V20Commands(props) {
             <CommandAccordion commands={Server20thDoc} />
           </TabPanel>
         </Container>
-      </Grid>
-      <Grid item xs={12} md={4}>
+      </Grid2>
+      <Grid2
+        size={{
+          xs: 12,
+          md: 4
+        }}>
         <Button
           color="primary"
           variant="outlined"
@@ -101,8 +105,12 @@ export default function V20Commands(props) {
         >
           20th Edition Home
         </Button>
-      </Grid>
-      <Grid item xs={12} md={4}>
+      </Grid2>
+      <Grid2
+        size={{
+          xs: 12,
+          md: 4
+        }}>
         <Button
           color="primary"
           variant="outlined"
@@ -113,8 +121,12 @@ export default function V20Commands(props) {
         >
           Bot Invite Link
         </Button>
-      </Grid>
-      <Grid item xs={12} md={4}>
+      </Grid2>
+      <Grid2
+        size={{
+          xs: 12,
+          md: 4
+        }}>
         <Button
           color="primary"
           variant="outlined"
@@ -124,7 +136,7 @@ export default function V20Commands(props) {
         >
           Dice (Coming Soon)
         </Button>
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
   );
 }

@@ -1,5 +1,4 @@
-import Grid from "@mui/material/Unstable_Grid2";
-import { Stack } from "@mui/material";
+import { Stack, Grid2 } from "@mui/material";
 import Header from "../Sheet/Header";
 import Advantages from "./Advantages";
 import AdvantagesViewDialogue from "./AdvantagesViewDialogue";
@@ -13,8 +12,13 @@ export default function AdvantagesTab() {
   }
 
   return (
-    <Grid rowSpacing={2} container xs={12}>
-      <Grid md={12} lg={6}>
+    <Grid2 rowSpacing={2} container size={12} paddingBottom={2}>
+      <Grid2
+        size={{
+          md: 12,
+          lg: 6,
+        }}
+      >
         <Stack
           justifyContent="flex-start"
           sx={{ width: "100%" }}
@@ -35,8 +39,13 @@ export default function AdvantagesTab() {
           <Header>Haven</Header>
           <Advantages name="haven" handleOpenView={handleOpenView} />
         </Stack>
-      </Grid>
-      <Grid md={12} lg={6}>
+      </Grid2>
+      <Grid2
+        size={{
+          md: 12,
+          lg: 6,
+        }}
+      >
         <Stack
           justifyContent="flex-start"
           sx={{ width: "100%" }}
@@ -49,13 +58,13 @@ export default function AdvantagesTab() {
           <Header>Loresheets</Header>
           <Advantages name="loresheets" handleOpenView={handleOpenView} />
         </Stack>
-      </Grid>
+      </Grid2>
       <AdvantagesViewDialogue
         open={isViewOpen}
         handleClose={() => {
           setIsViewOpen(false);
         }}
       />
-    </Grid>
+    </Grid2>
   );
 }

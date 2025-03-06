@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Unstable_Grid2";
 import {
   Dialog,
   DialogTitle,
@@ -8,6 +7,7 @@ import {
   Button,
   IconButton,
   DialogActions,
+  Grid2,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -87,8 +87,8 @@ export default function CustomDisciplineDialog({
         <CloseIcon />
       </IconButton>
       <DialogContent>
-        <Grid container spacing={2}>
-          <Grid xs={12}>
+        <Grid2 container spacing={2}>
+          <Grid2 size={12}>
             <TextField
               label="Discipline Name"
               variant="outlined"
@@ -100,8 +100,8 @@ export default function CustomDisciplineDialog({
               }}
               required
             />
-          </Grid>
-          <Grid xs={12}>
+          </Grid2>
+          <Grid2 size={12}>
             <TextField
               label="Discipline Description"
               variant="outlined"
@@ -113,8 +113,8 @@ export default function CustomDisciplineDialog({
                 updateText(e.target.value, description, setDescription, 4000)
               }
             />
-          </Grid>
-          <Grid xs={12}>
+          </Grid2>
+          <Grid2 size={12}>
             <TextField
               label="Discipline Characteristics"
               variant="outlined"
@@ -131,9 +131,9 @@ export default function CustomDisciplineDialog({
                 )
               }
             />
-          </Grid>
+          </Grid2>
           {/* Add other fields for the new discipline here */}
-        </Grid>
+        </Grid2>
       </DialogContent>
       <DialogActions sx={{ paddingX: 3, paddingBottom: 2 }}>
         <Button
