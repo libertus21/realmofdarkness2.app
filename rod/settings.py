@@ -117,11 +117,14 @@ WSGI_APPLICATION = "rod.wsgi.application"
 # Channels
 ASGI_APPLICATION = "rod.asgi.application"
 
+# Get Redis configuration
+REDIS_DB_INDEX = os.getenv("REDIS_DB_INDEX", "0")
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [f"redis://127.0.0.1:6379/{REDIS_DB_INDEX}"],
         },
     },
 }
@@ -129,7 +132,7 @@ CHANNEL_LAYERS = {
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
+        "LOCATION": f"redis://127.0.0.1:6379/{REDIS_DB_INDEX}",
     }
 }
 
