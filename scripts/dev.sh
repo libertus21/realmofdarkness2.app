@@ -10,16 +10,39 @@ cd ..
 echo "===== Realm of Darkness Development Environment ====="
 echo
 
-echo "[1/6] Checking Python dependencies..."
-pip install -r requirements.txt --quiet
+echo "[1/7] Setting up Python virtual environment..."
+# Create virtual environment if it doesn't exist
+if [ ! -d "venv" ]; then
+    python3 -m venv venv
+    if [ $? -ne 0 ]; then
+        echo "[X] Failed to create virtual environment!"
+        read -p "Press Enter to exit..."
+        exit 1
+    fi
+    echo "     - Virtual environment created successfully."
+else
+    echo "     - Using existing virtual environment."
+fi
+
+# Get Python executable in virtual environment
+VENV_PYTHON="venv/bin/python"
+if [ ! -f "$VENV_PYTHON" ]; then
+    echo "[X] Could not find Python in virtual environment!"
+    read -p "Press Enter to exit..."
+    exit 1
+fi
+echo "     - Virtual environment ready."
+
+echo "[2/7] Checking Python dependencies..."
+$VENV_PYTHON -m pip install -r requirements-dev.txt --quiet
 if [ $? -ne 0 ]; then
     echo "[X] Failed to install Python dependencies!"
     read -p "Press Enter to exit..."
     exit 1
 fi
-echo "     - Dependencies updated successfully."
+echo "     - Python dependencies updated successfully."
 
-echo "[2/6] Checking frontend dependencies..."
+echo "[3/7] Checking frontend dependencies..."
 cd frontend
 npm install --silent
 if [ $? -ne 0 ]; then
@@ -31,12 +54,12 @@ fi
 echo "     - Frontend dependencies updated successfully."
 cd ..
 
-echo "[3/6] Applying database migrations..."
-python3 manage.py makemigrations --verbosity 0
-python3 manage.py migrate --verbosity 0
+echo "[4/7] Applying database migrations..."
+$VENV_PYTHON manage.py makemigrations --verbosity 0
+$VENV_PYTHON manage.py migrate --verbosity 0
 echo "     - Database migration complete."
 
-echo "[4/6] Starting Redis..."
+echo "[5/7] Starting Redis..."
 # Check for different ways to start Redis based on platform
 if [ "$(uname)" == "Darwin" ]; then
     # macOS
@@ -64,7 +87,7 @@ else
 fi
 echo "     - Redis server started successfully."
 
-echo "[5/6] Starting Django server..."
+echo "[6/7] Starting Django server..."
 # Try to identify the best terminal to use
 TERM_CMD=""
 if [ "$(uname)" == "Darwin" ]; then
@@ -82,16 +105,16 @@ fi
 
 # Start Django server
 if [ -n "$TERM_CMD" ]; then
-    $TERM_CMD python3 manage.py runserver 8080 &
+    $TERM_CMD $VENV_PYTHON manage.py runserver 8080 &
 else
     # Fall back to background process
-    python3 manage.py runserver 8080 > django_server.log 2>&1 &
+    $VENV_PYTHON manage.py runserver 8080 > django_server.log 2>&1 &
     DJANGO_PID=$!
     echo "     - Django server started in background (PID: $DJANGO_PID)"
 fi
 echo "     - Django server started successfully."
 
-echo "[6/6] Starting React development server..."
+echo "[7/7] Starting React development server..."
 # Start React development server
 if [ -n "$TERM_CMD" ]; then
     $TERM_CMD bash -c "cd frontend && npm start" &
@@ -108,6 +131,7 @@ echo "     - React development server started successfully."
 echo
 echo "Development environment started successfully!"
 echo
+echo "* Python: Using virtual environment in ./venv"
 echo "* Redis Server: Running in background (daemon mode)"
 echo "* Django Server: http://localhost:8080"
 echo "* React Dev Server: http://localhost:3000"
