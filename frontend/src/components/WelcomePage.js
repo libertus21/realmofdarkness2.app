@@ -19,8 +19,9 @@ export default function WelcomePage(props) {
       <Grid2
         size={{
           md: 7,
-          xs: 12
-        }}>
+          xs: 12,
+        }}
+      >
         <Box sx={{ pt: { xs: 0, md: 6 } }}>
           <Box
             component="img"
@@ -54,8 +55,9 @@ export default function WelcomePage(props) {
         sx={{ height: { xs: "500px", lg: "600px" } }}
         size={{
           md: 5,
-          xs: 12
-        }}>
+          xs: 12,
+        }}
+      >
         <Slideshow imageList={itemData} timer={5000} />
       </Grid2>
     </Grid2>

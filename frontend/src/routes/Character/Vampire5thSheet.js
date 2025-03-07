@@ -135,14 +135,20 @@ export default function Vampire5thSheet(props) {
           direction="column"
           size={{
             xs: 12,
-            md: 5
-          }}>
+            md: 5,
+          }}
+        >
           <Attributes />
           <Skills />
         </Grid2>
-        <Grid2 container direction="column" rowGap={2} size={{
-          md: 7
-        }}>
+        <Grid2
+          container
+          direction="column"
+          rowGap={2}
+          size={{
+            md: 7,
+          }}
+        >
           <SheetNav />
         </Grid2>
       </Grid2>

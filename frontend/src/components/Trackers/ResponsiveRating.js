@@ -4,7 +4,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 
 export default function ResponsiveRating(props) {
   const { tracker, hoverColor, filledColor } = props;
-  const total = tracker?.total ? tracker.total : props.total ?? 5;
+  const total = tracker?.total ? tracker.total : (props.total ?? 5);
   const bars = [];
   let currentCount = tracker.current;
   const totalBars = Math.floor((total - 1) / 5) + 1;

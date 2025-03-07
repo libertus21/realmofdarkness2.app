@@ -76,8 +76,9 @@ export default function CodCommands(props) {
       <Grid2
         size={{
           xs: 12,
-          md: 4
-        }}>
+          md: 4,
+        }}
+      >
         <Button
           color="primary"
           variant="outlined"
@@ -92,8 +93,9 @@ export default function CodCommands(props) {
       <Grid2
         size={{
           xs: 12,
-          md: 4
-        }}>
+          md: 4,
+        }}
+      >
         <Button
           color="primary"
           variant="outlined"
@@ -108,8 +110,9 @@ export default function CodCommands(props) {
       <Grid2
         size={{
           xs: 12,
-          md: 4
-        }}>
+          md: 4,
+        }}
+      >
         <Button
           color="primary"
           variant="outlined"

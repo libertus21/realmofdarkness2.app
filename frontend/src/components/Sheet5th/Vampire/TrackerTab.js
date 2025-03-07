@@ -108,8 +108,9 @@ function HumanityPanel(props) {
           <Grid2
             size={{
               xs: 12,
-              md: "auto"
-            }}>
+              md: "auto",
+            }}
+          >
             <Tooltip arrow title="Remove Humanity">
               <IconButton
                 value="humanity"
@@ -131,8 +132,9 @@ function HumanityPanel(props) {
           <Grid2
             size={{
               xs: 12,
-              md: "auto"
-            }}>
+              md: "auto",
+            }}
+          >
             <Typography color="primary" paddingTop={{ xs: 0, md: 1 }}>
               Humanity
             </Typography>
@@ -140,8 +142,9 @@ function HumanityPanel(props) {
           <Grid2
             size={{
               xs: 12,
-              md: "auto"
-            }}>
+              md: "auto",
+            }}
+          >
             <Tooltip arrow title="Remove Stain">
               <IconButton
                 value="stains"
@@ -224,8 +227,9 @@ function DamagePanel(props) {
       <Grid2
         size={{
           xs: 12,
-          md: "auto"
-        }}>
+          md: "auto",
+        }}
+      >
         <Tooltip arrow title="Remove Aggravated Damage">
           <IconButton
             value="aggravated"
@@ -247,8 +251,9 @@ function DamagePanel(props) {
       <Grid2
         size={{
           xs: 12,
-          md: "auto"
-        }}>
+          md: "auto",
+        }}
+      >
         <Typography color="primary" paddingTop={{ xs: 0, md: 1 }}>
           {label}
         </Typography>
@@ -256,8 +261,9 @@ function DamagePanel(props) {
       <Grid2
         size={{
           xs: 12,
-          md: "auto"
-        }}>
+          md: "auto",
+        }}
+      >
         <Tooltip arrow title="Remove Superficial Damage">
           <IconButton
             value="superficial"

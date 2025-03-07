@@ -11,8 +11,9 @@ export default function ExpTextField(props) {
     <Grid2
       size={{
         xs: xs ?? 12,
-        md: "auto"
-      }}>
+        md: "auto",
+      }}
+    >
       <TextField
         disabled
         label={label}

@@ -22,7 +22,7 @@ function EmptyIcon(props) {
 
 export default function OverflowRating(props) {
   const { tracker, max } = props;
-  const total = tracker?.total ? tracker.total : props.total ?? 10;
+  const total = tracker?.total ? tracker.total : (props.total ?? 10);
   const bars = [];
 
   let overflowCount = 0;

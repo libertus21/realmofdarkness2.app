@@ -1,8 +1,8 @@
 from django.urls import path, re_path
 from . import views
 
-app_name = 'main'
+app_name = "main"
 urlpatterns = [
-    path('', views.index),
-    re_path(r'^(?P<path>.*)/$', views.index),
+    path("", views.index),
+    re_path(r"^(?P<path>.*)/$", views.index),
 ]

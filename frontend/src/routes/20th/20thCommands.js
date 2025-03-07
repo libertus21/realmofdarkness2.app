@@ -93,8 +93,9 @@ export default function V20Commands(props) {
       <Grid2
         size={{
           xs: 12,
-          md: 4
-        }}>
+          md: 4,
+        }}
+      >
         <Button
           color="primary"
           variant="outlined"
@@ -109,8 +110,9 @@ export default function V20Commands(props) {
       <Grid2
         size={{
           xs: 12,
-          md: 4
-        }}>
+          md: 4,
+        }}
+      >
         <Button
           color="primary"
           variant="outlined"
@@ -125,8 +127,9 @@ export default function V20Commands(props) {
       <Grid2
         size={{
           xs: 12,
-          md: 4
-        }}>
+          md: 4,
+        }}
+      >
         <Button
           color="primary"
           variant="outlined"

@@ -17,9 +17,9 @@ Including another URLconf
 from django.urls import path
 from . import views
 
-app_name = 'discordauth'
-urlpatterns = [    
-    path('login/success/', views.login_success),
-    path('login/', views.login),
-    path('logout/', views.logout)
+app_name = "discordauth"
+urlpatterns = [
+    path("login/success/", views.login_success),
+    path("login/", views.login),
+    path("logout/", views.logout),
 ]

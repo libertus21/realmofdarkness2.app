@@ -130,7 +130,8 @@ export default function V5Dice() {
           alignItems="center"
           rowSpacing={3}
           columnSpacing={3}
-          size={12}>
+          size={12}
+        >
           <Grid2 sx={{ textAlign: "center" }} size={12}>
             <Typography variant="h3" component="h1" color="primary">
               Dice Probability
@@ -174,8 +175,9 @@ export default function V5Dice() {
             sx={{ textAlign: "center" }}
             size={{
               xs: 12,
-              md: 2
-            }}>
+              md: 2,
+            }}
+          >
             <Button
               variant="contained"
               disabled={pool.error || hunger.error || difficulty.error}
@@ -235,8 +237,9 @@ export default function V5Dice() {
         <Grid2
           size={{
             xs: 12,
-            md: 4
-          }}>
+            md: 4,
+          }}
+        >
           <Button
             color="primary"
             variant="outlined"
@@ -251,8 +254,9 @@ export default function V5Dice() {
         <Grid2
           size={{
             xs: 12,
-            md: 4
-          }}>
+            md: 4,
+          }}
+        >
           <Button
             color="primary"
             variant="outlined"
@@ -267,8 +271,9 @@ export default function V5Dice() {
         <Grid2
           size={{
             xs: 12,
-            md: 4
-          }}>
+            md: 4,
+          }}
+        >
           <Button
             color="primary"
             variant="outlined"

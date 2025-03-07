@@ -13,8 +13,9 @@ export default function SkillsTab(props) {
       <Grid2
         size={{
           xs: 12,
-          sm: 4
-        }}>
+          sm: 4,
+        }}
+      >
         <Skill name="Athletics" skill={skills.athletics} />
         <Skill name="Brawl" skill={skills.brawl} />
         <Skill name="Craft" skill={skills.craft} />
@@ -28,8 +29,9 @@ export default function SkillsTab(props) {
       <Grid2
         size={{
           xs: 12,
-          sm: 4
-        }}>
+          sm: 4,
+        }}
+      >
         <Skill name="Animal Ken" skill={skills.animal_ken} />
         <Skill name="Etiquette" skill={skills.etiquette} />
         <Skill name="Insight" skill={skills.insight} />
@@ -43,8 +45,9 @@ export default function SkillsTab(props) {
       <Grid2
         size={{
           xs: 12,
-          sm: 4
-        }}>
+          sm: 4,
+        }}
+      >
         <Skill name="Academics" skill={skills.academics} />
         <Skill name="Awareness" skill={skills.awareness} />
         <Skill name="Finance" skill={skills.finance} />

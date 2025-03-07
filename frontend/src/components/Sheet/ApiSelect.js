@@ -41,8 +41,9 @@ export default function ApiSelect(props) {
     <Grid2
       size={{
         xs: xs ?? 12,
-        md: "auto"
-      }}>
+        md: "auto",
+      }}
+    >
       <FormControl fullWidth>
         <InputLabel id={`Selectselected-${label}`} size="small">
           {label}

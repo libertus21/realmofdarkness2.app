@@ -15,8 +15,9 @@ export default function BloodPotencyTab(props) {
       spacing={2}
       size={{
         xs: 12,
-        md: 8
-      }}>
+        md: 8,
+      }}
+    >
       <Header>Blood Potency</Header>
       <Grid2
         container

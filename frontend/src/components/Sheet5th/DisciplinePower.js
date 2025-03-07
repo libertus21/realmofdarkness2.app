@@ -122,8 +122,9 @@ export function PowerDialogue(props) {
           <Grid2
             size={{
               xs: 12,
-              md: 6
-            }}>
+              md: 6,
+            }}
+          >
             <TextField
               label="Power Name"
               variant="outlined"
@@ -135,8 +136,9 @@ export function PowerDialogue(props) {
           <Grid2
             size={{
               xs: 12,
-              md: 6
-            }}>
+              md: 6,
+            }}
+          >
             <TextField
               label="Amalgam"
               variant="outlined"
@@ -150,8 +152,9 @@ export function PowerDialogue(props) {
           <Grid2
             size={{
               xs: 12,
-              md: 4
-            }}>
+              md: 4,
+            }}
+          >
             <TextField
               label="Cost"
               variant="outlined"
@@ -165,8 +168,9 @@ export function PowerDialogue(props) {
           <Grid2
             size={{
               xs: 12,
-              md: 4
-            }}>
+              md: 4,
+            }}
+          >
             <TextField
               label="Dice Pool"
               variant="outlined"
@@ -182,8 +186,9 @@ export function PowerDialogue(props) {
           <Grid2
             size={{
               xs: 12,
-              md: 4
-            }}>
+              md: 4,
+            }}
+          >
             <TextField
               label="Duration"
               variant="outlined"

@@ -9,14 +9,18 @@ export default function SheetSkeleton(props) {
         <Grid2
           size={{
             xs: 12,
-            md: 5
-          }}>
+            md: 5,
+          }}
+        >
           <Skeleton sx={{ height: { xs: 200, md: 500 } }} />
           <Skeleton height={100} />
         </Grid2>
-        <Grid2 sx={{ display: { xs: "none", md: "block" } }} size={{
-          md: 7
-        }}>
+        <Grid2
+          sx={{ display: { xs: "none", md: "block" } }}
+          size={{
+            md: 7,
+          }}
+        >
           <Skeleton height={100} />
           <Skeleton height={200} />
           <Skeleton height={200} />
