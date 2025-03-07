@@ -1,4 +1,3 @@
-
 /**
  * Represents a user on Discord
  */
@@ -13,6 +12,6 @@ module.exports = class User {
   }
 
   get CreatedAt() {
-    return null // Create Datetime object
+    return null; // Create Datetime object
   }
-}
+};

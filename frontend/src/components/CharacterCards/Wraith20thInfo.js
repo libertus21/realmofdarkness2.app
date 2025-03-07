@@ -41,12 +41,12 @@ export default function Wraith20thInfo(props) {
         />
         <Divider sx={{ my: 1 }} />
         <Typography>
-          Corpus {`${character.corpus.current} / ${character.corpus.total}`}
+          Corpus {`${character.corpus_current} / ${character.corpus_total}`}
         </Typography>
         <ResponsiveRating
           tracker={{
-            current: character.corpus.current,
-            total: character.corpus.total,
+            current: character.corpus_current,
+            total: character.corpus_total,
           }}
         />
         <Divider sx={{ my: 1 }} />

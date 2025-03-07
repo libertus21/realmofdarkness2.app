@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Unstable_Grid2";
+import { Grid2 } from "@mui/material";
 import { TextField } from "@mui/material";
 import BloodPotency from "./BloodPotency";
 import { useSheetContext } from "../../../routes/Character/Vampire5thSheet";
@@ -10,31 +10,38 @@ export default function BloodPotencyTab(props) {
   let bpInfo = bpChart[potency];
 
   return (
-    <Grid container spacing={2} xs={12} md={8}>
+    <Grid2
+      container
+      spacing={2}
+      size={{
+        xs: 12,
+        md: 8,
+      }}
+    >
       <Header>Blood Potency</Header>
-      <Grid
+      <Grid2
         container
         direction="row"
         justifyContent="center"
         alignItems="center"
         paddingTop={2}
-        xs={12}
+        size={12}
       >
         <BloodPotency
           lock={lock}
           potency={potency}
           handleUpdate={handleUpdate}
         />
-      </Grid>
-      <Grid
+      </Grid2>
+      <Grid2
         container
         direction="row"
         justifyContent="center"
         alignItems="flex-start"
-        xs={12}
         paddingTop={2}
+        size={12}
       >
-        <Grid>
+        <Grid2>
           <TextField
             InputProps={{
               readOnly: true,
@@ -46,8 +53,8 @@ export default function BloodPotencyTab(props) {
             fullWidth
             size="small"
           />
-        </Grid>
-        <Grid>
+        </Grid2>
+        <Grid2>
           <TextField
             InputProps={{
               readOnly: true,
@@ -59,8 +66,8 @@ export default function BloodPotencyTab(props) {
             fullWidth
             size="small"
           />
-        </Grid>
-        <Grid>
+        </Grid2>
+        <Grid2>
           <TextField
             InputProps={{
               readOnly: true,
@@ -72,8 +79,8 @@ export default function BloodPotencyTab(props) {
             fullWidth
             size="small"
           />
-        </Grid>
-        <Grid>
+        </Grid2>
+        <Grid2>
           <TextField
             InputProps={{
               readOnly: true,
@@ -85,8 +92,8 @@ export default function BloodPotencyTab(props) {
             fullWidth
             size="small"
           />
-        </Grid>
-        <Grid>
+        </Grid2>
+        <Grid2>
           <TextField
             InputProps={{
               readOnly: true,
@@ -98,8 +105,8 @@ export default function BloodPotencyTab(props) {
             fullWidth
             size="small"
           />
-        </Grid>
-        <Grid>
+        </Grid2>
+        <Grid2>
           <TextField
             multiline
             InputProps={{
@@ -113,9 +120,9 @@ export default function BloodPotencyTab(props) {
             size="small"
             sx={{ marginRight: 4.375 }}
           />
-        </Grid>
-      </Grid>
-    </Grid>
+        </Grid2>
+      </Grid2>
+    </Grid2>
   );
 }
 

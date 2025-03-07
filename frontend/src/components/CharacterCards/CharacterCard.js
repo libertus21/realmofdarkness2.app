@@ -1,6 +1,12 @@
-import { Card, CardHeader, CardActions, Typography } from "@mui/material";
-import { Divider, Avatar } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
+import {
+  Card,
+  CardHeader,
+  CardActions,
+  Typography,
+  Divider,
+  Avatar,
+  Grid2,
+} from "@mui/material";
 import Vampire5thInfo from "./Vampire5thInfo";
 import Hunter5thInfo from "./Hunter5thInfo";
 import Mortal5thInfo from "./Mortal5thInfo";
@@ -22,7 +28,8 @@ const cardInfo = {
   vampire5th: Vampire5thInfo,
   hunter5th: Hunter5thInfo,
   werewolf5th: Werewolf5thInfo,
-  mortal5th: Mortal5thInfo,
+  human5th: Mortal5thInfo,
+  ghoul5th: Mortal5thInfo,
   vampire20th: Vampire20thInfo,
   human20th: Human20thInfo,
   werewolf20th: Werewolf20thInfo,
@@ -53,7 +60,7 @@ export default function CharacterCard(props) {
     sx.borderLeft = `1px solid ${theme.palette.primary.main}`;
 
   return (
-    <Grid>
+    <Grid2>
       <Card sx={sx}>
         <CardHeader
           avatar={<Avatar alt={nickname} src={avatar} />}
@@ -67,10 +74,12 @@ export default function CharacterCard(props) {
           user={user}
         />
         <Divider />
-        <CardActions sx={{ padding: 0 }}>
+        <CardActions sx={{ padding: "8px" }}>
+          {" "}
+          {/* Changed from padding: 0 */}
           <DeleteCharacterButton characterId={character.id} button />
         </CardActions>
       </Card>
-    </Grid>
+    </Grid2>
   );
 }

@@ -1,22 +1,21 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import Client from '../structures/Client';
+import { createContext, useContext, useState, useEffect } from "react";
+import Client from "../structures/Client";
 
 const ClientContext = createContext(null);
 export const useClientContext = () => useContext(ClientContext);
 
 let client = new Client();
 
-export default function ClientProvider({ children }) 
-{
+export default function ClientProvider({ children }) {
   // Gatway State
   const [user, setUser] = useState(null);
   const [characters, setCharacters] = useState(null);
-  const [chronicles, setChronicles] = useState(null);  
+  const [chronicles, setChronicles] = useState(null);
   const [members, setMembers] = useState(null);
   const [connected, setConnection] = useState(false);
   const [sheet, setSheet] = useState(null);
 
-  useEffect(() =>{    
+  useEffect(() => {
     client.handleGatewayEvents({
       setUser: setUser,
       setCharacters: setCharacters,
@@ -27,8 +26,7 @@ export default function ClientProvider({ children })
     });
   }, []); // only happens on site load
 
-  const clientContextValue =
-  {
+  const clientContextValue = {
     client,
     connected,
     user,
@@ -37,11 +35,11 @@ export default function ClientProvider({ children })
     members,
     sheet,
     setSheet,
-  }
+  };
 
   return (
     <ClientContext.Provider value={clientContextValue}>
-      { children }
+      {children}
     </ClientContext.Provider>
-  )
+  );
 }

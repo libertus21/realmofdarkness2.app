@@ -14,19 +14,16 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'rod.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "rod.settings")
 application = get_asgi_application()
 
 import gateway.routing
 
-application = ProtocolTypeRouter({
-    "http": application,
-    "websocket": AllowedHostsOriginValidator(
-        AuthMiddlewareStack(
-            URLRouter(
-                #haven.routing.websocket_urlpatterns
-                gateway.routing.websocket_urlpatterns
-            )
-        )
-    ),
-})
+application = ProtocolTypeRouter(
+    {
+        "http": application,
+        "websocket": AllowedHostsOriginValidator(
+            AuthMiddlewareStack(URLRouter(gateway.routing.websocket_urlpatterns))
+        ),
+    }
+)

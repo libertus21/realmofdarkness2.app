@@ -6,6 +6,45 @@ from chronicle.models import Member
 from constants import CharacterSheetLimit
 
 
+class CharacterTrackerSerializer(serializers.ModelSerializer):
+    """
+    Base serializer for character tracker data.
+    Only includes fields necessary for tracking and displaying character cards.
+    """
+
+    class Meta:
+        model = Character
+        fields = (
+            "name",
+            "id",
+            "is_sheet",
+            "status",
+            "theme",
+            "splat",
+        )
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        # Essential relationships
+        data["user"] = str(instance.user.id)
+        data["chronicle"] = str(instance.chronicle.id) if instance.chronicle else None
+        data["member"] = str(instance.member.id) if instance.member else None
+
+        # Essential metadata
+        data["created_at"] = instance.created_at.timestamp()
+        data["last_updated"] = instance.last_updated.timestamp()
+        data["faceclaim"] = instance.avatar.url if instance.avatar else None
+
+        # Experience points
+        data["exp"] = {
+            "current": instance.exp_current,
+            "total": instance.exp_total,
+        }
+
+        return data
+
+
 ########################### Character Serializer ##############################
 # Base serializer with common fields for Character
 class CharacterSerializer(serializers.ModelSerializer):
@@ -20,11 +59,12 @@ class CharacterSerializer(serializers.ModelSerializer):
             "history",
             "date_of_birth",
             "age",
-            "appearance",
+            "appearance_description",
             "notes",
             "notes2",
             "exp_spends",
             "st_lock",
+            "splat",
         )
 
     def to_representation(self, instance):
@@ -55,6 +95,7 @@ class CharacterDeserializer(serializers.ModelSerializer):
         data.pop("created_at", None)
         data.pop("last_updated", None)
         data.pop("avatar", None)
+        data.pop("splat", None)
 
         return super().to_internal_value(data)
 
@@ -83,6 +124,13 @@ class CharacterDeserializer(serializers.ModelSerializer):
         elif len(value) > 50:
             m = "Name cannot be longer than 50 characters."
             raise serializers.ValidationError(m, code=status.HTTP_409_CONFLICT)
+
+        # Add validation to prevent names starting with ~
+        if value.startswith("~"):
+            m = "Character name cannot start with '~'."
+            raise serializers.ValidationError(
+                m, code=status.HTTP_422_UNPROCESSABLE_ENTITY
+            )
 
         if self.instance:  # Update a character
             # We don't need to do anything if the name is the same

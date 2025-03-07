@@ -1,4 +1,4 @@
-import { Container, Grid, Tab, Tabs, Box } from "@mui/material";
+import { Container, Grid2, Tab, Tabs, Box } from "@mui/material";
 import { Button, ButtonGroup } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -43,14 +43,14 @@ export default function CodCommands(props) {
   };
 
   return (
-    <Grid
+    <Grid2
       container
       spacing={4}
       direction="row"
       justifyContent="space-evenly"
       alignItems="center"
     >
-      <Grid item xs={12} sx={{ textAlign: "center" }}>
+      <Grid2 sx={{ textAlign: "center" }} size={12}>
         <ButtonGroup>
           <Button href="https://v5.realmofdarkness.app/">5th Edition</Button>
           <Button component={Link} to="/20th/commands/">
@@ -58,8 +58,8 @@ export default function CodCommands(props) {
           </Button>
           <Button variant="contained">Chronicles of Darkness</Button>
         </ButtonGroup>
-      </Grid>
-      <Grid item xs={12}>
+      </Grid2>
+      <Grid2 size={12}>
         <Container disableGutters sx={{ px: 2 }}>
           <Tabs
             value={tabValue}
@@ -72,8 +72,13 @@ export default function CodCommands(props) {
             <CommandAccordion commands={DiceCodDoc} />
           </TabPanel>
         </Container>
-      </Grid>
-      <Grid item xs={12} md={4}>
+      </Grid2>
+      <Grid2
+        size={{
+          xs: 12,
+          md: 4,
+        }}
+      >
         <Button
           color="primary"
           variant="outlined"
@@ -84,8 +89,13 @@ export default function CodCommands(props) {
         >
           Chronicles of Darkness Home
         </Button>
-      </Grid>
-      <Grid item xs={12} md={4}>
+      </Grid2>
+      <Grid2
+        size={{
+          xs: 12,
+          md: 4,
+        }}
+      >
         <Button
           color="primary"
           variant="outlined"
@@ -96,8 +106,13 @@ export default function CodCommands(props) {
         >
           Bot Invite Link
         </Button>
-      </Grid>
-      <Grid item xs={12} md={4}>
+      </Grid2>
+      <Grid2
+        size={{
+          xs: 12,
+          md: 4,
+        }}
+      >
         <Button
           color="primary"
           variant="outlined"
@@ -107,7 +122,7 @@ export default function CodCommands(props) {
         >
           Dice (Coming soon!)
         </Button>
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
   );
 }

@@ -25,9 +25,7 @@ class Werewolf5thSerializer(Character5thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = Splats.werewolf5th.slug
         data["version"] = Splats.werewolf5th.version
-        data["class"] = Splats.werewolf5th.slug  # Temporary value to denote new type
 
         return data
 
@@ -47,9 +45,7 @@ class W5TrackerSerializer(Tracker5thSerializer):
         data = super().to_representation(instance)
 
         # Add the additional fields to the serialized data
-        data["splat"] = Splats.werewolf5th.slug
         data["version"] = Splats.werewolf5th.version
-        data["class"] = Splats.werewolf5th.slug  # Temporary value to denote new splat
 
         return data
 
@@ -57,7 +53,7 @@ class W5TrackerSerializer(Tracker5thSerializer):
 ############################ Character Deserializer ###########################
 class Werewolf5thDeserializer(Character5thDeserializer):
     def create(self, validated_data):
-        validated_data["splat_new"] = Splats.werewolf5th.slug
+        validated_data["splat"] = Splats.werewolf5th.slug
         return super().create(validated_data)
 
     class Meta(Character5thDeserializer.Meta):

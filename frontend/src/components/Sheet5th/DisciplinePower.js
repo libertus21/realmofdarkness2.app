@@ -9,8 +9,8 @@ import {
   Button,
   Stack,
   TextField,
+  Grid2,
 } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
 import React, { useState, useEffect } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -118,8 +118,13 @@ export function PowerDialogue(props) {
         {discipline?.name} Level {update?.level}
       </DialogTitle>
       <DialogContent>
-        <Grid container spacing={2} paddingY={1}>
-          <Grid xs={12} md={6}>
+        <Grid2 container spacing={2} paddingY={1}>
+          <Grid2
+            size={{
+              xs: 12,
+              md: 6,
+            }}
+          >
             <TextField
               label="Power Name"
               variant="outlined"
@@ -127,8 +132,13 @@ export function PowerDialogue(props) {
               value={name}
               onChange={(e) => updateText(e.target.value, name, setName, 50)}
             />
-          </Grid>
-          <Grid xs={12} md={6}>
+          </Grid2>
+          <Grid2
+            size={{
+              xs: 12,
+              md: 6,
+            }}
+          >
             <TextField
               label="Amalgam"
               variant="outlined"
@@ -138,8 +148,13 @@ export function PowerDialogue(props) {
               fullWidth
               value={amalgam}
             />
-          </Grid>
-          <Grid xs={12} md={4}>
+          </Grid2>
+          <Grid2
+            size={{
+              xs: 12,
+              md: 4,
+            }}
+          >
             <TextField
               label="Cost"
               variant="outlined"
@@ -149,8 +164,13 @@ export function PowerDialogue(props) {
               onChange={(e) => updateText(e.target.value, cost, setCost, 50)}
               value={cost}
             />
-          </Grid>
-          <Grid xs={12} md={4}>
+          </Grid2>
+          <Grid2
+            size={{
+              xs: 12,
+              md: 4,
+            }}
+          >
             <TextField
               label="Dice Pool"
               variant="outlined"
@@ -162,8 +182,13 @@ export function PowerDialogue(props) {
               }
               value={dicePool}
             />
-          </Grid>
-          <Grid xs={12} md={4}>
+          </Grid2>
+          <Grid2
+            size={{
+              xs: 12,
+              md: 4,
+            }}
+          >
             <TextField
               label="Duration"
               variant="outlined"
@@ -175,8 +200,8 @@ export function PowerDialogue(props) {
               }
               value={duration}
             />
-          </Grid>
-          <Grid xs={12}>
+          </Grid2>
+          <Grid2 size={12}>
             <TextField
               label="Description"
               variant="outlined"
@@ -189,8 +214,8 @@ export function PowerDialogue(props) {
               }
               value={description}
             />
-          </Grid>
-          <Grid xs={12}>
+          </Grid2>
+          <Grid2 size={12}>
             <TextField
               label="System"
               variant="outlined"
@@ -203,8 +228,8 @@ export function PowerDialogue(props) {
               }
               value={system}
             />
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </DialogContent>
       <DialogActions sx={{ paddingX: 3, paddingBottom: 2 }}>
         <Button

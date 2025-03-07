@@ -42,22 +42,22 @@ export default function Werewolf20thInfo(props) {
         />
         <Divider sx={{ my: 1 }} />
         <Typography>
-          Rage {`${character.rage.current} / ${character.rage.total}`}
+          Rage {`${character.rage_current} / ${character.rage_total}`}
         </Typography>
         <OverflowRating
           tracker={{
-            current: character.rage.current,
-            total: character.rage.total,
+            current: character.rage_current,
+            total: character.rage_total,
           }}
         />
         <Divider sx={{ my: 1 }} />
         <Typography>
-          Gnosis {`${character.gnosis.current} / ${character.gnosis.total}`}
+          Gnosis {`${character.gnosis_current} / ${character.gnosis_total}`}
         </Typography>
         <ResponsiveRating
           tracker={{
-            current: character.gnosis.current,
-            total: character.gnosis.total,
+            current: character.gnosis_current,
+            total: character.gnosis_total,
           }}
         />
         <Divider sx={{ my: 1 }} />

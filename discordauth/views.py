@@ -3,18 +3,38 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from .models import User
 from chronicle.models import Chronicle, Member
 import requests
-from .config import settings
 import hashlib
-import json
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Get environment variables
+DISCORD_APP_ID = os.getenv("DISCORD_APP_ID", "")
+DISCORD_APP_SECRET = os.getenv("DISCORD_APP_SECRET", "")
+DEBUG = os.getenv("DEBUG", "True") == "True"
+
+# Set URLs based on environment
+if DEBUG:
+    # Development environment
+    REDIRECT_URI = "http://localhost:8080/auth/login/success/"
+    FINAL_REDIRECT = "http://localhost:3000/"
+else:
+    # Production environment
+    REDIRECT_URI = "https://realmofdarkness.app/auth/login/success/"
+    FINAL_REDIRECT = "https://realmofdarkness.app/"
+
+# Discord OAuth URLs
+LOGIN_URL = f"https://discord.com/api/oauth2/authorize?client_id={DISCORD_APP_ID}&redirect_uri={REDIRECT_URI.replace(':', '%3A').replace('/', '%2F')}&response_type=code&scope=identify%20email%20guilds&prompt=none"
 
 
 class Oauth(object):
-    client_id = settings["id"]
-    client_secret = settings["secret"]
-    client_scope = settings["scope"]
-    # Discord redirect URL
-    redirect_uri = settings["redirect"]
-    login_url = settings["loginURL"]
+    client_id = DISCORD_APP_ID
+    client_secret = DISCORD_APP_SECRET
+    client_scope = "identify%20email%20guilds"
+    redirect_uri = REDIRECT_URI
+    login_url = LOGIN_URL
     token_url = "https://discordapp.com/api/oauth2/token"
     api_url = "https://discordapp.com/api"
 
@@ -56,7 +76,7 @@ def login(request):
 
 def logout(request):
     auth_logout(request)
-    return redirect(settings["final_redirect"])
+    return redirect(FINAL_REDIRECT)
 
 
 def login_success(request):
@@ -66,7 +86,7 @@ def login_success(request):
 
     if client_state != server_state:
         # Invalid state, handle accordingly
-        return redirect(settings["final_redirect"])
+        return redirect(FINAL_REDIRECT)
 
     code = request.GET.get("code", "no code found")
     access_token = Oauth.get_access_token(code)
@@ -114,4 +134,4 @@ def login_success(request):
 
     auth_login(request, user, backend="discordauth.backends.DiscordAuthBackend")
     # Enter redirect Page
-    return redirect(settings["final_redirect"])
+    return redirect(FINAL_REDIRECT)

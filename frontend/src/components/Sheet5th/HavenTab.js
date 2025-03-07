@@ -1,6 +1,5 @@
-import Grid from "@mui/material/Unstable_Grid2";
 import ApiTextField from "../Sheet/ApiTextField";
-import { Stack, TextField } from "@mui/material";
+import { Stack, TextField, Grid2 } from "@mui/material";
 import Header from "../Sheet/Header";
 import { useSheetContext } from "../../routes/Character/Vampire5thSheet";
 import RatingInfo from "./SheetRating";
@@ -8,8 +7,13 @@ import RatingInfo from "./SheetRating";
 export default function HavenTab() {
   const { sheet } = useSheetContext();
   return (
-    <Grid container rowSpacing={2} xs={12}>
-      <Grid xs={12} md={6}>
+    <Grid2 container rowSpacing={2} size={12}>
+      <Grid2
+        size={{
+          xs: 12,
+          md: 6,
+        }}
+      >
         <Stack
           justifyContent="flex-start"
           sx={{ width: "100%" }}
@@ -44,12 +48,18 @@ export default function HavenTab() {
             </Stack>
           ))}
         </Stack>
-      </Grid>
-      <Grid xs={12} md={6}>
+      </Grid2>
+      <Grid2
+        size={{
+          xs: 12,
+          md: 6,
+        }}
+      >
         <Stack
           justifyContent="flex-start"
           sx={{ width: "100%" }}
           paddingBottom={2}
+          spacing={2}
         >
           <Header>Info</Header>
           <ApiTextField
@@ -78,7 +88,7 @@ export default function HavenTab() {
             paddingX={2}
           />
         </Stack>
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
   );
 }

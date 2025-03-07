@@ -41,21 +41,21 @@ export default function Vampire20thInfo(props) {
         />
         <Divider sx={{ my: 1 }} />
         <Typography>
-          Blood {`${character.blood.current} / ${character.blood.total}`}
+          Blood {`${character.blood_current} / ${character.blood_total}`}
         </Typography>
         <ResponsiveRating
           tracker={{
-            current: character.blood.current,
-            total: character.blood.total,
+            current: character.blood_current,
+            total: character.blood_total,
           }}
         />
         <Divider sx={{ my: 1 }} />
         <Typography>
-          {character.morality.name} - {character.morality.current}
+          {character.morality_name} - {character.morality_value}
         </Typography>
         <ResponsiveRating
           tracker={{
-            current: character.morality.current,
+            current: character.morality_value,
             total: 10,
           }}
         />

@@ -1,6 +1,5 @@
-import { Typography, Stack, Grid } from "@mui/material";
-import RatingInfo from '../SheetRating';
-
+import { Typography, Stack, Grid2 } from "@mui/material";
+import RatingInfo from "../SheetRating";
 
 export default function BloodPotency(props) {
   const { lock, potency, handleUpdate } = props;
@@ -10,25 +9,24 @@ export default function BloodPotency(props) {
     handleUpdate({ blood_potency: updateValue });
   }
 
-
   return (
     <Stack
-      direction={{ xl: 'row', sm: 'column', xs: 'row' }}
+      direction={{ xl: "row", sm: "column", xs: "row" }}
       justifyContent="space-between"
       alignItems="center"
       padding={1}
       paddingTop={0}
     >
-      <Grid paddingRight={1.5}>
+      <Grid2 paddingRight={1.5}>
         <Typography>Potency</Typography>
-      </Grid>
+      </Grid2>
       <RatingInfo
         value={potency}
         locked={lock ?? false}
         onChange={onChange}
         max={10}
-        size='medium'
+        size="medium"
       />
     </Stack>
-  )
+  );
 }

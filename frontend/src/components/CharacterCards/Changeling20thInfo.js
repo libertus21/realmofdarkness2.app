@@ -47,26 +47,26 @@ export default function Changeling20thInfo(props) {
         <Divider sx={{ my: 1 }} />
         <Typography>
           Glamour
-          {` ${character.glamour.current} / ${character.glamour.total}`}
+          {` ${character.glamour_current} / ${character.glamour_total}`}
         </Typography>
         <ResponsiveRating
           tracker={{
-            current: character.glamour.current,
-            total: character.glamour.total,
+            current: character.glamour_current,
+            total: character.glamour_total,
           }}
         />
         <Divider sx={{ my: 1 }} />
         <Typography>
-          Banality Permanent {`${character.banality.total}`}
+          Banality Permanent {`${character.banality_total}`}
         </Typography>
         <ResponsiveRating
-          tracker={{ current: character.banality.total, total: 10 }}
+          tracker={{ current: character.banality_total, total: 10 }}
         />
         <Divider sx={{ my: 1 }} />
-        <Typography>Banality Temporary {character.banality.current}</Typography>
+        <Typography>Banality Temporary {character.banality_current}</Typography>
         <ResponsiveRating
           tracker={{
-            current: character.banality.current,
+            current: character.banality_current,
             total: 10,
           }}
         />
@@ -77,7 +77,14 @@ export default function Changeling20thInfo(props) {
         />
         <Divider sx={{ my: 1 }} />
         <Typography>Chimerical Health</Typography>
-        <V20HealthTracker tracker={character.chimerical} />
+        <V20HealthTracker
+          tracker={{
+            total: character.chimerical_total,
+            bashing: character.chimerical_bashing,
+            lethal: character.chimerical_lethal,
+            aggravated: character.chimerical_aggravated,
+          }}
+        />
         <Divider sx={{ my: 1 }} />
         <Typography>Health</Typography>
         <V20HealthTracker tracker={character.health} />

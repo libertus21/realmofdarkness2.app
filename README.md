@@ -1,253 +1,192 @@
-# realmofdarkness.app
+# Realm of Darkness App
 
-Welcome to the realmofdarkness.app codebase! This repository contains the source code for a web application built with Django framework.
+![Project Banner](https://res.cloudinary.com/dze64d7cr/image/upload/v1701410603/Logo/banner_bg_index.webp)
 
-The realmofdarkness.app is a platform designed for role-playing game enthusiasts, providing a space to create and manage character sheets, chronicles, and more within the World of Darkness setting.
+Welcome to the https://github.com/Mirai-Miki/realmofdarkness.app codebase! This repository contains the source code for a web application built with Django framework and React frontend.
+
+The Realm of Darkness is a platform designed for World of Darkness tabletop roleplaying enthusiasts, providing a space to create and manage character sheets, chronicles, and more within the World of Darkness setting.
 
 With this application, users can easily create and update character sheets, track their progress in various chronicles, and interact with other players in a collaborative environment.
 
-Feel free to explore the code and contribute to the development of this exciting project!
+## ✨ Features
 
-## Known Issues
+- **Discord Integration**: Seamless login and server synchronization
+- **Character Sheets**: Create and manage World of Darkness character sheets
+- **Chronicles**: Organize characters into shared storytelling environments
+- **Real-time Updates**: Live notifications and character sheet changes
+- **Responsive Design**: Works on both desktop and mobile devices
 
-- On sheet update from another user the nickname changes to your own and clicking on the sheet will bring up a nickame error and fail to load.
-- Updated sheets with a chronicle change will not automatically be added to another person's home page even if they should be able to see it.
-- A character sheet is not setting the chronicle to None when a member leaves a server.
+## 🚀 Installation and Setup
+
+### Prerequisites
+
+- Python 3.12 or higher
+- Node.js and npm
+- Redis (WSL required for Windows users)
+- MariaDB/MySQL (for production environments only)
+
+### First-time Setup
+
+We provide automated setup scripts to create your environment configuration:
+
+#### Windows Setup
+
+1. Navigate to the scripts directory: `cd scripts`
+2. Run the setup script: `setup.bat`
+3. Follow the prompts to configure your environment
+
+#### Linux/macOS Setup
+
+1. Navigate to the scripts directory: `cd scripts`
+2. Make scripts executable: `chmod +x *.sh`
+3. Run the setup script: `./setup.sh`
+4. Follow the prompts to configure your environment
+
+This will create a .env file with your configuration settings. The setup process will ask for:
+
+- Environment type (development or production)
+- Database configuration (for production)
+- Django security keys
+- Discord integration settings
+- Patreon integration settings (optional)
+
+### Running the Application
+
+After initial setup, use these scripts to start the application:
+
+#### Development Environment (with hot reloading)
+
+- Windows: `cd scripts` then run `dev.bat`
+- Linux/macOS: `cd scripts` then run `./dev.sh`
+
+This will:
+
+- Install/update all Python and npm dependencies
+- Apply database migrations
+- Start Redis server
+- Start Django development server on http://localhost:8080
+- Start React development server on http://localhost:3000
+
+#### Production Environment
+
+- Linux only: `cd scripts` then run `./run.sh`
+
+This will:
+
+- Pull latest code from Git
+- Install/update all dependencies
+- Build the frontend
+- Apply database migrations
+- Ensure Redis is running
+- Restart Gunicorn and reload services
+
+## 🔧 Project Structure
+
+### Core Components
+
+- rod - Core Django project settings, configuration, and URL routing
+- main - Main application views, templates, and site-wide functionality
+- manage.py - Django command-line utility for administrative tasks
+
+### Authentication & Integration
+
+- discordauth - Discord OAuth2 authentication and server integration
+- patreon - Patreon integration for premium features and webhooks
+
+### Game Content & Logic
+
+- haven - Character sheet models, views, and game mechanics
+- chronicle - Chronicle/campaign management and Discord server connections
+- constants - Game constants, configuration, and reference data
+- bot - Discord bot functionality and command handling
+
+### API & Frontend
+
+- api - RESTful API endpoints for frontend communication
+- gateway - WebSocket-based real-time communication services
+- frontend - React-based single page application (SPA) with component structure
+- media - User-uploaded content and static media files
+
+### Utilities & Deployment
+
+- scripts - Setup, deployment, and maintenance automation scripts
+- .env - Environment variable configuration (not tracked in git)
+
+## 🤝 Contributing
+
+We welcome contributions to improve realmofdarkness.app! Here's how you can help:
+
+1. Fork the repository
+2. Create a branch following our naming conventions:
+   - `feature/description` - New functionality or enhancements
+   - `bugfix/issue-description` - Bug fixes
+   - `refactor/component-name` - Code improvements
+   - `docs/description` - Documentation updates
+   - `test/description` - Test additions
+   - `chore/description` - Maintenance tasks
+3. Commit your changes with clear messages
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+Please ensure your code follows our coding standards and includes appropriate tests.
+
+## 🐛 Known Issues
+
+- On sheet update from another user the nickname changes to your own and clicking on the sheet will bring up a nickname error and fail to load
+- Updated sheets with a chronicle change will not automatically be added to another person's home page even if they should be able to see it
+- A character sheet is not setting the chronicle to None when a member leaves a server
 - Pressing enter when creating a new sheet should work as well
 - "No Server" filter on the Dashboard is not working with sheets
 - Being in a sheet when the character is deleted should redirect the user back home
-- leaving a server does not automatically update a sheet you need to refresh the page
+- Leaving a server does not automatically update a sheet; you need to refresh the page
 
-## Things to Implement
+## 🗺️ Roadmap
 
-- Add a requirements text file
 - Put a timer on returning Archived/Dead character to Active
-- Impletment Draft/Active/Dead/Retired features more thoughroughly
-- Server pages. Should include things like Settings/Exp Management/Server stats(clan stats ect)
+- Implement Draft/Active/Dead/Retired features more thoroughly
+- Server pages: Settings, Exp Management, Server stats (clan stats etc.)
 - Make Character profiles Public (Add settings to allow what is shown)
 
-## Required packages
+## 🔍 Troubleshooting
 
-- Python 3.12.1
-- Django 5.0.2
-- djangorestframework 3.14.0
-- channels 4.0.0 (python -m pip install -U 'channels[daphne]') will install daphne as well
-- channels-redis 4.2.0
-- pillow 10.2.0
-- requests 2.31.0
-- redis 5.0.1
+### Redis Connection Issues
 
-## Running the server
+- Windows: Ensure WSL is properly installed and running
+- Linux: Check that the Redis service is active with `systemctl status redis-server`
 
-- You will need a Redis server running on the default port. Windows users can use WSL to run it.
-- You will need to create the Database tables before you start the server. run `py ./manage.py makemigrations` and then `py ./manage.py migrate`
-- If you require the frontend then you can either build the frontend by running `npm run build` from the frontend directory. Or the recommended way while developing is `npm start` and that will launch the react dev page which auto updates on file saves.
-- To start the server is `py ./manage.py runserver 8080` (make sure you are running on 8080 for dev)
+### Frontend Build Failures
 
-## Required Files
+- Clear npm cache: `npm cache clean --force`
+- Remove node_modules: `rm -rf node_modules/`
+- Reinstall dependencies: `npm install`
 
-rod/settings.py
+## ⚙️ Environment Variables
 
-Replace: SECRET_KEY, API_KEY with dev versions
-PATREON_WEBHOOK_SECRET and the Discord constants are currently only used for patreon webhook updates and not really needed for dev work
+Key environment variables used by the application:
 
-```py
-"""
-Django settings for rod project.
+| Variable               | Description                                                        | Required |
+| ---------------------- | ------------------------------------------------------------------ | -------- |
+| DEBUG                  | Development mode when True                                         | Yes      |
+| SECRET_KEY             | Django security key                                                | Yes      |
+| API_KEY                | Internal API authentication - must match API key in bot repository | Yes      |
+| DISCORD_APP_ID         | Discord OAuth application ID                                       | Yes      |
+| DISCORD_APP_SECRET     | Discord OAuth secret                                               | Yes      |
+| DISCORD_BOT_TOKEN      | Bot integration token                                              | No       |
+| PATREON_WEBHOOK_SECRET | Patreon integration                                                | No       |
 
-Generated by 'django-admin startproject' using Django 3.2.5.
+**Note:** The API_KEY value must match the API key configured in the companion Discord bot repository for proper integration. See the [Realm of Darkness Bot Repository](https://github.com/Mirai-Miki/Realm-of-Darkness-Bot) for more information.
 
-For more information on this file, see
-https://docs.djangoproject.com/en/3.2/topics/settings/
+## 🔄 Connect
 
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/3.2/ref/settings/
-"""
+- **Website**: [Realm of Darkness](https://realmofdarkness.app)
+- **Discord**: [Join our community](https://discord.com/invite/p82yc8sKx2)
+- **Issues**: [Report bugs](https://github.com/Mirai-Miki/realm-of-darkness-site/issues)
+- **Bot Repository**: [Discord Bot Companion](https://github.com/Mirai-Miki/Realm-of-Darkness-Bot)
 
-from pathlib import Path
+## 📄 License
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+This project is licensed under the AGPL License. See the LICENSE file for details.
 
+---
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "SECRET_KEY"
-API_KEY = "API_KEY"
-PATREON_WEBHOOK_SECRET = (   "PATREON_WEBHOOK_SECRET"
-)
-
-
-# Discord constants
-DISCORD_BOT_TOKEN = "BOT_TOKEN"
-DISCORD_DEBUG_CHANNEL = "CHANNEL_ID"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-
-
-# Application definition
-
-INSTALLED_APPS = [
-    "daphne",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "discordauth.apps.DiscordauthConfig",
-    "main.apps.MainConfig",
-    "haven.apps.HavenConfig",
-    "chronicle.apps.ChronicleConfig",
-    "bot.apps.BotConfig",
-    "api.apps.ApiConfig",
-    "patreon.apps.PatreonConfig",
-    "channels",
-    "rest_framework",
-]
-
-MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-]
-
-ROOT_URLCONF = "rod.urls"
-
-TEMPLATES = [
-    {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "frontend/build/"],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-            ],
-        },
-    },
-]
-
-WSGI_APPLICATION = "rod.wsgi.application"
-# Channels
-ASGI_APPLICATION = "rod.asgi.application"
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
-    },
-}
-
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
-    }
-}
-
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-        # Other authentication classes...
-    ],
-    # Other DRF settings...
-}
-
-
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
-]
-
-
-# Custom Auth Backend
-# https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#specifying-authentication-backends
-
-AUTHENTICATION_BACKENDS = ["discordauth.backends.DiscordAuthBackend"]
-
-# Custom User Model
-# https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#extending-the-existing-user-model
-
-AUTH_USER_MODEL = "discordauth.User"
-
-# Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
-
-LANGUAGE_CODE = "en-us"
-
-TIME_ZONE = "UTC"
-
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
-
-STATIC_URL = "/static/"
-
-STATICFILES_DIRS = [
-    BASE_DIR / "frontend/build/static/",
-]
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-```
-
-discordauth/config.py
-
-```py
-settings = {
-    'id': 'DISCORD_APP_ID',
-    'secret': 'DISCORD_APP_SECRET',
-    'scope': 'identify%20email%20guilds',
-    'loginURL': 'https://discord.com/api/oauth2/authorize?client_id=CLIENT_ID&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Flogin%2Fsuccess%2F&response_type=code&scope=identify%20email&prompt=none',
-    'redirect': 'http://localhost:8080/auth/login/success/',
-    'final_redirect': 'http://localhost:3000/'
-}
-```
+Made with ❤️ for the World of Darkness community
