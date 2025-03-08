@@ -13,6 +13,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useSheetContext } from "../../routes/Character/Vampire5thSheet";
 import { slugify } from "../../utility";
 import { useState } from "react";
+import ClanInfoDialog from './ClanInfoDialog';
 
 export default function SelectionDialogue(props) {
   const { label, selected, onClose, open, getData, getItemInfo } = props;
@@ -80,121 +81,12 @@ export default function SelectionDialogue(props) {
         </DialogContent>
       </Dialog>
 
-      
-      <Dialog
+      <ClanInfoDialog
         open={infoOpen}
         onClose={() => setInfoOpen(false)}
-        fullWidth
-        maxWidth="sm"
-        PaperProps={{
-          style: {
-            backgroundColor: '#1a1a1a',
-            margin: '16px',
-          }
-        }}
-      >
-        <DialogTitle 
-          sx={{ 
-            color: '#ffd700',
-            padding: { xs: 2, sm: 3 },
-            fontSize: { xs: '1.2rem', sm: '1.5rem' }
-          }}
-        >
-          {selectedInfo}
-        </DialogTitle>
-        <DialogContent sx={{ padding: { xs: 2, sm: 3 } }}>
-          {selectedInfo && getItemInfo && (
-            <Grid2 container spacing={2}>
-              <Grid2 xs={12}>
-                <Typography 
-                  variant="subtitle1" 
-                  sx={{ 
-                    color: '#ffd700',
-                    fontWeight: 'bold',
-                    marginBottom: '4px'
-                  }}
-                >
-                  Description
-                </Typography>
-                <Typography 
-                  sx={{ 
-                    color: '#fff',
-                    fontSize: { xs: '0.9rem', sm: '1rem' }
-                  }}
-                >
-                  {getItemInfo(selectedInfo).description}
-                </Typography>
-              </Grid2>
-              
-              <Grid2 xs={12}>
-                <Typography 
-                  variant="subtitle1" 
-                  sx={{ 
-                    color: '#ffd700',
-                    fontWeight: 'bold',
-                    marginBottom: '4px',
-                    marginTop: '8px'
-                  }}
-                >
-                  Disciplines
-                </Typography>
-                <Typography 
-                  sx={{ 
-                    color: '#fff',
-                    fontSize: { xs: '0.9rem', sm: '1rem' }
-                  }}
-                >
-                  {getItemInfo(selectedInfo).disciplines}
-                </Typography>
-              </Grid2>
-
-              <Grid2 xs={12}>
-                <Typography 
-                  variant="subtitle1" 
-                  sx={{ 
-                    color: '#ffd700',
-                    fontWeight: 'bold',
-                    marginBottom: '4px',
-                    marginTop: '8px'
-                  }}
-                >
-                  Clan Bane
-                </Typography>
-                <Typography 
-                  sx={{ 
-                    color: '#fff',
-                    fontSize: { xs: '0.9rem', sm: '1rem' }
-                  }}
-                >
-                  {getItemInfo(selectedInfo).bane}
-                </Typography>
-              </Grid2>
-
-              <Grid2 xs={12}>
-                <Typography 
-                  variant="subtitle1" 
-                  sx={{ 
-                    color: '#ffd700',
-                    fontWeight: 'bold',
-                    marginBottom: '4px',
-                    marginTop: '8px'
-                  }}
-                >
-                  Compulsion
-                </Typography>
-                <Typography 
-                  sx={{ 
-                    color: '#fff',
-                    fontSize: { xs: '0.9rem', sm: '1rem' }
-                  }}
-                >
-                  {getItemInfo(selectedInfo).compulsion}
-                </Typography>
-              </Grid2>
-            </Grid2>
-          )}
-        </DialogContent>
-      </Dialog>
+        selectedClan={selectedInfo}
+        clanInfo={selectedInfo ? getItemInfo(selectedInfo) : null}
+      />
     </>
   );
 }
