@@ -53,7 +53,7 @@ else:
         "127.0.0.1",
         "[::1]",
     ]
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False  # handled by nginx
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
 
@@ -86,7 +86,7 @@ else:
     INSTALLED_APPS = COMMON_APPS
 
 MIDDLEWARE = [
-    "rod.securityMiddleware.CustomSecurityMiddleware",
+    "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
