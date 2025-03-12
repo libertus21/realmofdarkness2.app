@@ -275,6 +275,8 @@ if not DEBUG:
             "debug": {
                 "class": "logging.FileHandler",
                 "filename": BASE_DIR / "debug.log",
+                "mode": "a",  # Append mode
+                "encoding": "utf-8",
             },
             "console": {"class": "logging.StreamHandler"},
         },
