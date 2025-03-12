@@ -86,7 +86,6 @@ else:
     INSTALLED_APPS = COMMON_APPS
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
     "rod.securityMiddleware.CustomSecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
