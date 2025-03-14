@@ -136,7 +136,6 @@ Please ensure your code follows our coding standards and includes appropriate te
 - Updated sheets with a chronicle change will not automatically be added to another person's home page even if they should be able to see it
 - A character sheet is not setting the chronicle to None when a member leaves a server
 - Pressing enter when creating a new sheet should work as well
-- "No Server" filter on the Dashboard is not working with sheets
 - Being in a sheet when the character is deleted should redirect the user back home
 - Leaving a server does not automatically update a sheet; you need to refresh the page
 
