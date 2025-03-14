@@ -1,0 +1,18 @@
+{
+  "include": [
+    "api",
+    "bot",
+    "chronicle",
+    "discordauth",
+    "gateway",
+    "haven",
+    "main",
+    "patreon",
+    "rod"
+  ],
+  "exclude": ["**/node_modules", "**/__pycache__", "**/migrations", "frontend"],
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": false,
+  "pythonVersion": "3.12",
+  "typeCheckingMode": "basic"
+}
