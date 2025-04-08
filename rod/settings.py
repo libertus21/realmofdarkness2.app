@@ -53,7 +53,7 @@ else:
         "127.0.0.1",
         "[::1]",
     ]
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False  # handled by nginx
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
 
@@ -275,6 +275,8 @@ if not DEBUG:
             "debug": {
                 "class": "logging.FileHandler",
                 "filename": BASE_DIR / "debug.log",
+                "mode": "a",  # Append mode
+                "encoding": "utf-8",
             },
             "console": {"class": "logging.StreamHandler"},
         },
