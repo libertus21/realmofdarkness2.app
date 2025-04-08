@@ -150,7 +150,7 @@ frontend/build
 .env.test.local
 .env.production.local
 
-.out
+*.out
 
 .VSCodeCounter
 media/
@@ -158,3 +158,20 @@ rod/management/
 haven/management/
 
 .vscode
+patreon_test.txt
+
+# Temporary and backup files
+*.save
+*.save.*
+*.bak
+*.swp
+*.swo
+*~
+
+# Deployment markers
+.update_complete
+
+# Server-specific logs and runtime files
+gunicorn-error.out
+gunicorn.pid
+supervisor*.log
