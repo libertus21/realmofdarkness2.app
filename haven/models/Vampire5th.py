@@ -42,6 +42,7 @@ class PredatorType(models.TextChoices):
     MONTERO = "Montero"
     PURSUER = "Pursuer"
     TRAPDOOR = "Trapdoor"
+    TITHE_COLLECTOR = "Tithe Collector"
 
 
 class Vampire5th(Character5th):
