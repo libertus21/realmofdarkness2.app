@@ -1,3 +1,7 @@
+"""
+Central location for application-wide constants
+"""
+
 from .splats import Splats, Versions
 
 
@@ -42,3 +46,39 @@ class CharacterSheetLimit:
             return CharacterSheetLimit.NEONATE
         elif supporterLevel >= Supporter.ANCILLA:
             return CharacterSheetLimit.ANCILLA
+
+
+class ImageError:
+    """Constants for image download errors"""
+
+    NO_URL = "NO_URL"
+    TOO_LARGE = "TOO_LARGE"
+    DOWNLOAD_FAILED = "DOWNLOAD_FAILED"
+    INVALID_IMAGE = "INVALID_IMAGE"
+    SUCCESS = "SUCCESS"
+
+
+class TrackerLimit:
+    BASE = 50
+    FLEDGLING = 100
+    NEONATE = 150
+    ANCILLA = 200
+    ELDER = 300
+    METHUSELAH = 500
+
+    @staticmethod
+    def get_amount(supporterLevel):
+        if supporterLevel == Supporter.NONE:
+            return TrackerLimit.BASE
+        elif supporterLevel == Supporter.FLEDGLING:
+            return TrackerLimit.FLEDGLING
+        elif supporterLevel == Supporter.NEONATE:
+            return TrackerLimit.NEONATE
+        elif supporterLevel == Supporter.ANCILLA:
+            return TrackerLimit.ANCILLA
+        elif supporterLevel == Supporter.ELDER:
+            return TrackerLimit.ELDER
+        elif supporterLevel == Supporter.METHUSELAH:
+            return TrackerLimit.METHUSELAH
+        else:
+            return TrackerLimit.BASE

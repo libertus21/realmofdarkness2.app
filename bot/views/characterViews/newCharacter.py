@@ -6,19 +6,19 @@ from django.contrib.auth import get_user_model
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from time import time
+from rest_framework import status
 
 from ..Authenticate import authenticate
 from haven.models import Character
 from haven.serializers import validation_error_handler
 from gateway.constants import Group
 from bot.downloadAndVerifyImage import download_and_verify_image
+from constants import ImageError, TrackerLimit, Supporter
 from haven.utility import get_deserializer, get_tracker_serializer
 
 
 channel_layer = get_channel_layer()
 User = get_user_model()
-
-MAX_TRACKERS = 50
 
 
 class NewCharacter(APIView):
@@ -28,16 +28,33 @@ class NewCharacter(APIView):
         character = request.data["character"]
         image_url = character.get("avatar", None)
         image_file = None
+
         if image_url:
-            image_file = download_and_verify_image(image_url)
+            image_file, failure_reason = download_and_verify_image(image_url)
+
         if image_url and not image_file:
-            return HttpResponse(status=406)
+            if failure_reason == ImageError.TOO_LARGE:
+                return HttpResponse(
+                    "Image too large (max 5MB)",
+                    status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                )
+            elif failure_reason == ImageError.INVALID_IMAGE:
+                return HttpResponse(
+                    "Invalid image format",
+                    status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                )
+            else:
+                return HttpResponse(
+                    "Failed to download image",
+                    status=status.HTTP_406_NOT_ACCEPTABLE,
+                )
 
-        count = Character.objects.filter(user=character["user"]).count()
-        if count > MAX_TRACKERS:  # 409 Conflict - Too many Characters
-            return HttpResponse(status=409)
         user = User.objects.get(pk=character["user"])
-
+        supporter_level = getattr(user, "supporter", Supporter.NONE)
+        max_trackers = TrackerLimit.get_amount(supporter_level)
+        count = Character.objects.filter(user=character["user"]).count()
+        if count > max_trackers:  # 409 Conflict - Too many Characters
+            return HttpResponse(status=409)
         char = Character.objects.filter(
             name__iexact=character["name"], user=character["user"]
         )
