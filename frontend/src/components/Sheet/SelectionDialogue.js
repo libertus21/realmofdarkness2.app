@@ -7,19 +7,21 @@ import {
   Typography,
   IconButton,
   Grid2,
-  DialogContentText,
 } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useSheetContext } from "../../routes/Character/Vampire5thSheet";
 import { slugify } from "../../utility";
 import { useState } from "react";
-import ClanInfoDialog from './ClanInfoDialog';
+import ItemInfoDialog from "./ItemInfoDialog";
 
 export default function SelectionDialogue(props) {
   const { label, selected, onClose, open, getData, getItemInfo } = props;
   const { handleUpdate } = useSheetContext();
   const [infoOpen, setInfoOpen] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
+
+  // Show info button if getItemInfo function is provided
+  const showInfoButton = typeof getItemInfo === "function";
 
   let buttons = [];
   for (const element of getData()) {
@@ -32,7 +34,7 @@ export default function SelectionDialogue(props) {
         color={color}
         onClick={onSelect}
         onInfoClick={() => handleInfoClick(element)}
-        showInfo={label === "Clan"}
+        showInfo={showInfoButton}
       />
     );
   }
@@ -81,11 +83,11 @@ export default function SelectionDialogue(props) {
         </DialogContent>
       </Dialog>
 
-      <ClanInfoDialog
+      <ItemInfoDialog
         open={infoOpen}
         onClose={() => setInfoOpen(false)}
-        selectedClan={selectedInfo}
-        clanInfo={selectedInfo ? getItemInfo(selectedInfo) : null}
+        selectedItem={selectedInfo}
+        itemInfo={selectedInfo ? getItemInfo(selectedInfo) : null}
       />
     </>
   );
@@ -115,11 +117,15 @@ function DialogueButton(props) {
       </Grid2>
       {showInfo && (
         <Grid2>
-          <IconButton onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onInfoClick();
-          }}>
+          <IconButton
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onInfoClick();
+            }}
+            aria-label={`View information about ${label}`}
+            title={`View information about ${label}`}
+          >
             <InfoOutlinedIcon sx={{ color: "#ffd700" }} />
           </IconButton>
         </Grid2>
