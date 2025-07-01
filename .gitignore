@@ -171,3 +171,4 @@ celerybeat-schedule
 
 # mkdocs documentation
 /site
+backend/.env 77

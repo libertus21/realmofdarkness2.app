@@ -120,21 +120,42 @@ def login_success(request):
         )
         user = User.objects.create_user(discord_user, is_registered=True)
 
+    # Sincronizar servidores del usuario
+    synced_guilds = 0
     for guild in guilds:
         guild_id = int(guild["id"])
         permissions = guild["permissions"]
         name = guild["name"]
         admin = False
+        
         try:
-            guild = Chronicle.objects.get(id=guild_id)
+            chronicle = Chronicle.objects.get(id=guild_id)
         except Chronicle.DoesNotExist:
+            # El bot no está en este servidor, continuar
             continue
 
-        if not Member.objects.filter(chronicle=guild, user=user).exists():
-            print(f"User already exists in guild {name}")
+        # Verificar si ya existe la relación de miembro
+        if not Member.objects.filter(chronicle=chronicle, user=user).exists():
+            # Determinar si el usuario es admin (bit 3 = 8)
             if permissions & (1 << 3) != 0:
                 admin = True
-            Member.objects.create(chronicle=guild, user=user, admin=admin)
+            
+            # Crear la relación de miembro
+            Member.objects.create(chronicle=chronicle, user=user, admin=admin)
+            synced_guilds += 1
+            print(f"Usuario {user.username} sincronizado con servidor {name}")
+        else:
+            # Actualizar permisos de admin si es necesario
+            try:
+                member = Member.objects.get(chronicle=chronicle, user=user)
+                if permissions & (1 << 3) != 0 and not member.admin:
+                    member.admin = True
+                    member.save()
+                    print(f"Permisos de admin actualizados para {user.username} en {name}")
+            except Member.DoesNotExist:
+                pass
+    
+    print(f"Sincronización completada: {synced_guilds} servidores sincronizados para {user.username}")
 
     auth_login(request, user, backend="discordauth.backends.DiscordAuthBackend")
     # Enter redirect Page
