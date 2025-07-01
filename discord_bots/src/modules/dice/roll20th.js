@@ -7,13 +7,23 @@ const RollResults20th = require("@structures/RollResults20th");
 const { Emoji } = require("@constants");
 const getCharacter = require("@src/modules/getCharacter");
 const API = require("@api");
+const ChangelingNightmareRules = require("./changelingNightmareRules");
 
 module.exports = async function roll20th(interaction) {
   interaction.arguments = await getArgs(interaction);
   applyDicePenalty(interaction);
   interaction.results = new RollResults20th(interaction.arguments);
+  
+  // Aplicar reglas de pesadilla para Changeling C20
+  const nightmareEffects = await ChangelingNightmareRules.applyNightmareRules(interaction, interaction.results);
+  
   await updateWillpower(interaction);
-  return { content: getContent(interaction), embeds: [getEmbed(interaction)] };
+  
+  return { 
+    content: getContent(interaction), 
+    embeds: [getEmbed(interaction)],
+    nightmareEffects: nightmareEffects
+  };
 };
 
 async function getArgs(interaction) {
@@ -92,6 +102,24 @@ function getContent(interaction) {
     else content += Emoji.botch;
     content += " ";
   }
+
+  // Agregar información sobre efectos de pesadilla si es un personaje Changeling
+  if (args.character?.tracked?.splat?.slug === 'changeling20th' && results.nightmareDice.length > 0) {
+    const nightmareTens = results.nightmareDice.filter(die => die === 10).length;
+    if (nightmareTens > 0) {
+      content += `\n\n🎭 **Dados de Pesadilla**: ${nightmareTens} dado(s) sacó(aron) 10`;
+      
+      const currentNightmare = args.character.tracked.nightmare.secondary;
+      const newNightmare = currentNightmare + nightmareTens;
+      
+      if (newNightmare >= 10) {
+        content += `\n💀 **¡Pesadilla alcanzará 10!** Se reseteará y otorgará voluntad desequilibrada.`;
+      } else {
+        content += `\n📈 **Pesadilla aumentará**: ${currentNightmare} → ${newNightmare}`;
+      }
+    }
+  }
+
   return content;
 }
 
@@ -99,14 +127,36 @@ async function updateWillpower(interaction) {
   const character = interaction.arguments.character?.tracked;
   if (!character || !interaction.arguments.willpower) return;
   if (character.version !== "20th") return;
-  if (character.willpower.current === 0)
+  
+  // Verificar si puede gastar voluntad
+  if (!ChangelingNightmareRules.canSpendWillpower(character, 1)) {
     throw new RealmError({ code: ErrorCodes.NoWillpower });
+  }
 
-  const change = { command: "Dice Roll", willpower: -1 };
-  character.updateFields(change);
+  // Gastar voluntad usando el nuevo sistema
+  const willpowerResult = ChangelingNightmareRules.spendWillpower(character, 1);
+  
+  if (!willpowerResult.success) {
+    throw new RealmError({ code: ErrorCodes.NoWillpower });
+  }
+
+  // Guardar los cambios
   await character.save(interaction.client);
+  
+  // Crear mensaje de seguimiento con información sobre el gasto de voluntad
+  const followUpEmbed = character.getEmbed();
+  
+  // Agregar información sobre el gasto de voluntad si es relevante
+  if (willpowerResult.imbalancedSpent > 0) {
+    followUpEmbed.addFields({
+      name: "Voluntad Gastada",
+      value: `Se gastó ${willpowerResult.imbalancedSpent} punto(s) de voluntad desequilibrada`,
+      inline: false
+    });
+  }
+  
   interaction.followUps = [
-    { embeds: [character.getEmbed()], flags: MessageFlags.Ephemeral },
+    { embeds: [followUpEmbed], flags: MessageFlags.Ephemeral },
   ];
 }
 
@@ -191,6 +241,18 @@ function getEmbed(interaction) {
     value: `Rolled: ${results.total} Sux\n${results.outcome.toString}`,
     inline: false,
   });
+
+  // Agregar información sobre efectos de pesadilla si es un personaje Changeling
+  if (args.character?.tracked?.splat?.slug === 'changeling20th') {
+    const nightmareWarning = ChangelingNightmareRules.getNightmareWarning(args.character.tracked);
+    if (nightmareWarning) {
+      embed.addFields({
+        name: "⚠️ Advertencia de Pesadilla",
+        value: nightmareWarning,
+        inline: false,
+      });
+    }
+  }
 
   embed.setColor(results.outcome.color);
 

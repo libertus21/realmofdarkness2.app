@@ -4,6 +4,7 @@ const Consumable = require("../Consumable");
 const Counter = require("../Counter");
 const DamageTracker20th = require("../DamageTracker20th");
 const Character20th = require("./base/Character20th");
+const ImbalancedWillpower = require("../ImbalancedWillpower");
 const { Splats, Emoji } = require("@constants");
 const { EmbedBuilder } = require("discord.js");
 
@@ -23,6 +24,9 @@ module.exports = class Changeling extends Character20th {
     this.banality = new Counter(banality, 0);
     this.nightmare = new Counter(imbalance, nightmare);
     this.chimericalHealth = new DamageTracker20th();
+    
+    // Reemplazar la voluntad normal con voluntad desequilibrada
+    this.willpower = new ImbalancedWillpower(willpower, willpower, 0);
   }
 
   static getSplat() {
@@ -73,6 +77,15 @@ module.exports = class Changeling extends Character20th {
     this.chimericalHealth.setBashing(char.chimerical_bashing);
     this.chimericalHealth.setLethal(char.chimerical_lethal);
     this.chimericalHealth.setAgg(char.chimerical_aggravated);
+    
+    // Manejar voluntad desequilibrada si existe
+    if (char.willpower_imbalanced != null) {
+      this.willpower.imbalanced = char.willpower_imbalanced;
+    }
+    if (char.willpower_bedlam != null) {
+      this.willpower.isBedlam = char.willpower_bedlam;
+    }
+    
     return this;
   }
 
@@ -89,6 +102,11 @@ module.exports = class Changeling extends Character20th {
     s.character["chimerical_bashing"] = this.chimericalHealth.bashing;
     s.character["chimerical_lethal"] = this.chimericalHealth.lethal;
     s.character["chimerical_aggravated"] = this.chimericalHealth.aggravated;
+    
+    // Serializar voluntad desequilibrada
+    s.character["willpower_imbalanced"] = this.willpower.imbalanced;
+    s.character["willpower_bedlam"] = this.willpower.isBedlam;
+    
     return s;
   }
 
@@ -103,7 +121,7 @@ module.exports = class Changeling extends Character20th {
 
     embed.addFields({
       name: `Willpower [${this.willpower.current}/${this.willpower.total}]`,
-      value: this.willpower.getTracker({ emoji: Emoji.purple_dot_3 }),
+      value: this.willpower.getWillpowerTracker(),
       inline: false,
     });
 

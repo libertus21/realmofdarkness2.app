@@ -17,7 +17,15 @@ module.exports = {
     if (!interaction.isRepliable()) return "notRepliable";
     switch (interaction.options.getSubcommand()) {
       case "roll":
-        return await roll20th(interaction);
+        const result = await roll20th(interaction);
+        
+        // Agregar información sobre efectos de pesadilla si existe
+        if (result.nightmareEffects && result.nightmareEffects.messages.length > 0) {
+          const nightmareContent = result.nightmareEffects.messages.join('\n');
+          result.content += `\n\n${nightmareContent}`;
+        }
+        
+        return result;
       case "initiative":
         return await roll20thInit(interaction);
       case "general":
