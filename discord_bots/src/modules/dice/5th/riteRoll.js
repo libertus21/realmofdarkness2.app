@@ -28,6 +28,7 @@ async function getArgs(interaction) {
   const args = {
     pool: interaction.options.getInteger("pool"),
     rage: interaction.options.getInteger("rage"),
+    useCharRage: interaction.options.getBoolean("use_character_rage") || true,
     trainedParticipants: interaction.options.getInteger("trained_participants"),
     participants: interaction.options.getInteger("participants"),
     difficulty: interaction.options.getInteger("difficulty"),
@@ -58,6 +59,11 @@ async function getArgs(interaction) {
     }
   }
 
+  // Use linked character's rage if available
+  if (args.useCharRage && args.rage === null && args.character?.tracked?.rage) {
+    args.rage = args.character.tracked.rage.current;
+  }
+
   return args;
 }
 
@@ -67,12 +73,6 @@ async function getArgs(interaction) {
  */
 async function roll(interaction) {
   const args = interaction.arguments;
-  if (
-    args.character?.tracked &&
-    args.character.tracked.splat.slug === "werewolf5th"
-  ) {
-    args.rage = args.character.tracked.rage.current;
-  }
 
   const pool =
     (args.pool ?? 0) +
