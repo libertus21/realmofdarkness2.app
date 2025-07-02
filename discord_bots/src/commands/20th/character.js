@@ -34,12 +34,7 @@ module.exports = {
       Splats.demonTF.slug,
       Splats.mage20th.slug,
       Splats.werewolf20th.slug,
-      Splats.wraith20th.slug,
-      Splats.vampire5th.slug,
-      Splats.hunter5th.slug,
-      Splats.werewolf5th.slug,
-      Splats.human5th.slug,
-      Splats.ghoul5th.slug,
+      Splats.wraith20th.slug
     ]);
   },
 };
