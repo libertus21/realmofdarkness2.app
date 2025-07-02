@@ -5,6 +5,8 @@ const findCharacterCommand = require("@modules/findCharacter").command;
 const deleteCharacterCommand = require("@modules/deleteCharacter").command;
 const setDefaultCharacter = require("@modules/setDefaultCharacter");
 const commandUpdate = require("@modules/commandDatabaseUpdate");
+const autocomplete5th = require("@modules/autocomplete");
+const { Splats } = require("@constants");
 
 module.exports = {
   data: getCommands(),
@@ -22,6 +24,15 @@ module.exports = {
       case "default":
         return await setDefaultCharacter(interaction);
     }
+  },
+  async autocomplete(interaction) {
+    return await autocomplete5th(interaction, [
+      Splats.vampire5th.slug,
+      Splats.hunter5th.slug,
+      Splats.werewolf5th.slug,
+      Splats.human5th.slug,
+      Splats.ghoul5th.slug,
+    ]);
   },
 };
 
@@ -69,6 +80,8 @@ function getCommands() {
               .setName("name")
               .setDescription("Name of the character to set as default.")
               .setMaxLength(50)
+              .setRequired(true)
+              .setAutocomplete(true)
           )
           .addBooleanOption((option) =>
             option
