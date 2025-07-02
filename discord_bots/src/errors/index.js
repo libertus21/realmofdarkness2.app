@@ -46,6 +46,7 @@ module.exports.ErrorCodes = {
   TooManySheets: 26,
   NoBlood: 27,
   NoDamage: 28,
+  TormentExceedsTotal: 29,
 
   // Supporter Level Errors (100-199)
   RequiresFledgling: 100,

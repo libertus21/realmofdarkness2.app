@@ -312,4 +312,11 @@ const ErrorInfo = {
     debug: false,
     cause: false,
   },
+  [ErrorCodes.TormentExceedsTotal]: {
+    system: "Current Torment cannot be greater than Total Torment",
+    embedTitle: "Torment Validation Error",
+    embedMessage: "Current Torment cannot be greater than Total Torment.",
+    debug: false,
+    cause: false,
+  },
 };

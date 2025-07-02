@@ -5,6 +5,7 @@ const Counter = require("../Counter");
 const Character20th = require("./base/Character20th");
 const { Splats, Emoji } = require("@constants");
 const { EmbedBuilder } = require("discord.js");
+const { RealmError, ErrorCodes } = require("@errors");
 
 module.exports = class DemonTF extends Character20th {
   constructor({ client, name, willpower = 6 } = {}) {
@@ -21,13 +22,28 @@ module.exports = class DemonTF extends Character20th {
   setFields(args) {
     super.setFields(args);
     if (args.faith != null) this.faith.setTotal(args.faith);
-    if (args.torment != null) this.torment.setPrimary(args.torment);
+    if (args.torment != null) {
+      if (this.torment.secondary > args.torment) {
+        throw new RealmError({ 
+          code: ErrorCodes.TormentExceedsTotal
+        });
+      }
+      this.torment.setPrimary(args.torment);
+    }
   }
 
   updateFields(args) {
     super.updateFields(args);
     if (args.faith != null) this.faith.updateCurrent(args.faith);
-    if (args.torment != null) this.torment.updateSecondary(args.torment);
+    if (args.torment != null) {
+      const newTormentCurrent = this.torment.secondary + args.torment;
+      if (newTormentCurrent > this.torment.primary) {
+        throw new RealmError({ 
+          code: ErrorCodes.TormentExceedsTotal
+        });
+      }
+      this.torment.updateSecondary(args.torment);
+    }
   }
 
   async deserilize(char) {
