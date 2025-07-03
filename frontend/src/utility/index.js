@@ -35,6 +35,24 @@ export function getHost(proxy) {
 }
 
 /**
+ * Gets the correct WebSocket gateway URL for Development, Preproduction, and Production.
+ * - For localhost/127.0.0.1: returns ws://localhost:8080/gateway/web/
+ * - For any other domain (including subdomains like dev.realmofdarkness.app): returns wss://currentHost/gateway/web/
+ * This ensures the correct subdomain is always used for the environment.
+ * @returns {string} WebSocket gateway URL for the current environment
+ */
+export function getGatewayHost() {
+  const currentHost = window.location.hostname;
+
+  if (currentHost === "localhost" || currentHost === "127.0.0.1") {
+    return "ws://localhost:8080/gateway/web/";
+  } else {
+    // Production or any other domain (subdomain included)
+    return `wss://${currentHost}/gateway/web/`;
+  }
+}
+
+/**
  * Retrieves the CSRF Token from the cookie and returns it
  * @returns CSRF Token
  */
