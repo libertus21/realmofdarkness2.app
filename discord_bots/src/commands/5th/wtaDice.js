@@ -263,6 +263,7 @@ function getCommand() {
         return option;
       })
 
+      
       .addStringOption((option) => {
         option
           .setName("double_rage_check")
@@ -273,7 +274,7 @@ function getCommand() {
           );
         return option;
       })
-      
+
       .addStringOption((option) => {
         option
           .setName("character")
