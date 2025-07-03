@@ -34,6 +34,7 @@ async function getArgs(interaction) {
     difficulty: interaction.options.getInteger("difficulty"),
     spec: interaction.options.getString("speciality"),
     rageCheck: interaction.options.getString("rage_check"),
+    doubleRageCheck: interaction.options.getString("double_rage_check"),
     notes: interaction.options.getString("notes"),
     character: await getCharacter(
       interaction.options.getString("character"),
@@ -92,5 +93,7 @@ async function roll(interaction) {
   results.setOutcome();
 
   if (args.rageCheck != null) results.setRageCheck(args.rageCheck);
+  else if (args.doubleRageCheck != null)
+    results.setDoubleRageCheck(args.doubleRageCheck);
   return results;
 }

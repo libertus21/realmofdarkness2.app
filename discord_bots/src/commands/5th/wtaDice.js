@@ -265,6 +265,17 @@ function getCommand() {
 
       .addStringOption((option) => {
         option
+          .setName("double_rage_check")
+          .setDescription("Adds a double rage check to the roll.")
+          .setChoices(
+            { name: "No Reroll", value: "No Reroll" },
+            { name: "Reroll", value: "Reroll" }
+          );
+        return option;
+      })
+      
+      .addStringOption((option) => {
+        option
           .setName("character")
           .setDescription("Character name for this roll.")
           .setMaxLength(50)
