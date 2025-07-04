@@ -287,14 +287,16 @@ deploy_bots() {
 
     print_color $BLUE "[BOTS] [6/7] 🔍 Managing PM2 processes..."
 
-    # PM2 process parameters
-    local PM2_PARAMS="--restart-delay 30000 --time --max-memory-restart 1500M"
+    
     
     # Deploy each bot
     for bot_type in "v5" "v20" "cod"; do
         local BOT_NAME="${BOT_PREFIX}${bot_type}"
         local SCRIPT_PATH=""
-        
+
+        # PM2 process parameters
+        local PM2_PARAMS="--restart-delay 30000 --log /home/bot/logs/$BOT_NAME.log --time --max-memory-restart 1500M"
+
         case $bot_type in
             "v5")  SCRIPT_PATH="dist/shards/index-5th.js" ;;
             "v20") SCRIPT_PATH="dist/shards/index-20th.js" ;;
