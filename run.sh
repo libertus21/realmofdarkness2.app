@@ -40,10 +40,10 @@ echo "      ✅ Code updated successfully."
 
 echo "[2/7] 🔐 Setting file permissions..."
 echo "      → Setting permissions for backend and frontend (web user)..."
-chown -R "$WEB_USER:$WEB_USER" "$PROJECT_PATH/backend/" "$PROJECT_PATH/frontend/"
+chown -R ":$WEB_USER" "$PROJECT_PATH/backend/" "$PROJECT_PATH/frontend/"
 chmod -R 770 "$PROJECT_PATH/backend/" "$PROJECT_PATH/frontend/"
 echo "      → Setting permissions for discord_bots (bot user)..."
-chown -R "$BOT_USER:$BOT_USER" "$PROJECT_PATH/discord_bots/"
+chown -R ":$BOT_USER" "$PROJECT_PATH/discord_bots/"
 chmod -R 770 "$PROJECT_PATH/discord_bots/"
 echo "      ✅ File permissions updated."
 
