@@ -30,7 +30,7 @@ export function getHost(proxy) {
     return "http://localhost:8080/"; // Localhost development URL
   } else {
     // Handles production and preproduction (e.g., dev.realmofdarkness.app)
-    return `https://${currentHost}/`;
+    return `https://${currentHost}`;
   }
 }
 

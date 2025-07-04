@@ -63,7 +63,7 @@ export default function ResponsiveAppBar(props) {
 
   const loginButton = (
     <Box sx={{ flexGrow: 0 }}>
-      <Button color="primary" variant="contained" href={host + "auth/login/"}>
+      <Button color="primary" variant="contained" href={host + "/auth/login/"}>
         Login
       </Button>
     </Box>
