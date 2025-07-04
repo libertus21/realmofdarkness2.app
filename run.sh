@@ -1,7 +1,7 @@
 #!/bin/bash
 # Unified deployment script for Realm of Darkness
 # Combines all deployment functionality into one script
-# Must be run as root: sudo ./run.sh [all|backend|frontend|bots]
+# Run as regular user with sudo privileges: ./run.sh [all|backend|frontend|bots]
 set -e
 
 # Color codes for output
@@ -22,7 +22,7 @@ print_color() {
 show_help() {
     echo "Realm of Darkness Unified Deployment Script"
     echo
-    echo "Usage: sudo ./run.sh [COMPONENT]"
+    echo "Usage: ./run.sh [COMPONENT]"
     echo
     echo "COMPONENTS:"
     echo "  all         Deploy all components (frontend, backend, bots)"
@@ -31,30 +31,32 @@ show_help() {
     echo "  bots        Deploy only Discord bots"
     echo
     echo "Examples:"
-    echo "  sudo ./run.sh all                    # Deploy everything"
-    echo "  sudo ./run.sh backend                # Deploy only backend"
-    echo "  sudo ./run.sh bots                   # Deploy only bots"
-    echo "  sudo ./run.sh frontend               # Deploy only frontend"
+    echo "  ./run.sh all                    # Deploy everything"
+    echo "  ./run.sh backend                # Deploy only backend"
+    echo "  ./run.sh bots                   # Deploy only bots"
+    echo "  ./run.sh frontend               # Deploy only frontend"
     echo
     echo "Environment detection:"
     echo "  - Production:     No .preproduction file exists"
     echo "  - Preproduction:  .preproduction file exists in project root"
     echo
     echo "Requirements:"
-    echo "  - Must be run as root (sudo)"
+    echo "  - Must have sudo privileges (will prompt for password as needed)"
     echo "  - Users 'web' and 'bot' must exist"
     echo "  - .env files must exist for deployed components"
     echo "  - Systemd services must be configured"
 }
 
-# Check if running as root
-if [ "$EUID" -ne 0 ]; then
-    print_color $RED "❌ This script must be run as root!"
-    echo "   Usage: sudo ./run.sh [all|backend|frontend|bots]"
+# Check if user has sudo privileges
+if ! sudo -n true 2>/dev/null; then
+    print_color $RED "❌ This script requires sudo privileges!"
+    echo "   Usage: ./run.sh [all|backend|frontend|bots]"
     echo "   Examples:"
-    echo "     sudo ./run.sh all                    # Deploy everything"
-    echo "     sudo ./run.sh backend                # Deploy only backend"
-    echo "     sudo ./run.sh bots                   # Deploy only bots"
+    echo "     ./run.sh all                    # Deploy everything"
+    echo "     ./run.sh backend                # Deploy only backend"
+    echo "     ./run.sh bots                   # Deploy only bots"
+    echo ""
+    echo "   Note: You may be prompted for your sudo password during execution."
     exit 1
 fi
 
@@ -162,7 +164,7 @@ check_requirements() {
     
     # Check if required services are available
     if [ "$COMPONENT" = "all" ] || [ "$COMPONENT" = "backend" ]; then
-        if ! systemctl list-unit-files | grep -q "^$GUNICORN_SERVICE.service"; then
+        if ! sudo systemctl list-unit-files | grep -q "^$GUNICORN_SERVICE.service"; then
             print_color $RED "[CHECK] ❌ Gunicorn service '$GUNICORN_SERVICE' not found!"
             echo "        Check systemd service configuration."
             return 1
@@ -213,12 +215,12 @@ deploy_backend() {
     print_color $GREEN "[BACKEND]       ✅ Cache cleaned successfully."
     
     print_color $BLUE "[BACKEND] [5/6] 📋 Ensuring Redis is running..."
-    if ! systemctl is-active --quiet redis-server; then
+    if ! sudo systemctl is-active --quiet redis-server; then
         print_color $YELLOW "[BACKEND]       → Starting Redis..."
-        systemctl start redis-server
+        sudo systemctl start redis-server
         sleep 2
     fi
-    if systemctl is-active --quiet redis-server; then
+    if sudo systemctl is-active --quiet redis-server; then
         print_color $GREEN "[BACKEND]       ✅ Redis is running."
     else
         print_color $RED "[BACKEND]       ❌ Redis failed to start!"
@@ -226,17 +228,17 @@ deploy_backend() {
     fi
     
     print_color $BLUE "[BACKEND] [6/6] 🔄 Reloading Gunicorn service..."
-    systemctl daemon-reload
-    systemctl enable "$GUNICORN_SERVICE"
-    systemctl restart "$GUNICORN_SERVICE"
+    sudo systemctl daemon-reload
+    sudo systemctl enable "$GUNICORN_SERVICE"
+    sudo systemctl restart "$GUNICORN_SERVICE"
     
     # Wait a moment and check if service started successfully
     sleep 3
-    if systemctl is-active --quiet "$GUNICORN_SERVICE"; then
+    if sudo systemctl is-active --quiet "$GUNICORN_SERVICE"; then
         print_color $GREEN "[BACKEND]       ✅ Gunicorn service started successfully."
     else
         print_color $RED "[BACKEND]       ❌ Gunicorn service failed to start!"
-        systemctl status "$GUNICORN_SERVICE" --no-pager -l
+        sudo systemctl status "$GUNICORN_SERVICE" --no-pager -l
         return 1
     fi
     
@@ -336,7 +338,7 @@ stop_services() {
     # Stop web services
     if [ "$COMPONENT" = "all" ] || [ "$COMPONENT" = "backend" ]; then
         print_color $BLUE "[STOP] Stopping web services..."
-        systemctl stop "$GUNICORN_SERVICE" 2>/dev/null || print_color $YELLOW "[STOP]       → $GUNICORN_SERVICE was not running"
+        sudo systemctl stop "$GUNICORN_SERVICE" 2>/dev/null || print_color $YELLOW "[STOP]       → $GUNICORN_SERVICE was not running"
         print_color $GREEN "[STOP]       ✅ Web services stopped."
     fi
 }
@@ -398,14 +400,14 @@ main() {
     print_color $BLUE "📊 Service Status Check:"
     
     if [ "$COMPONENT" = "all" ] || [ "$COMPONENT" = "backend" ]; then
-        if systemctl is-active --quiet "$GUNICORN_SERVICE"; then
+        if sudo systemctl is-active --quiet "$GUNICORN_SERVICE"; then
             print_color $GREEN "   ✅ $GUNICORN_SERVICE (Django backend)"
         else
             print_color $RED "   ❌ $GUNICORN_SERVICE (Django backend) - Not running!"
         fi
     fi
     
-    if systemctl is-active --quiet nginx; then
+    if sudo systemctl is-active --quiet nginx; then
         print_color $GREEN "   ✅ nginx (Web server)"
     else
         print_color $RED "   ❌ nginx (Web server) - Not running!"
@@ -437,8 +439,8 @@ main() {
     echo
     print_color $CYAN "🔎 Monitor Discord bots: pm2 status"
     print_color $CYAN "📋 View bot logs:        pm2 logs [${BOT_PREFIX}v5|${BOT_PREFIX}v20|${BOT_PREFIX}cod]"
-    print_color $CYAN "🔧 Check backend logs:   systemctl status $GUNICORN_SERVICE"
-    print_color $CYAN "🌐 Check nginx status:   systemctl status nginx"
+    print_color $CYAN "🔧 Check backend logs:   sudo systemctl status $GUNICORN_SERVICE"
+    print_color $CYAN "🌐 Check nginx status:   sudo systemctl status nginx"
     echo
 }
 
