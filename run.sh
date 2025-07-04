@@ -287,7 +287,10 @@ deploy_bots() {
 
     print_color $BLUE "[BOTS] [6/7] 🔍 Managing PM2 processes..."
 
-    
+    # Ensure all files in dist/shards are executable before starting PM2 processes
+    if [ -d "$PROJECT_PATH/discord_bots/dist/shards" ]; then
+        run_as_user "$BOT_USER" "chmod +x $PROJECT_PATH/discord_bots/dist/shards/*"
+    fi
     
     # Deploy each bot
     for bot_type in "v5" "v20" "cod"; do
