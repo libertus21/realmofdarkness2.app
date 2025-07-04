@@ -21,6 +21,19 @@ PROJECT_PATH=$(pwd)
 BOT_USER="bot"  # The user that owns the files
 LOG_DIR="/home/bot/logs" # Log directory
 
+# Check if this is a preproduction environment
+cd ../..
+if [ -f ".preproduction" ]; then
+    ENVIRONMENT="preproduction"
+    BOT_PREFIX="preprod-"
+    echo "🧪 Running Discord bots in PREPRODUCTION mode"
+else
+    ENVIRONMENT="production"
+    BOT_PREFIX=""
+    echo "🚀 Running Discord bots in PRODUCTION mode"
+fi
+cd discord_bots
+
 # Function to run commands as bot user
 run_as_bot() {
     if [ "$CURRENT_USER" = "$BOT_USER" ]; then
@@ -52,7 +65,7 @@ fi
 echo "      ✅ Project built successfully."
 
 echo "[4/6] 🧹 Flushing PM2 logs..."
-run_as_bot "cd $PROJECT_PATH && pm2 flush v5 && pm2 flush v20 && pm2 flush cod"
+run_as_bot "cd $PROJECT_PATH && pm2 flush ${BOT_PREFIX}v5 && pm2 flush ${BOT_PREFIX}v20 && pm2 flush ${BOT_PREFIX}cod"
 echo "      ✅ PM2 logs flushed."
 
 echo "[5/6] 🔍 Checking PM2 processes..."
@@ -60,30 +73,33 @@ echo "[5/6] 🔍 Checking PM2 processes..."
 PM2_PARAMS="--restart-delay 30000 --time --max-memory-restart 1500M"
 
 # v5 bot process
-if run_as_bot "cd $PROJECT_PATH && pm2 id v5" > /dev/null 2>&1; then
-    echo "      Restarting v5 process..."
-    run_as_bot "cd $PROJECT_PATH && pm2 restart v5"
+BOT_NAME="${BOT_PREFIX}v5"
+if run_as_bot "cd $PROJECT_PATH && pm2 id $BOT_NAME" > /dev/null 2>&1; then
+    echo "      Restarting $BOT_NAME process..."
+    run_as_bot "cd $PROJECT_PATH && pm2 restart $BOT_NAME"
 else
-    echo "      Creating v5 process..."
-    run_as_bot "cd $PROJECT_PATH && pm2 start dist/shards/index-5th.js $PM2_PARAMS --log $LOG_DIR/v5.log --name v5" 
+    echo "      Creating $BOT_NAME process..."
+    run_as_bot "cd $PROJECT_PATH && pm2 start dist/shards/index-5th.js $PM2_PARAMS --log $LOG_DIR/${BOT_NAME}.log --name $BOT_NAME" 
 fi
 
 # v20 bot process
-if run_as_bot "cd $PROJECT_PATH && pm2 id v20" > /dev/null 2>&1; then
-    echo "      Restarting v20 process..."
-    run_as_bot "cd $PROJECT_PATH && pm2 restart v20"
+BOT_NAME="${BOT_PREFIX}v20"
+if run_as_bot "cd $PROJECT_PATH && pm2 id $BOT_NAME" > /dev/null 2>&1; then
+    echo "      Restarting $BOT_NAME process..."
+    run_as_bot "cd $PROJECT_PATH && pm2 restart $BOT_NAME"
 else
-    echo "      Creating v20 process..."
-    run_as_bot "cd $PROJECT_PATH && pm2 start dist/shards/index-20th.js $PM2_PARAMS --log $LOG_DIR/v20.log --name v20"
+    echo "      Creating $BOT_NAME process..."
+    run_as_bot "cd $PROJECT_PATH && pm2 start dist/shards/index-20th.js $PM2_PARAMS --log $LOG_DIR/${BOT_NAME}.log --name $BOT_NAME"
 fi
 
 # cod bot process
-if run_as_bot "cd $PROJECT_PATH && pm2 id cod" > /dev/null 2>&1; then
-    echo "      Restarting cod process..."
-    run_as_bot "cd $PROJECT_PATH && pm2 restart cod"
+BOT_NAME="${BOT_PREFIX}cod"
+if run_as_bot "cd $PROJECT_PATH && pm2 id $BOT_NAME" > /dev/null 2>&1; then
+    echo "      Restarting $BOT_NAME process..."
+    run_as_bot "cd $PROJECT_PATH && pm2 restart $BOT_NAME"
 else
-    echo "      Creating cod process..."
-    run_as_bot "cd $PROJECT_PATH && pm2 start dist/shards/index-cod.js $PM2_PARAMS --log $LOG_DIR/cod.log --name cod"
+    echo "      Creating $BOT_NAME process..."
+    run_as_bot "cd $PROJECT_PATH && pm2 start dist/shards/index-cod.js $PM2_PARAMS --log $LOG_DIR/${BOT_NAME}.log --name $BOT_NAME"
 fi
 
 echo "[6/6] 🔄 Saving PM2 process list..."

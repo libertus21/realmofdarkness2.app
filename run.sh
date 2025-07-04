@@ -23,6 +23,17 @@ PROJECT_PATH=$(pwd)
 WEB_USER="web"  # The user that runs the Frontend & Backend
 BOT_USER="bot"  # The user that runs the Discord bots
 
+# Check if this is a preproduction environment
+if [ -f ".preproduction" ]; then
+    ENVIRONMENT="preproduction"
+    GUNICORN_SERVICE="gunicorn-preprod"
+    echo "🧪 Running in PREPRODUCTION mode"
+else
+    ENVIRONMENT="production"
+    GUNICORN_SERVICE="gunicorn"
+    echo "🚀 Running in PRODUCTION mode"
+fi
+
 echo "[1/7] 📥 Updating from git repository..."
 cd $PROJECT_PATH && git pull
 echo "      ✅ Code updated successfully."
@@ -37,11 +48,15 @@ chmod -R u+rwX,g+rX,o+rX "$PROJECT_PATH/discord_bots/"
 echo "      ✅ File permissions updated."
 
 echo "[3/7] 🛑 Stopping Discord bots..."
-sudo -u "$BOT_USER" bash -c "cd $PROJECT_PATH/discord_bots && pm2 stop v5 v20 cod" || echo "      → Some bots were not running"
+if [ "$ENVIRONMENT" = "preproduction" ]; then
+    sudo -u "$BOT_USER" bash -c "cd $PROJECT_PATH/discord_bots && pm2 stop preprod-v5 preprod-v20 preprod-cod" || echo "      → Some bots were not running"
+else
+    sudo -u "$BOT_USER" bash -c "cd $PROJECT_PATH/discord_bots && pm2 stop v5 v20 cod" || echo "      → Some bots were not running"
+fi
 echo "      ✅ Discord bots stopped."
 
 echo "[4/7] 🛑 Stopping web services..."
-systemctl stop gunicorn || echo "      → Gunicorn was not running"
+systemctl stop $GUNICORN_SERVICE || echo "      → $GUNICORN_SERVICE was not running"
 echo "      ✅ Web services stopped."
 
 echo "[5/7] ⚛️  Building frontend..."

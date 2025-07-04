@@ -17,6 +17,17 @@ CURRENT_USER=$(whoami)
 PROJECT_PATH=$(pwd)
 WEB_USER="web"  # The user that owns the files
 
+# Check if this is a preproduction environment
+cd ../..
+if [ -f ".preproduction" ]; then
+    ENVIRONMENT="preproduction"
+    GUNICORN_SERVICE="gunicorn-preprod"
+else
+    ENVIRONMENT="production"
+    GUNICORN_SERVICE="gunicorn"
+fi
+cd backend
+
 # Function to run commands as web user
 run_as_web() {
     if [ "$CURRENT_USER" = "$WEB_USER" ]; then
@@ -80,12 +91,12 @@ fi
 echo "[5/5] 🔄 Starting web services..."
 if [ "$CURRENT_USER" != "root" ] && id -nG "$CURRENT_USER" | grep -qw "sudo"; then
     sudo systemctl daemon-reload
-    sudo systemctl start gunicorn
-    sudo systemctl enable gunicorn
+    sudo systemctl start $GUNICORN_SERVICE
+    sudo systemctl enable $GUNICORN_SERVICE
     echo "      ✅ Web services started successfully."
 else
     echo "      ⚠️  Cannot start services - sudo required."
-    echo "      → Please ask your administrator to run: sudo systemctl start gunicorn"
+    echo "      → Please ask your administrator to run: sudo systemctl start $GUNICORN_SERVICE"
     # Create a touch file to signal that restart is needed
     run_as_web "cd $PROJECT_PATH && touch .restart_needed"
 fi

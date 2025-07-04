@@ -118,6 +118,7 @@ coverage/
 *dump.rdb
 
 # Miscellaneous
+.preproduction
 .DS_Store
 *.out
 .VSCodeCounter
