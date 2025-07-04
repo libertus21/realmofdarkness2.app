@@ -34,20 +34,11 @@ else
     echo "🚀 Running in PRODUCTION mode"
 fi
 
-echo "[1/7] 📥 Updating from git repository..."
+echo "[1/6] 📥 Updating from git repository..."
 cd $PROJECT_PATH && git pull
 echo "      ✅ Code updated successfully."
 
-echo "[2/7] 🔐 Setting file permissions..."
-echo "      → Setting permissions for backend and frontend (web user)..."
-chown -R ":$WEB_USER" "$PROJECT_PATH/backend/" "$PROJECT_PATH/frontend/"
-chmod -R 770 "$PROJECT_PATH/backend/" "$PROJECT_PATH/frontend/"
-echo "      → Setting permissions for discord_bots (bot user)..."
-chown -R ":$BOT_USER" "$PROJECT_PATH/discord_bots/"
-chmod -R 770 "$PROJECT_PATH/discord_bots/"
-echo "      ✅ File permissions updated."
-
-echo "[3/7] 🛑 Stopping Discord bots..."
+echo "[2/6] 🛑 Stopping Discord bots..."
 if [ "$ENVIRONMENT" = "preproduction" ]; then
     sudo -u "$BOT_USER" bash -c "cd $PROJECT_PATH/discord_bots && pm2 stop preprod-v5 preprod-v20 preprod-cod" || echo "      → Some bots were not running"
 else
@@ -55,17 +46,17 @@ else
 fi
 echo "      ✅ Discord bots stopped."
 
-echo "[4/7] 🛑 Stopping web services..."
+echo "[3/6] 🛑 Stopping web services..."
 systemctl stop $GUNICORN_SERVICE || echo "      → $GUNICORN_SERVICE was not running"
 echo "      ✅ Web services stopped."
 
-echo "[5/7] ⚛️  Building frontend..."
+echo "[4/6] ⚛️  Building frontend..."
 cd "$PROJECT_PATH/frontend" && ./run.sh
 
-echo "[6/7] 🐍 Deploying backend..."
+echo "[5/6] 🐍 Deploying backend..."
 cd "$PROJECT_PATH/backend/scripts" && ./run.sh
 
-echo "[7/7] 🤖 Deploying and starting Discord bots..."
+echo "[6/6] 🤖 Deploying and starting Discord bots..."
 cd "$PROJECT_PATH/discord_bots/scripts" && ./run.sh
 
 echo
