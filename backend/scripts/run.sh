@@ -5,7 +5,6 @@ set -e
 
 # Navigate to backend directory
 cd "$(dirname "$0")"
-cd ..
 
 echo "=========================================================="
 echo "=     🐍 Realm of Darkness Backend Production 🐍        ="

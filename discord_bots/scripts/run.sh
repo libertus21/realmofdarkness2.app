@@ -5,7 +5,6 @@ set -e
 
 # Navigate to discord_bots directory
 cd "$(dirname "$0")"
-cd ..
 
 # Set production environment 
 export NODE_ENV=production
