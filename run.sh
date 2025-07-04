@@ -54,10 +54,10 @@ echo "[4/6] ⚛️  Building frontend..."
 cd "$PROJECT_PATH/frontend" && ./run.sh
 
 echo "[5/6] 🐍 Deploying backend..."
-cd "$PROJECT_PATH/backend/scripts" && ./scripts/run.sh
+cd "$PROJECT_PATH/backend/scripts" && ./run.sh
 
 echo "[6/6] 🤖 Deploying and starting Discord bots..."
-cd "$PROJECT_PATH/discord_bots/scripts" && ./scripts/run.sh
+cd "$PROJECT_PATH/discord_bots/scripts" && ./run.sh
 
 echo
 echo "=========================================================="
