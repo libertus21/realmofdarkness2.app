@@ -176,7 +176,7 @@ check_requirements() {
 deploy_backend() {
     print_color $GREEN "[BACKEND] 🐍 Starting Django backend deployment..."
     
-    print_color $BLUE "[BACKEND] [1/7] � Setting up Python virtual environment..."
+    print_color $BLUE "[BACKEND] [1/6] � Setting up Python virtual environment..."
     cd "$PROJECT_PATH/backend"
     
     # Create virtual environment if it doesn't exist
@@ -199,24 +199,20 @@ deploy_backend() {
         return 1
     fi
     
-    print_color $BLUE "[BACKEND] [2/7] 📥 Updating Python dependencies..."
+    print_color $BLUE "[BACKEND] [2/6] 📥 Updating Python dependencies..."
     run_as_user "$WEB_USER" "cd '$PROJECT_PATH/backend' && $VENV_PYTHON -m pip install --upgrade pip"
     run_as_user "$WEB_USER" "cd '$PROJECT_PATH/backend' && $VENV_PYTHON -m pip install -r requirements.txt"
     print_color $GREEN "[BACKEND]       ✅ Dependencies updated successfully."
     
-    print_color $BLUE "[BACKEND] [3/7] 🔄 Running Django migrations..."
+    print_color $BLUE "[BACKEND] [3/6] 🔄 Running Django migrations..."
     run_as_user "$WEB_USER" "cd '$PROJECT_PATH/backend' && $VENV_PYTHON manage.py migrate --no-input"
     print_color $GREEN "[BACKEND]       ✅ Migrations completed successfully."
     
-    print_color $BLUE "[BACKEND] [4/7] 📁 Collecting static files..."
-    run_as_user "$WEB_USER" "cd '$PROJECT_PATH/backend' && $VENV_PYTHON manage.py collectstatic --noinput"
-    print_color $GREEN "[BACKEND]       ✅ Static files collected successfully."
-    
-    print_color $BLUE "[BACKEND] [5/7] 🧹 Cleaning up cache..."
+    print_color $BLUE "[BACKEND] [4/6] 🧹 Cleaning up cache..."
     run_as_user "$WEB_USER" "cd '$PROJECT_PATH/backend' && find . -name '*.pyc' -delete && find . -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true"
     print_color $GREEN "[BACKEND]       ✅ Cache cleaned successfully."
     
-    print_color $BLUE "[BACKEND] [6/7] 📋 Ensuring Redis is running..."
+    print_color $BLUE "[BACKEND] [5/6] 📋 Ensuring Redis is running..."
     if ! systemctl is-active --quiet redis-server; then
         print_color $YELLOW "[BACKEND]       → Starting Redis..."
         systemctl start redis-server
@@ -229,7 +225,7 @@ deploy_backend() {
         return 1
     fi
     
-    print_color $BLUE "[BACKEND] [7/7] 🔄 Reloading Gunicorn service..."
+    print_color $BLUE "[BACKEND] [6/6] 🔄 Reloading Gunicorn service..."
     systemctl daemon-reload
     systemctl enable "$GUNICORN_SERVICE"
     systemctl restart "$GUNICORN_SERVICE"
@@ -251,27 +247,14 @@ deploy_backend() {
 deploy_frontend() {
     print_color $GREEN "[FRONTEND] ⚛️  Starting React frontend deployment..."
     
-    print_color $BLUE "[FRONTEND] [1/4] 📦 Installing Node.js dependencies..."
+    print_color $BLUE "[FRONTEND] [1/2] 📦 Installing Node.js dependencies..."
     cd "$PROJECT_PATH/frontend"
-    run_as_user "$WEB_USER" "cd '$PROJECT_PATH/frontend' && npm install"
+    run_as_user "$WEB_USER" "cd '$PROJECT_PATH/frontend' && npm install --silent"
     print_color $GREEN "[FRONTEND]        ✅ Dependencies installed successfully."
     
-    print_color $BLUE "[FRONTEND] [2/4] 🏗️ Building React application..."
-    # Set NODE_ENV based on environment
-    if [ "$ENVIRONMENT" = "preproduction" ]; then
-        run_as_user "$WEB_USER" "cd '$PROJECT_PATH/frontend' && NODE_ENV=development npm run build"
-    else
-        run_as_user "$WEB_USER" "cd '$PROJECT_PATH/frontend' && NODE_ENV=production npm run build"
-    fi
+    print_color $BLUE "[FRONTEND] [2/2] 🏗️ Building React application..."
+    run_as_user "$WEB_USER" "cd '$PROJECT_PATH/frontend' && npm run build --silent"
     print_color $GREEN "[FRONTEND]        ✅ React build completed successfully."
-    
-    print_color $BLUE "[FRONTEND] [3/4] 📁 Setting up build directory..."
-    run_as_user "$WEB_USER" "cd '$PROJECT_PATH/frontend' && mkdir -p build"
-    print_color $GREEN "[FRONTEND]        ✅ Build directory ready."
-    
-    print_color $BLUE "[FRONTEND] [4/4] 🌐 Reloading NGINX..."
-    nginx -t && systemctl reload nginx
-    print_color $GREEN "[FRONTEND]        ✅ NGINX reloaded successfully."
     
     print_color $GREEN "[FRONTEND] 🎉 React frontend deployment completed!"
 }
@@ -280,34 +263,28 @@ deploy_frontend() {
 deploy_bots() {
     print_color $GREEN "[BOTS] 🤖 Starting Discord bots deployment..."
     
-    # Set up log directory
-    local LOG_DIR="/home/$BOT_USER/logs"
-    print_color $BLUE "[BOTS] [0/7] 📁 Setting up log directory..."
-    run_as_user "$BOT_USER" "mkdir -p '$LOG_DIR'"
-    print_color $GREEN "[BOTS]       ✅ Log directory ready."
-    
-    print_color $BLUE "[BOTS] [1/6] 📦 Updating Node.js dependencies..."
+    print_color $BLUE "[BOTS] [1/7] 📦 Updating Node.js dependencies..."
     cd "$PROJECT_PATH/discord_bots"
-    run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && npm install"
+    run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && npm install --silent"
     print_color $GREEN "[BOTS]    ✅ Dependencies updated successfully."
-    
-    print_color $BLUE "[BOTS] [2/6] 🏗️ Building TypeScript project..."
-    if ! run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && npm run build"; then
+
+    print_color $BLUE "[BOTS] [2/7] 🏗️ Building TypeScript project..."
+    if ! run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && npm run build --silent"; then
         print_color $RED "[BOTS]    ❌ Build failed!"
         return 1
     fi
     print_color $GREEN "[BOTS]    ✅ Project built successfully."
-    
-    print_color $BLUE "[BOTS] [3/6] 🚀 Deploying Discord commands..."
-    run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && npm run deploy:all"
+
+    print_color $BLUE "[BOTS] [4/7] 🚀 Deploying Discord commands..."
+    run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && npm run deploy:all --silent > /dev/null 2>&1"
     print_color $GREEN "[BOTS]    ✅ Discord commands deployed successfully."
-    
-    print_color $BLUE "[BOTS] [4/6] 🧹 Flushing PM2 logs..."
+
+    print_color $BLUE "[BOTS] [5/7] 🧹 Flushing PM2 logs..."
     run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 flush ${BOT_PREFIX}v5 && pm2 flush ${BOT_PREFIX}v20 && pm2 flush ${BOT_PREFIX}cod" 2>/dev/null || true
     print_color $GREEN "[BOTS]    ✅ PM2 logs flushed."
-    
-    print_color $BLUE "[BOTS] [5/6] 🔍 Managing PM2 processes..."
-    
+
+    print_color $BLUE "[BOTS] [6/7] 🔍 Managing PM2 processes..."
+
     # PM2 process parameters
     local PM2_PARAMS="--restart-delay 30000 --time --max-memory-restart 1500M"
     
@@ -322,18 +299,19 @@ deploy_bots() {
             "cod") SCRIPT_PATH="dist/shards/index-cod.js" ;;
         esac
         
-        if run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 id '$BOT_NAME'" > /dev/null 2>&1; then
+        # Check if process exists using pm2 list
+        if run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 list | grep -q '$BOT_NAME'"; then
             print_color $YELLOW "[BOTS]       Restarting $BOT_NAME process..."
             run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 restart '$BOT_NAME'"
         else
             print_color $YELLOW "[BOTS]       Creating $BOT_NAME process..."
-            run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 start '$SCRIPT_PATH' $PM2_PARAMS --log '$LOG_DIR/${BOT_NAME}.log' --name '$BOT_NAME'"
+            run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 start '$SCRIPT_PATH' $PM2_PARAMS --name '$BOT_NAME'"
         fi
     done
     
     print_color $GREEN "[BOTS]    ✅ PM2 processes managed successfully."
     
-    print_color $BLUE "[BOTS] [6/6] 🔄 Saving PM2 process list..."
+    print_color $BLUE "[BOTS] [6/7] 🔄 Saving PM2 process list..."
     run_as_user "$BOT_USER" "pm2 save"
     print_color $GREEN "[BOTS]    ✅ PM2 process list saved."
     
