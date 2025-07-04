@@ -350,11 +350,9 @@ stop_services() {
 
 # Function to update code from git
 update_code() {
-    if [ "$COMPONENT" = "all" ]; then
-        print_color $BLUE "[GIT] 📥 Updating from git repository..."
-        cd "$PROJECT_PATH" && git pull
-        print_color $GREEN "[GIT]    ✅ Code updated successfully."
-    fi
+    print_color $BLUE "[GIT] 📥 Updating from git repository..."
+    cd "$PROJECT_PATH" && git pull
+    print_color $GREEN "[GIT]    ✅ Code updated successfully."
 }
 
 # Main deployment logic
@@ -362,7 +360,7 @@ main() {
     # Check requirements before starting
     check_requirements
     
-    # Update code if deploying all components
+    # Always update code before deployment
     update_code
     
     # Stop relevant services
