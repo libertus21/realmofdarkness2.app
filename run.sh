@@ -301,9 +301,9 @@ deploy_bots() {
         local PM2_PARAMS="--restart-delay 30000 --log /home/bot/logs/$BOT_NAME.log --time --max-memory-restart 1500M"
 
         case $bot_type in
-            "v5")  SCRIPT_PATH="discord_bots/dist/shards/index-5th.js" ;;
-            "v20") SCRIPT_PATH="discord_bots/dist/shards/index-20th.js" ;;
-            "cod") SCRIPT_PATH="discord_bots/dist/shards/index-cod.js" ;;
+            "v5")  SCRIPT_PATH="dist/shards/index-5th.js" ;;
+            "v20") SCRIPT_PATH="dist/shards/index-20th.js" ;;
+            "cod") SCRIPT_PATH="dist/shards/index-cod.js" ;;
         esac
         
         # Check if process exists and is online using pm2 list
