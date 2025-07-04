@@ -298,7 +298,7 @@ deploy_bots() {
         local SCRIPT_PATH=""
 
         # PM2 process parameters
-        local PM2_PARAMS="--restart-delay 30000 --log /home/bot/logs/$BOT_NAME.log --time --max-memory-restart 1500M"
+        local PM2_PARAMS="--restart-delay 30000 --log /realm-of-darkness/logs/$BOT_NAME.log --time --max-memory-restart 1500M"
 
         case $bot_type in
             "v5")  SCRIPT_PATH="dist/shards/index-5th.js" ;;
@@ -306,12 +306,18 @@ deploy_bots() {
             "cod") SCRIPT_PATH="dist/shards/index-cod.js" ;;
         esac
         
-        # Check if process exists and is online using pm2 list
+        # Check if process exists and get its status
         if run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 list | grep -E '\b$BOT_NAME\b' | grep -q online"; then
-            print_color $YELLOW "[BOTS]       Restarting $BOT_NAME process..."
+            # Process exists and is online - restart it
+            print_color $YELLOW "[BOTS]       Restarting $BOT_NAME process (currently online)..."
             run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 restart '$BOT_NAME'"
+        elif run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 list | grep -E '\b$BOT_NAME\b'" > /dev/null 2>&1; then
+            # Process exists but is not online - start it
+            print_color $YELLOW "[BOTS]       Starting $BOT_NAME process (currently stopped)..."
+            run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 start '$BOT_NAME'"
         else
-            print_color $YELLOW "[BOTS]       Creating $BOT_NAME process..."
+            # Process doesn't exist - create it
+            print_color $YELLOW "[BOTS]       Creating $BOT_NAME process (new)..."
             run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 start '$SCRIPT_PATH' $PM2_PARAMS --name '$BOT_NAME'"
         fi
     done
