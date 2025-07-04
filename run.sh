@@ -306,8 +306,8 @@ deploy_bots() {
             "cod") SCRIPT_PATH="discord_bots/dist/shards/index-cod.js" ;;
         esac
         
-        # Check if process exists using pm2 list
-        if run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 list | grep -q '$BOT_NAME'"; then
+        # Check if process exists and is online using pm2 list
+        if run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 list | grep -E '\b$BOT_NAME\b' | grep -q online"; then
             print_color $YELLOW "[BOTS]       Restarting $BOT_NAME process..."
             run_as_user "$BOT_USER" "cd '$PROJECT_PATH/discord_bots' && pm2 restart '$BOT_NAME'"
         else
