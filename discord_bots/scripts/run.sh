@@ -5,6 +5,7 @@ set -e
 
 # Navigate to discord_bots directory
 cd "$(dirname "$0")"
+cd ..
 
 # Set production environment 
 export NODE_ENV=production
@@ -21,7 +22,7 @@ BOT_USER="bot"  # The user that owns the files
 LOG_DIR="/home/bot/logs" # Log directory
 
 # Check if this is a preproduction environment
-cd ../..
+cd ..
 if [ -f ".preproduction" ]; then
     ENVIRONMENT="preproduction"
     BOT_PREFIX="preprod-"

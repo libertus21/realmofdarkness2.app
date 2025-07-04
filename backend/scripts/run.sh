@@ -5,6 +5,7 @@ set -e
 
 # Navigate to backend directory
 cd "$(dirname "$0")"
+cd ..
 
 echo "=========================================================="
 echo "=     🐍 Realm of Darkness Backend Production 🐍        ="
@@ -17,7 +18,7 @@ PROJECT_PATH=$(pwd)
 WEB_USER="web"  # The user that owns the files
 
 # Check if this is a preproduction environment
-cd ../..
+cd ..
 if [ -f ".preproduction" ]; then
     ENVIRONMENT="preproduction"
     GUNICORN_SERVICE="gunicorn-preprod"
