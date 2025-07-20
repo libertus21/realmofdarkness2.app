@@ -16,7 +16,7 @@ DISCORD_APP_SECRET = os.getenv("DISCORD_APP_SECRET", "")
 ENV = os.getenv("ENV", "development")
 
 # Set URLs based on environment
-if ENV:
+if ENV == "development":
     # Development environment
     REDIRECT_URI = "http://localhost:8080/auth/login/success/"
     FINAL_REDIRECT = "http://localhost:3000/"

@@ -79,6 +79,7 @@ backend/haven/management/
 backend/gunicorn-error.out
 backend/gunicorn.pid
 backend/supervisor*.log
+backend/.restart_needed
 
 # Discord bots (Node.js & Python)
 discord_bots/node_modules/
@@ -118,6 +119,7 @@ coverage/
 *dump.rdb
 
 # Miscellaneous
+.preproduction
 .DS_Store
 *.out
 .VSCodeCounter

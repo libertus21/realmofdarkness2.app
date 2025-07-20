@@ -1,5 +1,6 @@
 import GatewayMessage from "./GatewayMessage";
 import { GATEWAY_OPCODE } from "../constants";
+import { getGatewayHost } from "../utility";
 const { EventEmitter } = require("events");
 
 const cooldownTimer = {
@@ -8,13 +9,6 @@ const cooldownTimer = {
   2: 10,
   3: 20,
 };
-
-let host;
-if (process.env.NODE_ENV === "production")
-  host = "wss://realmofdarkness.app/gateway/web/";
-else if (process.env.NODE_ENV === "preproduction")
-  host = "wss://dev.realmofdarkness.app/gateway/web/";
-else host = "ws://localhost:8080/gateway/web/";
 
 function incrementCooldown(cooldown) {
   let t = cooldown + 1;
@@ -29,7 +23,7 @@ export default class GatewayManager extends EventEmitter {
   }
 
   connect() {
-    this.ws = new WebSocket(host);
+    this.ws = new WebSocket(getGatewayHost());
 
     this.ws.onopen = () => {
       this.emit("CONNECT", this.setConnection);
