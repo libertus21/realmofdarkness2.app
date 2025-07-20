@@ -27,7 +27,7 @@ export function getHost(proxy) {
   ) {
     return ""; // Proxy URL is empty, handled by the proxy server
   } else if (currentHost === "localhost" || currentHost === "127.0.0.1") {
-    return "http://localhost:8080/"; // Localhost development URL
+    return "http://localhost:8080"; // Localhost development URL
   } else {
     // Handles production and preproduction (e.g., dev.realmofdarkness.app)
     return `https://${currentHost}`;
