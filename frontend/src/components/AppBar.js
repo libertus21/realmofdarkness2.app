@@ -15,11 +15,9 @@ import { Link } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useClientContext } from "./ClientProvider";
+import { getHost } from "../utility";
 
-let host;
-if (process.env.NODE_ENV === "production")
-  host = "https://realmofdarkness.app/";
-else host = "http://localhost:8080/";
+const host = getHost();
 
 const pages = {
   sm: ["20th Anniversary", "Chronicles of Darkness"],
@@ -65,7 +63,7 @@ export default function ResponsiveAppBar(props) {
 
   const loginButton = (
     <Box sx={{ flexGrow: 0 }}>
-      <Button color="primary" variant="contained" href={host + "auth/login/"}>
+      <Button color="primary" variant="contained" href={host + "/auth/login/"}>
         Login
       </Button>
     </Box>
