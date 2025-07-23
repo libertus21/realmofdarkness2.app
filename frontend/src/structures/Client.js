@@ -12,20 +12,23 @@ export default class Client {
     return this.gatewayManager.status;
   }
 
-  handleGatewayEvents(contextSetters) {
+  handleGatewayEvents(clientStateRef) {
+    // Clear existing listeners
+    this.gatewayManager.removeAllListeners();
+
     for (const key of Object.keys(GatewayEvents)) {
       const event = GatewayEvents[key];
       this.gatewayManager.on(event.name, (...args) => event.execute(...args));
     }
-    this.gatewayManager.listenOnMessage(contextSetters);
+    this.gatewayManager.listenOnMessage(clientStateRef);
 
     // Update the connection property when the WebSocket connects or disconnects
     this.gatewayManager.on("READY", () => {
-      contextSetters.setConnection(true);
+      clientStateRef.current.setConnection(true);
     });
 
     this.gatewayManager.on("DISCONNECT", () => {
-      contextSetters.setConnection(false);
+      clientStateRef.current.setConnection(false);
     });
   }
 

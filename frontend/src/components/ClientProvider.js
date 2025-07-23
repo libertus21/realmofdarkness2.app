@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import Client from "../structures/Client";
 
 const ClientContext = createContext(null);
@@ -15,16 +15,33 @@ export default function ClientProvider({ children }) {
   const [connected, setConnection] = useState(false);
   const [sheet, setSheet] = useState(null);
 
+  // Use a ref to store the current client state that can be updated without re-registering listeners
+  const clientStateRef = useRef();
+
+  // Update the ref whenever state changes
   useEffect(() => {
-    client.handleGatewayEvents({
+    clientStateRef.current = {
+      // State values
+      user,
+      characters,
+      chronicles,
+      members,
+      connected,
+      sheet,
+      // Setters
       setUser: setUser,
       setCharacters: setCharacters,
       setChronicles: setChronicles,
       setMembers: setMembers,
       setConnection: setConnection,
       setSheet: setSheet,
-    });
-  }, []); // only happens on site load
+    };
+  }, [user, characters, chronicles, members, connected, sheet]);
+
+  // Setup gateway events only once on mount
+  useEffect(() => {
+    client.handleGatewayEvents(clientStateRef);
+  }, []); // Only run once on mount
 
   const clientContextValue = {
     client,
