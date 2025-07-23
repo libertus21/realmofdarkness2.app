@@ -108,20 +108,49 @@ class GatewayConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             logger.error(f"Receive error: {str(e)}")
 
+    async def character_new(self, event):
+        """
+        Handle new character creation events
+        Add character to subscriptions if user has permission to see it
+        """
+        try:
+            character_id = str(event.get("id", ""))
+
+            # Check if we're already subscribed to this character
+            if character_id in self.subscribed_character_ids:
+                # Already subscribed, ignore this event to avoid duplicates
+                return
+
+            if await self.verify_new_character(event.get("tracker", {})):
+                # Add subscription to this character
+                await self.add_character_subscription(character_id)
+                # Send update to client
+                await self.send(
+                    text_data=GatewayMessage().update_character(event, None)
+                )
+        except Exception as e:
+            logger.error(f"New character error: {str(e)}")
+
     async def character_update(self, event):
         """
         Handle character update events
         Check visibility permissions before sending data to client
         """
         try:
+            tracker = event.get("tracker", {})
+            chronicle_id = tracker.get("chronicle", None)
+            user_id = tracker.get("user", "")
+
+            is_current_user = user_id == str(self.user.id) if user_id else False
+            is_staff = (
+                await self.is_user_staff_in_chronicle(chronicle_id)
+                if chronicle_id
+                else False
+            )
+            is_visible = is_current_user or is_staff
             # Check if user has permission to see this character
-            chronicle = event.get("tracker", {}).get("chronicle", None)
-            is_visible = (int(chronicle) if chronicle else 0) in self.chronicles
-            if (
-                str(event.get("tracker", {}).get("user", "")) != str(self.user.id)
-                and not is_visible
-            ):
-                # If not visible, treat as a deletion
+            if not is_visible:
+                # If not visible then treat as a deletion (delete also unsubs)
                 return await self.character_delete(event)
 
             # Check if this is the currently selected character sheet
@@ -135,45 +164,6 @@ class GatewayConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=GatewayMessage().update_character(event, sub))
         except Exception as e:
             logger.error(f"Character update error: {str(e)}")
-
-    async def member_update(self, event):
-        """Handle member update events from the channel layer"""
-        try:
-            await self.send(text_data=GatewayMessage().update_member(event))
-        except Exception as e:
-            logger.error(f"Member update error: {str(e)}")
-
-    async def user_update(self, event):
-        """Handle user update events from the channel layer"""
-        try:
-            await self.send(text_data=GatewayMessage().update_user(event))
-        except Exception as e:
-            logger.error(f"User update error: {str(e)}")
-
-    async def chronicle_update(self, event):
-        """Handle chronicle update events from the channel layer"""
-        try:
-            await self.send(text_data=GatewayMessage().update_chronicle(event))
-        except Exception as e:
-            logger.error(f"Chronicle update error: {str(e)}")
-
-    async def character_new(self, event):
-        """
-        Handle new character creation events
-        Add character to subscriptions if user has permission to see it
-        """
-        try:
-            # Verify permission to see this character
-            if await self.verify_new_character(event.get("tracker", {})):
-                # Add subscription to this character
-                character_id = event.get("id")
-                await self.add_character_subscription(character_id)
-                # Send update to client
-                await self.send(
-                    text_data=GatewayMessage().update_character(event, None)
-                )
-        except Exception as e:
-            logger.error(f"New character error: {str(e)}")
 
     async def character_delete(self, event):
         """
@@ -190,6 +180,20 @@ class GatewayConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=GatewayMessage().delete_character(id))
         except Exception as e:
             logger.error(f"Character delete error: {str(e)}")
+
+    async def user_update(self, event):
+        """Handle user update events from the channel layer"""
+        try:
+            await self.send(text_data=GatewayMessage().update_user(event))
+        except Exception as e:
+            logger.error(f"User update error: {str(e)}")
+
+    async def chronicle_update(self, event):
+        """Handle chronicle update events from the channel layer"""
+        try:
+            await self.send(text_data=GatewayMessage().update_chronicle(event))
+        except Exception as e:
+            logger.error(f"Chronicle update error: {str(e)}")
 
     async def member_new(self, event):
         """
@@ -282,6 +286,13 @@ class GatewayConsumer(AsyncWebsocketConsumer):
                 await self.send(text_data=GatewayMessage().update_member(event))
         except Exception as e:
             logger.error(f"Member new error: {str(e)}")
+
+    async def member_update(self, event):
+        """Handle member update events from the channel layer"""
+        try:
+            await self.send(text_data=GatewayMessage().update_member(event))
+        except Exception as e:
+            logger.error(f"Member update error: {str(e)}")
 
     async def member_delete(self, event):
         """
