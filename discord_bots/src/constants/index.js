@@ -1,7 +1,7 @@
 "use strict";
 
-// Emoji constants used throughout the bot UI
-module.exports.Emoji = require("./emoji");
+const { Emoji } = require("./Emoji");
+module.exports.Emoji = Emoji;
 // Splats constants for game archetypes
 module.exports.Splats = require("./Splats");
 // ComponentCID constants for Discord component custom IDs

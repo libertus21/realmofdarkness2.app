@@ -4,8 +4,7 @@ const { EmbedBuilder, MessageFlags } = require("discord.js");
 const Supporter = require("@src/constants/Supporter");
 const AppMember = require("@structures/AppMember");
 const AppUser = require("@structures/AppUser");
-const API = require("@api");
-const Emoji = require("@constants/emoji");
+const { Emoji } = require("@constants");
 
 /**
  * Create a visual progress bar for display
@@ -18,7 +17,6 @@ function createProgressBar(current, max) {
   const barLength = 10;
   const percentage = max > 0 ? Math.min(current / max, 1) : 0;
   const filledBars = Math.floor(percentage * barLength);
-  const emptyBars = barLength - filledBars;
 
   // Choose color set
   let color = "green";
@@ -28,32 +26,31 @@ function createProgressBar(current, max) {
   // Emoji keys for each color
   const keys = {
     green: {
-      left_full: Emoji.green_left_full,
-      left_empty: Emoji.green_left_empty,
-      middle_full: Emoji.green_middle_full,
-      middle_empty: Emoji.green_middle_empty,
-      right_full: Emoji.green_right_full,
-      right_empty: Emoji.green_right_empty,
+      left_full: Emoji.bar_g_filled_left.toString(),
+      left_empty: Emoji.bar_g_empty_left.toString(),
+      middle_full: Emoji.bar_g_filled_middle.toString(),
+      middle_empty: Emoji.bar_g_empty_middle.toString(),
+      right_full: Emoji.bar_g_filled_right.toString(),
+      right_empty: Emoji.bar_g_empty_right.toString(),
     },
     yellow: {
-      left_full: Emoji.yellow_left_full,
-      left_empty: Emoji.yellow_left_empty,
-      middle_full: Emoji.yellow_middle_full,
-      middle_empty: Emoji.yellow_middle_empty,
-      right_full: Emoji.yellow_right_full,
-      right_empty: Emoji.yellow_right_empty,
+      left_full: Emoji.bar_y_filled_left.toString(),
+      left_empty: Emoji.bar_y_empty_left.toString(),
+      middle_full: Emoji.bar_y_filled_middle.toString(),
+      middle_empty: Emoji.bar_y_empty_middle.toString(),
+      right_full: Emoji.bar_y_filled_right.toString(),
+      right_empty: Emoji.bar_y_empty_right.toString(),
     },
     red: {
-      left_full: Emoji.red_left_full,
-      left_empty: Emoji.red_left_empty,
-      middle_full: Emoji.red_middle_full,
-      middle_empty: Emoji.red_middle_empty,
-      right_full: Emoji.red_right_full,
-      right_empty: Emoji.red_right_empty,
+      left_full: Emoji.bar_r_filled_left.toString(),
+      left_empty: Emoji.bar_r_empty_left.toString(),
+      middle_full: Emoji.bar_r_filled_middle.toString(),
+      middle_empty: Emoji.bar_r_empty_middle.toString(),
+      right_full: Emoji.bar_r_filled_right.toString(),
+      right_empty: Emoji.bar_r_empty_right.toString(),
     },
   };
   const set = keys[color];
-
   let bar = "";
   for (let i = 0; i < barLength; i++) {
     if (i === 0) {
