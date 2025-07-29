@@ -52,10 +52,10 @@ export default function Ghoul20thInfo(props) {
           }}
         />
         <Divider sx={{ my: 1 }} />
-        <Typography>Humanity - {character.morality}</Typography>
+        <Typography>Humanity {character.humanity}</Typography>
         <ResponsiveRating
           tracker={{
-            current: character.morality,
+            current: character.humanity,
             total: 10,
           }}
         />
