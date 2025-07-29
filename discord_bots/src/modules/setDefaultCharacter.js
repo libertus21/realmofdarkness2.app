@@ -5,7 +5,6 @@ const { RealmError, ErrorCodes } = require("@errors");
 const verifySupporterStatus = require("@modules/verifySupporterStatus");
 const API = require("@api");
 const getCharacter = require("@modules/getCharacter");
-const { get } = require("http");
 
 module.exports = async function setDefaultCharacter(interaction) {
   if (!interaction.guild)
@@ -48,7 +47,7 @@ async function getArgs(interaction) {
     disable: interaction.options.getBoolean("disable") ?? false,
   };
   const character = await getCharacter(args.autocomplete, interaction, true);
-  args.name = character?.name || null;
+  args.name = character.name; // getCharacter throws an error if not found, so we can assume it's valid
   return args;
 }
 
