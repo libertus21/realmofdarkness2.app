@@ -34,7 +34,7 @@ module.exports = {
       Splats.demonTF.slug,
       Splats.mage20th.slug,
       Splats.werewolf20th.slug,
-      Splats.wraith20th.slug
+      Splats.wraith20th.slug,
     ]);
   },
 };
@@ -88,7 +88,6 @@ function getCommands() {
               .setName("name")
               .setDescription("Name of the character to set as default.")
               .setMaxLength(50)
-              .setRequired(true)
               .setAutocomplete(true)
           )
 

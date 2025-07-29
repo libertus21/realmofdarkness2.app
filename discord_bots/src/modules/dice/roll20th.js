@@ -43,7 +43,10 @@ async function getArgs(interaction) {
       interaction.user.id
     );
     if (defaults)
-      args.character = await getCharacter(defaults.name, interaction);
+      args.character = {
+        name: defaults.character.name,
+        tracked: defaults.character,
+      };
   }
 
   return args;

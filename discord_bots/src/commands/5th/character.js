@@ -80,7 +80,6 @@ function getCommands() {
               .setName("name")
               .setDescription("Name of the character to set as default.")
               .setMaxLength(50)
-              .setRequired(true)
               .setAutocomplete(true)
           )
           .addBooleanOption((option) =>
