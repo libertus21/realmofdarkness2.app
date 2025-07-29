@@ -6,7 +6,10 @@
  * @param {string} defaultSplat - The default splat to use if not specified
  * @returns {Object} An object containing the parsed name, splat and pk
  */
-module.exports = function parseAutocompleteCharacter(nameInput, defaultSplat) {
+module.exports = function parseAutocompleteCharacter(
+  nameInput,
+  defaultSplat = null
+) {
   // Guard against null/undefined input
   if (!nameInput) {
     return {

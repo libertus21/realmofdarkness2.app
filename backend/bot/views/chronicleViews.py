@@ -304,7 +304,6 @@ class SetDefaultsView(View):
             )
         except Character.DoesNotExist:
             return HttpResponse(status=204)
-
         member.default_character = character
         member.default_auto_hunger = data["auto_hunger"]
         member.save()
@@ -338,7 +337,6 @@ class GetDefaultsView(View):
             character = member.default_character
             if character._meta.model == Character:
                 character = get_derived_instance(character)
-
             # If splat filter is provided, check if default character's splat matches
             if not splat_filter or character.splat in splat_filter:
                 character_serializer = get_serializer(character.splat)

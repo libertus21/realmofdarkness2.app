@@ -30,7 +30,11 @@ async function getArgs(interaction) {
       interaction.user.id
     );
 
-    if (defaults) args.character = defaults.name;
+    if (defaults)
+      args.character = {
+        name: defaults.character.name,
+        tracked: defaults.character,
+      };
   }
   return args;
 }
