@@ -1,0 +1,74 @@
+# Set default behavior to automatically normalize line endings.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.py text
+*.js text
+*.jsx text
+*.ts text
+*.tsx text
+*.html text
+*.css text
+*.scss text
+*.sass text
+*.less text
+*.json text
+*.xml text
+*.yml text
+*.yaml text
+*.md text
+*.txt text
+*.sh text eol=lf
+*.bat text eol=crlf
+
+# Files that should not be normalized (binary files)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.otf binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+*.gz binary
+
+# Database files
+*.sqlite3 binary
+*.db binary
+*.rdb binary
+
+# Node modules and package locks (these should have consistent line endings)
+package-lock.json text
+yarn.lock text
+
+# Python specific
+*.py text
+*.pyx text
+*.pxd text
+*.pxi text
+
+# Django specific
+*.po text
+*.pot text
+
+# Configuration files
+*.ini text
+*.cfg text
+*.conf text
+*.config text
+.env* text
+.gitignore text
+.gitattributes text
+
+# Documentation
+README* text
+LICENSE* text
+CHANGELOG* text
+CONTRIBUTING* text
