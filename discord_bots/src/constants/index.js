@@ -1,17 +1,18 @@
 "use strict";
 
-module.exports.Emoji = require("./emoji");
+const { Emoji } = require("./Emoji");
+module.exports.Emoji = Emoji;
+// Splats constants for game archetypes
 module.exports.Splats = require("./Splats");
+// ComponentCID constants for Discord component custom IDs
 module.exports.ComponentCID = require("./ComponentCID");
 
-module.exports.Supporter = {
-  fledgling: 1,
-  neonate: 2,
-  ancilla: 3,
-  elder: 4,
-  methuselah: 5,
-};
+module.exports.Supporter = require("./Supporter");
 
+/**
+ * Initialization phases for Discord bot game sessions.
+ * Used to track the current state of a game or session.
+ */
 module.exports.InitPhase = {
   JOIN: 0,
   JOIN2: 1,

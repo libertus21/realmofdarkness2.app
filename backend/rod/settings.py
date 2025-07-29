@@ -49,7 +49,7 @@ if ENV == "development":
 else:
     # Production & preproduction environment
     ALLOWED_HOSTS = [
-        ".localhost",
+        "localhost",
         "127.0.0.1",
         "[::1]",
     ]

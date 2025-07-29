@@ -65,7 +65,6 @@ export default function MageQuintTracker(props) {
       direction="row"
       justifyContent="flex-start"
       alignItems="center"
-      sx={{ ml: -1.8 }}
     >
       {bars}
     </Grid2>
