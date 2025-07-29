@@ -18,6 +18,7 @@
 *.yml text
 *.yaml text
 *.md text
+*.mdx text
 *.txt text
 *.sh text eol=lf
 *.bat text eol=crlf
