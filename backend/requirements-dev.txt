@@ -1,9 +1,9 @@
 # requirements-dev.txt
 # Project dependencies with exact version locking for development
 
-Django==5.2.3
+Django==5.2.4
 djangorestframework==3.16.0
-channels[daphne]==4.2.2
+channels[daphne]==4.3.0
 channels-redis==4.2.1
 Pillow==11.2.1
 requests==2.32.4
@@ -12,6 +12,6 @@ python-dotenv==1.1.1
 pip==25.1.1
 mysqlclient==2.2.7
 black==25.1.0
-django-stubs[compatible-mypy]==5.2.1
-mypy==1.16.1
-django-types==0.21.0
+django-stubs[compatible-mypy]==5.2.2
+mypy==1.17.0
+django-types==0.22.0
