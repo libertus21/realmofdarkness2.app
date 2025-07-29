@@ -1,5 +1,6 @@
 import GatewayMessage from "./GatewayMessage";
 import { GATEWAY_OPCODE } from "../constants";
+import { getGatewayHost } from "../utility";
 const { EventEmitter } = require("events");
 
 const cooldownTimer = {
@@ -8,13 +9,6 @@ const cooldownTimer = {
   2: 10,
   3: 20,
 };
-
-let host;
-if (process.env.NODE_ENV === "production")
-  host = "wss://realmofdarkness.app/gateway/web/";
-else if (process.env.NODE_ENV === "preproduction")
-  host = "wss://dev.realmofdarkness.app/gateway/web/";
-else host = "ws://localhost:8080/gateway/web/";
 
 function incrementCooldown(cooldown) {
   let t = cooldown + 1;
@@ -29,7 +23,7 @@ export default class GatewayManager extends EventEmitter {
   }
 
   connect() {
-    this.ws = new WebSocket(host);
+    this.ws = new WebSocket(getGatewayHost());
 
     this.ws.onopen = () => {
       this.emit("CONNECT", this.setConnection);
@@ -54,9 +48,9 @@ export default class GatewayManager extends EventEmitter {
     this.listenOnMessage();
   }
 
-  listenOnMessage(contextSetters = null) {
-    if (contextSetters) this.contextSetters = contextSetters;
-    else if (!this.contextSetters) return;
+  listenOnMessage(clientStateRef = null) {
+    if (clientStateRef) this.clientStateRef = clientStateRef;
+    else if (!this.clientStateRef) return;
 
     this.ws.onmessage = (message) => {
       const json = message.data;
@@ -64,7 +58,11 @@ export default class GatewayManager extends EventEmitter {
 
       switch (gm.getOpcode()) {
         case GATEWAY_OPCODE.dispatch:
-          this.emit(gm.getEventName(), gm.getData(), this.contextSetters);
+          this.emit(
+            gm.getEventName(),
+            gm.getData(),
+            this.clientStateRef.current
+          );
           break;
         case GATEWAY_OPCODE.welcome:
           // send Identify message

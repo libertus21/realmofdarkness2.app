@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from .models import User
+from ..models import User
 from chronicle.models import Chronicle, Member
 import requests
 import hashlib
@@ -16,7 +16,7 @@ DISCORD_APP_SECRET = os.getenv("DISCORD_APP_SECRET", "")
 ENV = os.getenv("ENV", "development")
 
 # Set URLs based on environment
-if ENV:
+if ENV == "development":
     # Development environment
     REDIRECT_URI = "http://localhost:8080/auth/login/success/"
     FINAL_REDIRECT = "http://localhost:3000/"
@@ -120,21 +120,37 @@ def login_success(request):
         )
         user = User.objects.create_user(discord_user, is_registered=True)
 
+    # Get list of guild IDs the user is currently in according to Discord API
+    current_guild_ids = {int(guild["id"]) for guild in guilds}
+
+    # Add missing member relations for guilds the user is in
     for guild in guilds:
         guild_id = int(guild["id"])
         permissions = guild["permissions"]
         name = guild["name"]
         admin = False
         try:
-            guild = Chronicle.objects.get(id=guild_id)
+            chronicle = Chronicle.objects.get(id=guild_id)
         except Chronicle.DoesNotExist:
             continue
 
-        if not Member.objects.filter(chronicle=guild, user=user).exists():
-            print(f"User already exists in guild {name}")
-            if permissions & (1 << 3) != 0:
-                admin = True
-            Member.objects.create(chronicle=guild, user=user, admin=admin)
+        admin = (permissions & (1 << 3)) != 0
+        member, created = Member.objects.get_or_create(
+            chronicle=chronicle, user=user, defaults={"admin": admin}
+        )
+
+        # Update admin status if member already existed and admin status changed
+        if not created and member.admin != admin:
+            member.admin = admin
+            member.save()
+
+    # Remove stale member relations for guilds the user is no longer in
+    # Get all existing member relations for this user
+    existing_members = Member.objects.filter(user=user)
+
+    for member in existing_members:
+        if member.chronicle.id not in current_guild_ids:
+            member.delete()
 
     auth_login(request, user, backend="discordauth.backends.DiscordAuthBackend")
     # Enter redirect Page
