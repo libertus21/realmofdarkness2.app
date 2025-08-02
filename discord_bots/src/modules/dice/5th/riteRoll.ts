@@ -1,18 +1,26 @@
-"use strict";
-require(`${process.cwd()}/alias`);
-const { getEmbed, getContent, getComponents } = require("./getWtaRollResponse");
-const { trimString } = require("@modules/misc");
-const getCharacter = require("@src/modules/getCharacter");
-const Wta5thRollResults = require("@structures/Wta5thRollResults");
-const handleButtonPress = require("@modules/dice/5th/handleButtonPress");
-const API = require("@api");
-const { Splats } = require("@constants");
+import {
+  ChatInputCommandInteraction,
+  EmbedBuilder,
+  ActionRowBuilder,
+  AnyComponentBuilder,
+} from "discord.js";
+import { getEmbed, getContent, getComponents } from "./getWtaRollResponse";
+import { trimString } from "@modules/misc";
+import getCharacter from "@src/modules/getCharacter";
+import Wta5thRollResults from "@structures/Wta5thRollResults";
+import handleButtonPress from "@modules/dice/5th/handleButtonPress";
+import API from "@api";
+import { Splats } from "@constants/index";
 
-/**
- *
- * @param {Interaction} interaction
- */
-module.exports = async function riteRoll(interaction) {
+export type RiteResponse = {
+  content: string;
+  embeds: EmbedBuilder[];
+  components: ActionRowBuilder<AnyComponentBuilder>[];
+};
+
+export default async function riteRoll(
+  interaction: ChatInputCommandInteraction & { arguments?: any; rollResults?: any }
+): Promise<RiteResponse> {
   interaction.arguments = await getArgs(interaction);
   interaction.rollResults = await roll(interaction);
 
@@ -22,13 +30,13 @@ module.exports = async function riteRoll(interaction) {
     embeds: [getEmbed(interaction)],
     components: getComponents(interaction),
   };
-};
+}
 
-async function getArgs(interaction) {
+async function getArgs(interaction: ChatInputCommandInteraction) {
   const args = {
     pool: interaction.options.getInteger("pool"),
     rage: interaction.options.getInteger("rage"),
-    useCharRage: interaction.options.getBoolean("use_character_rage") || true,
+    useCharRage: interaction.options.getBoolean("use_character_rage") ?? true,
     trainedParticipants: interaction.options.getInteger("trained_participants"),
     participants: interaction.options.getInteger("participants"),
     difficulty: interaction.options.getInteger("difficulty"),
@@ -40,9 +48,8 @@ async function getArgs(interaction) {
       interaction,
       false
     ),
-  };
+  } as any;
 
-  // Get character defaults if no character specified
   if (!args.character?.tracked && interaction.guild) {
     const defaults = await API.characterDefaults.get(
       interaction.client,
@@ -50,7 +57,6 @@ async function getArgs(interaction) {
       interaction.user.id,
       [Splats.werewolf5th.slug]
     );
-
     if (defaults) {
       args.character = {
         name: defaults.character.name,
@@ -59,35 +65,23 @@ async function getArgs(interaction) {
     }
   }
 
-  // Use linked character's rage if available
-  if (args.useCharRage && args.rage === null && args.character?.tracked?.rage) {
+  if (args.useCharRage && args.rage == null && args.character?.tracked?.rage) {
     args.rage = args.character.tracked.rage.current;
   }
-
   return args;
 }
 
-/**
- * Takes a set of arguments and performs a roll
- * @param {Object} args Arguments recieved from the interaction
- */
-async function roll(interaction) {
+async function roll(interaction: any) {
   const args = interaction.arguments;
+  const pool = (args.pool ?? 0) + (args.participants ?? 0) + (args.trainedParticipants ?? 0) * 2;
 
-  const pool =
-    (args.pool ?? 0) +
-    (args.participants ?? 0) +
-    (args.trainedParticipants ?? 0) * 2;
   const results = new Wta5thRollResults({
     difficulty: args.difficulty ?? 1,
-    pool: pool,
+    pool,
     spec: args.spec,
   });
 
-  const rage =
-    (args.rage ?? 0) +
-    (args.participants ?? 0) +
-    (args.trainedParticipants ?? 0);
+  const rage = (args.rage ?? 0) + (args.participants ?? 0) + (args.trainedParticipants ?? 0);
   results.rollDice(rage);
   results.setOutcome();
 

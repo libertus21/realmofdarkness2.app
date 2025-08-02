@@ -54,16 +54,29 @@ const commandModule: CommandModule = {
 
     if (!interaction.isRepliable()) return "notRepliable";
 
+    let result: DiceResponse | string | void;
     switch (interaction.options.getSubcommand()) {
       case "roll":
-        return await wtaRoll(interaction);
+        result = await wtaRoll(interaction);
+        break;
       case "rage":
-        return await rageRoll(interaction);
+        result = await rageRoll(interaction);
+        break;
       case "rite":
-        return await riteRoll(interaction);
+        result = await riteRoll(interaction);
+        break;
       case "general":
-        return generalRoll(interaction);
+        result = generalRoll(interaction);
+        break;
     }
+
+    // send response
+    if (typeof result === "string") {
+      await interaction.editReply({ content: result });
+    } else if (result) {
+      await interaction.editReply(result as any);
+    }
+    return "notRepliable";
   },
 
   async autocomplete(interaction: AutocompleteInteraction): Promise<void> {

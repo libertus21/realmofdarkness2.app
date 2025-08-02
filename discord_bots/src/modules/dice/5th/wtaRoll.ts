@@ -1,22 +1,29 @@
-"use strict";
-require(`${process.cwd()}/alias`);
-const { MessageFlags } = require("discord.js");
-const getCharacter = require("@src/modules/getCharacter");
-const {
+import {
+  ChatInputCommandInteraction,
+  EmbedBuilder,
+  ActionRowBuilder,
+  AnyComponentBuilder,
+} from "discord.js";
+import getCharacter from "@src/modules/getCharacter";
+import {
   getEmbed,
   getContent,
   getComponents,
-} = require("@modules/dice/5th/getWtaRollResponse");
-const Wta5thRollResults = require("@structures/Wta5thRollResults");
-const handleButtonPress = require("@modules/dice/5th/handleButtonPress");
-const API = require("@api");
-const { Splats } = require("@constants");
+} from "@modules/dice/5th/getWtaRollResponse";
+import Wta5thRollResults from "@structures/Wta5thRollResults";
+import handleButtonPress from "@modules/dice/5th/handleButtonPress";
+import API from "@api";
+import { Splats } from "@constants/index";
 
-/**
- *
- * @param {Interaction} interaction
- */
-module.exports = async function wtaRoll(interaction) {
+export type WtaRollResponse = {
+  content: string;
+  embeds: EmbedBuilder[];
+  components: ActionRowBuilder<AnyComponentBuilder>[];
+};
+
+export default async function wtaRoll(
+  interaction: ChatInputCommandInteraction & { arguments?: any; rollResults?: any }
+): Promise<WtaRollResponse> {
   interaction.arguments = await getArgs(interaction);
   interaction.rollResults = await roll(interaction);
 
@@ -26,9 +33,9 @@ module.exports = async function wtaRoll(interaction) {
     embeds: [getEmbed(interaction)],
     components: getComponents(interaction),
   };
-};
+}
 
-async function getArgs(interaction) {
+async function getArgs(interaction: ChatInputCommandInteraction) {
   const args = {
     pool: interaction.options.getInteger("pool"),
     rage: interaction.options.getInteger("rage"),
@@ -43,9 +50,9 @@ async function getArgs(interaction) {
       interaction,
       false
     ),
-  };
+  } as any;
 
-  // Get character defaults if no character specified
+  // Defaults
   if (!args.character?.tracked && interaction.guild) {
     const defaults = await API.characterDefaults.get(
       interaction.client,
@@ -53,7 +60,6 @@ async function getArgs(interaction) {
       interaction.user.id,
       [Splats.werewolf5th.slug, Splats.human5th.slug]
     );
-
     if (defaults) {
       args.character = {
         name: defaults.character.name,
@@ -61,15 +67,10 @@ async function getArgs(interaction) {
       };
     }
   }
-
   return args;
 }
 
-/**
- * Takes a set of arguments and performs a roll
- * @param {Object} args Arguments recieved from the interaction
- */
-async function roll(interaction) {
+async function roll(interaction: any) {
   const args = interaction.arguments;
   if (
     args.character?.tracked &&
@@ -96,27 +97,18 @@ async function roll(interaction) {
   return results;
 }
 
-async function updateRage(interaction, results) {
+async function updateRage(interaction: any, results: any) {
   let rage = 0;
-  if (results.rageCheck?.passed === false) rage++;
-  else if (results.doubleRageCheck?.decreased > 0)
-    rage += results.doubleRageCheck.decreased;
+  if (results.rageCheck != null) rage = 1;
+  else if (results.doubleRageCheck != null) rage = 2;
+  if (results.outcome.bestialOutcome) rage += 2;
 
-  let character;
-  if (interaction.arguments.character?.tracked)
-    character = interaction.arguments.character.tracked;
-  else if (interaction.arguments.sheet)
-    character = interaction.arguments.character;
-
-  if (character && rage && character.splat.slug === "werewolf5th") {
-    const change = { command: "Dice Roll", rage: -rage };
-    character.updateFields(change);
-    await character.save(interaction.client);
-    interaction.followUps = [
-      {
-        embeds: [character.getEmbed()],
-        flags: MessageFlags.Ephemeral,
-      },
-    ];
+  const char = interaction.arguments.character;
+  if (char?.tracked?.rage) {
+    if ((API as any).characters?.updateRage) await (API as any).characters.updateRage(
+      interaction.client,
+      char.tracked.id,
+      char.tracked.rage.current + rage
+    );
   }
 }
