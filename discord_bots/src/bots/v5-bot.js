@@ -71,7 +71,8 @@ const commandFiles = fs
 
 for (const file of commandFiles) {
   try {
-    const command = require(`@commands/5th/${file}`);
+    const importedCmd = require(`@commands/5th/${file}`);
+    const command = importedCmd.default ?? importedCmd;
     if (command.data && command.data.name) {
       client.commands.set(command.data.name, command);
     } else {
@@ -93,7 +94,8 @@ if (fs.existsSync(componentsPath)) {
 
   for (const file of componentFiles) {
     try {
-      const component = require(`@components/5th/${file}`);
+      const importedComp = require(`@components/5th/${file}`);
+      const component = importedComp.default ?? importedComp;
       if (component.name) {
         client.components.set(component.name, component);
       } else {
