@@ -1,38 +1,63 @@
-"use strict";
-require(`${process.cwd()}/alias`);
-const { SlashCommandBuilder, MessageFlags } = require("discord.js");
-const { Splats } = require("@constants");
-const tracker = require("@modules/tracker");
-const getHexColor = require("@modules/getColorHex");
-const verifySupporterStatus = require("@modules/verifySupporterStatus");
-const commandUpdate = require("@modules/commandDatabaseUpdate");
-const autocomplete5th = require("@modules/autocomplete");
+import { SlashCommandBuilder, MessageFlags, ChatInputCommandInteraction, AutocompleteInteraction, User, Attachment, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
+import { Splats } from "@constants";
+import tracker from "@modules/tracker";
+import getHexColor from "@modules/getColorHex";
+import verifySupporterStatus from "@modules/verifySupporterStatus";
+import commandUpdate from "@modules/commandDatabaseUpdate";
+import autocomplete5th from "@modules/autocomplete";
 
-module.exports = {
+interface CommandModule {
+  data: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
+  execute(interaction: ChatInputCommandInteraction): Promise<{ flags: MessageFlags; embeds: any[] } | string | void>;
+  autocomplete(interaction: AutocompleteInteraction): Promise<void>;
+}
+
+interface InteractionArguments {
+  player: User | null;
+  name: string | null;
+  exp: number | null;
+  notes: string | null;
+  nameChange: string | null;
+  thumbnail: Attachment | null;
+  color: string | null;
+  willpower: number | null;
+  health: number | null;
+  willpowerSup: number | null;
+  willpowerAgg: number | null;
+  healthSup: number | null;
+  healthAgg: number | null;
+  humanity: number | null;
+  stains: number | null;
+  blood: number | null;
+  bloodSup: number | null;
+  bloodAgg: number | null;
+}
+
+const module: CommandModule = {
   data: getCommands(),
-  async execute(interaction) {
+  async execute(interaction: ChatInputCommandInteraction): Promise<{ flags: MessageFlags; embeds: any[] } | string | void> {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     await commandUpdate(interaction);
 
     if (!interaction.isRepliable()) return "notRepliable";
-    interaction.arguments = await getArgs(interaction);
+    (interaction as any).arguments = await getArgs(interaction);
     switch (interaction.options.getSubcommand()) {
       case "new":
-        return await tracker.new(interaction, Splats.hunter5th);
+        return await tracker.new(interaction, Splats.vampire5th);
       case "update":
-        return await tracker.update(interaction, Splats.hunter5th);
+        return await tracker.update(interaction, null);
       case "set":
-        return await tracker.set(interaction, Splats.hunter5th);
+        return await tracker.set(interaction, null);
     }
   },
 
-  async autocomplete(interaction) {
-    return await autocomplete5th(interaction, Splats.hunter5th.slug);
+  async autocomplete(interaction: AutocompleteInteraction): Promise<void> {
+    return await autocomplete5th(interaction, Splats.vampire5th.slug);
   },
 };
 
-async function getArgs(interaction) {
-  const args = {
+async function getArgs(interaction: ChatInputCommandInteraction): Promise<InteractionArguments> {
+  const args: InteractionArguments = {
     player: interaction.options.getUser("player"),
     name: interaction.options.getString("name"),
     exp: interaction.options.getInteger("exp"),
@@ -46,9 +71,11 @@ async function getArgs(interaction) {
     willpowerAgg: interaction.options.getInteger("willpower_agg"),
     healthSup: interaction.options.getInteger("health_superficial"),
     healthAgg: interaction.options.getInteger("health_agg"),
-    desperation: interaction.options.getInteger("desperation"),
-    danger: interaction.options.getInteger("danger"),
-    despair: interaction.options.getBoolean("despair"),
+    humanity: interaction.options.getInteger("humanity"),
+    stains: interaction.options.getInteger("stains"),
+    blood: interaction.options.getInteger("blood"),
+    bloodSup: interaction.options.getInteger("blood_superficial"),
+    bloodAgg: interaction.options.getInteger("blood_agg"),
   };
 
   if (args.color || args.thumbnail)
@@ -56,16 +83,16 @@ async function getArgs(interaction) {
   return args;
 }
 
-function getCommands() {
+function getCommands(): SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder {
   const command = new SlashCommandBuilder()
-    .setName("hunter")
-    .setDescription("Hunter tracker commands.");
+    .setName("vampire")
+    .setDescription("Vampire tracker commands.");
 
   ////////////////// New Vampire ////////////////////////////
   command.addSubcommand((subcommand) =>
     subcommand
       .setName("new")
-      .setDescription("Create a new Hunter 5th character.")
+      .setDescription("Create a new Vampire 5th character.")
 
       .addStringOption((option) =>
         option
@@ -95,24 +122,20 @@ function getCommands() {
 
       .addIntegerOption((option) =>
         option
-          .setName("desperation")
-          .setDescription("Current Desperation (1-5).")
-          .setMaxValue(5)
-          .setMinValue(1)
+          .setName("humanity")
+          .setDescription("Current Humanity (0-10).")
+          .setMaxValue(10)
+          .setMinValue(0)
+          .setRequired(true)
       )
 
       .addIntegerOption((option) =>
         option
-          .setName("danger")
-          .setDescription("Current Danger (1-5).")
-          .setMaxValue(5)
+          .setName("blood")
+          .setDescription("Total Blood (1-20).")
+          .setMaxValue(20)
           .setMinValue(1)
-      )
-
-      .addBooleanOption((option) =>
-        option
-          .setName("despair")
-          .setDescription("If you are currently in despair.")
+          .setRequired(true)
       )
 
       .addIntegerOption((option) =>
@@ -126,16 +149,16 @@ function getCommands() {
       .addIntegerOption((option) =>
         option
           .setName("willpower_superficial")
-          .setDescription("Superficial Willpower Damage (0-15).")
-          .setMaxValue(15)
+          .setDescription("Superficial Willpower Damage (0-20).")
+          .setMaxValue(20)
           .setMinValue(0)
       )
 
       .addIntegerOption((option) =>
         option
           .setName("willpower_agg")
-          .setDescription("Aggravated Willpower Damage (0-15).")
-          .setMaxValue(15)
+          .setDescription("Aggravated Willpower Damage (0-20).")
+          .setMaxValue(20)
           .setMinValue(0)
       )
 
@@ -152,6 +175,30 @@ function getCommands() {
           .setName("health_agg")
           .setDescription("Aggravated Health Damage (0-20).")
           .setMaxValue(20)
+          .setMinValue(0)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("blood_superficial")
+          .setDescription("Superficial Blood Damage (0-20).")
+          .setMaxValue(20)
+          .setMinValue(0)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("blood_agg")
+          .setDescription("Aggravated Blood Damage (0-20).")
+          .setMaxValue(20)
+          .setMinValue(0)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("stains")
+          .setDescription("Current Stains (0-10).")
+          .setMaxValue(10)
           .setMinValue(0)
       )
 
@@ -185,7 +232,7 @@ function getCommands() {
   command.addSubcommand((subcommand) =>
     subcommand
       .setName("set")
-      .setDescription("Set values for your Hunter 5th character.")
+      .setDescription("Set values for your Vampire 5th character.")
 
       .addStringOption((option) =>
         option
@@ -214,32 +261,24 @@ function getCommands() {
 
       .addIntegerOption((option) =>
         option
-          .setName("desperation")
-          .setDescription("Current Desperation (1-5).")
-          .setMaxValue(5)
-          .setMinValue(1)
+          .setName("humanity")
+          .setDescription("Current Humanity (0-10).")
+          .setMaxValue(10)
+          .setMinValue(0)
       )
 
       .addIntegerOption((option) =>
         option
-          .setName("danger")
-          .setDescription("Current Danger (1-5).")
-          .setMaxValue(5)
+          .setName("blood")
+          .setDescription("Total Blood (1-20).")
+          .setMaxValue(20)
           .setMinValue(1)
-      )
-
-      .addBooleanOption((option) =>
-        option
-          .setName("despair")
-          .setDescription("If you are currently in despair.")
       )
 
       .addIntegerOption((option) =>
         option
           .setName("exp")
-          .setDescription(
-            "Total Experience. Positive values increase current exp."
-          )
+          .setDescription("Total Experience. + values increase current.")
           .setMaxValue(1000)
           .setMinValue(0)
       )
@@ -247,16 +286,16 @@ function getCommands() {
       .addIntegerOption((option) =>
         option
           .setName("willpower_superficial")
-          .setDescription("Superficial Willpower Damage (0-15).")
-          .setMaxValue(15)
+          .setDescription("Superficial Willpower Damage (0-20).")
+          .setMaxValue(20)
           .setMinValue(0)
       )
 
       .addIntegerOption((option) =>
         option
           .setName("willpower_agg")
-          .setDescription("Aggravated Willpower Damage (0-15).")
-          .setMaxValue(15)
+          .setDescription("Aggravated Willpower Damage (0-20).")
+          .setMaxValue(20)
           .setMinValue(0)
       )
 
@@ -273,6 +312,30 @@ function getCommands() {
           .setName("health_agg")
           .setDescription("Aggravated Health Damage (0-20).")
           .setMaxValue(20)
+          .setMinValue(0)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("blood_superficial")
+          .setDescription("Superficial Blood Damage (0-20).")
+          .setMaxValue(20)
+          .setMinValue(0)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("blood_agg")
+          .setDescription("Aggravated Blood Damage (0-20).")
+          .setMaxValue(20)
+          .setMinValue(0)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("stains")
+          .setDescription("Current Stains (0-10).")
+          .setMaxValue(10)
           .setMinValue(0)
       )
 
@@ -313,7 +376,7 @@ function getCommands() {
   command.addSubcommand((subcommand) =>
     subcommand
       .setName("update")
-      .setDescription("Update values for your Hunter 5th character.")
+      .setDescription("Update values for your Vampire 5th character.")
 
       .addStringOption((option) =>
         option
@@ -326,41 +389,19 @@ function getCommands() {
 
       .addIntegerOption((option) =>
         option
-          .setName("desperation")
-          .setDescription("Change Desperation by value (-10 to 10).")
-          .setMaxValue(10)
-          .setMinValue(-10)
-      )
-
-      .addIntegerOption((option) =>
-        option
-          .setName("danger")
-          .setDescription("Change Danger by value (-10 to 10).")
-          .setMaxValue(10)
-          .setMinValue(-10)
-      )
-
-      .addBooleanOption((option) =>
-        option
-          .setName("despair")
-          .setDescription("If you are currently in despair.")
-      )
-
-      .addIntegerOption((option) =>
-        option
           .setName("willpower_superficial")
           .setDescription(
-            "Change Superficial Willpower Damage by value (-20 to 20)."
+            "Change Superficial Willpower Damage by amount (-30 to 30)."
           )
-          .setMaxValue(20)
-          .setMinValue(-20)
+          .setMaxValue(30)
+          .setMinValue(-30)
       )
 
       .addIntegerOption((option) =>
         option
           .setName("health_superficial")
           .setDescription(
-            "Change Superficial Health Damage by value (-30 to 30)."
+            "Change Superficial Health Damage by amount (-30 to 30)."
           )
           .setMaxValue(30)
           .setMinValue(-30)
@@ -370,17 +411,7 @@ function getCommands() {
         option
           .setName("willpower_agg")
           .setDescription(
-            "Change Aggravated Willpower Damage by value (-20 to 20)."
-          )
-          .setMaxValue(20)
-          .setMinValue(-20)
-      )
-
-      .addIntegerOption((option) =>
-        option
-          .setName("health_agg")
-          .setDescription(
-            "Change Aggravated Health Damage by value (-30 to 30)."
+            "Change Aggravated Willpower Damage by amount (-30 to 30)."
           )
           .setMaxValue(30)
           .setMinValue(-30)
@@ -388,8 +419,46 @@ function getCommands() {
 
       .addIntegerOption((option) =>
         option
+          .setName("health_agg")
+          .setDescription(
+            "Change Aggravated Health Damage by amount (-30 to 30)."
+          )
+          .setMaxValue(30)
+          .setMinValue(-30)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("blood_superficial")
+          .setDescription(
+            "Change Superficial Blood Damage by amount (-30 to 30)."
+          )
+          .setMaxValue(30)
+          .setMinValue(-30)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("blood_agg")
+          .setDescription(
+            "Change Aggravated Blood Damage by amount (-30 to 30)."
+          )
+          .setMaxValue(30)
+          .setMinValue(-30)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("stains")
+          .setDescription("Change Stains by amount (-15 to 15).")
+          .setMaxValue(15)
+          .setMinValue(-15)
+      )
+
+      .addIntegerOption((option) =>
+        option
           .setName("exp")
-          .setDescription("Change Experience by value.")
+          .setDescription("Change Experience by amount.")
           .setMaxValue(2000)
           .setMinValue(-2000)
       )
@@ -397,7 +466,7 @@ function getCommands() {
       .addIntegerOption((option) =>
         option
           .setName("willpower")
-          .setDescription("Change Total Willpower by value (-20 to 20).")
+          .setDescription("Change Total Willpower by amount (-20 to 20).")
           .setMaxValue(20)
           .setMinValue(-20)
       )
@@ -405,9 +474,25 @@ function getCommands() {
       .addIntegerOption((option) =>
         option
           .setName("health")
-          .setDescription("Change Total Health by value (-30 to 30).")
+          .setDescription("Change Total Health by amount (-30 to 30).")
           .setMaxValue(30)
           .setMinValue(-30)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("blood")
+          .setDescription("Change Total Blood by amount (-20 to 20).")
+          .setMaxValue(20)
+          .setMinValue(-20)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("humanity")
+          .setDescription("Change Humanity by amount (-15 to 15).")
+          .setMaxValue(15)
+          .setMinValue(-15)
       )
 
       .addUserOption((option) =>
@@ -427,3 +512,5 @@ function getCommands() {
   );
   return command;
 }
+
+export default module; 

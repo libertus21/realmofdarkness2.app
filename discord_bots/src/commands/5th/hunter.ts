@@ -1,77 +1,60 @@
-"use strict";
-require(`${process.cwd()}/alias`);
-const {
-  SlashCommandBuilder,
-  EmbedBuilder,
-  MessageFlags,
-} = require("discord.js");
-const { Splats } = require("@constants");
-const tracker = require("@modules/tracker");
-const getHexColor = require("@modules/getColorHex");
-const verifySupporterStatus = require("@modules/verifySupporterStatus");
-const commandUpdate = require("@modules/commandDatabaseUpdate");
-const autocomplete5th = require("@modules/autocomplete");
+import { SlashCommandBuilder, MessageFlags, ChatInputCommandInteraction, AutocompleteInteraction, User, Attachment, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
+import { Splats } from "@constants";
+import tracker from "@modules/tracker";
+import getHexColor from "@modules/getColorHex";
+import verifySupporterStatus from "@modules/verifySupporterStatus";
+import commandUpdate from "@modules/commandDatabaseUpdate";
+import autocomplete5th from "@modules/autocomplete";
 
-module.exports = {
+interface CommandModule {
+  data: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
+  execute(interaction: ChatInputCommandInteraction): Promise<{ flags: MessageFlags; embeds: any[] } | string | void>;
+  autocomplete(interaction: AutocompleteInteraction): Promise<void>;
+}
+
+interface InteractionArguments {
+  player: User | null;
+  name: string | null;
+  exp: number | null;
+  notes: string | null;
+  nameChange: string | null;
+  thumbnail: Attachment | null;
+  color: string | null;
+  willpower: number | null;
+  health: number | null;
+  willpowerSup: number | null;
+  willpowerAgg: number | null;
+  healthSup: number | null;
+  healthAgg: number | null;
+  humanity: number | null;
+  stains: number | null;
+}
+
+const module: CommandModule = {
   data: getCommands(),
-
-  /**
-   * Executes the vampire command based on the provided interaction.
-   * @param {Interaction} interaction - The interaction object representing the command interaction.
-   * @returns {Promise<string|void>} - A promise that resolves to a string or void.
-   */
-  async execute(interaction) {
+  async execute(interaction: ChatInputCommandInteraction): Promise<{ flags: MessageFlags; embeds: any[] } | string | void> {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     await commandUpdate(interaction);
 
     if (!interaction.isRepliable()) return "notRepliable";
-    interaction.arguments = await getArgs(interaction);
+    (interaction as any).arguments = await getArgs(interaction);
     switch (interaction.options.getSubcommand()) {
       case "new":
-        const res = await tracker.new(interaction, Splats.vampire5th);
-        await sheetFollowUp(interaction);
-        return res;
+        return await tracker.new(interaction, Splats.hunter5th);
       case "update":
-        const update = await tracker.update(interaction, Splats.vampire5th);
-        return update;
+        return await tracker.update(interaction, null);
       case "set":
-        return await tracker.set(interaction, Splats.vampire5th);
+        return await tracker.set(interaction, null);
     }
   },
 
-  async autocomplete(interaction) {
-    return await autocomplete5th(interaction, Splats.vampire5th.slug);
+  async autocomplete(interaction: AutocompleteInteraction): Promise<void> {
+    return await autocomplete5th(interaction, Splats.hunter5th.slug);
   },
 };
 
-/**
- * Sends a follow-up message with information about character sheets.
- * @param {Interaction} interaction - The interaction object representing the command interaction.
- * @returns {Promise<void>} - A promise that resolves when the follow-up message is sent.
- */
-async function sheetFollowUp(interaction) {
-  if (!interaction.followUps) interaction.followUps = [];
-  const message = { flags: MessageFlags.Ephemeral, embeds: [] };
-
-  const embed = new EmbedBuilder();
-  embed
-    .setColor("#ede61a")
-    .setTitle("Character Sheets Available")
-    .setDescription(
-      'Character sheets are now available and feature complete on the [Website](https://realmofdarkness.app).\n\nWe recommend creating a sheet rather than using the tracker directly as sheets offer more functionality while still being fully compatible with the bot tracker commands. Sheets provide an easy-to-use web interface to update values and access to the `/sheet roll` command for building dice pools without having to look at your character sheet.\n\nTo create a new sheet, simply login to the [Website](https://realmofdarkness.app) and click the "New Sheet" button to get started.'
-    );
-  message.embeds.push(embed);
-  interaction.followUps.push(message);
-}
-
-/**
- * Retrieves the arguments from an interaction and returns them as an object.
- *
- * @param {Interaction} interaction - The interaction object containing the options.
- * @returns {Object} - An object containing the retrieved arguments.
- */
-async function getArgs(interaction) {
-  const args = {
+async function getArgs(interaction: ChatInputCommandInteraction): Promise<InteractionArguments> {
+  const args: InteractionArguments = {
     player: interaction.options.getUser("player"),
     name: interaction.options.getString("name"),
     exp: interaction.options.getInteger("exp"),
@@ -85,7 +68,6 @@ async function getArgs(interaction) {
     willpowerAgg: interaction.options.getInteger("willpower_agg"),
     healthSup: interaction.options.getInteger("health_superficial"),
     healthAgg: interaction.options.getInteger("health_agg"),
-    hunger: interaction.options.getInteger("hunger"),
     humanity: interaction.options.getInteger("humanity"),
     stains: interaction.options.getInteger("stains"),
   };
@@ -95,20 +77,16 @@ async function getArgs(interaction) {
   return args;
 }
 
-/**
- * Retrieves the slash commands for the vampire tracker.
- * @returns {SlashCommandBuilder} The slash command builder object containing the vampire tracker commands.
- */
-function getCommands() {
+function getCommands(): SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder {
   const command = new SlashCommandBuilder()
-    .setName("vampire")
-    .setDescription("Vampire tracker commands for V5 characters.");
+    .setName("hunter")
+    .setDescription("Hunter tracker commands.");
 
-  ////////////////// New Vampire ////////////////////////////
+  ////////////////// New Hunter ////////////////////////////
   command.addSubcommand((subcommand) =>
     subcommand
       .setName("new")
-      .setDescription("Create a new V5 Vampire character.")
+      .setDescription("Create a new Hunter 5th character.")
 
       .addStringOption((option) =>
         option
@@ -147,14 +125,6 @@ function getCommands() {
 
       .addIntegerOption((option) =>
         option
-          .setName("hunger")
-          .setDescription("Current Hunger (0-5).")
-          .setMaxValue(5)
-          .setMinValue(0)
-      )
-
-      .addIntegerOption((option) =>
-        option
           .setName("exp")
           .setDescription("Total Experience.")
           .setMaxValue(1000)
@@ -164,16 +134,16 @@ function getCommands() {
       .addIntegerOption((option) =>
         option
           .setName("willpower_superficial")
-          .setDescription("Superficial Willpower Damage (0-15).")
-          .setMaxValue(15)
+          .setDescription("Superficial Willpower Damage (0-20).")
+          .setMaxValue(20)
           .setMinValue(0)
       )
 
       .addIntegerOption((option) =>
         option
           .setName("willpower_agg")
-          .setDescription("Aggravated Willpower Damage (0-15).")
-          .setMaxValue(15)
+          .setDescription("Aggravated Willpower Damage (0-20).")
+          .setMaxValue(20)
           .setMinValue(0)
       )
 
@@ -204,7 +174,7 @@ function getCommands() {
       .addStringOption((option) =>
         option
           .setName("notes")
-          .setDescription("Any extra info to include.")
+          .setDescription("Any additional information you want to include.")
           .setMaxLength(300)
       )
 
@@ -212,7 +182,7 @@ function getCommands() {
         option
           .setName("color")
           .setDescription(
-            "Sidebar color hex code (e.g. #6f82ab). [Supporter Only]"
+            "Sidebar color. Enter hex code (e.g. #6f82ab). [Supporter Only]"
           )
           .setMaxLength(7)
           .setMinLength(7)
@@ -222,7 +192,7 @@ function getCommands() {
         option
           .setName("image")
           .setDescription(
-            "Set your character's thumbnail image. [Supporter Only]"
+            "Change your character's thumbnail image. [Supporter Only]"
           )
       )
   );
@@ -231,7 +201,7 @@ function getCommands() {
   command.addSubcommand((subcommand) =>
     subcommand
       .setName("set")
-      .setDescription("Set values for your V5 Vampire character.")
+      .setDescription("Set values for your Hunter 5th character.")
 
       .addStringOption((option) =>
         option
@@ -268,18 +238,8 @@ function getCommands() {
 
       .addIntegerOption((option) =>
         option
-          .setName("hunger")
-          .setDescription("Current Hunger (0-5).")
-          .setMaxValue(5)
-          .setMinValue(0)
-      )
-
-      .addIntegerOption((option) =>
-        option
           .setName("exp")
-          .setDescription(
-            "Total Experience. Positive values also increase current."
-          )
+          .setDescription("Total Experience. + values increase current.")
           .setMaxValue(1000)
           .setMinValue(0)
       )
@@ -287,16 +247,16 @@ function getCommands() {
       .addIntegerOption((option) =>
         option
           .setName("willpower_superficial")
-          .setDescription("Superficial Willpower Damage (0-15).")
-          .setMaxValue(15)
+          .setDescription("Superficial Willpower Damage (0-20).")
+          .setMaxValue(20)
           .setMinValue(0)
       )
 
       .addIntegerOption((option) =>
         option
           .setName("willpower_agg")
-          .setDescription("Aggravated Willpower Damage (0-15).")
-          .setMaxValue(15)
+          .setDescription("Aggravated Willpower Damage (0-20).")
+          .setMaxValue(20)
           .setMinValue(0)
       )
 
@@ -327,7 +287,7 @@ function getCommands() {
       .addStringOption((option) =>
         option
           .setName("notes")
-          .setDescription("Any extra info to include.")
+          .setDescription("Any additional information you want to include.")
           .setMaxLength(300)
       )
 
@@ -342,7 +302,7 @@ function getCommands() {
         option
           .setName("color")
           .setDescription(
-            "Sidebar color hex code (e.g. #6f82ab). [Supporter Only]"
+            "Sidebar color. Enter hex code (e.g. #6f82ab). [Supporter Only]"
           )
           .setMaxLength(7)
           .setMinLength(7)
@@ -352,7 +312,7 @@ function getCommands() {
         option
           .setName("image")
           .setDescription(
-            "Set your character's thumbnail image. [Supporter Only]"
+            "Change your character's thumbnail image. [Supporter Only]"
           )
       )
   );
@@ -361,7 +321,7 @@ function getCommands() {
   command.addSubcommand((subcommand) =>
     subcommand
       .setName("update")
-      .setDescription("Update values for your V5 Vampire character.")
+      .setDescription("Update values for your Hunter 5th character.")
 
       .addStringOption((option) =>
         option
@@ -374,24 +334,20 @@ function getCommands() {
 
       .addIntegerOption((option) =>
         option
-          .setName("hunger")
-          .setDescription("Change Hunger by this amount (-10 to 10).")
-          .setMaxValue(10)
-          .setMinValue(-10)
-      )
-
-      .addIntegerOption((option) =>
-        option
           .setName("willpower_superficial")
-          .setDescription("Change Superficial Willpower Damage (-20 to 20).")
-          .setMaxValue(20)
-          .setMinValue(-20)
+          .setDescription(
+            "Change Superficial Willpower Damage by amount (-30 to 30)."
+          )
+          .setMaxValue(30)
+          .setMinValue(-30)
       )
 
       .addIntegerOption((option) =>
         option
           .setName("health_superficial")
-          .setDescription("Change Superficial Health Damage (-30 to 30).")
+          .setDescription(
+            "Change Superficial Health Damage by amount (-30 to 30)."
+          )
           .setMaxValue(30)
           .setMinValue(-30)
       )
@@ -399,15 +355,19 @@ function getCommands() {
       .addIntegerOption((option) =>
         option
           .setName("willpower_agg")
-          .setDescription("Change Aggravated Willpower Damage (-20 to 20).")
-          .setMaxValue(20)
-          .setMinValue(-20)
+          .setDescription(
+            "Change Aggravated Willpower Damage by amount (-30 to 30)."
+          )
+          .setMaxValue(30)
+          .setMinValue(-30)
       )
 
       .addIntegerOption((option) =>
         option
           .setName("health_agg")
-          .setDescription("Change Aggravated Health Damage (-30 to 30).")
+          .setDescription(
+            "Change Aggravated Health Damage by amount (-30 to 30)."
+          )
           .setMaxValue(30)
           .setMinValue(-30)
       )
@@ -415,7 +375,7 @@ function getCommands() {
       .addIntegerOption((option) =>
         option
           .setName("stains")
-          .setDescription("Change Stains by this amount (-15 to 15).")
+          .setDescription("Change Stains by amount (-15 to 15).")
           .setMaxValue(15)
           .setMinValue(-15)
       )
@@ -423,7 +383,7 @@ function getCommands() {
       .addIntegerOption((option) =>
         option
           .setName("exp")
-          .setDescription("Change Experience by this amount.")
+          .setDescription("Change Experience by amount.")
           .setMaxValue(2000)
           .setMinValue(-2000)
       )
@@ -431,7 +391,7 @@ function getCommands() {
       .addIntegerOption((option) =>
         option
           .setName("willpower")
-          .setDescription("Change Total Willpower (-20 to 20).")
+          .setDescription("Change Total Willpower by amount (-20 to 20).")
           .setMaxValue(20)
           .setMinValue(-20)
       )
@@ -439,7 +399,7 @@ function getCommands() {
       .addIntegerOption((option) =>
         option
           .setName("health")
-          .setDescription("Change Total Health (-30 to 30).")
+          .setDescription("Change Total Health by amount (-30 to 30).")
           .setMaxValue(30)
           .setMinValue(-30)
       )
@@ -447,7 +407,7 @@ function getCommands() {
       .addIntegerOption((option) =>
         option
           .setName("humanity")
-          .setDescription("Change Humanity by this amount (-15 to 15).")
+          .setDescription("Change Humanity by amount (-15 to 15).")
           .setMaxValue(15)
           .setMinValue(-15)
       )
@@ -463,9 +423,11 @@ function getCommands() {
       .addStringOption((option) =>
         option
           .setName("notes")
-          .setDescription("Any extra info to include.")
+          .setDescription("Any additional information you want to include.")
           .setMaxLength(300)
       )
   );
   return command;
 }
+
+export default module; 

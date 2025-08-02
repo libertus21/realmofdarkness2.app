@@ -1,16 +1,20 @@
-"use strict";
-require(`${process.cwd()}/alias`);
-const { SlashCommandBuilder, MessageFlags } = require("discord.js");
-const findCharacterCommand = require("@modules/findCharacter").command;
-const deleteCharacterCommand = require("@modules/deleteCharacter").command;
-const setDefaultCharacter = require("@modules/setDefaultCharacter");
-const commandUpdate = require("@modules/commandDatabaseUpdate");
-const autocomplete5th = require("@modules/autocomplete");
-const { Splats } = require("@constants");
+import { SlashCommandBuilder, MessageFlags, ChatInputCommandInteraction, AutocompleteInteraction, EmbedBuilder, ActionRowBuilder, AnyComponentBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
+import findCharacterCommand from "@modules/findCharacter";
+import deleteCharacterCommand from "@modules/deleteCharacter";
+import setDefaultCharacter from "@modules/setDefaultCharacter";
+import commandUpdate from "@modules/commandDatabaseUpdate";
+import autocomplete5th from "@modules/autocomplete";
+import { Splats } from "@constants";
 
-module.exports = {
+interface CommandModule {
+  data: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
+  execute(interaction: ChatInputCommandInteraction): Promise<{ embeds: EmbedBuilder[]; components: ActionRowBuilder<AnyComponentBuilder>[]; flags: MessageFlags } | { content: string; embeds: EmbedBuilder[] } | { embeds: EmbedBuilder[]; flags: MessageFlags } | string | void>;
+  autocomplete(interaction: AutocompleteInteraction): Promise<void>;
+}
+
+const module: CommandModule = {
   data: getCommands(),
-  async execute(interaction) {
+  async execute(interaction: ChatInputCommandInteraction): Promise<{ embeds: EmbedBuilder[]; components: ActionRowBuilder<AnyComponentBuilder>[]; flags: MessageFlags } | { content: string; embeds: EmbedBuilder[] } | { embeds: EmbedBuilder[]; flags: MessageFlags } | string | void> {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     await commandUpdate(interaction);
 
@@ -18,14 +22,14 @@ module.exports = {
 
     switch (interaction.options.getSubcommand()) {
       case "find":
-        return await findCharacterCommand(interaction);
+        return await findCharacterCommand.command(interaction);
       case "delete":
-        return await deleteCharacterCommand(interaction);
+        return await deleteCharacterCommand.command(interaction);
       case "default":
         return await setDefaultCharacter(interaction);
     }
   },
-  async autocomplete(interaction) {
+  async autocomplete(interaction: AutocompleteInteraction): Promise<void> {
     return await autocomplete5th(interaction, [
       Splats.vampire5th.slug,
       Splats.hunter5th.slug,
@@ -36,7 +40,7 @@ module.exports = {
   },
 };
 
-function getCommands() {
+function getCommands(): SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder {
   return (
     new SlashCommandBuilder()
       .setName("character")
@@ -97,3 +101,5 @@ function getCommands() {
       )
   );
 }
+
+export default module; 

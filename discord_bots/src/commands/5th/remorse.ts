@@ -1,14 +1,18 @@
-"use strict";
-require(`${process.cwd()}/alias`);
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const remorse = require("@modules/dice/5th/remorse");
-const commandUpdate = require("@modules/commandDatabaseUpdate");
-const autocomplete5th = require("@modules/autocomplete");
-const { Splats } = require("@constants");
+import { SlashCommandBuilder, ChatInputCommandInteraction, AutocompleteInteraction, EmbedBuilder, SlashCommandOptionsOnlyBuilder } from "discord.js";
+import remorse from "@modules/dice/5th/remorse";
+import commandUpdate from "@modules/commandDatabaseUpdate";
+import autocomplete5th from "@modules/autocomplete";
+import { Splats } from "@constants";
 
-module.exports = {
+interface CommandModule {
+  data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
+  execute(interaction: ChatInputCommandInteraction): Promise<{ content: string; embeds: EmbedBuilder[] } | string | void>;
+  autocomplete(interaction: AutocompleteInteraction): Promise<void>;
+}
+
+const module: CommandModule = {
   data: getCommand(),
-  async execute(interaction) {
+  async execute(interaction: ChatInputCommandInteraction): Promise<{ content: string; embeds: EmbedBuilder[] } | string | void> {
     await interaction.deferReply();
     await commandUpdate(interaction);
 
@@ -17,7 +21,7 @@ module.exports = {
     return await remorse(interaction);
   },
 
-  async autocomplete(interaction) {
+  async autocomplete(interaction: AutocompleteInteraction): Promise<void> {
     return await autocomplete5th(interaction, [
       Splats.vampire5th.slug,
       Splats.human5th.slug,
@@ -26,7 +30,7 @@ module.exports = {
   },
 };
 
-function getCommand() {
+function getCommand(): SlashCommandBuilder | SlashCommandOptionsOnlyBuilder {
   const command = new SlashCommandBuilder()
     .setName("remorse")
     .setDescription("Humanity Remorse roll (p239).")
@@ -54,3 +58,5 @@ function getCommand() {
 
   return command;
 }
+
+export default module; 

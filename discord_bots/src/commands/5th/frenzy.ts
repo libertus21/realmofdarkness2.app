@@ -1,14 +1,18 @@
-"use strict";
-require(`${process.cwd()}/alias`);
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const frenzy = require("@modules/dice/5th/frenzy");
-const commandUpdate = require("@modules/commandDatabaseUpdate");
-const autocomplete5th = require("@modules/autocomplete");
-const { Splats } = require("@constants");
+import { SlashCommandBuilder, ChatInputCommandInteraction, AutocompleteInteraction, EmbedBuilder, SlashCommandOptionsOnlyBuilder } from "discord.js";
+import frenzy from "@modules/dice/5th/frenzy";
+import commandUpdate from "@modules/commandDatabaseUpdate";
+import autocomplete5th from "@modules/autocomplete";
+import { Splats } from "@constants";
 
-module.exports = {
+interface CommandModule {
+  data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
+  execute(interaction: ChatInputCommandInteraction): Promise<{ content: string; embeds: EmbedBuilder[] } | string | void>;
+  autocomplete(interaction: AutocompleteInteraction): Promise<void>;
+}
+
+const module: CommandModule = {
   data: getCommand(),
-  async execute(interaction) {
+  async execute(interaction: ChatInputCommandInteraction): Promise<{ content: string; embeds: EmbedBuilder[] } | string | void> {
     await interaction.deferReply();
     await commandUpdate(interaction);
     if (!interaction.isRepliable()) return "notRepliable";
@@ -16,12 +20,12 @@ module.exports = {
     return await frenzy(interaction);
   },
 
-  async autocomplete(interaction) {
+  async autocomplete(interaction: AutocompleteInteraction): Promise<void> {
     return await autocomplete5th(interaction, Splats.vampire5th.slug);
   },
 };
 
-function getCommand() {
+function getCommand(): SlashCommandBuilder | SlashCommandOptionsOnlyBuilder {
   const command = new SlashCommandBuilder()
     .setName("frenzy")
     .setDescription("Rolls to resist frenzy with your character.")
@@ -68,3 +72,5 @@ function getCommand() {
 
   return command;
 }
+
+export default module; 

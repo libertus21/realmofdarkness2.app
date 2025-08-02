@@ -1,28 +1,49 @@
-"use strict";
-require(`${process.cwd()}/alias`);
-const { SlashCommandBuilder, MessageFlags } = require("discord.js");
-const { Splats } = require("@constants");
-const tracker = require("@modules/tracker");
-const getHexColor = require("@modules/getColorHex");
-const verifySupporterStatus = require("@modules/verifySupporterStatus");
-const commandUpdate = require("@modules/commandDatabaseUpdate");
-const autocomplete5th = require("@modules/autocomplete");
+import { SlashCommandBuilder, MessageFlags, ChatInputCommandInteraction, AutocompleteInteraction, User, Attachment, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
+import { Splats } from "@constants";
+import tracker from "@modules/tracker";
+import getHexColor from "@modules/getColorHex";
+import verifySupporterStatus from "@modules/verifySupporterStatus";
+import commandUpdate from "@modules/commandDatabaseUpdate";
+import autocomplete5th from "@modules/autocomplete";
 
-module.exports = {
+interface CommandModule {
+  data: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
+  execute(interaction: ChatInputCommandInteraction): Promise<{ flags: MessageFlags; embeds: any[] } | string | void>;
+  autocomplete(interaction: AutocompleteInteraction): Promise<void>;
+}
+
+interface InteractionArguments {
+  player: User | null;
+  name: string | null;
+  exp: number | null;
+  notes: string | null;
+  nameChange: string | null;
+  thumbnail: Attachment | null;
+  color: string | null;
+  willpower: number | null;
+  health: number | null;
+  willpowerSup: number | null;
+  willpowerAgg: number | null;
+  healthSup: number | null;
+  healthAgg: number | null;
+  humanity: number | null;
+  stains: number | null;
+  rage: number | null;
+  rageSup: number | null;
+  rageAgg: number | null;
+}
+
+const module: CommandModule = {
   data: getCommands(),
-  async execute(interaction) {
+  async execute(interaction: ChatInputCommandInteraction): Promise<{ flags: MessageFlags; embeds: any[] } | string | void> {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     await commandUpdate(interaction);
 
     if (!interaction.isRepliable()) return "notRepliable";
-    interaction.arguments = await getArgs(interaction);
+    (interaction as any).arguments = await getArgs(interaction);
     switch (interaction.options.getSubcommand()) {
       case "new":
-        const splat =
-          interaction.arguments.characterType === "human"
-            ? Splats.human5th
-            : Splats.ghoul5th;
-        return await tracker.new(interaction, splat);
+        return await tracker.new(interaction, Splats.werewolf5th);
       case "update":
         return await tracker.update(interaction, null);
       case "set":
@@ -30,19 +51,15 @@ module.exports = {
     }
   },
 
-  async autocomplete(interaction) {
-    return await autocomplete5th(interaction, [
-      Splats.human5th.slug,
-      Splats.ghoul5th.slug,
-    ]);
+  async autocomplete(interaction: AutocompleteInteraction): Promise<void> {
+    return await autocomplete5th(interaction, Splats.werewolf5th.slug);
   },
 };
 
-async function getArgs(interaction) {
-  const args = {
+async function getArgs(interaction: ChatInputCommandInteraction): Promise<InteractionArguments> {
+  const args: InteractionArguments = {
     player: interaction.options.getUser("player"),
     name: interaction.options.getString("name"),
-    characterType: interaction.options.getString("type"),
     exp: interaction.options.getInteger("exp"),
     notes: interaction.options.getString("notes"),
     nameChange: interaction.options.getString("change_name"),
@@ -56,6 +73,9 @@ async function getArgs(interaction) {
     healthAgg: interaction.options.getInteger("health_agg"),
     humanity: interaction.options.getInteger("humanity"),
     stains: interaction.options.getInteger("stains"),
+    rage: interaction.options.getInteger("rage"),
+    rageSup: interaction.options.getInteger("rage_superficial"),
+    rageAgg: interaction.options.getInteger("rage_agg"),
   };
 
   if (args.color || args.thumbnail)
@@ -63,16 +83,16 @@ async function getArgs(interaction) {
   return args;
 }
 
-function getCommands() {
+function getCommands(): SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder {
   const command = new SlashCommandBuilder()
-    .setName("mortal")
-    .setDescription("Mortal tracker commands.");
+    .setName("werewolf")
+    .setDescription("Werewolf tracker commands.");
 
-  ////////////////// New Vampire ////////////////////////////
+  ////////////////// New Werewolf ////////////////////////////
   command.addSubcommand((subcommand) =>
     subcommand
       .setName("new")
-      .setDescription("Create a new Mortal 5th character.")
+      .setDescription("Create a new Werewolf 5th character.")
 
       .addStringOption((option) =>
         option
@@ -80,17 +100,6 @@ function getCommands() {
           .setDescription("Name of your character.")
           .setRequired(true)
           .setMaxLength(50)
-      )
-
-      .addStringOption((option) =>
-        option
-          .setName("type")
-          .setDescription("Type of Mortal you are playing.")
-          .setRequired(true)
-          .addChoices(
-            { name: "Human", value: "human" },
-            { name: "Ghoul", value: "ghoul" }
-          )
       )
 
       .addIntegerOption((option) =>
@@ -117,6 +126,15 @@ function getCommands() {
           .setDescription("Current Humanity (0-10).")
           .setMaxValue(10)
           .setMinValue(0)
+          .setRequired(true)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("rage")
+          .setDescription("Total Rage (1-20).")
+          .setMaxValue(20)
+          .setMinValue(1)
           .setRequired(true)
       )
 
@@ -162,6 +180,22 @@ function getCommands() {
 
       .addIntegerOption((option) =>
         option
+          .setName("rage_superficial")
+          .setDescription("Superficial Rage Damage (0-20).")
+          .setMaxValue(20)
+          .setMinValue(0)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("rage_agg")
+          .setDescription("Aggravated Rage Damage (0-20).")
+          .setMaxValue(20)
+          .setMinValue(0)
+      )
+
+      .addIntegerOption((option) =>
+        option
           .setName("stains")
           .setDescription("Current Stains (0-10).")
           .setMaxValue(10)
@@ -198,7 +232,7 @@ function getCommands() {
   command.addSubcommand((subcommand) =>
     subcommand
       .setName("set")
-      .setDescription("Set values for your Mortal 5th character.")
+      .setDescription("Set values for your Werewolf 5th character.")
 
       .addStringOption((option) =>
         option
@@ -231,6 +265,14 @@ function getCommands() {
           .setDescription("Current Humanity (0-10).")
           .setMaxValue(10)
           .setMinValue(0)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("rage")
+          .setDescription("Total Rage (1-20).")
+          .setMaxValue(20)
+          .setMinValue(1)
       )
 
       .addIntegerOption((option) =>
@@ -269,6 +311,22 @@ function getCommands() {
         option
           .setName("health_agg")
           .setDescription("Aggravated Health Damage (0-20).")
+          .setMaxValue(20)
+          .setMinValue(0)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("rage_superficial")
+          .setDescription("Superficial Rage Damage (0-20).")
+          .setMaxValue(20)
+          .setMinValue(0)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("rage_agg")
+          .setDescription("Aggravated Rage Damage (0-20).")
           .setMaxValue(20)
           .setMinValue(0)
       )
@@ -318,7 +376,7 @@ function getCommands() {
   command.addSubcommand((subcommand) =>
     subcommand
       .setName("update")
-      .setDescription("Update values for your Mortal 5th character.")
+      .setDescription("Update values for your Werewolf 5th character.")
 
       .addStringOption((option) =>
         option
@@ -371,6 +429,26 @@ function getCommands() {
 
       .addIntegerOption((option) =>
         option
+          .setName("rage_superficial")
+          .setDescription(
+            "Change Superficial Rage Damage by amount (-30 to 30)."
+          )
+          .setMaxValue(30)
+          .setMinValue(-30)
+      )
+
+      .addIntegerOption((option) =>
+        option
+          .setName("rage_agg")
+          .setDescription(
+            "Change Aggravated Rage Damage by amount (-30 to 30)."
+          )
+          .setMaxValue(30)
+          .setMinValue(-30)
+      )
+
+      .addIntegerOption((option) =>
+        option
           .setName("stains")
           .setDescription("Change Stains by amount (-15 to 15).")
           .setMaxValue(15)
@@ -403,6 +481,14 @@ function getCommands() {
 
       .addIntegerOption((option) =>
         option
+          .setName("rage")
+          .setDescription("Change Total Rage by amount (-20 to 20).")
+          .setMaxValue(20)
+          .setMinValue(-20)
+      )
+
+      .addIntegerOption((option) =>
+        option
           .setName("humanity")
           .setDescription("Change Humanity by amount (-15 to 15).")
           .setMaxValue(15)
@@ -426,3 +512,5 @@ function getCommands() {
   );
   return command;
 }
+
+export default module; 
