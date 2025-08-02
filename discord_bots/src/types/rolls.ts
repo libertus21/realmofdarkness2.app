@@ -4,13 +4,26 @@
 import type { CharacterSelection } from "./characters";
 
 export interface WtaArgs {
-  pool: number | null; // Base dice pool
-  rage: number | null; // Rage dice supplied directly
-  autoRage: boolean; // Whether to pull rage dice from character
+  pool: number | null;
+  rage: number | null;
+  autoRage: boolean;
   difficulty: number | null;
   spec: string | null;
-  rageCheck: string | null; // "Reroll" | null
-  doubleRageCheck: string | null; // "Reroll" | null
+  rageCheck: string | null;
+  doubleRageCheck: string | null;
+  notes: string | null;
+  character: CharacterSelection;
+}
+
+export interface RiteArgs {
+  pool: number | null;
+  rage: number | null;
+  useCharRage: boolean;
+  trainedParticipants: number | null;
+  participants: number | null;
+  difficulty: number | null;
+  spec: string | null;
+  rageCheck: string | null;
   notes: string | null;
   character: CharacterSelection;
 }

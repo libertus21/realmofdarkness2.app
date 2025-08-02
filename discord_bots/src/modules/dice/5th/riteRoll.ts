@@ -8,6 +8,8 @@ import { getEmbed, getContent, getComponents } from "./getWtaRollResponse";
 import { trimString } from "@modules/misc";
 import getCharacter from "@src/modules/getCharacter";
 import Wta5thRollResults from "@structures/Wta5thRollResults";
+import type { CharacterSelection } from "../../../types/characters";
+import type { RiteArgs } from "../../../types/rolls";
 import handleButtonPress from "@modules/dice/5th/handleButtonPress";
 import API from "@api";
 import { Splats } from "@constants/index";
@@ -19,12 +21,12 @@ export type RiteResponse = {
 };
 
 export default async function riteRoll(
-  interaction: ChatInputCommandInteraction & { arguments?: any; rollResults?: any }
+  interaction: ChatInputCommandInteraction & { arguments?: RiteArgs; rollResults?: Wta5thRollResults }
 ): Promise<RiteResponse> {
   interaction.arguments = await getArgs(interaction);
-  interaction.rollResults = await roll(interaction);
+  interaction.rollResults = await roll(interaction as ChatInputCommandInteraction & { arguments: RiteArgs });
 
-  await handleButtonPress(interaction, getEmbed, getComponents, getContent);
+  await handleButtonPress(interaction as ChatInputCommandInteraction & { arguments: RiteArgs }, getEmbed, getComponents, getContent);
   return {
     content: getContent(interaction),
     embeds: [getEmbed(interaction)],
@@ -32,7 +34,7 @@ export default async function riteRoll(
   };
 }
 
-async function getArgs(interaction: ChatInputCommandInteraction) {
+async function getArgs(interaction: ChatInputCommandInteraction): Promise<RiteArgs> {
   const args = {
     pool: interaction.options.getInteger("pool"),
     rage: interaction.options.getInteger("rage"),
@@ -48,7 +50,7 @@ async function getArgs(interaction: ChatInputCommandInteraction) {
       interaction,
       false
     ),
-  } as any;
+  } as RiteArgs;
 
   if (!args.character?.tracked && interaction.guild) {
     const defaults = await API.characterDefaults.get(
@@ -61,7 +63,7 @@ async function getArgs(interaction: ChatInputCommandInteraction) {
       args.character = {
         name: defaults.character.name,
         tracked: defaults.character,
-      };
+      } as CharacterSelection;
     }
   }
 
@@ -71,7 +73,7 @@ async function getArgs(interaction: ChatInputCommandInteraction) {
   return args;
 }
 
-async function roll(interaction: any) {
+async function roll(interaction: ChatInputCommandInteraction & { arguments: RiteArgs }): Promise<Wta5thRollResults> {
   const args = interaction.arguments;
   const pool = (args.pool ?? 0) + (args.participants ?? 0) + (args.trainedParticipants ?? 0) * 2;
 
