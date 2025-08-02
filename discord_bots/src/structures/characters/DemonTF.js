@@ -34,8 +34,8 @@ module.exports = class DemonTF extends Character20th {
     await super.deserilize(char);
     this.faith.setTotal(char.faith_total);
     this.faith.setCurrent(char.faith_current);
-    this.torment.setPrimary(char.torment_total);
-    this.torment.setSecondary(char.torment_current);
+    this.torment.setPrimary(char.torment_permanent);
+    this.torment.setSecondary(char.torment_temporary);
     return this;
   }
 
@@ -44,8 +44,8 @@ module.exports = class DemonTF extends Character20th {
     s.character["splat"] = this.splat.slug;
     s.character["faith_total"] = this.faith.total;
     s.character["faith_current"] = this.faith.current;
-    s.character["torment_total"] = this.torment.primary;
-    s.character["torment_current"] = this.torment.secondary;
+    s.character["torment_permanent"] = this.torment.primary;
+    s.character["torment_temporary"] = this.torment.secondary;
     return s;
   }
 
@@ -60,25 +60,33 @@ module.exports = class DemonTF extends Character20th {
 
     embed.addFields({
       name: `Willpower [${this.willpower.current}/${this.willpower.total}]`,
-      value: this.willpower.getTracker({ emoji: Emoji.purple_dot_3 }),
+      value: this.willpower.getTracker({
+        emoji: Emoji.tracker_3_filled.toString(),
+      }),
       inline: false,
     });
 
     embed.addFields({
       name: `Faith [${this.faith.current}/${this.faith.total}]`,
-      value: this.faith.getTracker({ emoji: Emoji.red_dot }),
+      value: this.faith.getTracker({
+        emoji: Emoji.tracker_0_filled.toString(),
+      }),
       inline: false,
     });
 
     embed.addFields({
       name: `Torment - Permanent: ${this.torment.primary}`,
-      value: this.torment.getPrimaryTracker({ emoji: Emoji.purple_dot_1 }),
+      value: this.torment.getPrimaryTracker({
+        emoji: Emoji.tracker_1_filled.toString(),
+      }),
       inline: false,
     });
 
     embed.addFields({
       name: `Torment - Temporary: ${this.torment.secondary}`,
-      value: this.torment.getSecondaryTracker({ emoji: Emoji.purple_dot_2 }),
+      value: this.torment.getSecondaryTracker({
+        emoji: Emoji.tracker_2_filled.toString(),
+      }),
       inline: false,
     });
 

@@ -2,11 +2,15 @@
 require(`${process.cwd()}/alias`);
 const { EmbedBuilder, MessageFlags } = require("discord.js");
 const { RealmError, ErrorCodes } = require("@errors");
+const verifySupporterStatus = require("@modules/verifySupporterStatus");
 const API = require("@api");
+const getCharacter = require("@modules/getCharacter");
 
 module.exports = async function setDefaultCharacter(interaction) {
-  const level = await API.getSupporterLevel(interaction.user.id);
-  if (level === 0) throw new RealmError({ code: ErrorCodes.RequiresFledgling });
+  if (!interaction.guild)
+    throw new RealmError({ code: ErrorCodes.GuildRequired });
+
+  await verifySupporterStatus.mortal(interaction.user.id);
   interaction.arguments = await getArgs(interaction);
 
   if (!interaction.arguments.name && !interaction.arguments.disable) {
@@ -38,13 +42,12 @@ module.exports = async function setDefaultCharacter(interaction) {
 
 async function getArgs(interaction) {
   const args = {
-    name: interaction.options.getString("name"),
+    autocomplete: interaction.options.getString("name"),
     auto_hunger: interaction.options.getBoolean("auto_hunger") ?? false,
     disable: interaction.options.getBoolean("disable") ?? false,
   };
-
-  if (!interaction.guild)
-    throw new RealmError({ code: ErrorCodes.GuildRequired });
+  const character = await getCharacter(args.autocomplete, interaction, true);
+  args.name = character.name; // getCharacter throws an error if not found, so we can assume it's valid
   return args;
 }
 
@@ -70,7 +73,8 @@ function getDefaultEmbed(defaults) {
     return embed;
   }
 
-  if (defaults.name) embed.addFields({ name: "Name:", value: defaults.name });
+  if (defaults.character?.name)
+    embed.addFields({ name: "Name:", value: defaults.character.name });
   if (defaults.auto_hunger)
     embed.addFields({ name: "Auto Hunger:", value: "True" });
   return embed;
