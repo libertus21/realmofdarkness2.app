@@ -4,7 +4,7 @@ import deleteCharacterCommand from "@modules/deleteCharacter";
 import setDefaultCharacter from "@modules/setDefaultCharacter";
 import commandUpdate from "@modules/commandDatabaseUpdate";
 import autocomplete5th from "@modules/autocomplete";
-import { Splats } from "@constants";
+import { Splats } from "@constants/index";
 
 interface CommandModule {
   data: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
@@ -12,7 +12,7 @@ interface CommandModule {
   autocomplete(interaction: AutocompleteInteraction): Promise<void>;
 }
 
-const module: CommandModule = {
+const commandModule: CommandModule = {
   data: getCommands(),
   async execute(interaction: ChatInputCommandInteraction): Promise<{ embeds: EmbedBuilder[]; components: ActionRowBuilder<AnyComponentBuilder>[]; flags: MessageFlags } | { content: string; embeds: EmbedBuilder[] } | { embeds: EmbedBuilder[]; flags: MessageFlags } | string | void> {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
@@ -102,4 +102,4 @@ function getCommands(): SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder
   );
 }
 
-export default module; 
+export default commandModule; 

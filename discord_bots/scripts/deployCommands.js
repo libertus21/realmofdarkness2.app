@@ -1,9 +1,38 @@
 "use strict";
 require("dotenv").config();
+require(`${process.cwd()}/alias`);
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
 const fs = require("fs");
 const path = require("path");
+
+// Register ts-node to handle TypeScript files
+require("ts-node").register({
+  compilerOptions: {
+    module: "commonjs",
+    target: "ES2022",
+    esModuleInterop: true,
+    allowSyntheticDefaultImports: true,
+    skipLibCheck: true,
+    lib: ["es2022"],
+    checkJs: false,
+    baseUrl: "./",
+    paths: {
+      "@src*": ["./src/*"],
+      "@bots*": ["./src/bots/*"],
+      "@commands*": ["./src/commands/*"],
+      "@components*": ["./src/components/*"],
+      "@structures*": ["./src/structures/*"],
+      "@events*": ["./src/events/*"],
+      "@modules*": ["./src/modules/*"],
+      "@errors*": ["./src/errors/*", "./src/errors/index.js"],
+      "@api*": ["./src/realm_api/*", "./src/realm_api/index.js"],
+      "@constants*": ["./src/constants/*", "./src/constants/index.js"],
+      "@utils*": ["./src/utils/*"],
+      "@types*": ["./src/types/*"]
+    }
+  }
+});
 
 /**
  * Deploys commands for a specific bot version (commands only, no emojis)
@@ -59,7 +88,8 @@ async function deployCommands({
     }
     for (const file of commandFiles) {
       try {
-        const command = require(path.join(commandPath, file));
+        const imported = require(path.join(commandPath, file));
+        const command = imported.default ?? imported;
         if (command.data) {
           commands.push(command.data);
           console.log(`Loaded ${file}: ${command.data.name}`);

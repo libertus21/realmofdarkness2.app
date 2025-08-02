@@ -1,12 +1,15 @@
-"use strict";
-require(`${process.cwd()}/alias`);
-const { SlashCommandBuilder, MessageFlags } = require("discord.js");
-const { supporterStatus, supporterJoin } = require("@modules/supporter");
-const commandUpdate = require("@modules/commandDatabaseUpdate");
+import { SlashCommandBuilder, MessageFlags, ChatInputCommandInteraction, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
+import { supporterStatus, supporterJoin } from "@modules/supporter";
+import commandUpdate from "@modules/commandDatabaseUpdate";
 
-module.exports = {
+interface CommandModule {
+  data: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
+  execute(interaction: ChatInputCommandInteraction): Promise<any>;
+}
+
+const commandModule: CommandModule = {
   data: getCommands(),
-  async execute(interaction) {
+  async execute(interaction: ChatInputCommandInteraction): Promise<any> {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     await commandUpdate(interaction);
 
@@ -19,7 +22,7 @@ module.exports = {
   },
 };
 
-function getCommands() {
+function getCommands(): SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder {
   return (
     new SlashCommandBuilder()
       .setName("supporter")
@@ -38,3 +41,5 @@ function getCommands() {
       )
   );
 }
+
+export default commandModule; 

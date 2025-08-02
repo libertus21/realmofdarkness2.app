@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, AutocompleteInteraction, EmbedBuilder, SlashCommandOptionsOnlyBuilder } from "discord.js";
-import remorse from "@modules/dice/5th/remorse";
+import remorse from "@modules/dice/5th/remorse.js";
 import commandUpdate from "@modules/commandDatabaseUpdate";
 import autocomplete5th from "@modules/autocomplete";
 import { Splats } from "@constants";
@@ -10,7 +10,7 @@ interface CommandModule {
   autocomplete(interaction: AutocompleteInteraction): Promise<void>;
 }
 
-const module: CommandModule = {
+const commandModule: CommandModule = {
   data: getCommand(),
   async execute(interaction: ChatInputCommandInteraction): Promise<{ content: string; embeds: EmbedBuilder[] } | string | void> {
     await interaction.deferReply();
@@ -59,4 +59,4 @@ function getCommand(): SlashCommandBuilder | SlashCommandOptionsOnlyBuilder {
   return command;
 }
 
-export default module; 
+export default commandModule; 

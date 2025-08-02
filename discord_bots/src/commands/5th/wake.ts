@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, AutocompleteInteraction, SlashCommandOptionsOnlyBuilder } from "discord.js";
-import v5Wake from "@modules/dice/5th/v5WakeRoll";
+import v5Wake from "@modules/dice/5th/v5WakeRoll.js";
 import commandUpdate from "@modules/commandDatabaseUpdate";
 import autocomplete5th from "@modules/autocomplete";
 import { Splats } from "@constants";
@@ -10,7 +10,7 @@ interface CommandModule {
   autocomplete(interaction: AutocompleteInteraction): Promise<void>;
 }
 
-const module: CommandModule = {
+const commandModule: CommandModule = {
   data: getCommand(),
   async execute(interaction: ChatInputCommandInteraction): Promise<any> {
     await interaction.deferReply();
@@ -52,4 +52,4 @@ function getCommand(): SlashCommandBuilder | SlashCommandOptionsOnlyBuilder {
     });
 }
 
-export default module; 
+export default commandModule; 

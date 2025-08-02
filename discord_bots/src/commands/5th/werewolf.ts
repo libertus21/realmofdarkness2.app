@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, MessageFlags, ChatInputCommandInteraction, AutocompleteInteraction, User, Attachment, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
-import { Splats } from "@constants";
+import { Splats } from "@constants/index";
 import tracker from "@modules/tracker";
 import getHexColor from "@modules/getColorHex";
 import verifySupporterStatus from "@modules/verifySupporterStatus";
@@ -33,7 +33,7 @@ interface InteractionArguments {
   rageAgg: number | null;
 }
 
-const module: CommandModule = {
+const commandModule: CommandModule = {
   data: getCommands(),
   async execute(interaction: ChatInputCommandInteraction): Promise<{ flags: MessageFlags; embeds: any[] } | string | void> {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
@@ -513,4 +513,4 @@ function getCommands(): SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder
   return command;
 }
 
-export default module; 
+export default commandModule; 

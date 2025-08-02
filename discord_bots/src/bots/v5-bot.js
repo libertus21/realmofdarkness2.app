@@ -5,6 +5,35 @@
  * providing dice rolling, character management, and other utilities.
  */
 "use strict";
+
+// Register ts-node to handle TypeScript files
+require("ts-node").register({
+  compilerOptions: {
+    module: "commonjs",
+    target: "ES2022",
+    esModuleInterop: true,
+    allowSyntheticDefaultImports: true,
+    skipLibCheck: true,
+    lib: ["es2022"],
+    checkJs: false,
+    baseUrl: "./",
+    paths: {
+      "@src*": ["./src/*"],
+      "@bots*": ["./src/bots/*"],
+      "@commands*": ["./src/commands/*"],
+      "@components*": ["./src/components/*"],
+      "@structures*": ["./src/structures/*"],
+      "@events*": ["./src/events/*"],
+      "@modules*": ["./src/modules/*"],
+      "@errors*": ["./src/errors/*", "./src/errors/index.js"],
+      "@api*": ["./src/realm_api/*", "./src/realm_api/index.js"],
+      "@constants*": ["./src/constants/*", "./src/constants/index.js"],
+      "@utils*": ["./src/utils/*"],
+      "@types*": ["./src/types/*"]
+    }
+  }
+});
+
 require(`${process.cwd()}/alias`);
 const fs = require("fs");
 const path = require("path");
