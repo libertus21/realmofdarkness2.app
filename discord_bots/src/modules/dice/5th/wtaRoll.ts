@@ -11,6 +11,8 @@ import {
   getComponents,
 } from "@modules/dice/5th/getWtaRollResponse";
 import Wta5thRollResults from "@structures/Wta5thRollResults";
+import type { CharacterSelection } from "../../../types/characters";
+import type { WtaArgs } from "../../../types/rolls";
 import handleButtonPress from "@modules/dice/5th/handleButtonPress";
 import API from "@api";
 import { Splats } from "@constants/index";
@@ -22,7 +24,7 @@ export type WtaRollResponse = {
 };
 
 export default async function wtaRoll(
-  interaction: ChatInputCommandInteraction & { arguments?: any; rollResults?: any }
+  interaction: ChatInputCommandInteraction & { arguments?: WtaArgs; rollResults?: Wta5thRollResults }
 ): Promise<WtaRollResponse> {
   interaction.arguments = await getArgs(interaction);
   interaction.rollResults = await roll(interaction);
@@ -35,7 +37,7 @@ export default async function wtaRoll(
   };
 }
 
-async function getArgs(interaction: ChatInputCommandInteraction) {
+async function getArgs(interaction: ChatInputCommandInteraction): Promise<WtaArgs> {
   const args = {
     pool: interaction.options.getInteger("pool"),
     rage: interaction.options.getInteger("rage"),
@@ -50,7 +52,7 @@ async function getArgs(interaction: ChatInputCommandInteraction) {
       interaction,
       false
     ),
-  } as any;
+  } as WtaArgs;
 
   // Defaults
   if (!args.character?.tracked && interaction.guild) {
@@ -64,14 +66,14 @@ async function getArgs(interaction: ChatInputCommandInteraction) {
       args.character = {
         name: defaults.character.name,
         tracked: defaults.character,
-      };
+      } as CharacterSelection;
     }
   }
   return args;
 }
 
-async function roll(interaction: any) {
-  const args = interaction.arguments;
+async function roll(interaction: ChatInputCommandInteraction & { arguments?: WtaArgs }): Promise<Wta5thRollResults> {
+  const args = interaction.arguments as WtaArgs;
   if (
     args.character?.tracked &&
     args.autoRage &&
@@ -93,11 +95,11 @@ async function roll(interaction: any) {
   else if (args.doubleRageCheck != null)
     results.setDoubleRageCheck(args.doubleRageCheck);
 
-  await updateRage(interaction, results);
+  await updateRage(interaction as ChatInputCommandInteraction & { arguments: WtaArgs }, results);
   return results;
 }
 
-async function updateRage(interaction: any, results: any) {
+async function updateRage(interaction: ChatInputCommandInteraction & { arguments: WtaArgs }, results: Wta5thRollResults): Promise<void> {
   let rage = 0;
   if (results.rageCheck != null) rage = 1;
   else if (results.doubleRageCheck != null) rage = 2;

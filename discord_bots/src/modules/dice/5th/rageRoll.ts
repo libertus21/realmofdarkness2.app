@@ -11,20 +11,12 @@ const passedString = "```ansi\n\u001b[2;33mPassed [{dice}]\u001b[0m\n```";
 const failedString =
   "```ansi\n\u001b[2;33m\u001b[2;31mFailed [{dice}]\u001b[0m\u001b[2;33m\u001b[0m\n```";
 
-interface RageRollResult {
-  dice: number[];
-  passed: boolean;
-}
+import type { CharacterSelection, RageRollResult, RageResults } from "../../../types/characters";
 
-interface RageResults {
-  decreased: number;
-  rolls: RageRollResult[];
-  toString: string;
-  color: string;
-}
+
 
 interface RageArgs {
-  character: any;
+  character: CharacterSelection;
   checks: number;
   reroll?: boolean | null;
   notes?: string | null;
@@ -90,7 +82,7 @@ async function getArgs(interaction: ChatInputCommandInteraction): Promise<RageAr
       args.character = {
         name: defaults.character.name,
         tracked: defaults.character,
-      } as any;
+      } as CharacterSelection;
     }
   }
   return args;
@@ -111,18 +103,19 @@ function getEmbed(interaction: RageInteraction): EmbedBuilder {
   const results = interaction.results as RageResults;
   const embed = new EmbedBuilder();
 
-  embed.setAuthor({
-    name:
-      (interaction.member as any)?.displayName ??
-      (interaction.user as any).displayName ??
-      interaction.user.username,
-    iconURL:
-      (interaction.member as any)?.displayAvatarURL() ??
-      interaction.user.displayAvatarURL(),
-  });
+  const displayName =
+    interaction.member && "displayName" in interaction.member
+      ? (interaction.member as import("discord.js").GuildMember).displayName
+      : interaction.user.username;
+  const avatarURL =
+    interaction.member && "displayAvatarURL" in interaction.member
+      ? (interaction.member as import("discord.js").GuildMember).displayAvatarURL()
+      : interaction.user.displayAvatarURL();
+
+  embed.setAuthor({ name: displayName, iconURL: avatarURL });
 
   embed.setTitle("Rage Check");
-  embed.setColor(results.color as any);
+  embed.setColor(results.color);
   embed.setURL("https://realmofdarkness.app/");
 
   if (interaction.args?.character) {
