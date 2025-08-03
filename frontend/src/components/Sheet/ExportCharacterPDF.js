@@ -51,19 +51,29 @@ export default function ExportCharacterPDF(props) {
     yPosition += lineHeight * 2;
 
     // Creencias y Touchstones
-    if (sheet.tenets) {
-      pdf.text(`Tenets: ${sheet.tenets}`, margin, yPosition);
+    if (sheet.tenets || sheet.touchstones || sheet.convictions) {
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(12);
+      pdf.text("CREENCIAS Y PRINCIPIOS", margin, yPosition);
+      yPosition += lineHeight;
+      
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(10);
+      
+      if (sheet.tenets) {
+        pdf.text(`Tenets: ${sheet.tenets}`, margin, yPosition);
+        yPosition += lineHeight;
+      }
+      if (sheet.touchstones) {
+        pdf.text(`Touchstones: ${sheet.touchstones}`, margin, yPosition);
+        yPosition += lineHeight;
+      }
+      if (sheet.convictions) {
+        pdf.text(`Convictions: ${sheet.convictions}`, margin, yPosition);
+        yPosition += lineHeight;
+      }
       yPosition += lineHeight;
     }
-    if (sheet.touchstones) {
-      pdf.text(`Touchstones: ${sheet.touchstones}`, margin, yPosition);
-      yPosition += lineHeight;
-    }
-    if (sheet.convictions) {
-      pdf.text(`Convictions: ${sheet.convictions}`, margin, yPosition);
-      yPosition += lineHeight;
-    }
-    yPosition += lineHeight;
 
     // Atributos
     if (yPosition > pageHeight - 60) {
@@ -153,40 +163,43 @@ export default function ExportCharacterPDF(props) {
     const columnWidth = contentWidth / 3;
     const columnSpacing = 10;
     
+    // Calcular la altura máxima de las columnas para alineación
+    const maxSkillsPerColumn = Math.max(physicalSkills.length, socialSkills.length, mentalSkills.length);
+    const skillsSectionHeight = maxSkillsPerColumn * lineHeight;
+    
     // Columna 1: Habilidades Físicas
+    const physicalX = margin;
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(10);
-    pdf.text("FÍSICAS:", margin, yPosition);
+    pdf.text("FÍSICAS:", physicalX, yPosition);
     yPosition += lineHeight;
     pdf.setFont("helvetica", "normal");
     
-    physicalSkills.forEach(skill => {
-      pdf.text(`${skill.name}: ${skill.value}`, margin, yPosition);
-      yPosition += lineHeight;
+    physicalSkills.forEach((skill, index) => {
+      pdf.text(`${skill.name}: ${skill.value}`, physicalX, yPosition + index * lineHeight);
     });
-    yPosition += lineHeight;
     
     // Columna 2: Habilidades Sociales
     const socialX = margin + columnWidth + columnSpacing;
     pdf.setFont("helvetica", "bold");
-    pdf.text("SOCIALES:", socialX, yPosition - (physicalSkills.length + 1) * lineHeight);
+    pdf.text("SOCIALES:", socialX, yPosition - lineHeight);
     pdf.setFont("helvetica", "normal");
     
     socialSkills.forEach((skill, index) => {
-      pdf.text(`${skill.name}: ${skill.value}`, socialX, yPosition - (physicalSkills.length - index) * lineHeight);
+      pdf.text(`${skill.name}: ${skill.value}`, socialX, yPosition + index * lineHeight);
     });
     
     // Columna 3: Habilidades Mentales
     const mentalX = margin + 2 * columnWidth + 2 * columnSpacing;
     pdf.setFont("helvetica", "bold");
-    pdf.text("MENTALES:", mentalX, yPosition - (physicalSkills.length + 1) * lineHeight);
+    pdf.text("MENTALES:", mentalX, yPosition - lineHeight);
     pdf.setFont("helvetica", "normal");
     
     mentalSkills.forEach((skill, index) => {
-      pdf.text(`${skill.name}: ${skill.value}`, mentalX, yPosition - (physicalSkills.length - index) * lineHeight);
+      pdf.text(`${skill.name}: ${skill.value}`, mentalX, yPosition + index * lineHeight);
     });
     
-    yPosition += lineHeight * 2 + sectionSpacing;
+    yPosition += skillsSectionHeight + sectionSpacing;
 
     // Disciplinas
     if (yPosition > pageHeight - 60) {
@@ -226,123 +239,81 @@ export default function ExportCharacterPDF(props) {
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(10);
 
+    // Función mejorada para manejar texto largo
     function addWrappedText(text, x, y, maxWidth) {
       const words = text.split(' ');
       let line = '';
       let currentY = y;
+      let linesAdded = 0;
       
       for (let i = 0; i < words.length; i++) {
         const testLine = line + words[i] + ' ';
         const testWidth = pdf.getTextWidth(testLine);
         
         if (testWidth > maxWidth && line !== '') {
-          pdf.text(line, x, currentY);
+          pdf.text(line.trim(), x, currentY);
           line = words[i] + ' ';
           currentY += lineHeight;
+          linesAdded++;
         } else {
           line = testLine;
         }
       }
       
       if (line) {
-        pdf.text(line, x, currentY);
-        currentY += lineHeight;
+        pdf.text(line.trim(), x, currentY);
+        linesAdded++;
       }
       
-      return currentY - y;
+      return linesAdded * lineHeight;
     }
 
+    // Función para agregar sección de ventajas de manera simétrica
+    function addAdvantageSection(title, items, startY) {
+      if (!items || items.length === 0) return startY;
+      
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(10);
+      pdf.text(`${title}:`, margin, startY);
+      let currentY = startY + lineHeight;
+      pdf.setFont("helvetica", "normal");
+      
+      items.forEach(item => {
+        if (item.name) {
+          const rating = item.rating || item.level || 0;
+          pdf.text(`  ${item.name}: ${rating}`, margin, currentY);
+          currentY += lineHeight;
+          
+          if (item.description) {
+            const descriptionText = `    Descripción: ${item.description}`;
+            const heightUsed = addWrappedText(descriptionText, margin, currentY, contentWidth);
+            currentY += heightUsed;
+          }
+          
+          if (item.notes) {
+            const notesText = `    Notas: ${item.notes}`;
+            const heightUsed = addWrappedText(notesText, margin, currentY, contentWidth);
+            currentY += heightUsed;
+          }
+        }
+      });
+      
+      return currentY;
+    }
+
+    // Agregar secciones de ventajas de manera simétrica
+    let advantagesY = yPosition;
+    
     // Merits
-    if (sheet.merits && sheet.merits.length > 0) {
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(10);
-      pdf.text("Merits:", margin, yPosition);
-      yPosition += lineHeight;
-      pdf.setFont("helvetica", "normal");
-      
-      sheet.merits.forEach(merit => {
-        if (merit.name) {
-          const rating = merit.rating || merit.level || 0;
-          pdf.text(`  ${merit.name}: ${rating}`, margin, yPosition);
-          yPosition += lineHeight;
-          
-          if (merit.description) {
-            const descriptionText = `    Descripción: ${merit.description}`;
-            const heightUsed = addWrappedText(descriptionText, margin, yPosition, contentWidth);
-            yPosition += heightUsed;
-          }
-          
-          if (merit.notes) {
-            const notesText = `    Notas: ${merit.notes}`;
-            const heightUsed = addWrappedText(notesText, margin, yPosition, contentWidth);
-            yPosition += heightUsed;
-          }
-        }
-      });
-      yPosition += lineHeight;
-    }
-
+    advantagesY = addAdvantageSection("Merits", sheet.merits, advantagesY);
+    
     // Flaws
-    if (sheet.flaws && sheet.flaws.length > 0) {
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(10);
-      pdf.text("Flaws:", margin, yPosition);
-      yPosition += lineHeight;
-      pdf.setFont("helvetica", "normal");
-      
-      sheet.flaws.forEach(flaw => {
-        if (flaw.name) {
-          const rating = flaw.rating || flaw.level || 0;
-          pdf.text(`  ${flaw.name}: ${rating}`, margin, yPosition);
-          yPosition += lineHeight;
-          
-          if (flaw.description) {
-            const descriptionText = `    Descripción: ${flaw.description}`;
-            const heightUsed = addWrappedText(descriptionText, margin, yPosition, contentWidth);
-            yPosition += heightUsed;
-          }
-          
-          if (flaw.notes) {
-            const notesText = `    Notas: ${flaw.notes}`;
-            const heightUsed = addWrappedText(notesText, margin, yPosition, contentWidth);
-            yPosition += heightUsed;
-          }
-        }
-      });
-      yPosition += lineHeight;
-    }
-
+    advantagesY = addAdvantageSection("Flaws", sheet.flaws, advantagesY);
+    
     // Backgrounds
-    if (sheet.backgrounds && sheet.backgrounds.length > 0) {
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(10);
-      pdf.text("Backgrounds:", margin, yPosition);
-      yPosition += lineHeight;
-      pdf.setFont("helvetica", "normal");
-      
-      sheet.backgrounds.forEach(background => {
-        if (background.name) {
-          const rating = background.rating || background.level || 0;
-          pdf.text(`  ${background.name}: ${rating}`, margin, yPosition);
-          yPosition += lineHeight;
-          
-          if (background.description) {
-            const descriptionText = `    Descripción: ${background.description}`;
-            const heightUsed = addWrappedText(descriptionText, margin, yPosition, contentWidth);
-            yPosition += heightUsed;
-          }
-          
-          if (background.notes) {
-            const notesText = `    Notas: ${background.notes}`;
-            const heightUsed = addWrappedText(notesText, margin, yPosition, contentWidth);
-            yPosition += heightUsed;
-          }
-        }
-      });
-      yPosition += lineHeight;
-    }
-
-    yPosition += sectionSpacing;
+    advantagesY = addAdvantageSection("Backgrounds", sheet.backgrounds, advantagesY);
+    
+    yPosition = advantagesY + sectionSpacing;
 
     // Salud y Voluntad
     if (yPosition > pageHeight - 60) {
