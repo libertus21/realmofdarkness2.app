@@ -50,6 +50,21 @@ export default function ExportCharacterPDF(props) {
     pdf.text(`Deseo: ${sheet.desire || "Sin deseo"}`, margin, yPosition);
     yPosition += lineHeight * 2;
 
+    // Creencias y Touchstones
+    if (sheet.tenets) {
+      pdf.text(`Tenets: ${sheet.tenets}`, margin, yPosition);
+      yPosition += lineHeight;
+    }
+    if (sheet.touchstones) {
+      pdf.text(`Touchstones: ${sheet.touchstones}`, margin, yPosition);
+      yPosition += lineHeight;
+    }
+    if (sheet.convictions) {
+      pdf.text(`Convictions: ${sheet.convictions}`, margin, yPosition);
+      yPosition += lineHeight;
+    }
+    yPosition += lineHeight;
+
     // Atributos
     if (yPosition > pageHeight - 60) {
       pdf.addPage();
@@ -220,9 +235,18 @@ export default function ExportCharacterPDF(props) {
       pdf.setFont("helvetica", "normal");
       
       sheet.merits.forEach(merit => {
-        if (merit.name && merit.level) {
-          pdf.text(`  ${merit.name}: ${merit.level}`, margin, yPosition);
+        if (merit.name) {
+          const rating = merit.rating || merit.level || 0;
+          pdf.text(`  ${merit.name}: ${rating}`, margin, yPosition);
           yPosition += lineHeight;
+          if (merit.description) {
+            pdf.text(`    Descripción: ${merit.description}`, margin, yPosition);
+            yPosition += lineHeight;
+          }
+          if (merit.notes) {
+            pdf.text(`    Notas: ${merit.notes}`, margin, yPosition);
+            yPosition += lineHeight;
+          }
         }
       });
       yPosition += lineHeight;
@@ -237,9 +261,18 @@ export default function ExportCharacterPDF(props) {
       pdf.setFont("helvetica", "normal");
       
       sheet.flaws.forEach(flaw => {
-        if (flaw.name && flaw.level) {
-          pdf.text(`  ${flaw.name}: ${flaw.level}`, margin, yPosition);
+        if (flaw.name) {
+          const rating = flaw.rating || flaw.level || 0;
+          pdf.text(`  ${flaw.name}: ${rating}`, margin, yPosition);
           yPosition += lineHeight;
+          if (flaw.description) {
+            pdf.text(`    Descripción: ${flaw.description}`, margin, yPosition);
+            yPosition += lineHeight;
+          }
+          if (flaw.notes) {
+            pdf.text(`    Notas: ${flaw.notes}`, margin, yPosition);
+            yPosition += lineHeight;
+          }
         }
       });
       yPosition += lineHeight;
@@ -254,9 +287,18 @@ export default function ExportCharacterPDF(props) {
       pdf.setFont("helvetica", "normal");
       
       sheet.backgrounds.forEach(background => {
-        if (background.name && background.level) {
-          pdf.text(`  ${background.name}: ${background.level}`, margin, yPosition);
+        if (background.name) {
+          const rating = background.rating || background.level || 0;
+          pdf.text(`  ${background.name}: ${rating}`, margin, yPosition);
           yPosition += lineHeight;
+          if (background.description) {
+            pdf.text(`    Descripción: ${background.description}`, margin, yPosition);
+            yPosition += lineHeight;
+          }
+          if (background.notes) {
+            pdf.text(`    Notas: ${background.notes}`, margin, yPosition);
+            yPosition += lineHeight;
+          }
         }
       });
       yPosition += lineHeight;
@@ -313,12 +355,27 @@ export default function ExportCharacterPDF(props) {
     pdf.text(`Humanidad: ${sheet.humanity || 0}`, margin, yPosition);
     yPosition += lineHeight;
     pdf.text(`Manchas: ${sheet.stains || 0}`, margin, yPosition);
-    yPosition += lineHeight * 2;
+    yPosition += lineHeight;
+    if (sheet.resonance) {
+      pdf.text(`Resonancia: ${sheet.resonance}`, margin, yPosition);
+      yPosition += lineHeight;
+    }
+    if (sheet.hunting_roll) {
+      pdf.text(`Tirada de Caza: ${sheet.hunting_roll}`, margin, yPosition);
+      yPosition += lineHeight;
+    }
+    yPosition += lineHeight;
 
     // Experiencia
-    pdf.text(`Experiencia: ${sheet.exp_current || 0}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Experiencia Total: ${sheet.exp_total || 0}`, margin, yPosition);
+    if (sheet.exp) {
+      pdf.text(`Experiencia Actual: ${sheet.exp.current || 0}`, margin, yPosition);
+      yPosition += lineHeight;
+      pdf.text(`Experiencia Total: ${sheet.exp.total || 0}`, margin, yPosition);
+    } else {
+      pdf.text(`Experiencia: ${sheet.exp_current || 0}`, margin, yPosition);
+      yPosition += lineHeight;
+      pdf.text(`Experiencia Total: ${sheet.exp_total || 0}`, margin, yPosition);
+    }
     yPosition += lineHeight;
 
     // Haven
@@ -346,6 +403,74 @@ export default function ExportCharacterPDF(props) {
       }
       if (sheet.haven_description) {
         pdf.text(`Descripción: ${sheet.haven_description}`, margin, yPosition);
+        yPosition += lineHeight;
+      }
+      yPosition += sectionSpacing;
+    }
+
+    // Información adicional
+    if (yPosition > pageHeight - 80) {
+      pdf.addPage();
+      yPosition = margin;
+    }
+
+    if (sheet.date_of_birth || sheet.age || sheet.apparent_age || sheet.date_of_death) {
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(12);
+      pdf.text("INFORMACIÓN ADICIONAL", margin, yPosition);
+      yPosition += lineHeight;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(10);
+
+      if (sheet.date_of_birth) {
+        pdf.text(`Fecha de Nacimiento: ${sheet.date_of_birth}`, margin, yPosition);
+        yPosition += lineHeight;
+      }
+      if (sheet.age) {
+        pdf.text(`Edad: ${sheet.age}`, margin, yPosition);
+        yPosition += lineHeight;
+      }
+      if (sheet.apparent_age) {
+        pdf.text(`Edad Aparente: ${sheet.apparent_age}`, margin, yPosition);
+        yPosition += lineHeight;
+      }
+      if (sheet.date_of_death) {
+        pdf.text(`Fecha de Muerte: ${sheet.date_of_death}`, margin, yPosition);
+        yPosition += lineHeight;
+      }
+      yPosition += sectionSpacing;
+    }
+
+    // Notas
+    if (sheet.notes || sheet.notes2 || sheet.history || sheet.appearance_description) {
+      if (yPosition > pageHeight - 60) {
+        pdf.addPage();
+        yPosition = margin;
+      }
+
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(12);
+      pdf.text("NOTAS Y DESCRIPCIONES", margin, yPosition);
+      yPosition += lineHeight;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(10);
+
+      if (sheet.history) {
+        pdf.text(`Historia: ${sheet.history}`, margin, yPosition);
+        yPosition += lineHeight;
+      }
+      if (sheet.appearance_description) {
+        pdf.text(`Descripción Física: ${sheet.appearance_description}`, margin, yPosition);
+        yPosition += lineHeight;
+      }
+      if (sheet.notes) {
+        pdf.text(`Notas: ${sheet.notes}`, margin, yPosition);
+        yPosition += lineHeight;
+      }
+      if (sheet.notes2) {
+        pdf.text(`Notas Adicionales: ${sheet.notes2}`, margin, yPosition);
         yPosition += lineHeight;
       }
       yPosition += sectionSpacing;
