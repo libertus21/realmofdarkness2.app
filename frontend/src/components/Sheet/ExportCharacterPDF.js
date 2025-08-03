@@ -16,7 +16,41 @@ export default function ExportCharacterPDF(props) {
     const lineHeight = 7;
     const sectionSpacing = 10;
 
-    // Función mejorada para manejar texto largo (movida al inicio)
+    // Colores y estilos
+    const colors = {
+      primary: [0.8, 0, 0],    // Rojo oscuro para títulos principales
+      secondary: [0.5, 0, 0],  // Rojo más oscuro para subtítulos
+      text: [0, 0, 0],         // Negro para texto normal
+      border: [0.3, 0, 0]      // Rojo muy oscuro para bordes
+    };
+
+    // Función para dibujar una caja con título
+    function drawTitledBox(title, startY, endY, options = {}) {
+      const boxMargin = 3;
+      const titleHeight = 8;
+      const boxStartY = startY - titleHeight - boxMargin;
+      const boxEndY = endY + boxMargin;
+      
+      // Dibujar el borde
+      pdf.setDrawColor(...colors.border);
+      pdf.setLineWidth(0.5);
+      pdf.rect(margin - boxMargin, boxStartY, contentWidth + (2 * boxMargin), boxEndY - boxStartY);
+
+      // Dibujar el título
+      pdf.setFont("helvetica", "bold");
+      pdf.setTextColor(...colors.primary);
+      pdf.setFontSize(12);
+      pdf.text(title, margin, boxStartY + 7);
+
+      // Restaurar colores
+      pdf.setTextColor(...colors.text);
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(10);
+
+      return boxEndY;
+    }
+
+    // Función mejorada para manejar texto largo
     function addWrappedText(text, x, y, maxWidth) {
       const words = text.split(' ');
       let line = '';
@@ -45,109 +79,209 @@ export default function ExportCharacterPDF(props) {
       return linesAdded * lineHeight;
     }
 
-    // Configurar fuente
-    pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(16);
-    
-    // Título principal
-    pdf.text("Vampire: The Masquerade 5th Edition", pageWidth / 2, yPosition, { align: "center" });
-    yPosition += lineHeight * 2;
+    // Función para dibujar puntos de atributo/habilidad
+    function drawDots(value, x, y, maxDots = 5) {
+      const dotRadius = 1;
+      const dotSpacing = 4;
+      
+      pdf.setDrawColor(...colors.border);
+      pdf.setFillColor(...colors.border);
 
-    // Información general del personaje
-    pdf.setFontSize(14);
-    pdf.text("INFORMACIÓN GENERAL", margin, yPosition);
-    yPosition += lineHeight;
-
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(10);
-
-    // Nombre y clan
-    pdf.text(`Nombre: ${sheet.name || "Sin nombre"}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Clan: ${sheet.clan || "Sin clan"}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Generación: ${sheet.generation || "Sin especificar"}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Sire: ${sheet.sire || "Sin sire"}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Tipo de Depredador: ${sheet.predator_type || "Sin especificar"}`, margin, yPosition);
-    yPosition += lineHeight * 2;
-
-    // Ambición y Deseo
-    pdf.text(`Ambición: ${sheet.ambition || "Sin ambición"}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Deseo: ${sheet.desire || "Sin deseo"}`, margin, yPosition);
-    yPosition += lineHeight * 2;
-
-    // Atributos
-    if (yPosition > pageHeight - 60) {
-      pdf.addPage();
-      yPosition = margin;
-    }
-
-    pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(12);
-    pdf.text("ATRIBUTOS", margin, yPosition);
-    yPosition += lineHeight;
-
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(10);
-
-    const attributes = [
-      { name: "Fuerza", value: sheet.attributes?.strength || 0 },
-      { name: "Destreza", value: sheet.attributes?.dexterity || 0 },
-      { name: "Vigor", value: sheet.attributes?.stamina || 0 },
-      { name: "Carisma", value: sheet.attributes?.charisma || 0 },
-      { name: "Manipulación", value: sheet.attributes?.manipulation || 0 },
-      { name: "Composición", value: sheet.attributes?.composure || 0 },
-      { name: "Inteligencia", value: sheet.attributes?.intelligence || 0 },
-      { name: "Percepción", value: sheet.attributes?.wits || 0 },
-      { name: "Resolución", value: sheet.attributes?.resolve || 0 }
-    ];
-
-    const attributesPerColumn = 3;
-    for (let i = 0; i < attributes.length; i += attributesPerColumn) {
-      const columnX = margin + (i / attributesPerColumn) * (contentWidth / 3);
-      for (let j = 0; j < attributesPerColumn && i + j < attributes.length; j++) {
-        const attr = attributes[i + j];
-        pdf.text(`${attr.name}: ${attr.value}`, columnX, yPosition + j * lineHeight);
+      for (let i = 0; i < maxDots; i++) {
+        const dotX = x + (i * dotSpacing);
+        if (i < value) {
+          pdf.circle(dotX, y, dotRadius, 'F'); // Punto lleno
+        } else {
+          pdf.circle(dotX, y, dotRadius, 'S'); // Punto vacío
+        }
       }
     }
-    yPosition += lineHeight * 3 + sectionSpacing;
 
-    // Habilidades
-    if (yPosition > pageHeight - 80) {
-      pdf.addPage();
-      yPosition = margin;
-    }
-
+    // Título principal
     pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(12);
-    pdf.text("HABILIDADES", margin, yPosition);
-    yPosition += lineHeight;
+    pdf.setFontSize(24);
+    pdf.setTextColor(...colors.primary);
+    pdf.text("VAMPIRE", pageWidth / 2, yPosition, { align: "center" });
+    yPosition += lineHeight * 2;
+    pdf.setFontSize(16);
+    pdf.text("THE MASQUERADE 5th EDITION", pageWidth / 2, yPosition, { align: "center" });
+    yPosition += lineHeight * 3;
 
-    pdf.setFont("helvetica", "normal");
+    // Información general
+    let sectionStart = yPosition;
+    pdf.setTextColor(...colors.text);
     pdf.setFontSize(10);
 
-    const skills = [
-      { name: "Atletismo", value: sheet.skills?.athletics?.value || 0 },
+    // Primera columna
+    pdf.text("Name:", margin, yPosition);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(sheet.name || "", margin + 25, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Chronicle:", margin, yPosition);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(sheet.chronicle || "", margin + 25, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Clan:", margin, yPosition);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(sheet.clan || "", margin + 25, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    // Segunda columna
+    const col2X = pageWidth / 2;
+    yPosition = sectionStart;
+
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Ambition:", col2X, yPosition);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(sheet.ambition || "", col2X + 25, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Desire:", col2X, yPosition);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(sheet.desire || "", col2X + 25, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Predator Type:", col2X, yPosition);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(sheet.predator_type || "", col2X + 25, yPosition);
+    yPosition += lineHeight * 2;
+
+    // Dibujar caja alrededor de la información general
+    drawTitledBox("CHARACTER INFORMATION", sectionStart - lineHeight, yPosition);
+    yPosition += sectionSpacing * 2;
+
+    // Atributos
+    sectionStart = yPosition;
+    pdf.setFont("helvetica", "bold");
+    
+    // Físicos
+    const physicalX = margin + 10;
+    pdf.text("Physical", physicalX, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    const attributes = [
+      { name: "Strength", value: sheet.attributes?.strength || 0 },
+      { name: "Dexterity", value: sheet.attributes?.dexterity || 0 },
+      { name: "Stamina", value: sheet.attributes?.stamina || 0 }
+    ];
+
+    attributes.forEach(attr => {
+      pdf.setFont("helvetica", "normal");
+      pdf.text(attr.name, physicalX, yPosition);
+      drawDots(attr.value, physicalX + 30, yPosition - 1.5);
+      yPosition += lineHeight;
+    });
+
+    // Sociales
+    yPosition = sectionStart;
+    const socialX = margin + contentWidth/3 + 10;
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Social", socialX, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    const socialAttributes = [
+      { name: "Charisma", value: sheet.attributes?.charisma || 0 },
+      { name: "Manipulation", value: sheet.attributes?.manipulation || 0 },
+      { name: "Composure", value: sheet.attributes?.composure || 0 }
+    ];
+
+    socialAttributes.forEach(attr => {
+      pdf.setFont("helvetica", "normal");
+      pdf.text(attr.name, socialX, yPosition);
+      drawDots(attr.value, socialX + 30, yPosition - 1.5);
+      yPosition += lineHeight;
+    });
+
+    // Mentales
+    yPosition = sectionStart;
+    const mentalX = margin + (2 * contentWidth/3) + 10;
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Mental", mentalX, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    const mentalAttributes = [
+      { name: "Intelligence", value: sheet.attributes?.intelligence || 0 },
+      { name: "Wits", value: sheet.attributes?.wits || 0 },
+      { name: "Resolve", value: sheet.attributes?.resolve || 0 }
+    ];
+
+    mentalAttributes.forEach(attr => {
+      pdf.setFont("helvetica", "normal");
+      pdf.text(attr.name, mentalX, yPosition);
+      drawDots(attr.value, mentalX + 30, yPosition - 1.5);
+      yPosition += lineHeight;
+    });
+
+    // Dibujar caja alrededor de los atributos
+    const attrEndY = sectionStart + (lineHeight * 5);
+    drawTitledBox("ATTRIBUTES", sectionStart - lineHeight, attrEndY);
+    yPosition = attrEndY + sectionSpacing * 2;
+
+    // Habilidades
+    sectionStart = yPosition;
+    
+    // Habilidades Físicas
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Physical", physicalX, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    const physicalSkills = [
+      { name: "Athletics", value: sheet.skills?.athletics?.value || 0 },
       { name: "Brawl", value: sheet.skills?.brawl?.value || 0 },
       { name: "Craft", value: sheet.skills?.craft?.value || 0 },
-      { name: "Conducir", value: sheet.skills?.drive?.value || 0 },
-      { name: "Armas de Fuego", value: sheet.skills?.firearms?.value || 0 },
-      { name: "Larceny", value: sheet.skills?.larceny?.value || 0 },
+      { name: "Drive", value: sheet.skills?.drive?.value || 0 },
+      { name: "Firearms", value: sheet.skills?.firearms?.value || 0 },
       { name: "Melee", value: sheet.skills?.melee?.value || 0 },
-      { name: "Sigilo", value: sheet.skills?.stealth?.value || 0 },
-      { name: "Supervivencia", value: sheet.skills?.survival?.value || 0 },
+      { name: "Larceny", value: sheet.skills?.larceny?.value || 0 },
+      { name: "Stealth", value: sheet.skills?.stealth?.value || 0 },
+      { name: "Survival", value: sheet.skills?.survival?.value || 0 }
+    ];
+
+    physicalSkills.forEach(skill => {
+      pdf.setFont("helvetica", "normal");
+      pdf.text(skill.name, physicalX, yPosition);
+      drawDots(skill.value, physicalX + 30, yPosition - 1.5);
+      yPosition += lineHeight;
+    });
+
+    // Habilidades Sociales
+    yPosition = sectionStart;
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Social", socialX, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    const socialSkills = [
       { name: "Animal Ken", value: sheet.skills?.animal_ken?.value || 0 },
-      { name: "Etiqueta", value: sheet.skills?.etiquette?.value || 0 },
+      { name: "Etiquette", value: sheet.skills?.etiquette?.value || 0 },
       { name: "Insight", value: sheet.skills?.insight?.value || 0 },
       { name: "Intimidation", value: sheet.skills?.intimidation?.value || 0 },
       { name: "Leadership", value: sheet.skills?.leadership?.value || 0 },
       { name: "Performance", value: sheet.skills?.performance?.value || 0 },
       { name: "Persuasion", value: sheet.skills?.persuasion?.value || 0 },
       { name: "Streetwise", value: sheet.skills?.streetwise?.value || 0 },
-      { name: "Subterfuge", value: sheet.skills?.subterfuge?.value || 0 },
+      { name: "Subterfuge", value: sheet.skills?.subterfuge?.value || 0 }
+    ];
+
+    socialSkills.forEach(skill => {
+      pdf.setFont("helvetica", "normal");
+      pdf.text(skill.name, socialX, yPosition);
+      drawDots(skill.value, socialX + 30, yPosition - 1.5);
+      yPosition += lineHeight;
+    });
+
+    // Habilidades Mentales
+    yPosition = sectionStart;
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Mental", mentalX, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    const mentalSkills = [
       { name: "Academics", value: sheet.skills?.academics?.value || 0 },
       { name: "Awareness", value: sheet.skills?.awareness?.value || 0 },
       { name: "Finance", value: sheet.skills?.finance?.value || 0 },
@@ -159,383 +293,350 @@ export default function ExportCharacterPDF(props) {
       { name: "Technology", value: sheet.skills?.technology?.value || 0 }
     ];
 
-    // Organizar habilidades en 3 columnas: Físicas, Sociales, Mentales
-    const physicalSkills = skills.slice(0, 9); // Primeras 9 habilidades físicas
-    const socialSkills = skills.slice(9, 18);   // Siguientes 9 habilidades sociales
-    const mentalSkills = skills.slice(18);      // Últimas 9 habilidades mentales
-    
-    const columnWidth = contentWidth / 3;
-    const columnSpacing = 10;
-    
-    // Calcular la altura máxima de las columnas para alineación
-    const maxSkillsPerColumn = Math.max(physicalSkills.length, socialSkills.length, mentalSkills.length);
-    const skillsSectionHeight = maxSkillsPerColumn * lineHeight;
-    
-    // Columna 1: Habilidades Físicas
-    const physicalX = margin;
-    pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(10);
-    pdf.text("FÍSICAS:", physicalX, yPosition);
-    yPosition += lineHeight;
-    pdf.setFont("helvetica", "normal");
-    
-    physicalSkills.forEach((skill, index) => {
-      pdf.text(`${skill.name}: ${skill.value}`, physicalX, yPosition + index * lineHeight);
-    });
-    
-    // Columna 2: Habilidades Sociales
-    const socialX = margin + columnWidth + columnSpacing;
-    pdf.setFont("helvetica", "bold");
-    pdf.text("SOCIALES:", socialX, yPosition - lineHeight);
-    pdf.setFont("helvetica", "normal");
-    
-    socialSkills.forEach((skill, index) => {
-      pdf.text(`${skill.name}: ${skill.value}`, socialX, yPosition + index * lineHeight);
-    });
-    
-    // Columna 3: Habilidades Mentales
-    const mentalX = margin + 2 * columnWidth + 2 * columnSpacing;
-    pdf.setFont("helvetica", "bold");
-    pdf.text("MENTALES:", mentalX, yPosition - lineHeight);
-    pdf.setFont("helvetica", "normal");
-    
-    mentalSkills.forEach((skill, index) => {
-      pdf.text(`${skill.name}: ${skill.value}`, mentalX, yPosition + index * lineHeight);
-    });
-    
-    yPosition += skillsSectionHeight + sectionSpacing;
-
-    // Creencias y Touchstones (movido aquí para evitar desbordamiento)
-    if (sheet.tenets || sheet.touchstones || sheet.convictions) {
-      if (yPosition > pageHeight - 100) {
-        pdf.addPage();
-        yPosition = margin;
-      }
-
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(12);
-      pdf.text("CREENCIAS Y PRINCIPIOS", margin, yPosition);
-      yPosition += lineHeight;
-      
+    mentalSkills.forEach(skill => {
       pdf.setFont("helvetica", "normal");
-      pdf.setFontSize(10);
-      
-      // Manejar Tenets (puede ser string o array)
-      if (sheet.tenets) {
-        if (Array.isArray(sheet.tenets)) {
-          sheet.tenets.forEach((tenet, index) => {
-            if (tenet && tenet.trim()) {
-              const tenetsText = `Tenets ${index + 1}: ${tenet}`;
-              const heightUsed = addWrappedText(tenetsText, margin, yPosition, contentWidth);
-              yPosition += heightUsed + lineHeight;
-            }
-          });
-        } else {
-          const tenetsText = `Tenets: ${sheet.tenets}`;
-          const heightUsed = addWrappedText(tenetsText, margin, yPosition, contentWidth);
-          yPosition += heightUsed + lineHeight;
-        }
-      }
+      pdf.text(skill.name, mentalX, yPosition);
+      drawDots(skill.value, mentalX + 30, yPosition - 1.5);
+      yPosition += lineHeight;
+    });
 
-      // Manejar Touchstones (puede ser string o array)
-      if (sheet.touchstones) {
-        if (Array.isArray(sheet.touchstones)) {
-          sheet.touchstones.forEach((touchstone, index) => {
-            if (touchstone && touchstone.trim()) {
-              const touchstonesText = `Touchstones ${index + 1}: ${touchstone}`;
-              const heightUsed = addWrappedText(touchstonesText, margin, yPosition, contentWidth);
-              yPosition += heightUsed + lineHeight;
-            }
-          });
-        } else {
-          const touchstonesText = `Touchstones: ${sheet.touchstones}`;
-          const heightUsed = addWrappedText(touchstonesText, margin, yPosition, contentWidth);
-          yPosition += heightUsed + lineHeight;
-        }
-      }
+    // Dibujar caja alrededor de las habilidades
+    const skillsEndY = sectionStart + (lineHeight * 11);
+    drawTitledBox("SKILLS", sectionStart - lineHeight, skillsEndY);
+    yPosition = skillsEndY + sectionSpacing * 2;
 
-      // Manejar Convictions (puede ser string o array)
-      if (sheet.convictions) {
-        if (Array.isArray(sheet.convictions)) {
-          sheet.convictions.forEach((conviction, index) => {
-            if (conviction && conviction.trim()) {
-              const convictionsText = `Convictions ${index + 1}: ${conviction}`;
-              const heightUsed = addWrappedText(convictionsText, margin, yPosition, contentWidth);
-              yPosition += heightUsed + lineHeight;
-            }
-          });
-        } else {
-          const convictionsText = `Convictions: ${sheet.convictions}`;
-          const heightUsed = addWrappedText(convictionsText, margin, yPosition, contentWidth);
-          yPosition += heightUsed + lineHeight;
-        }
-      }
-      
-      yPosition += sectionSpacing;
-    }
+    // Nueva página para el resto del contenido
+    pdf.addPage();
+    yPosition = margin;
 
     // Disciplinas
-    if (yPosition > pageHeight - 60) {
-      pdf.addPage();
-      yPosition = margin;
-    }
-
+    sectionStart = yPosition;
     pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(12);
-    pdf.text("DISCIPLINAS", margin, yPosition);
-    yPosition += lineHeight;
-
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(10);
-
+    
     if (sheet.disciplines) {
       Object.entries(sheet.disciplines).forEach(([discipline, level]) => {
         if (level > 0) {
-          pdf.text(`${discipline}: ${level}`, margin, yPosition);
+          pdf.setFont("helvetica", "normal");
+          pdf.text(discipline, margin + 10, yPosition);
+          drawDots(level, margin + 50, yPosition - 1.5);
           yPosition += lineHeight;
         }
       });
     }
-    yPosition += sectionSpacing;
+
+    drawTitledBox("DISCIPLINES", sectionStart - lineHeight, yPosition);
+    yPosition += sectionSpacing * 2;
 
     // Ventajas
-    if (yPosition > pageHeight - 80) {
-      pdf.addPage();
-      yPosition = margin;
-    }
+    sectionStart = yPosition;
 
-    pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(12);
-    pdf.text("VENTAJAS", margin, yPosition);
-    yPosition += lineHeight;
-
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(10);
-
-    // Función para agregar sección de ventajas de manera simétrica
     function addAdvantageSection(title, items, startY) {
       if (!items || items.length === 0) return startY;
       
       pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(10);
-      pdf.text(`${title}:`, margin, startY);
-      let currentY = startY + lineHeight;
-      pdf.setFont("helvetica", "normal");
+      pdf.text(title, margin + 10, startY);
+      let currentY = startY + lineHeight * 1.5;
       
       items.forEach(item => {
         if (item.name) {
-          const rating = item.rating || item.level || 0;
-          pdf.text(`  ${item.name}: ${rating}`, margin, currentY);
+          pdf.setFont("helvetica", "normal");
+          pdf.text(item.name, margin + 15, currentY);
+          drawDots(item.rating || item.level || 0, margin + 70, currentY - 1.5);
           currentY += lineHeight;
           
           if (item.description) {
-            const descriptionText = `    Descripción: ${item.description}`;
-            const heightUsed = addWrappedText(descriptionText, margin, currentY, contentWidth);
+            const heightUsed = addWrappedText(item.description, margin + 20, currentY, contentWidth - 40);
             currentY += heightUsed;
           }
           
           if (item.notes) {
-            const notesText = `    Notas: ${item.notes}`;
-            const heightUsed = addWrappedText(notesText, margin, currentY, contentWidth);
+            pdf.setFont("helvetica", "italic");
+            const heightUsed = addWrappedText(item.notes, margin + 20, currentY, contentWidth - 40);
             currentY += heightUsed;
           }
+          currentY += lineHeight/2;
         }
       });
       
       return currentY;
     }
 
-    // Agregar secciones de ventajas de manera simétrica
     let advantagesY = yPosition;
-    
-    // Merits
     advantagesY = addAdvantageSection("Merits", sheet.merits, advantagesY);
-    
-    // Flaws
     advantagesY = addAdvantageSection("Flaws", sheet.flaws, advantagesY);
-    
-    // Backgrounds
     advantagesY = addAdvantageSection("Backgrounds", sheet.backgrounds, advantagesY);
-    
-    yPosition = advantagesY + sectionSpacing;
 
-    // Salud y Voluntad
-    if (yPosition > pageHeight - 60) {
-      pdf.addPage();
-      yPosition = margin;
+    drawTitledBox("ADVANTAGES", sectionStart - lineHeight, advantagesY);
+    yPosition = advantagesY + sectionSpacing * 2;
+
+    // Creencias y Touchstones
+    if (sheet.tenets || sheet.touchstones || sheet.convictions) {
+      sectionStart = yPosition;
+      
+      if (sheet.tenets) {
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Tenets", margin + 10, yPosition);
+        yPosition += lineHeight * 1.5;
+        
+        if (Array.isArray(sheet.tenets)) {
+          sheet.tenets.forEach((tenet, index) => {
+            if (tenet && tenet.trim()) {
+              pdf.setFont("helvetica", "normal");
+              const heightUsed = addWrappedText(`${index + 1}. ${tenet}`, margin + 15, yPosition, contentWidth - 30);
+              yPosition += heightUsed + lineHeight/2;
+            }
+          });
+        } else {
+          pdf.setFont("helvetica", "normal");
+          const heightUsed = addWrappedText(sheet.tenets, margin + 15, yPosition, contentWidth - 30);
+          yPosition += heightUsed + lineHeight;
+        }
+      }
+
+      if (sheet.touchstones) {
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Touchstones", margin + 10, yPosition);
+        yPosition += lineHeight * 1.5;
+        
+        if (Array.isArray(sheet.touchstones)) {
+          sheet.touchstones.forEach((touchstone, index) => {
+            if (touchstone && touchstone.trim()) {
+              pdf.setFont("helvetica", "normal");
+              const heightUsed = addWrappedText(`${index + 1}. ${touchstone}`, margin + 15, yPosition, contentWidth - 30);
+              yPosition += heightUsed + lineHeight/2;
+            }
+          });
+        } else {
+          pdf.setFont("helvetica", "normal");
+          const heightUsed = addWrappedText(sheet.touchstones, margin + 15, yPosition, contentWidth - 30);
+          yPosition += heightUsed + lineHeight;
+        }
+      }
+
+      if (sheet.convictions) {
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Convictions", margin + 10, yPosition);
+        yPosition += lineHeight * 1.5;
+        
+        if (Array.isArray(sheet.convictions)) {
+          sheet.convictions.forEach((conviction, index) => {
+            if (conviction && conviction.trim()) {
+              pdf.setFont("helvetica", "normal");
+              const heightUsed = addWrappedText(`${index + 1}. ${conviction}`, margin + 15, yPosition, contentWidth - 30);
+              yPosition += heightUsed + lineHeight/2;
+            }
+          });
+        } else {
+          pdf.setFont("helvetica", "normal");
+          const heightUsed = addWrappedText(sheet.convictions, margin + 15, yPosition, contentWidth - 30);
+          yPosition += heightUsed + lineHeight;
+        }
+      }
+
+      drawTitledBox("BELIEFS & CONVICTIONS", sectionStart - lineHeight, yPosition);
+      yPosition += sectionSpacing * 2;
     }
 
+    // Salud y Voluntad en una fila
+    sectionStart = yPosition;
+    const halfWidth = (contentWidth - margin) / 2;
+
+    // Salud
     pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(12);
-    pdf.text("SALUD Y VOLUNTAD", margin, yPosition);
-    yPosition += lineHeight;
-
+    pdf.text("Health", margin + 10, yPosition);
+    yPosition += lineHeight * 1.5;
+    
     pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(10);
+    const healthTotal = sheet.health?.total || 0;
+    const healthSuperficial = sheet.health?.superficial || 0;
+    const healthAggravated = sheet.health?.aggravated || 0;
+    
+    for (let i = 0; i < healthTotal; i++) {
+      const boxX = margin + 15 + (i * 5);
+      pdf.rect(boxX, yPosition - 3, 4, 4);
+      
+      if (i < healthAggravated) {
+        pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1); // X
+        pdf.line(boxX, yPosition + 1, boxX + 4, yPosition - 3); // X
+      } else if (i < (healthAggravated + healthSuperficial)) {
+        pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1); // /
+      }
+    }
+    
+    // Voluntad
+    const willX = margin + halfWidth + 10;
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Willpower", willX, sectionStart);
+    
+    pdf.setFont("helvetica", "normal");
+    const willTotal = sheet.willpower?.total || 0;
+    const willSuperficial = sheet.willpower?.superficial || 0;
+    const willAggravated = sheet.willpower?.aggravated || 0;
+    
+    for (let i = 0; i < willTotal; i++) {
+      const boxX = willX + 5 + (i * 5);
+      pdf.rect(boxX, yPosition - 3, 4, 4);
+      
+      if (i < willAggravated) {
+        pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1); // X
+        pdf.line(boxX, yPosition + 1, boxX + 4, yPosition - 3); // X
+      } else if (i < (willAggravated + willSuperficial)) {
+        pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1); // /
+      }
+    }
 
-    pdf.text(`Salud Total: ${sheet.health?.total || 0}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Salud Superficial: ${sheet.health?.superficial || 0}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Salud Agravada: ${sheet.health?.aggravated || 0}`, margin, yPosition);
     yPosition += lineHeight * 2;
-
-    pdf.text(`Voluntad Total: ${sheet.willpower?.total || 0}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Voluntad Superficial: ${sheet.willpower?.superficial || 0}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Voluntad Agravada: ${sheet.willpower?.aggravated || 0}`, margin, yPosition);
-    yPosition += lineHeight * 2;
+    drawTitledBox("HEALTH & WILLPOWER", sectionStart - lineHeight, yPosition);
+    yPosition += sectionSpacing * 2;
 
     // Sangre y Potencia
-    if (yPosition > pageHeight - 60) {
-      pdf.addPage();
-      yPosition = margin;
-    }
-
+    sectionStart = yPosition;
+    
+    // Potencia de sangre
     pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(12);
-    pdf.text("SANGRE Y POTENCIA", margin, yPosition);
-    yPosition += lineHeight;
-
+    pdf.text("Blood Potency", margin + 10, yPosition);
+    yPosition += lineHeight * 1.5;
+    
     pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(10);
+    drawDots(sheet.blood_potency || 0, margin + 50, yPosition - 1.5, 10);
+    yPosition += lineHeight * 2;
 
-    pdf.text(`Potencia de Sangre: ${sheet.blood_potency || 0}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Hambre: ${sheet.hunger || 0}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Humanidad: ${sheet.humanity || 0}`, margin, yPosition);
-    yPosition += lineHeight;
-    pdf.text(`Manchas: ${sheet.stains || 0}`, margin, yPosition);
-    yPosition += lineHeight;
+    // Hambre
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Hunger", margin + 10, yPosition);
+    yPosition += lineHeight * 1.5;
+    
+    pdf.setFont("helvetica", "normal");
+    drawDots(sheet.hunger || 0, margin + 50, yPosition - 1.5, 5);
+    yPosition += lineHeight * 2;
+
+    // Humanidad
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Humanity", margin + 10, yPosition);
+    yPosition += lineHeight * 1.5;
+    
+    pdf.setFont("helvetica", "normal");
+    drawDots(sheet.humanity || 0, margin + 50, yPosition - 1.5, 10);
+    yPosition += lineHeight * 2;
+
     if (sheet.resonance) {
-      pdf.text(`Resonancia: ${sheet.resonance}`, margin, yPosition);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Resonance", margin + 10, yPosition);
+      yPosition += lineHeight;
+      
+      pdf.setFont("helvetica", "normal");
+      pdf.text(sheet.resonance, margin + 15, yPosition);
       yPosition += lineHeight;
     }
-    if (sheet.hunting_roll) {
-      pdf.text(`Tirada de Caza: ${sheet.hunting_roll}`, margin, yPosition);
-      yPosition += lineHeight;
-    }
-    yPosition += lineHeight;
+
+    drawTitledBox("BLOOD & HUMANITY", sectionStart - lineHeight, yPosition);
+    yPosition += sectionSpacing * 2;
 
     // Experiencia
-    if (sheet.exp) {
-      pdf.text(`Experiencia Actual: ${sheet.exp.current || 0}`, margin, yPosition);
+    if (sheet.exp || sheet.exp_current) {
+      sectionStart = yPosition;
+      
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Experience", margin + 10, yPosition);
+      yPosition += lineHeight * 1.5;
+      
+      pdf.setFont("helvetica", "normal");
+      if (sheet.exp) {
+        pdf.text(`Current: ${sheet.exp.current || 0}`, margin + 15, yPosition);
+        yPosition += lineHeight;
+        pdf.text(`Total: ${sheet.exp.total || 0}`, margin + 15, yPosition);
+      } else {
+        pdf.text(`Current: ${sheet.exp_current || 0}`, margin + 15, yPosition);
+        yPosition += lineHeight;
+        pdf.text(`Total: ${sheet.exp_total || 0}`, margin + 15, yPosition);
+      }
       yPosition += lineHeight;
-      pdf.text(`Experiencia Total: ${sheet.exp.total || 0}`, margin, yPosition);
-    } else {
-      pdf.text(`Experiencia: ${sheet.exp_current || 0}`, margin, yPosition);
-      yPosition += lineHeight;
-      pdf.text(`Experiencia Total: ${sheet.exp_total || 0}`, margin, yPosition);
+
+      drawTitledBox("EXPERIENCE", sectionStart - lineHeight, yPosition);
+      yPosition += sectionSpacing * 2;
     }
-    yPosition += lineHeight;
 
     // Haven
-    if (yPosition > pageHeight - 60) {
-      pdf.addPage();
-      yPosition = margin;
-    }
-
     if (sheet.haven_name || sheet.haven_location || sheet.haven_description) {
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(12);
-      pdf.text("HAVEN", margin, yPosition);
-      yPosition += lineHeight;
-
-      pdf.setFont("helvetica", "normal");
-      pdf.setFontSize(10);
-
+      sectionStart = yPosition;
+      
       if (sheet.haven_name) {
-        pdf.text(`Nombre: ${sheet.haven_name}`, margin, yPosition);
-        yPosition += lineHeight;
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Name", margin + 10, yPosition);
+        pdf.setFont("helvetica", "normal");
+        pdf.text(sheet.haven_name, margin + 50, yPosition);
+        yPosition += lineHeight * 1.5;
       }
+      
       if (sheet.haven_location) {
-        pdf.text(`Ubicación: ${sheet.haven_location}`, margin, yPosition);
-        yPosition += lineHeight;
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Location", margin + 10, yPosition);
+        pdf.setFont("helvetica", "normal");
+        pdf.text(sheet.haven_location, margin + 50, yPosition);
+        yPosition += lineHeight * 1.5;
       }
+      
       if (sheet.haven_description) {
-        pdf.text(`Descripción: ${sheet.haven_description}`, margin, yPosition);
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Description", margin + 10, yPosition);
         yPosition += lineHeight;
+        
+        pdf.setFont("helvetica", "normal");
+        const heightUsed = addWrappedText(sheet.haven_description, margin + 15, yPosition, contentWidth - 30);
+        yPosition += heightUsed;
       }
-      yPosition += sectionSpacing;
+
+      drawTitledBox("HAVEN", sectionStart - lineHeight, yPosition);
+      yPosition += sectionSpacing * 2;
     }
 
-    // Información adicional
-    if (yPosition > pageHeight - 80) {
+    // Notas y descripciones en la última página
+    if (sheet.notes || sheet.notes2 || sheet.history || sheet.appearance_description) {
       pdf.addPage();
       yPosition = margin;
-    }
-
-    if (sheet.date_of_birth || sheet.age || sheet.apparent_age || sheet.date_of_death) {
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(12);
-      pdf.text("INFORMACIÓN ADICIONAL", margin, yPosition);
-      yPosition += lineHeight;
-
-      pdf.setFont("helvetica", "normal");
-      pdf.setFontSize(10);
-
-      if (sheet.date_of_birth) {
-        pdf.text(`Fecha de Nacimiento: ${sheet.date_of_birth}`, margin, yPosition);
-        yPosition += lineHeight;
-      }
-      if (sheet.age) {
-        pdf.text(`Edad: ${sheet.age}`, margin, yPosition);
-        yPosition += lineHeight;
-      }
-      if (sheet.apparent_age) {
-        pdf.text(`Edad Aparente: ${sheet.apparent_age}`, margin, yPosition);
-        yPosition += lineHeight;
-      }
-      if (sheet.date_of_death) {
-        pdf.text(`Fecha de Muerte: ${sheet.date_of_death}`, margin, yPosition);
-        yPosition += lineHeight;
-      }
-      yPosition += sectionSpacing;
-    }
-
-    // Notas
-    if (sheet.notes || sheet.notes2 || sheet.history || sheet.appearance_description) {
-      if (yPosition > pageHeight - 60) {
-        pdf.addPage();
-        yPosition = margin;
-      }
-
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(12);
-      pdf.text("NOTAS Y DESCRIPCIONES", margin, yPosition);
-      yPosition += lineHeight;
-
-      pdf.setFont("helvetica", "normal");
-      pdf.setFontSize(10);
+      sectionStart = yPosition;
 
       if (sheet.history) {
-        const historyText = `Historia: ${sheet.history}`;
-        const heightUsed = addWrappedText(historyText, margin, yPosition, contentWidth);
-        yPosition += heightUsed;
+        pdf.setFont("helvetica", "bold");
+        pdf.text("History", margin + 10, yPosition);
+        yPosition += lineHeight * 1.5;
+        
+        pdf.setFont("helvetica", "normal");
+        const heightUsed = addWrappedText(sheet.history, margin + 15, yPosition, contentWidth - 30);
+        yPosition += heightUsed + lineHeight;
       }
-      if (sheet.appearance_description) {
-        const appearanceText = `Descripción Física: ${sheet.appearance_description}`;
-        const heightUsed = addWrappedText(appearanceText, margin, yPosition, contentWidth);
-        yPosition += heightUsed;
-      }
-      if (sheet.notes) {
-        const notesText = `Notas: ${sheet.notes}`;
-        const heightUsed = addWrappedText(notesText, margin, yPosition, contentWidth);
-        yPosition += heightUsed;
-      }
-      if (sheet.notes2) {
-        const notes2Text = `Notas Adicionales: ${sheet.notes2}`;
-        const heightUsed = addWrappedText(notes2Text, margin, yPosition, contentWidth);
-        yPosition += heightUsed;
-      }
-      yPosition += sectionSpacing;
-    }
 
-    // Crónica
-    if (sheet.chronicle) {
-      pdf.text(`Crónica: ${sheet.chronicle}`, margin, yPosition);
+      if (sheet.appearance_description) {
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Appearance", margin + 10, yPosition);
+        yPosition += lineHeight * 1.5;
+        
+        pdf.setFont("helvetica", "normal");
+        const heightUsed = addWrappedText(sheet.appearance_description, margin + 15, yPosition, contentWidth - 30);
+        yPosition += heightUsed + lineHeight;
+      }
+
+      if (sheet.notes) {
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Notes", margin + 10, yPosition);
+        yPosition += lineHeight * 1.5;
+        
+        pdf.setFont("helvetica", "normal");
+        const heightUsed = addWrappedText(sheet.notes, margin + 15, yPosition, contentWidth - 30);
+        yPosition += heightUsed + lineHeight;
+      }
+
+      if (sheet.notes2) {
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Additional Notes", margin + 10, yPosition);
+        yPosition += lineHeight * 1.5;
+        
+        pdf.setFont("helvetica", "normal");
+        const heightUsed = addWrappedText(sheet.notes2, margin + 15, yPosition, contentWidth - 30);
+        yPosition += heightUsed + lineHeight;
+      }
+
+      drawTitledBox("NOTES & DESCRIPTIONS", sectionStart - lineHeight, yPosition);
     }
 
     // Guardar el PDF
@@ -550,4 +651,4 @@ export default function ExportCharacterPDF(props) {
       </IconButton>
     </Tooltip>
   );
-} 
+}
