@@ -226,6 +226,32 @@ export default function ExportCharacterPDF(props) {
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(10);
 
+    function addWrappedText(text, x, y, maxWidth) {
+      const words = text.split(' ');
+      let line = '';
+      let currentY = y;
+      
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + ' ';
+        const testWidth = pdf.getTextWidth(testLine);
+        
+        if (testWidth > maxWidth && line !== '') {
+          pdf.text(line, x, currentY);
+          line = words[i] + ' ';
+          currentY += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      
+      if (line) {
+        pdf.text(line, x, currentY);
+        currentY += lineHeight;
+      }
+      
+      return currentY - y;
+    }
+
     // Merits
     if (sheet.merits && sheet.merits.length > 0) {
       pdf.setFont("helvetica", "bold");
@@ -239,13 +265,17 @@ export default function ExportCharacterPDF(props) {
           const rating = merit.rating || merit.level || 0;
           pdf.text(`  ${merit.name}: ${rating}`, margin, yPosition);
           yPosition += lineHeight;
+          
           if (merit.description) {
-            pdf.text(`    Descripción: ${merit.description}`, margin, yPosition);
-            yPosition += lineHeight;
+            const descriptionText = `    Descripción: ${merit.description}`;
+            const heightUsed = addWrappedText(descriptionText, margin, yPosition, contentWidth);
+            yPosition += heightUsed;
           }
+          
           if (merit.notes) {
-            pdf.text(`    Notas: ${merit.notes}`, margin, yPosition);
-            yPosition += lineHeight;
+            const notesText = `    Notas: ${merit.notes}`;
+            const heightUsed = addWrappedText(notesText, margin, yPosition, contentWidth);
+            yPosition += heightUsed;
           }
         }
       });
@@ -265,13 +295,17 @@ export default function ExportCharacterPDF(props) {
           const rating = flaw.rating || flaw.level || 0;
           pdf.text(`  ${flaw.name}: ${rating}`, margin, yPosition);
           yPosition += lineHeight;
+          
           if (flaw.description) {
-            pdf.text(`    Descripción: ${flaw.description}`, margin, yPosition);
-            yPosition += lineHeight;
+            const descriptionText = `    Descripción: ${flaw.description}`;
+            const heightUsed = addWrappedText(descriptionText, margin, yPosition, contentWidth);
+            yPosition += heightUsed;
           }
+          
           if (flaw.notes) {
-            pdf.text(`    Notas: ${flaw.notes}`, margin, yPosition);
-            yPosition += lineHeight;
+            const notesText = `    Notas: ${flaw.notes}`;
+            const heightUsed = addWrappedText(notesText, margin, yPosition, contentWidth);
+            yPosition += heightUsed;
           }
         }
       });
@@ -291,13 +325,17 @@ export default function ExportCharacterPDF(props) {
           const rating = background.rating || background.level || 0;
           pdf.text(`  ${background.name}: ${rating}`, margin, yPosition);
           yPosition += lineHeight;
+          
           if (background.description) {
-            pdf.text(`    Descripción: ${background.description}`, margin, yPosition);
-            yPosition += lineHeight;
+            const descriptionText = `    Descripción: ${background.description}`;
+            const heightUsed = addWrappedText(descriptionText, margin, yPosition, contentWidth);
+            yPosition += heightUsed;
           }
+          
           if (background.notes) {
-            pdf.text(`    Notas: ${background.notes}`, margin, yPosition);
-            yPosition += lineHeight;
+            const notesText = `    Notas: ${background.notes}`;
+            const heightUsed = addWrappedText(notesText, margin, yPosition, contentWidth);
+            yPosition += heightUsed;
           }
         }
       });
@@ -458,20 +496,24 @@ export default function ExportCharacterPDF(props) {
       pdf.setFontSize(10);
 
       if (sheet.history) {
-        pdf.text(`Historia: ${sheet.history}`, margin, yPosition);
-        yPosition += lineHeight;
+        const historyText = `Historia: ${sheet.history}`;
+        const heightUsed = addWrappedText(historyText, margin, yPosition, contentWidth);
+        yPosition += heightUsed;
       }
       if (sheet.appearance_description) {
-        pdf.text(`Descripción Física: ${sheet.appearance_description}`, margin, yPosition);
-        yPosition += lineHeight;
+        const appearanceText = `Descripción Física: ${sheet.appearance_description}`;
+        const heightUsed = addWrappedText(appearanceText, margin, yPosition, contentWidth);
+        yPosition += heightUsed;
       }
       if (sheet.notes) {
-        pdf.text(`Notas: ${sheet.notes}`, margin, yPosition);
-        yPosition += lineHeight;
+        const notesText = `Notas: ${sheet.notes}`;
+        const heightUsed = addWrappedText(notesText, margin, yPosition, contentWidth);
+        yPosition += heightUsed;
       }
       if (sheet.notes2) {
-        pdf.text(`Notas Adicionales: ${sheet.notes2}`, margin, yPosition);
-        yPosition += lineHeight;
+        const notes2Text = `Notas Adicionales: ${sheet.notes2}`;
+        const heightUsed = addWrappedText(notes2Text, margin, yPosition, contentWidth);
+        yPosition += heightUsed;
       }
       yPosition += sectionSpacing;
     }
