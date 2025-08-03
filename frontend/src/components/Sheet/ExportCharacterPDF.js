@@ -16,6 +16,35 @@ export default function ExportCharacterPDF(props) {
     const lineHeight = 7;
     const sectionSpacing = 10;
 
+    // Función mejorada para manejar texto largo (movida al inicio)
+    function addWrappedText(text, x, y, maxWidth) {
+      const words = text.split(' ');
+      let line = '';
+      let currentY = y;
+      let linesAdded = 0;
+      
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + ' ';
+        const testWidth = pdf.getTextWidth(testLine);
+        
+        if (testWidth > maxWidth && line !== '') {
+          pdf.text(line.trim(), x, currentY);
+          line = words[i] + ' ';
+          currentY += lineHeight;
+          linesAdded++;
+        } else {
+          line = testLine;
+        }
+      }
+      
+      if (line) {
+        pdf.text(line.trim(), x, currentY);
+        linesAdded++;
+      }
+      
+      return linesAdded * lineHeight;
+    }
+
     // Configurar fuente
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(16);
@@ -49,31 +78,6 @@ export default function ExportCharacterPDF(props) {
     yPosition += lineHeight;
     pdf.text(`Deseo: ${sheet.desire || "Sin deseo"}`, margin, yPosition);
     yPosition += lineHeight * 2;
-
-    // Creencias y Touchstones
-    if (sheet.tenets || sheet.touchstones || sheet.convictions) {
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(12);
-      pdf.text("CREENCIAS Y PRINCIPIOS", margin, yPosition);
-      yPosition += lineHeight;
-      
-      pdf.setFont("helvetica", "normal");
-      pdf.setFontSize(10);
-      
-      if (sheet.tenets) {
-        pdf.text(`Tenets: ${sheet.tenets}`, margin, yPosition);
-        yPosition += lineHeight;
-      }
-      if (sheet.touchstones) {
-        pdf.text(`Touchstones: ${sheet.touchstones}`, margin, yPosition);
-        yPosition += lineHeight;
-      }
-      if (sheet.convictions) {
-        pdf.text(`Convictions: ${sheet.convictions}`, margin, yPosition);
-        yPosition += lineHeight;
-      }
-      yPosition += lineHeight;
-    }
 
     // Atributos
     if (yPosition > pageHeight - 60) {
@@ -201,6 +205,75 @@ export default function ExportCharacterPDF(props) {
     
     yPosition += skillsSectionHeight + sectionSpacing;
 
+    // Creencias y Touchstones (movido aquí para evitar desbordamiento)
+    if (sheet.tenets || sheet.touchstones || sheet.convictions) {
+      if (yPosition > pageHeight - 100) {
+        pdf.addPage();
+        yPosition = margin;
+      }
+
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(12);
+      pdf.text("CREENCIAS Y PRINCIPIOS", margin, yPosition);
+      yPosition += lineHeight;
+      
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(10);
+      
+      // Manejar Tenets (puede ser string o array)
+      if (sheet.tenets) {
+        if (Array.isArray(sheet.tenets)) {
+          sheet.tenets.forEach((tenet, index) => {
+            if (tenet && tenet.trim()) {
+              const tenetsText = `Tenets ${index + 1}: ${tenet}`;
+              const heightUsed = addWrappedText(tenetsText, margin, yPosition, contentWidth);
+              yPosition += heightUsed + lineHeight;
+            }
+          });
+        } else {
+          const tenetsText = `Tenets: ${sheet.tenets}`;
+          const heightUsed = addWrappedText(tenetsText, margin, yPosition, contentWidth);
+          yPosition += heightUsed + lineHeight;
+        }
+      }
+
+      // Manejar Touchstones (puede ser string o array)
+      if (sheet.touchstones) {
+        if (Array.isArray(sheet.touchstones)) {
+          sheet.touchstones.forEach((touchstone, index) => {
+            if (touchstone && touchstone.trim()) {
+              const touchstonesText = `Touchstones ${index + 1}: ${touchstone}`;
+              const heightUsed = addWrappedText(touchstonesText, margin, yPosition, contentWidth);
+              yPosition += heightUsed + lineHeight;
+            }
+          });
+        } else {
+          const touchstonesText = `Touchstones: ${sheet.touchstones}`;
+          const heightUsed = addWrappedText(touchstonesText, margin, yPosition, contentWidth);
+          yPosition += heightUsed + lineHeight;
+        }
+      }
+
+      // Manejar Convictions (puede ser string o array)
+      if (sheet.convictions) {
+        if (Array.isArray(sheet.convictions)) {
+          sheet.convictions.forEach((conviction, index) => {
+            if (conviction && conviction.trim()) {
+              const convictionsText = `Convictions ${index + 1}: ${conviction}`;
+              const heightUsed = addWrappedText(convictionsText, margin, yPosition, contentWidth);
+              yPosition += heightUsed + lineHeight;
+            }
+          });
+        } else {
+          const convictionsText = `Convictions: ${sheet.convictions}`;
+          const heightUsed = addWrappedText(convictionsText, margin, yPosition, contentWidth);
+          yPosition += heightUsed + lineHeight;
+        }
+      }
+      
+      yPosition += sectionSpacing;
+    }
+
     // Disciplinas
     if (yPosition > pageHeight - 60) {
       pdf.addPage();
@@ -238,35 +311,6 @@ export default function ExportCharacterPDF(props) {
 
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(10);
-
-    // Función mejorada para manejar texto largo
-    function addWrappedText(text, x, y, maxWidth) {
-      const words = text.split(' ');
-      let line = '';
-      let currentY = y;
-      let linesAdded = 0;
-      
-      for (let i = 0; i < words.length; i++) {
-        const testLine = line + words[i] + ' ';
-        const testWidth = pdf.getTextWidth(testLine);
-        
-        if (testWidth > maxWidth && line !== '') {
-          pdf.text(line.trim(), x, currentY);
-          line = words[i] + ' ';
-          currentY += lineHeight;
-          linesAdded++;
-        } else {
-          line = testLine;
-        }
-      }
-      
-      if (line) {
-        pdf.text(line.trim(), x, currentY);
-        linesAdded++;
-      }
-      
-      return linesAdded * lineHeight;
-    }
 
     // Función para agregar sección de ventajas de manera simétrica
     function addAdvantageSection(title, items, startY) {
