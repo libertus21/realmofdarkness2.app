@@ -264,8 +264,6 @@ export default function ExportCharacterPDF(props) {
     sectionStart = yPosition;
 
     // Habilidades Físicas
-    pdf.setFont("helvetica", "bold");
-    pdf.text("Physical", physicalX, yPosition);
     yPosition += lineHeight * 1.5;
 
     const physicalSkills = [
@@ -289,8 +287,6 @@ export default function ExportCharacterPDF(props) {
 
     // Habilidades Sociales
     yPosition = sectionStart;
-    pdf.setFont("helvetica", "bold");
-    pdf.text("Social", socialX, yPosition);
     yPosition += lineHeight * 1.5;
 
     const socialSkills = [
@@ -314,8 +310,6 @@ export default function ExportCharacterPDF(props) {
 
     // Habilidades Mentales
     yPosition = sectionStart;
-    pdf.setFont("helvetica", "bold");
-    pdf.text("Mental", mentalX, yPosition);
     yPosition += lineHeight * 1.5;
 
     const mentalSkills = [
