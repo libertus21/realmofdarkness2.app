@@ -1,16 +1,16 @@
-import BasePDFGenerator from './BasePDFGenerator';
+import BasePDFGenerator from '../../BasePDFGenerator';
 
 /**
- * Generador de PDF específico para Hombre Lobo 5th Edition
- * Extiende BasePDFGenerator con funcionalidades específicas de W5
+ * Generador de PDF específico para Vampiro 5th Edition
+ * Extiende BasePDFGenerator con funcionalidades específicas de V5
  */
-export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
+export default class Vampire5thPDFGenerator extends BasePDFGenerator {
   constructor(sheet, options = {}) {
     super(sheet, {
       colors: {
-        primary: [0.55, 0.27, 0.07], // Marrón para hombre lobo
+        primary: [0.2, 0, 0], // Rojo oscuro para vampiro
         text: [0, 0, 0],
-        border: [0.4, 0.2, 0.05],
+        border: [0.3, 0, 0],
       },
       ...options
     });
@@ -22,16 +22,16 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
     this.generateAttributes();
     this.generateSkills();
     this.addNewPage();
-    this.generateGifts();
+    this.generateDisciplines();
     this.generateAdvantages();
     this.generateBeliefs();
     this.addNewPage();
     this.generateNotes();
-    this.generateHealthRage();
+    this.generateHealthWillpower();
     this.generateExperience();
-    this.generateTerritory();
+    this.generateHaven();
     
-    const fileName = `${this.sheet.name || "character"}_W5.pdf`;
+    const fileName = `${this.sheet.name || "character"}_V5.pdf`;
     this.save(fileName);
   }
 
@@ -39,10 +39,10 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
     this.pdf.setFont("helvetica", "bold");
     this.pdf.setFontSize(24);
     this.pdf.setTextColor(...this.colors.primary);
-    this.pdf.text("WEREWOLF", this.pageWidth / 2, this.yPosition, { align: "center" });
+    this.pdf.text("VAMPIRE", this.pageWidth / 2, this.yPosition, { align: "center" });
     this.yPosition += this.options.lineHeight * 2;
     this.pdf.setFontSize(16);
-    this.pdf.text("THE APOCALYPSE 5th EDITION", this.pageWidth / 2, this.yPosition, {
+    this.pdf.text("THE MASQUERADE 5th EDITION", this.pageWidth / 2, this.yPosition, {
       align: "center",
     });
     this.yPosition += this.options.lineHeight * 3;
@@ -67,21 +67,21 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
     this.yPosition += this.options.lineHeight * 1.5;
 
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Auspice:", this.options.margin, this.yPosition);
+    this.pdf.text("Clan:", this.options.margin, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(this.sheet.auspice || "", this.options.margin + 25, this.yPosition);
+    this.pdf.text(this.sheet.clan || "", this.options.margin + 25, this.yPosition);
     this.yPosition += this.options.lineHeight * 1.5;
 
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Tribe:", this.options.margin, this.yPosition);
+    this.pdf.text("Blood Potency:", this.options.margin, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(this.sheet.tribe || "", this.options.margin + 25, this.yPosition);
+    this.pdf.text(String(this.sheet.blood_potency || 0), this.options.margin + 35, this.yPosition);
     this.yPosition += this.options.lineHeight * 1.5;
 
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Breed:", this.options.margin, this.yPosition);
+    this.pdf.text("Generation:", this.options.margin, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(this.sheet.breed || "", this.options.margin + 25, this.yPosition);
+    this.pdf.text(String(this.sheet.generation || 0), this.options.margin + 35, this.yPosition);
     this.yPosition += this.options.lineHeight * 1.5;
 
     // Segunda columna
@@ -89,27 +89,33 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
     this.yPosition = sectionStart;
 
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Primal Urge:", col2X, this.yPosition);
+    this.pdf.text("Ambition:", col2X, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(String(this.sheet.primal_urge || 0), col2X + 35, this.yPosition);
+    this.pdf.text(this.sheet.ambition || "", col2X + 25, this.yPosition);
     this.yPosition += this.options.lineHeight * 1.5;
 
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Rage:", col2X, this.yPosition);
+    this.pdf.text("Desire:", col2X, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(String(this.sheet.rage || 0), col2X + 35, this.yPosition);
+    this.pdf.text(this.sheet.desire || "", col2X + 25, this.yPosition);
     this.yPosition += this.options.lineHeight * 1.5;
 
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Gnosis:", col2X, this.yPosition);
+    this.pdf.text("Predator Type:", col2X, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(String(this.sheet.gnosis || 0), col2X + 35, this.yPosition);
+    this.pdf.text(this.sheet.predator_type || "", col2X + 25, this.yPosition);
     this.yPosition += this.options.lineHeight * 1.5;
 
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Harmony:", col2X, this.yPosition);
+    this.pdf.text("Hunger:", col2X, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(String(this.sheet.harmony || 0), col2X + 35, this.yPosition);
+    this.pdf.text(String(this.sheet.hunger || 0), col2X + 35, this.yPosition);
+    this.yPosition += this.options.lineHeight * 1.5;
+
+    this.pdf.setFont("helvetica", "bold");
+    this.pdf.text("Humanity:", col2X, this.yPosition);
+    this.pdf.setFont("helvetica", "normal");
+    this.pdf.text(String(this.sheet.humanity || 0), col2X + 35, this.yPosition);
     this.yPosition += this.options.lineHeight * 2;
 
     this.drawSimpleBox("CHARACTER INFORMATION", sectionStart - this.options.lineHeight, this.yPosition);
@@ -117,7 +123,6 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
   }
 
   generateAttributes() {
-    // Similar a Vampire5thPDFGenerator pero con atributos específicos de W5
     const sectionStart = this.yPosition;
     this.pdf.setFont("helvetica", "bold");
 
@@ -185,7 +190,6 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
   }
 
   generateSkills() {
-    // Similar a Vampire5thPDFGenerator pero con habilidades específicas de W5
     const sectionStart = this.yPosition;
 
     // Habilidades Físicas
@@ -264,28 +268,28 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
     this.yPosition = skillsEndY + this.options.sectionSpacing * 2;
   }
 
-  generateGifts() {
+  generateDisciplines() {
     const sectionStart = this.yPosition;
     this.pdf.setFont("helvetica", "bold");
 
-    if (this.sheet.gifts && Object.keys(this.sheet.gifts).length > 0) {
-      Object.entries(this.sheet.gifts).forEach(([gift, giftData]) => {
-        const level = typeof giftData === 'object' ? giftData.value || 0 : giftData || 0;
+    if (this.sheet.disciplines && Object.keys(this.sheet.disciplines).length > 0) {
+      Object.entries(this.sheet.disciplines).forEach(([discipline, disciplineData]) => {
+        const level = typeof disciplineData === 'object' ? disciplineData.value || 0 : disciplineData || 0;
         
         if (level > 0) {
           this.pdf.setFont("helvetica", "normal");
-          this.pdf.text(gift, this.options.margin + 10, this.yPosition);
+          this.pdf.text(discipline, this.options.margin + 10, this.yPosition);
           this.drawSimpleDots(level, this.options.margin + 50, this.yPosition - 1.5, 5);
           this.yPosition += this.options.lineHeight;
         }
       });
     } else {
       this.pdf.setFont("helvetica", "normal");
-      this.pdf.text("No gifts", this.options.margin + 10, this.yPosition);
+      this.pdf.text("No disciplines", this.options.margin + 10, this.yPosition);
       this.yPosition += this.options.lineHeight;
     }
 
-    this.drawSimpleBox("GIFTS", sectionStart - this.options.lineHeight, this.yPosition);
+    this.drawSimpleBox("DISCIPLINES", sectionStart - this.options.lineHeight, this.yPosition);
     this.yPosition += this.options.sectionSpacing * 2;
   }
 
@@ -376,6 +380,66 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
         }
       }
 
+      if (this.sheet.touchstones) {
+        this.pdf.setFont("helvetica", "bold");
+        this.pdf.text("Touchstones", this.options.margin + 10, this.yPosition);
+        this.yPosition += this.options.lineHeight * 1.5;
+
+        if (Array.isArray(this.sheet.touchstones)) {
+          this.sheet.touchstones.forEach((touchstone, index) => {
+            if (touchstone && touchstone.trim()) {
+              this.pdf.setFont("helvetica", "normal");
+              const heightUsed = this.addWrappedText(
+                `${index + 1}. ${touchstone}`,
+                this.options.margin + 15,
+                this.yPosition,
+                this.contentWidth - 30
+              );
+              this.yPosition += heightUsed + this.options.lineHeight / 2;
+            }
+          });
+        } else {
+          this.pdf.setFont("helvetica", "normal");
+          const heightUsed = this.addWrappedText(
+            this.sheet.touchstones,
+            this.options.margin + 15,
+            this.yPosition,
+            this.contentWidth - 30
+          );
+          this.yPosition += heightUsed + this.options.lineHeight;
+        }
+      }
+
+      if (this.sheet.convictions) {
+        this.pdf.setFont("helvetica", "bold");
+        this.pdf.text("Convictions", this.options.margin + 10, this.yPosition);
+        this.yPosition += this.options.lineHeight * 1.5;
+
+        if (Array.isArray(this.sheet.convictions)) {
+          this.sheet.convictions.forEach((conviction, index) => {
+            if (conviction && conviction.trim()) {
+              this.pdf.setFont("helvetica", "normal");
+              const heightUsed = this.addWrappedText(
+                `${index + 1}. ${conviction}`,
+                this.options.margin + 15,
+                this.yPosition,
+                this.contentWidth - 30
+              );
+              this.yPosition += heightUsed + this.options.lineHeight / 2;
+            }
+          });
+        } else {
+          this.pdf.setFont("helvetica", "normal");
+          const heightUsed = this.addWrappedText(
+            this.sheet.convictions,
+            this.options.margin + 15,
+            this.yPosition,
+            this.contentWidth - 30
+          );
+          this.yPosition += heightUsed + this.options.lineHeight;
+        }
+      }
+
       this.drawSimpleBox("BELIEFS & CONVICTIONS", sectionStart - this.options.lineHeight, this.yPosition);
       this.yPosition += this.options.sectionSpacing * 2;
     }
@@ -450,12 +514,12 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
     }
   }
 
-  generateHealthRage() {
+  generateHealthWillpower() {
     const sectionStart = this.yPosition;
     this.pdf.setFont("helvetica", "bold");
     this.pdf.setFontSize(12);
     this.pdf.setTextColor(...this.colors.primary);
-    this.pdf.text("HEALTH & RAGE", this.options.margin, this.yPosition);
+    this.pdf.text("HEALTH & WILLPOWER", this.options.margin, this.yPosition);
     this.pdf.setTextColor(...this.colors.text);
     this.pdf.setFontSize(10);
     this.yPosition += this.options.lineHeight * 2;
@@ -494,24 +558,35 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
     }
     this.yPosition += this.options.lineHeight * 2;
 
-    // Rage
-    const rageX = this.options.margin + 100;
-    const rageBoxY = healthY + this.options.lineHeight * 1.9;
+    // Willpower
+    const willX = this.options.margin + 100;
+    const willBoxY = healthY + this.options.lineHeight * 1.9;
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Rage", rageX, healthY);
+    this.pdf.text("Willpower", willX, healthY);
     
-    const rageTotal = this.sheet.rage?.total || 10;
-    const rageCurrent = this.sheet.rage?.current || 0;
+    const willTotal = this.sheet.willpower?.total || 10;
+    const willSuperficial = this.sheet.willpower?.superficial || 0;
+    const willAggravated = this.sheet.willpower?.aggravated || 0;
 
-    for (let i = 0; i < rageTotal; i++) {
-      const boxX = rageX + 5 + i * 5;
-      if (i < rageCurrent) {
-        this.pdf.setFillColor(...this.colors.primary);
-        this.pdf.rect(boxX, rageBoxY - 2, 4, 4, "F");
+    for (let i = 0; i < willTotal; i++) {
+      const boxX = willX + 5 + i * 5;
+      if (i < willAggravated) {
+        this.pdf.setFillColor(0, 0, 0);
+        this.pdf.rect(boxX, willBoxY - 2, 4, 4, "F");
+        this.pdf.setTextColor(1, 1, 1);
+        this.pdf.setFontSize(6);
+        this.pdf.text("X", boxX + 1, willBoxY + 1);
+        this.pdf.setTextColor(0, 0, 0);
+        this.pdf.setFontSize(10);
+      } else if (i < willAggravated + willSuperficial) {
+        this.pdf.setDrawColor(0, 0, 0);
+        this.pdf.setLineWidth(0.2);
+        this.pdf.rect(boxX, willBoxY - 2, 4, 4);
+        this.pdf.line(boxX, willBoxY - 2, boxX + 4, willBoxY + 2);
       } else {
         this.pdf.setDrawColor(0, 0, 0);
         this.pdf.setLineWidth(0.2);
-        this.pdf.rect(boxX, rageBoxY - 2, 4, 4);
+        this.pdf.rect(boxX, willBoxY - 2, 4, 4);
       }
     }
     this.yPosition += this.options.lineHeight * 2;
@@ -557,38 +632,38 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
     this.yPosition += this.options.sectionSpacing * 2;
   }
 
-  generateTerritory() {
-    if (this.sheet.territory_name || this.sheet.territory_location || this.sheet.territory_description) {
+  generateHaven() {
+    if (this.sheet.haven_name || this.sheet.haven_location || this.sheet.haven_description) {
       const sectionStart = this.yPosition;
       this.pdf.setFont("helvetica", "bold");
       this.pdf.setFontSize(12);
       this.pdf.setTextColor(...this.colors.primary);
-      this.pdf.text("TERRITORY", this.options.margin, this.yPosition);
+      this.pdf.text("HAVEN", this.options.margin, this.yPosition);
       this.pdf.setTextColor(...this.colors.text);
       this.pdf.setFontSize(10);
       this.yPosition += this.options.lineHeight * 2;
 
-      if (this.sheet.territory_name) {
+      if (this.sheet.haven_name) {
         this.pdf.setFont("helvetica", "bold");
         this.pdf.text("Name", this.options.margin + 10, this.yPosition);
         this.pdf.setFont("helvetica", "normal");
-        this.pdf.text(this.sheet.territory_name, this.options.margin + 50, this.yPosition);
+        this.pdf.text(this.sheet.haven_name, this.options.margin + 50, this.yPosition);
         this.yPosition += this.options.lineHeight * 1.5;
       }
 
-      if (this.sheet.territory_location) {
+      if (this.sheet.haven_location) {
         this.pdf.setFont("helvetica", "bold");
         this.pdf.text("Location", this.options.margin + 10, this.yPosition);
         this.pdf.setFont("helvetica", "normal");
-        this.pdf.text(this.sheet.territory_location, this.options.margin + 50, this.yPosition);
+        this.pdf.text(this.sheet.haven_location, this.options.margin + 50, this.yPosition);
         this.yPosition += this.options.lineHeight * 1.5;
       }
 
-      if (this.sheet.territory_description) {
+      if (this.sheet.haven_description) {
         this.pdf.setFont("helvetica", "bold");
         this.pdf.text("Description", this.options.margin + 10, this.yPosition);
         this.pdf.setFont("helvetica", "normal");
-        this.pdf.text(this.sheet.territory_description || "", this.options.margin + 50, this.yPosition);
+        this.pdf.text(this.sheet.haven_description || "", this.options.margin + 50, this.yPosition);
         this.yPosition += this.options.lineHeight * 1.5;
       }
 

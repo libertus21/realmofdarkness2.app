@@ -21,8 +21,8 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import PDFGeneratorFactory from './PDFGenerator/PDFGeneratorFactory';
 
 /**
- * Componente modular para importar y exportar PDFs de fichas de personajes
- * Soporta múltiples tipos de fichas y ediciones
+ * Modular component for importing and exporting character sheet PDFs
+ * Supports multiple sheet types and editions
  */
 export default function PDFImportExport({ sheet, sheetType = 'v5', onImportSuccess }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -42,7 +42,7 @@ export default function PDFImportExport({ sheet, sheetType = 'v5', onImportSucce
       const generator = PDFGeneratorFactory.createGenerator(selectedSheetType, sheet);
       generator.generate();
     } catch (err) {
-      setError(`Error al exportar PDF: ${err.message}`);
+      setError(`Error exporting PDF: ${err.message}`);
     } finally {
       setIsProcessing(false);
     }
@@ -56,22 +56,22 @@ export default function PDFImportExport({ sheet, sheetType = 'v5', onImportSucce
       setIsProcessing(true);
       setError(null);
 
-      // Aquí implementarías la lógica de importación de PDF
-      // Por ahora solo simulamos el proceso
+      // Here you would implement the PDF import logic
+      // For now we just simulate the process
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Simular éxito de importación
+      // Simulate successful import
       if (onImportSuccess) {
         onImportSuccess({
           name: file.name,
           type: selectedSheetType,
-          // Aquí irían los datos extraídos del PDF
+          // Here would go the data extracted from the PDF
         });
       }
       
       setIsDialogOpen(false);
     } catch (err) {
-      setError(`Error al importar PDF: ${err.message}`);
+      setError(`Error importing PDF: ${err.message}`);
     } finally {
       setIsProcessing(false);
     }
@@ -95,13 +95,13 @@ export default function PDFImportExport({ sheet, sheetType = 'v5', onImportSucce
   return (
     <>
       <Box sx={{ display: 'flex', gap: 1 }}>
-        <Tooltip title="Exportar como PDF">
+        <Tooltip title="Export as PDF">
           <IconButton onClick={() => openDialog('export')}>
             <PictureAsPdfIcon fontSize="large" color="secondary" />
           </IconButton>
         </Tooltip>
         
-        <Tooltip title="Importar desde PDF">
+        <Tooltip title="Import from PDF">
           <IconButton onClick={() => openDialog('import')}>
             <UploadFileIcon fontSize="large" color="primary" />
           </IconButton>
@@ -110,24 +110,24 @@ export default function PDFImportExport({ sheet, sheetType = 'v5', onImportSucce
 
       <Dialog open={isDialogOpen} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>
-          {selectedAction === 'export' ? 'Exportar PDF' : 'Importar PDF'}
+          {selectedAction === 'export' ? 'Export PDF' : 'Import PDF'}
         </DialogTitle>
         
         <DialogContent>
           <Box sx={{ mb: 2 }}>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               {selectedAction === 'export' 
-                ? 'Selecciona el tipo de ficha para exportar:'
-                : 'Selecciona el tipo de ficha para importar:'
+                ? 'Select the sheet type to export:'
+                : 'Select the sheet type to import:'
               }
             </Typography>
 
             <FormControl fullWidth>
-              <InputLabel>Tipo de Ficha</InputLabel>
+              <InputLabel>Sheet Type</InputLabel>
               <Select
                 value={selectedSheetType}
                 onChange={(e) => setSelectedSheetType(e.target.value)}
-                label="Tipo de Ficha"
+                label="Sheet Type"
               >
                 {supportedTypes.map((type) => (
                   <MenuItem key={type.value} value={type.value}>
@@ -141,7 +141,7 @@ export default function PDFImportExport({ sheet, sheetType = 'v5', onImportSucce
           {selectedAction === 'import' && (
             <Box sx={{ mb: 2 }}>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Selecciona un archivo PDF para importar:
+                Select a PDF file to import:
               </Typography>
               
               <input
@@ -158,7 +158,7 @@ export default function PDFImportExport({ sheet, sheetType = 'v5', onImportSucce
                 disabled={isProcessing}
                 fullWidth
               >
-                Seleccionar PDF
+                Select PDF
               </Button>
             </Box>
           )}
@@ -173,7 +173,7 @@ export default function PDFImportExport({ sheet, sheetType = 'v5', onImportSucce
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 2 }}>
               <CircularProgress size={20} />
               <Typography variant="body2">
-                {selectedAction === 'export' ? 'Generando PDF...' : 'Procesando PDF...'}
+                {selectedAction === 'export' ? 'Generating PDF...' : 'Processing PDF...'}
               </Typography>
             </Box>
           )}
@@ -181,7 +181,7 @@ export default function PDFImportExport({ sheet, sheetType = 'v5', onImportSucce
 
         <DialogActions>
           <Button onClick={handleClose} disabled={isProcessing}>
-            Cancelar
+            Cancel
           </Button>
           
           {selectedAction === 'export' && (
@@ -191,7 +191,7 @@ export default function PDFImportExport({ sheet, sheetType = 'v5', onImportSucce
               variant="contained"
               startIcon={<PictureAsPdfIcon />}
             >
-              Exportar
+              Export
             </Button>
           )}
         </DialogActions>

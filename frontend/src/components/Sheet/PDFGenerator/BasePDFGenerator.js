@@ -1,9 +1,9 @@
 import jsPDF from "jspdf";
 
 /**
- * Clase base abstracta para generar PDFs de fichas de personajes
- * Esta clase proporciona funcionalidades comunes que serán utilizadas
- * por todos los generadores específicos de cada tipo de ficha
+ * Abstract base class for generating character sheet PDFs
+ * This class provides common functionalities that will be used
+ * by all specific generators for each sheet type
  */
 export default class BasePDFGenerator {
   constructor(sheet, options = {}) {
@@ -23,23 +23,23 @@ export default class BasePDFGenerator {
     this.contentWidth = this.pageWidth - 2 * this.options.margin;
     this.yPosition = this.options.margin;
     
-    // Colores por defecto (pueden ser sobrescritos por subclases)
+    // Default colors (can be overridden by subclasses)
     this.colors = {
-      primary: [0.2, 0, 0], // Rojo oscuro
-      text: [0, 0, 0], // Negro puro
-      border: [0.3, 0, 0], // Rojo para bordes
+      primary: [0.2, 0, 0], // Dark red
+      text: [0, 0, 0], // Pure black
+      border: [0.3, 0, 0], // Red for borders
     };
   }
 
   /**
-   * Método principal que debe ser implementado por cada subclase
+   * Main method that must be implemented by each subclass
    */
   generate() {
-    throw new Error("El método generate() debe ser implementado por la subclase");
+    throw new Error("The generate() method must be implemented by the subclass");
   }
 
   /**
-   * Dibuja un borde simple
+   * Draws a simple border
    */
   drawSimpleBorder(x, y, width, height) {
     this.pdf.setDrawColor(...this.colors.border);
@@ -48,7 +48,7 @@ export default class BasePDFGenerator {
   }
 
   /**
-   * Dibuja una caja con título
+   * Draws a box with title
    */
   drawSimpleBox(title, startY, endY) {
     const boxMargin = 3;
@@ -78,7 +78,7 @@ export default class BasePDFGenerator {
   }
 
   /**
-   * Maneja texto largo con wrap
+   * Handles long text with wrapping
    */
   addWrappedText(text, x, y, maxWidth) {
     if (!text) return 0;
@@ -111,7 +111,7 @@ export default class BasePDFGenerator {
   }
 
   /**
-   * Dibuja puntos simples (para atributos, habilidades, etc.)
+   * Draws simple dots (for attributes, skills, etc.)
    */
   drawSimpleDots(value, x, y, maxDots = 5) {
     const dotRadius = 1;
@@ -131,7 +131,7 @@ export default class BasePDFGenerator {
   }
 
   /**
-   * Agrega una nueva página
+   * Adds a new page
    */
   addNewPage() {
     this.pdf.addPage();
@@ -139,21 +139,21 @@ export default class BasePDFGenerator {
   }
 
   /**
-   * Guarda el PDF con el nombre especificado
+   * Saves the PDF with the specified filename
    */
   save(fileName) {
     this.pdf.save(fileName);
   }
 
   /**
-   * Obtiene el PDF como blob (útil para preview o upload)
+   * Gets the PDF as blob (useful for preview or upload)
    */
   getBlob() {
     return this.pdf.output('blob');
   }
 
   /**
-   * Obtiene el PDF como base64 (útil para preview)
+   * Gets the PDF as base64 (useful for preview)
    */
   getBase64() {
     return this.pdf.output('datauristring');

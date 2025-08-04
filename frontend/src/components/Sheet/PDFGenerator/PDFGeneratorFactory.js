@@ -1,18 +1,18 @@
-import Vampire5thPDFGenerator from './Vampire5thPDFGenerator';
-import Werewolf5thPDFGenerator from './Werewolf5thPDFGenerator';
+import Vampire5thPDFGenerator from './sheet/5th/Vampire5thPDFGenerator';
+import Werewolf5thPDFGenerator from './sheet/5th/Werewolf5thPDFGenerator';
 
 /**
- * Factory para crear generadores de PDF específicos según el tipo de ficha
- * Esta clase centraliza la creación de generadores y permite fácil extensión
- * para nuevos tipos de fichas
+ * Factory for creating specific PDF generators according to sheet type
+ * This class centralizes generator creation and allows easy extension
+ * for new sheet types
  */
 export default class PDFGeneratorFactory {
   /**
-   * Crea un generador de PDF apropiado para el tipo de ficha especificado
-   * @param {string} sheetType - Tipo de ficha (v5, w5, m5, etc.)
-   * @param {object} sheet - Datos de la ficha
-   * @param {object} options - Opciones adicionales para el generador
-   * @returns {BasePDFGenerator} Instancia del generador apropiado
+   * Creates an appropriate PDF generator for the specified sheet type
+   * @param {string} sheetType - Sheet type (v5, w5, m5, etc.)
+   * @param {object} sheet - Sheet data
+   * @param {object} options - Additional options for the generator
+   * @returns {BasePDFGenerator} Instance of the appropriate generator
    */
   static createGenerator(sheetType, sheet, options = {}) {
     switch (sheetType.toLowerCase()) {
@@ -21,7 +21,7 @@ export default class PDFGeneratorFactory {
       case 'vampire5':
         return new Vampire5thPDFGenerator(sheet, options);
       
-      // Aquí se pueden agregar más casos para otros tipos de fichas
+      // Here you can add more cases for other sheet types
       case 'w5':
       case 'werewolf5th':
       case 'werewolf5':
@@ -36,27 +36,27 @@ export default class PDFGeneratorFactory {
       //   return new Vampire20thPDFGenerator(sheet, options);
       
       default:
-        throw new Error(`Tipo de ficha no soportado: ${sheetType}`);
+        throw new Error(`Unsupported sheet type: ${sheetType}`);
     }
   }
 
   /**
-   * Obtiene la lista de tipos de fichas soportados
-   * @returns {Array} Array de tipos soportados
+   * Gets the list of supported sheet types
+   * @returns {Array} Array of supported types
    */
   static getSupportedTypes() {
     return [
-      { value: 'v5', label: 'Vampiro 5th Edition', color: '#8B0000' },
-      { value: 'w5', label: 'Hombre Lobo 5th Edition', color: '#8B4513' },
-      // { value: 'm5', label: 'Mago 5th Edition', color: '#4B0082' },
-      // { value: 'v20', label: 'Vampiro 20th Anniversary', color: '#8B0000' },
+      { value: 'v5', label: 'Vampire 5th Edition', color: '#8B0000' },
+      { value: 'w5', label: 'Werewolf 5th Edition', color: '#8B4513' },
+      // { value: 'm5', label: 'Mage 5th Edition', color: '#4B0082' },
+      // { value: 'v20', label: 'Vampire 20th Anniversary', color: '#8B0000' },
     ];
   }
 
   /**
-   * Verifica si un tipo de ficha es soportado
-   * @param {string} sheetType - Tipo de ficha a verificar
-   * @returns {boolean} True si es soportado, false en caso contrario
+   * Checks if a sheet type is supported
+   * @param {string} sheetType - Sheet type to check
+   * @returns {boolean} True if supported, false otherwise
    */
   static isSupported(sheetType) {
     try {
