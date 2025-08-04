@@ -593,11 +593,8 @@ export default function ExportCharacterPDF(props) {
       }
 
       drawSimpleBox("NOTES & DESCRIPTIONS", sectionStart - lineHeight, yPosition);
+      yPosition += sectionSpacing * 2;
     }
-
-  // Tercera página para las secciones eliminadas
-  pdf.addPage();
-  yPosition = margin;
 
   // HEALTH & WILLPOWER
   sectionStart = yPosition;
