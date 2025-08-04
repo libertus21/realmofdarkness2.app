@@ -145,6 +145,12 @@ export default function ExportCharacterPDF(props) {
     pdf.text(sheet.clan || "", margin + 25, yPosition);
     yPosition += lineHeight * 1.5;
 
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Blood Potency:", margin, yPosition);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(String(sheet.blood_potency || 0), margin + 35, yPosition);
+    yPosition += lineHeight * 1.5;
+
     // Segunda columna
     const col2X = pageWidth / 2;
     yPosition = sectionStart;
@@ -165,6 +171,18 @@ export default function ExportCharacterPDF(props) {
     pdf.text("Predator Type:", col2X, yPosition);
     pdf.setFont("helvetica", "normal");
     pdf.text(sheet.predator_type || "", col2X + 25, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Hunger:", col2X, yPosition);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(String(sheet.hunger || 0), col2X + 35, yPosition);
+    yPosition += lineHeight * 1.5;
+
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Humanity:", col2X, yPosition);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(String(sheet.humanity || 0), col2X + 35, yPosition);
     yPosition += lineHeight * 2;
 
     drawSimpleBox("CHARACTER INFORMATION", sectionStart - lineHeight, yPosition);
@@ -194,7 +212,7 @@ export default function ExportCharacterPDF(props) {
 
     // Sociales
     yPosition = sectionStart;
-    const socialX = margin + contentWidth / 3 + 10;
+    const socialX = margin + contentWidth / 3 + 5;
     pdf.setFont("helvetica", "bold");
     pdf.text("Social", socialX, yPosition);
     yPosition += lineHeight * 1.5;
@@ -214,7 +232,7 @@ export default function ExportCharacterPDF(props) {
 
     // Mentales
     yPosition = sectionStart;
-    const mentalX = margin + (2 * contentWidth) / 3 + 10;
+    const mentalX = margin + (2 * contentWidth) / 3;
     pdf.setFont("helvetica", "bold");
     pdf.text("Mental", mentalX, yPosition);
     yPosition += lineHeight * 1.5;
@@ -489,191 +507,13 @@ export default function ExportCharacterPDF(props) {
       yPosition += sectionSpacing * 2;
     }
 
-    // Salud y Voluntad
-    sectionStart = yPosition;
-    const halfWidth = (contentWidth - margin) / 2;
 
-    // Salud
-    pdf.setFont("helvetica", "bold");
-    pdf.text("Health", margin + 10, yPosition);
-    yPosition += lineHeight * 1.5;
 
-    pdf.setFont("helvetica", "normal");
-    const healthTotal = sheet.health?.total || 0;
-    const healthSuperficial = sheet.health?.superficial || 0;
-    const healthAggravated = sheet.health?.aggravated || 0;
 
-    for (let i = 0; i < healthTotal; i++) {
-      const boxX = margin + 15 + i * 5;
-      
-      if (i < healthAggravated) {
-        // Daño agravado - cuadrado lleno con X
-        pdf.setFillColor(0, 0, 0);
-        pdf.rect(boxX, yPosition - 3, 4, 4, "F");
-        pdf.setTextColor(1, 1, 1);
-        pdf.setFontSize(6);
-        pdf.text("X", boxX + 1, yPosition + 1);
-        pdf.setTextColor(0, 0, 0);
-        pdf.setFontSize(10);
-      } else if (i < healthAggravated + healthSuperficial) {
-        // Daño superficial - cuadrado con diagonal
-        pdf.setDrawColor(0, 0, 0);
-        pdf.setLineWidth(0.2);
-        pdf.rect(boxX, yPosition - 3, 4, 4);
-        pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1);
-      } else {
-        // Sin daño - cuadrado vacío
-        pdf.setDrawColor(0, 0, 0);
-        pdf.setLineWidth(0.2);
-        pdf.rect(boxX, yPosition - 3, 4, 4);
-      }
-    }
 
-    // Voluntad
-    const willX = margin + halfWidth + 10;
-    pdf.setFont("helvetica", "bold");
-    pdf.text("Willpower", willX, sectionStart);
 
-    pdf.setFont("helvetica", "normal");
-    const willTotal = sheet.willpower?.total || 0;
-    const willSuperficial = sheet.willpower?.superficial || 0;
-    const willAggravated = sheet.willpower?.aggravated || 0;
 
-    for (let i = 0; i < willTotal; i++) {
-      const boxX = willX + 5 + i * 5;
-      
-      if (i < willAggravated) {
-        // Daño agravado - cuadrado lleno con X
-        pdf.setFillColor(0, 0, 0);
-        pdf.rect(boxX, yPosition - 3, 4, 4, "F");
-        pdf.setTextColor(1, 1, 1);
-        pdf.setFontSize(6);
-        pdf.text("X", boxX + 1, yPosition + 1);
-        pdf.setTextColor(0, 0, 0);
-        pdf.setFontSize(10);
-      } else if (i < willAggravated + willSuperficial) {
-        // Daño superficial - cuadrado con diagonal
-        pdf.setDrawColor(0, 0, 0);
-        pdf.setLineWidth(0.2);
-        pdf.rect(boxX, yPosition - 3, 4, 4);
-        pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1);
-      } else {
-        // Sin daño - cuadrado vacío
-        pdf.setDrawColor(0, 0, 0);
-        pdf.setLineWidth(0.2);
-        pdf.rect(boxX, yPosition - 3, 4, 4);
-      }
-    }
 
-    yPosition += lineHeight * 2;
-    drawSimpleBox("HEALTH & WILLPOWER", sectionStart - lineHeight, yPosition);
-    yPosition += sectionSpacing * 2;
-
-    // Sangre y Potencia
-    sectionStart = yPosition;
-
-    // Potencia de sangre
-    pdf.setFont("helvetica", "bold");
-    pdf.text("Blood Potency", margin + 10, yPosition);
-    yPosition += lineHeight * 1.5;
-
-    pdf.setFont("helvetica", "normal");
-    drawSimpleDots(sheet.blood_potency || 0, margin + 50, yPosition - 1.5, 10);
-    yPosition += lineHeight * 2;
-
-    // Hambre
-    pdf.setFont("helvetica", "bold");
-    pdf.text("Hunger", margin + 10, yPosition);
-    yPosition += lineHeight * 1.5;
-
-    pdf.setFont("helvetica", "normal");
-    drawSimpleDots(sheet.hunger || 0, margin + 50, yPosition - 1.5, 5);
-    yPosition += lineHeight * 2;
-
-    // Humanidad
-    pdf.setFont("helvetica", "bold");
-    pdf.text("Humanity", margin + 10, yPosition);
-    yPosition += lineHeight * 1.5;
-
-    pdf.setFont("helvetica", "normal");
-    drawSimpleDots(sheet.humanity || 0, margin + 50, yPosition - 1.5, 10);
-    yPosition += lineHeight * 2;
-
-    if (sheet.resonance) {
-      pdf.setFont("helvetica", "bold");
-      pdf.text("Resonance", margin + 10, yPosition);
-      yPosition += lineHeight;
-
-      pdf.setFont("helvetica", "normal");
-      pdf.text(sheet.resonance, margin + 15, yPosition);
-      yPosition += lineHeight;
-    }
-
-    drawSimpleBox("BLOOD & HUMANITY", sectionStart - lineHeight, yPosition);
-    yPosition += sectionSpacing * 2;
-
-    // Experiencia
-    if (sheet.exp || sheet.exp_current) {
-      sectionStart = yPosition;
-
-      pdf.setFont("helvetica", "bold");
-      pdf.text("Experience", margin + 10, yPosition);
-      yPosition += lineHeight * 1.5;
-
-      pdf.setFont("helvetica", "normal");
-      if (sheet.exp) {
-        pdf.text(`Current: ${sheet.exp.current || 0}`, margin + 15, yPosition);
-        yPosition += lineHeight;
-        pdf.text(`Total: ${sheet.exp.total || 0}`, margin + 15, yPosition);
-      } else {
-        pdf.text(`Current: ${sheet.exp_current || 0}`, margin + 15, yPosition);
-        yPosition += lineHeight;
-        pdf.text(`Total: ${sheet.exp_total || 0}`, margin + 15, yPosition);
-      }
-      yPosition += lineHeight;
-
-      drawSimpleBox("EXPERIENCE", sectionStart - lineHeight, yPosition);
-      yPosition += sectionSpacing * 2;
-    }
-
-    // Haven
-    if (sheet.haven_name || sheet.haven_location || sheet.haven_description) {
-      sectionStart = yPosition;
-
-      if (sheet.haven_name) {
-        pdf.setFont("helvetica", "bold");
-        pdf.text("Name", margin + 10, yPosition);
-        pdf.setFont("helvetica", "normal");
-        pdf.text(sheet.haven_name, margin + 50, yPosition);
-        yPosition += lineHeight * 1.5;
-      }
-
-      if (sheet.haven_location) {
-        pdf.setFont("helvetica", "bold");
-        pdf.text("Location", margin + 10, yPosition);
-        pdf.setFont("helvetica", "normal");
-        pdf.text(sheet.haven_location, margin + 50, yPosition);
-        yPosition += lineHeight * 1.5;
-      }
-
-      if (sheet.haven_description) {
-        pdf.setFont("helvetica", "bold");
-        pdf.text("Description", margin + 10, yPosition);
-        yPosition += lineHeight;
-
-        pdf.setFont("helvetica", "normal");
-        const heightUsed = addWrappedText(
-          sheet.haven_description,
-          margin + 15,
-          yPosition,
-          contentWidth - 30
-        );
-        yPosition += heightUsed;
-      }
-
-      drawSimpleBox("HAVEN", sectionStart - lineHeight, yPosition);
-      yPosition += sectionSpacing * 2;
-    }
 
     // Notas y descripciones en la última página
     if (
@@ -746,12 +586,190 @@ export default function ExportCharacterPDF(props) {
         yPosition += heightUsed + lineHeight;
       }
 
-      drawSimpleBox("NOTES & DESCRIPTIONS", sectionStart - lineHeight, yPosition);
+          drawSimpleBox("NOTES & DESCRIPTIONS", sectionStart - lineHeight, yPosition);
+  }
+
+  // Tercera página para las secciones eliminadas
+  pdf.addPage();
+  yPosition = margin;
+
+  // HEALTH & WILLPOWER
+  sectionStart = yPosition;
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(12);
+  pdf.setTextColor(...colors.primary);
+  pdf.text("HEALTH & WILLPOWER", margin, yPosition);
+  pdf.setTextColor(...colors.text);
+  pdf.setFontSize(10);
+  yPosition += lineHeight * 2;
+
+  // Health
+  const healthY = yPosition;
+  const healthBoxY = healthY + lineHeight * 1.9;
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Health", margin + 10, healthY);
+  yPosition += lineHeight * 1.9;
+
+  const healthTotal = sheet.health?.total || 10;
+  const healthSuperficial = sheet.health?.superficial || 0;
+  const healthAggravated = sheet.health?.aggravated || 0;
+
+  for (let i = 0; i < healthTotal; i++) {
+    const boxX = margin + 15 + i * 5;
+    if (i < healthAggravated) {
+      // Daño agravado
+      pdf.setFillColor(0, 0, 0);
+      pdf.rect(boxX, healthBoxY - 2, 4, 4, "F");
+      pdf.setTextColor(1, 1, 1);
+      pdf.setFontSize(6);
+      pdf.text("X", boxX + 1, healthBoxY + 1);
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(10);
+    } else if (i < healthAggravated + healthSuperficial) {
+      // Daño superficial
+      pdf.setDrawColor(0, 0, 0);
+      pdf.setLineWidth(0.2);
+      pdf.rect(boxX, healthBoxY - 2, 4, 4);
+      pdf.line(boxX, healthBoxY - 2, boxX + 4, healthBoxY + 2);
+    } else {
+      // Sin daño
+      pdf.setDrawColor(0, 0, 0);
+      pdf.setLineWidth(0.2);
+      pdf.rect(boxX, healthBoxY - 2, 4, 4);
+    }
+  }
+  yPosition += lineHeight * 2;
+
+  // Willpower
+  const willX = margin + 100;
+  const willBoxY = healthY + lineHeight * 1.9; // Misma posición Y que Health boxes
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Willpower", willX, healthY);
+  
+  const willTotal = sheet.willpower?.total || 10;
+  const willSuperficial = sheet.willpower?.superficial || 0;
+  const willAggravated = sheet.willpower?.aggravated || 0;
+
+  for (let i = 0; i < willTotal; i++) {
+    const boxX = willX + 5 + i * 5;
+    if (i < willAggravated) {
+      // Daño agravado
+      pdf.setFillColor(0, 0, 0);
+      pdf.rect(boxX, willBoxY - 2, 4, 4, "F");
+      pdf.setTextColor(1, 1, 1);
+      pdf.setFontSize(6);
+      pdf.text("X", boxX + 1, willBoxY + 1);
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(10);
+    } else if (i < willAggravated + willSuperficial) {
+      // Daño superficial
+      pdf.setDrawColor(0, 0, 0);
+      pdf.setLineWidth(0.2);
+      pdf.rect(boxX, willBoxY - 2, 4, 4);
+      pdf.line(boxX, willBoxY - 2, boxX + 4, willBoxY + 2);
+    } else {
+      // Sin daño
+      pdf.setDrawColor(0, 0, 0);
+      pdf.setLineWidth(0.2);
+      pdf.rect(boxX, willBoxY - 2, 4, 4);
+    }
+  }
+  yPosition += lineHeight * 2;
+
+  // Borde de la sección HEALTH & WILLPOWER
+  pdf.setDrawColor(...colors.border);
+  pdf.setLineWidth(0.2);
+  pdf.rect(margin - 3, sectionStart - 5, contentWidth + 6, yPosition - sectionStart + 5);
+  yPosition += sectionSpacing * 2;
+
+
+
+  // EXPERIENCE
+  sectionStart = yPosition;
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(12);
+  pdf.setTextColor(...colors.primary);
+  pdf.text("EXPERIENCE", margin, yPosition);
+  pdf.setTextColor(...colors.text);
+  pdf.setFontSize(10);
+  yPosition += lineHeight * 2;
+
+  const expY = yPosition;
+  const expCurrentY = expY + lineHeight * 1.5; // Explicit Y for Current
+  const expTotalY = expCurrentY + lineHeight; // Explicit Y for Total
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Experience", margin + 10, expY);
+  yPosition += lineHeight * 1.5;
+
+  pdf.setFont("helvetica", "normal");
+  if (sheet.exp) {
+    pdf.text(`Current: ${sheet.exp.current || 0}`, margin + 15, expCurrentY);
+    yPosition += lineHeight;
+    pdf.text(`Total: ${sheet.exp.total || 0}`, margin + 15, expTotalY);
+  } else {
+    pdf.text(`Current: ${sheet.exp_current || 0}`, margin + 15, expCurrentY);
+    yPosition += lineHeight;
+    pdf.text(`Total: ${sheet.exp_total || 0}`, margin + 15, expTotalY);
+  }
+  yPosition += lineHeight;
+
+  // Borde de la sección EXPERIENCE
+  pdf.setDrawColor(...colors.border);
+  pdf.setLineWidth(0.2);
+  pdf.rect(margin - 3, sectionStart - 5, contentWidth + 6, yPosition - sectionStart + 5);
+  yPosition += sectionSpacing * 2;
+
+  // HAVEN
+  if (sheet.haven_name || sheet.haven_location || sheet.haven_description) {
+    sectionStart = yPosition;
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(12);
+    pdf.setTextColor(...colors.primary);
+    pdf.text("HAVEN", margin, yPosition);
+    pdf.setTextColor(...colors.text);
+    pdf.setFontSize(10);
+    yPosition += lineHeight * 2;
+
+    if (sheet.haven_name) {
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Name", margin + 10, yPosition);
+      pdf.setFont("helvetica", "normal");
+      pdf.text(sheet.haven_name, margin + 50, yPosition);
+      yPosition += lineHeight * 1.5;
     }
 
-    // Guardar el PDF
-    const fileName = `${sheet.name || "personaje"}_V5.pdf`;
-    pdf.save(fileName);
+    if (sheet.haven_location) {
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Location", margin + 10, yPosition);
+      pdf.setFont("helvetica", "normal");
+      pdf.text(sheet.haven_location, margin + 50, yPosition);
+      yPosition += lineHeight * 1.5;
+    }
+
+    if (sheet.haven_description) {
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Description", margin + 10, yPosition);
+      yPosition += lineHeight;
+
+      pdf.setFont("helvetica", "normal");
+      const heightUsed = addWrappedText(
+        sheet.haven_description,
+        margin + 15,
+        yPosition,
+        contentWidth - 30
+      );
+      yPosition += heightUsed;
+    }
+
+    // Borde de la sección HAVEN
+    pdf.setDrawColor(...colors.border);
+    pdf.setLineWidth(0.2);
+    pdf.rect(margin - 3, sectionStart - 5, contentWidth + 6, yPosition - sectionStart + 5);
+  }
+
+  // Guardar el PDF
+  const fileName = `${sheet.name || "personaje"}_V5.pdf`;
+  pdf.save(fileName);
   }
 
   return (
