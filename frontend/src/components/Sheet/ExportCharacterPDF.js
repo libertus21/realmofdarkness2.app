@@ -151,6 +151,12 @@ export default function ExportCharacterPDF(props) {
     pdf.text(String(sheet.blood_potency || 0), margin + 35, yPosition);
     yPosition += lineHeight * 1.5;
 
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Generation:", margin, yPosition);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(String(sheet.generation || 0), margin + 35, yPosition);
+    yPosition += lineHeight * 1.5;
+
     // Segunda columna
     const col2X = pageWidth / 2;
     yPosition = sectionStart;
@@ -586,8 +592,8 @@ export default function ExportCharacterPDF(props) {
         yPosition += heightUsed + lineHeight;
       }
 
-          drawSimpleBox("NOTES & DESCRIPTIONS", sectionStart - lineHeight, yPosition);
-  }
+      drawSimpleBox("NOTES & DESCRIPTIONS", sectionStart - lineHeight, yPosition);
+    }
 
   // Tercera página para las secciones eliminadas
   pdf.addPage();
@@ -767,9 +773,9 @@ export default function ExportCharacterPDF(props) {
     pdf.rect(margin - 3, sectionStart - 5, contentWidth + 6, yPosition - sectionStart + 5);
   }
 
-  // Guardar el PDF
-  const fileName = `${sheet.name || "personaje"}_V5.pdf`;
-  pdf.save(fileName);
+    // Guardar el PDF
+    const fileName = `${sheet.name || "personaje"}_V5.pdf`;
+    pdf.save(fileName);
   }
 
   return (
