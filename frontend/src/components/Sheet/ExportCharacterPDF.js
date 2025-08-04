@@ -343,8 +343,11 @@ export default function ExportCharacterPDF(props) {
     sectionStart = yPosition;
     pdf.setFont("helvetica", "bold");
 
-    if (sheet.disciplines) {
-      Object.entries(sheet.disciplines).forEach(([discipline, level]) => {
+    if (sheet.disciplines && Object.keys(sheet.disciplines).length > 0) {
+      Object.entries(sheet.disciplines).forEach(([discipline, disciplineData]) => {
+        // Handle both object format {value: X} and direct number format
+        const level = typeof disciplineData === 'object' ? disciplineData.value || 0 : disciplineData || 0;
+        
         if (level > 0) {
           pdf.setFont("helvetica", "normal");
           pdf.text(discipline, margin + 10, yPosition);
@@ -352,6 +355,11 @@ export default function ExportCharacterPDF(props) {
           yPosition += lineHeight;
         }
       });
+    } else {
+      // If no disciplines, add a placeholder
+      pdf.setFont("helvetica", "normal");
+      pdf.text("No disciplines", margin + 10, yPosition);
+      yPosition += lineHeight;
     }
 
     drawSimpleBox("DISCIPLINES", sectionStart - lineHeight, yPosition);
