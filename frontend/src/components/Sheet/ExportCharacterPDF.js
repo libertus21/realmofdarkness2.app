@@ -9,34 +9,43 @@ export default function ExportCharacterPDF(props) {
     const pdf = new jsPDF("p", "mm", "a4");
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
-    const margin = 15;
+    const margin = 20;
     const contentWidth = pageWidth - 2 * margin;
-    
-    let yPosition = margin;
-    const lineHeight = 7;
-    const sectionSpacing = 10;
 
-    // Colores y estilos
+    let yPosition = margin;
+    const lineHeight = 6;
+    const sectionSpacing = 15;
+
+    // Colores simples y seguros
     const colors = {
-      primary: [0.8, 0, 0],    // Rojo oscuro para títulos principales
-      secondary: [0.5, 0, 0],  // Rojo más oscuro para subtítulos
-      text: [0, 0, 0],         // Negro para texto normal
-      border: [0.3, 0, 0]      // Rojo muy oscuro para bordes
+      primary: [0.2, 0, 0], // Rojo oscuro
+      text: [0, 0, 0], // Negro puro
+      border: [0.3, 0, 0], // Rojo para bordes
     };
 
-    // Función para dibujar una caja con título
-    function drawTitledBox(title, startY, endY, options = {}) {
-      const boxMargin = 3;
-      const titleHeight = 8;
-      const boxStartY = startY - titleHeight - boxMargin;
-      const boxEndY = endY + boxMargin;
-      
-      // Dibujar el borde
+    // Función simple para dibujar bordes
+    function drawSimpleBorder(x, y, width, height) {
       pdf.setDrawColor(...colors.border);
       pdf.setLineWidth(0.5);
-      pdf.rect(margin - boxMargin, boxStartY, contentWidth + (2 * boxMargin), boxEndY - boxStartY);
+      pdf.rect(x, y, width, height);
+    }
 
-      // Dibujar el título
+    // Función para dibujar una caja simple con título
+    function drawSimpleBox(title, startY, endY) {
+      const boxMargin = 5;
+      const titleHeight = 10;
+      const boxStartY = startY - titleHeight - boxMargin;
+      const boxEndY = endY + boxMargin;
+
+      // Solo borde, sin fondo
+      drawSimpleBorder(
+        margin - boxMargin,
+        boxStartY,
+        contentWidth + 2 * boxMargin,
+        boxEndY - boxStartY
+      );
+
+      // Título simple
       pdf.setFont("helvetica", "bold");
       pdf.setTextColor(...colors.primary);
       pdf.setFontSize(12);
@@ -50,61 +59,65 @@ export default function ExportCharacterPDF(props) {
       return boxEndY;
     }
 
-    // Función mejorada para manejar texto largo
+    // Función para manejar texto largo
     function addWrappedText(text, x, y, maxWidth) {
-      const words = text.split(' ');
-      let line = '';
+      const words = text.split(" ");
+      let line = "";
       let currentY = y;
       let linesAdded = 0;
-      
+
       for (let i = 0; i < words.length; i++) {
-        const testLine = line + words[i] + ' ';
+        const testLine = line + words[i] + " ";
         const testWidth = pdf.getTextWidth(testLine);
-        
-        if (testWidth > maxWidth && line !== '') {
+
+        if (testWidth > maxWidth && line !== "") {
           pdf.text(line.trim(), x, currentY);
-          line = words[i] + ' ';
+          line = words[i] + " ";
           currentY += lineHeight;
           linesAdded++;
         } else {
           line = testLine;
         }
       }
-      
+
       if (line) {
         pdf.text(line.trim(), x, currentY);
         linesAdded++;
       }
-      
+
       return linesAdded * lineHeight;
     }
 
-    // Función para dibujar puntos de atributo/habilidad
-    function drawDots(value, x, y, maxDots = 5) {
+    // Función simple para dibujar puntos
+    function drawSimpleDots(value, x, y, maxDots = 5) {
       const dotRadius = 1;
       const dotSpacing = 4;
-      
-      pdf.setDrawColor(...colors.border);
-      pdf.setFillColor(...colors.border);
 
       for (let i = 0; i < maxDots; i++) {
-        const dotX = x + (i * dotSpacing);
+        const dotX = x + i * dotSpacing;
+        
         if (i < value) {
-          pdf.circle(dotX, y, dotRadius, 'F'); // Punto lleno
+          // Punto lleno
+          pdf.setFillColor(...colors.primary);
+          pdf.circle(dotX, y, dotRadius, "F");
         } else {
-          pdf.circle(dotX, y, dotRadius, 'S'); // Punto vacío
+          // Punto vacío
+          pdf.setDrawColor(...colors.border);
+          pdf.circle(dotX, y, dotRadius, "S");
         }
       }
     }
 
-    // Título principal
+    // Título principal simple
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(24);
     pdf.setTextColor(...colors.primary);
     pdf.text("VAMPIRE", pageWidth / 2, yPosition, { align: "center" });
     yPosition += lineHeight * 2;
     pdf.setFontSize(16);
-    pdf.text("THE MASQUERADE 5th EDITION", pageWidth / 2, yPosition, { align: "center" });
+    pdf.text("THE MASQUERADE 5th EDITION", pageWidth / 2, yPosition, {
+      align: "center",
+    });
     yPosition += lineHeight * 3;
 
     // Información general
@@ -152,14 +165,13 @@ export default function ExportCharacterPDF(props) {
     pdf.text(sheet.predator_type || "", col2X + 25, yPosition);
     yPosition += lineHeight * 2;
 
-    // Dibujar caja alrededor de la información general
-    drawTitledBox("CHARACTER INFORMATION", sectionStart - lineHeight, yPosition);
+    drawSimpleBox("CHARACTER INFORMATION", sectionStart - lineHeight, yPosition);
     yPosition += sectionSpacing * 2;
 
     // Atributos
     sectionStart = yPosition;
     pdf.setFont("helvetica", "bold");
-    
+
     // Físicos
     const physicalX = margin + 10;
     pdf.text("Physical", physicalX, yPosition);
@@ -168,19 +180,19 @@ export default function ExportCharacterPDF(props) {
     const attributes = [
       { name: "Strength", value: sheet.attributes?.strength || 0 },
       { name: "Dexterity", value: sheet.attributes?.dexterity || 0 },
-      { name: "Stamina", value: sheet.attributes?.stamina || 0 }
+      { name: "Stamina", value: sheet.attributes?.stamina || 0 },
     ];
 
-    attributes.forEach(attr => {
+    attributes.forEach((attr) => {
       pdf.setFont("helvetica", "normal");
       pdf.text(attr.name, physicalX, yPosition);
-      drawDots(attr.value, physicalX + 30, yPosition - 1.5);
+      drawSimpleDots(attr.value, physicalX + 30, yPosition - 1.5);
       yPosition += lineHeight;
     });
 
     // Sociales
     yPosition = sectionStart;
-    const socialX = margin + contentWidth/3 + 10;
+    const socialX = margin + contentWidth / 3 + 10;
     pdf.setFont("helvetica", "bold");
     pdf.text("Social", socialX, yPosition);
     yPosition += lineHeight * 1.5;
@@ -188,19 +200,19 @@ export default function ExportCharacterPDF(props) {
     const socialAttributes = [
       { name: "Charisma", value: sheet.attributes?.charisma || 0 },
       { name: "Manipulation", value: sheet.attributes?.manipulation || 0 },
-      { name: "Composure", value: sheet.attributes?.composure || 0 }
+      { name: "Composure", value: sheet.attributes?.composure || 0 },
     ];
 
-    socialAttributes.forEach(attr => {
+    socialAttributes.forEach((attr) => {
       pdf.setFont("helvetica", "normal");
       pdf.text(attr.name, socialX, yPosition);
-      drawDots(attr.value, socialX + 30, yPosition - 1.5);
+      drawSimpleDots(attr.value, socialX + 30, yPosition - 1.5);
       yPosition += lineHeight;
     });
 
     // Mentales
     yPosition = sectionStart;
-    const mentalX = margin + (2 * contentWidth/3) + 10;
+    const mentalX = margin + (2 * contentWidth) / 3 + 10;
     pdf.setFont("helvetica", "bold");
     pdf.text("Mental", mentalX, yPosition);
     yPosition += lineHeight * 1.5;
@@ -208,24 +220,23 @@ export default function ExportCharacterPDF(props) {
     const mentalAttributes = [
       { name: "Intelligence", value: sheet.attributes?.intelligence || 0 },
       { name: "Wits", value: sheet.attributes?.wits || 0 },
-      { name: "Resolve", value: sheet.attributes?.resolve || 0 }
+      { name: "Resolve", value: sheet.attributes?.resolve || 0 },
     ];
 
-    mentalAttributes.forEach(attr => {
+    mentalAttributes.forEach((attr) => {
       pdf.setFont("helvetica", "normal");
       pdf.text(attr.name, mentalX, yPosition);
-      drawDots(attr.value, mentalX + 30, yPosition - 1.5);
+      drawSimpleDots(attr.value, mentalX + 30, yPosition - 1.5);
       yPosition += lineHeight;
     });
 
-    // Dibujar caja alrededor de los atributos
-    const attrEndY = sectionStart + (lineHeight * 5);
-    drawTitledBox("ATTRIBUTES", sectionStart - lineHeight, attrEndY);
+    const attrEndY = sectionStart + lineHeight * 5;
+    drawSimpleBox("ATTRIBUTES", sectionStart - lineHeight, attrEndY);
     yPosition = attrEndY + sectionSpacing * 2;
 
     // Habilidades
     sectionStart = yPosition;
-    
+
     // Habilidades Físicas
     pdf.setFont("helvetica", "bold");
     pdf.text("Physical", physicalX, yPosition);
@@ -240,13 +251,13 @@ export default function ExportCharacterPDF(props) {
       { name: "Melee", value: sheet.skills?.melee?.value || 0 },
       { name: "Larceny", value: sheet.skills?.larceny?.value || 0 },
       { name: "Stealth", value: sheet.skills?.stealth?.value || 0 },
-      { name: "Survival", value: sheet.skills?.survival?.value || 0 }
+      { name: "Survival", value: sheet.skills?.survival?.value || 0 },
     ];
 
-    physicalSkills.forEach(skill => {
+    physicalSkills.forEach((skill) => {
       pdf.setFont("helvetica", "normal");
       pdf.text(skill.name, physicalX, yPosition);
-      drawDots(skill.value, physicalX + 30, yPosition - 1.5);
+      drawSimpleDots(skill.value, physicalX + 30, yPosition - 1.5);
       yPosition += lineHeight;
     });
 
@@ -265,13 +276,13 @@ export default function ExportCharacterPDF(props) {
       { name: "Performance", value: sheet.skills?.performance?.value || 0 },
       { name: "Persuasion", value: sheet.skills?.persuasion?.value || 0 },
       { name: "Streetwise", value: sheet.skills?.streetwise?.value || 0 },
-      { name: "Subterfuge", value: sheet.skills?.subterfuge?.value || 0 }
+      { name: "Subterfuge", value: sheet.skills?.subterfuge?.value || 0 },
     ];
 
-    socialSkills.forEach(skill => {
+    socialSkills.forEach((skill) => {
       pdf.setFont("helvetica", "normal");
       pdf.text(skill.name, socialX, yPosition);
-      drawDots(skill.value, socialX + 30, yPosition - 1.5);
+      drawSimpleDots(skill.value, socialX + 30, yPosition - 1.5);
       yPosition += lineHeight;
     });
 
@@ -290,19 +301,18 @@ export default function ExportCharacterPDF(props) {
       { name: "Occult", value: sheet.skills?.occult?.value || 0 },
       { name: "Politics", value: sheet.skills?.politics?.value || 0 },
       { name: "Science", value: sheet.skills?.science?.value || 0 },
-      { name: "Technology", value: sheet.skills?.technology?.value || 0 }
+      { name: "Technology", value: sheet.skills?.technology?.value || 0 },
     ];
 
-    mentalSkills.forEach(skill => {
+    mentalSkills.forEach((skill) => {
       pdf.setFont("helvetica", "normal");
       pdf.text(skill.name, mentalX, yPosition);
-      drawDots(skill.value, mentalX + 30, yPosition - 1.5);
+      drawSimpleDots(skill.value, mentalX + 30, yPosition - 1.5);
       yPosition += lineHeight;
     });
 
-    // Dibujar caja alrededor de las habilidades
-    const skillsEndY = sectionStart + (lineHeight * 11);
-    drawTitledBox("SKILLS", sectionStart - lineHeight, skillsEndY);
+    const skillsEndY = sectionStart + lineHeight * 11;
+    drawSimpleBox("SKILLS", sectionStart - lineHeight, skillsEndY);
     yPosition = skillsEndY + sectionSpacing * 2;
 
     // Nueva página para el resto del contenido
@@ -312,19 +322,19 @@ export default function ExportCharacterPDF(props) {
     // Disciplinas
     sectionStart = yPosition;
     pdf.setFont("helvetica", "bold");
-    
+
     if (sheet.disciplines) {
       Object.entries(sheet.disciplines).forEach(([discipline, level]) => {
         if (level > 0) {
           pdf.setFont("helvetica", "normal");
           pdf.text(discipline, margin + 10, yPosition);
-          drawDots(level, margin + 50, yPosition - 1.5);
+          drawSimpleDots(level, margin + 50, yPosition - 1.5, 5);
           yPosition += lineHeight;
         }
       });
     }
 
-    drawTitledBox("DISCIPLINES", sectionStart - lineHeight, yPosition);
+    drawSimpleBox("DISCIPLINES", sectionStart - lineHeight, yPosition);
     yPosition += sectionSpacing * 2;
 
     // Ventajas
@@ -332,32 +342,42 @@ export default function ExportCharacterPDF(props) {
 
     function addAdvantageSection(title, items, startY) {
       if (!items || items.length === 0) return startY;
-      
+
       pdf.setFont("helvetica", "bold");
       pdf.text(title, margin + 10, startY);
       let currentY = startY + lineHeight * 1.5;
-      
-      items.forEach(item => {
+
+      items.forEach((item) => {
         if (item.name) {
           pdf.setFont("helvetica", "normal");
           pdf.text(item.name, margin + 15, currentY);
-          drawDots(item.rating || item.level || 0, margin + 70, currentY - 1.5);
+          drawSimpleDots(item.rating || item.level || 0, margin + 70, currentY - 1.5);
           currentY += lineHeight;
-          
+
           if (item.description) {
-            const heightUsed = addWrappedText(item.description, margin + 20, currentY, contentWidth - 40);
+            const heightUsed = addWrappedText(
+              item.description,
+              margin + 20,
+              currentY,
+              contentWidth - 40
+            );
             currentY += heightUsed;
           }
-          
+
           if (item.notes) {
             pdf.setFont("helvetica", "italic");
-            const heightUsed = addWrappedText(item.notes, margin + 20, currentY, contentWidth - 40);
+            const heightUsed = addWrappedText(
+              item.notes,
+              margin + 20,
+              currentY,
+              contentWidth - 40
+            );
             currentY += heightUsed;
           }
-          currentY += lineHeight/2;
+          currentY += lineHeight / 2;
         }
       });
-      
+
       return currentY;
     }
 
@@ -366,29 +386,39 @@ export default function ExportCharacterPDF(props) {
     advantagesY = addAdvantageSection("Flaws", sheet.flaws, advantagesY);
     advantagesY = addAdvantageSection("Backgrounds", sheet.backgrounds, advantagesY);
 
-    drawTitledBox("ADVANTAGES", sectionStart - lineHeight, advantagesY);
+    drawSimpleBox("ADVANTAGES", sectionStart - lineHeight, advantagesY);
     yPosition = advantagesY + sectionSpacing * 2;
 
     // Creencias y Touchstones
     if (sheet.tenets || sheet.touchstones || sheet.convictions) {
       sectionStart = yPosition;
-      
+
       if (sheet.tenets) {
         pdf.setFont("helvetica", "bold");
         pdf.text("Tenets", margin + 10, yPosition);
         yPosition += lineHeight * 1.5;
-        
+
         if (Array.isArray(sheet.tenets)) {
           sheet.tenets.forEach((tenet, index) => {
             if (tenet && tenet.trim()) {
               pdf.setFont("helvetica", "normal");
-              const heightUsed = addWrappedText(`${index + 1}. ${tenet}`, margin + 15, yPosition, contentWidth - 30);
-              yPosition += heightUsed + lineHeight/2;
+              const heightUsed = addWrappedText(
+                `${index + 1}. ${tenet}`,
+                margin + 15,
+                yPosition,
+                contentWidth - 30
+              );
+              yPosition += heightUsed + lineHeight / 2;
             }
           });
         } else {
           pdf.setFont("helvetica", "normal");
-          const heightUsed = addWrappedText(sheet.tenets, margin + 15, yPosition, contentWidth - 30);
+          const heightUsed = addWrappedText(
+            sheet.tenets,
+            margin + 15,
+            yPosition,
+            contentWidth - 30
+          );
           yPosition += heightUsed + lineHeight;
         }
       }
@@ -397,18 +427,28 @@ export default function ExportCharacterPDF(props) {
         pdf.setFont("helvetica", "bold");
         pdf.text("Touchstones", margin + 10, yPosition);
         yPosition += lineHeight * 1.5;
-        
+
         if (Array.isArray(sheet.touchstones)) {
           sheet.touchstones.forEach((touchstone, index) => {
             if (touchstone && touchstone.trim()) {
               pdf.setFont("helvetica", "normal");
-              const heightUsed = addWrappedText(`${index + 1}. ${touchstone}`, margin + 15, yPosition, contentWidth - 30);
-              yPosition += heightUsed + lineHeight/2;
+              const heightUsed = addWrappedText(
+                `${index + 1}. ${touchstone}`,
+                margin + 15,
+                yPosition,
+                contentWidth - 30
+              );
+              yPosition += heightUsed + lineHeight / 2;
             }
           });
         } else {
           pdf.setFont("helvetica", "normal");
-          const heightUsed = addWrappedText(sheet.touchstones, margin + 15, yPosition, contentWidth - 30);
+          const heightUsed = addWrappedText(
+            sheet.touchstones,
+            margin + 15,
+            yPosition,
+            contentWidth - 30
+          );
           yPosition += heightUsed + lineHeight;
         }
       }
@@ -417,27 +457,37 @@ export default function ExportCharacterPDF(props) {
         pdf.setFont("helvetica", "bold");
         pdf.text("Convictions", margin + 10, yPosition);
         yPosition += lineHeight * 1.5;
-        
+
         if (Array.isArray(sheet.convictions)) {
           sheet.convictions.forEach((conviction, index) => {
             if (conviction && conviction.trim()) {
               pdf.setFont("helvetica", "normal");
-              const heightUsed = addWrappedText(`${index + 1}. ${conviction}`, margin + 15, yPosition, contentWidth - 30);
-              yPosition += heightUsed + lineHeight/2;
+              const heightUsed = addWrappedText(
+                `${index + 1}. ${conviction}`,
+                margin + 15,
+                yPosition,
+                contentWidth - 30
+              );
+              yPosition += heightUsed + lineHeight / 2;
             }
           });
         } else {
           pdf.setFont("helvetica", "normal");
-          const heightUsed = addWrappedText(sheet.convictions, margin + 15, yPosition, contentWidth - 30);
+          const heightUsed = addWrappedText(
+            sheet.convictions,
+            margin + 15,
+            yPosition,
+            contentWidth - 30
+          );
           yPosition += heightUsed + lineHeight;
         }
       }
 
-      drawTitledBox("BELIEFS & CONVICTIONS", sectionStart - lineHeight, yPosition);
+      drawSimpleBox("BELIEFS & CONVICTIONS", sectionStart - lineHeight, yPosition);
       yPosition += sectionSpacing * 2;
     }
 
-    // Salud y Voluntad en una fila
+    // Salud y Voluntad
     sectionStart = yPosition;
     const halfWidth = (contentWidth - margin) / 2;
 
@@ -445,101 +495,129 @@ export default function ExportCharacterPDF(props) {
     pdf.setFont("helvetica", "bold");
     pdf.text("Health", margin + 10, yPosition);
     yPosition += lineHeight * 1.5;
-    
+
     pdf.setFont("helvetica", "normal");
     const healthTotal = sheet.health?.total || 0;
     const healthSuperficial = sheet.health?.superficial || 0;
     const healthAggravated = sheet.health?.aggravated || 0;
-    
+
     for (let i = 0; i < healthTotal; i++) {
-      const boxX = margin + 15 + (i * 5);
-      pdf.rect(boxX, yPosition - 3, 4, 4);
+      const boxX = margin + 15 + i * 5;
       
       if (i < healthAggravated) {
-        pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1); // X
-        pdf.line(boxX, yPosition + 1, boxX + 4, yPosition - 3); // X
-      } else if (i < (healthAggravated + healthSuperficial)) {
-        pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1); // /
+        // Daño agravado - cuadrado lleno con X
+        pdf.setFillColor(0, 0, 0);
+        pdf.rect(boxX, yPosition - 3, 4, 4, "F");
+        pdf.setTextColor(1, 1, 1);
+        pdf.setFontSize(6);
+        pdf.text("X", boxX + 1, yPosition + 1);
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFontSize(10);
+      } else if (i < healthAggravated + healthSuperficial) {
+        // Daño superficial - cuadrado con diagonal
+        pdf.setDrawColor(0, 0, 0);
+        pdf.setLineWidth(0.5);
+        pdf.rect(boxX, yPosition - 3, 4, 4);
+        pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1);
+      } else {
+        // Sin daño - cuadrado vacío
+        pdf.setDrawColor(0, 0, 0);
+        pdf.setLineWidth(0.5);
+        pdf.rect(boxX, yPosition - 3, 4, 4);
       }
     }
-    
+
     // Voluntad
     const willX = margin + halfWidth + 10;
     pdf.setFont("helvetica", "bold");
     pdf.text("Willpower", willX, sectionStart);
-    
+
     pdf.setFont("helvetica", "normal");
     const willTotal = sheet.willpower?.total || 0;
     const willSuperficial = sheet.willpower?.superficial || 0;
     const willAggravated = sheet.willpower?.aggravated || 0;
-    
+
     for (let i = 0; i < willTotal; i++) {
-      const boxX = willX + 5 + (i * 5);
-      pdf.rect(boxX, yPosition - 3, 4, 4);
+      const boxX = willX + 5 + i * 5;
       
       if (i < willAggravated) {
-        pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1); // X
-        pdf.line(boxX, yPosition + 1, boxX + 4, yPosition - 3); // X
-      } else if (i < (willAggravated + willSuperficial)) {
-        pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1); // /
+        // Daño agravado - cuadrado lleno con X
+        pdf.setFillColor(0, 0, 0);
+        pdf.rect(boxX, yPosition - 3, 4, 4, "F");
+        pdf.setTextColor(1, 1, 1);
+        pdf.setFontSize(6);
+        pdf.text("X", boxX + 1, yPosition + 1);
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFontSize(10);
+      } else if (i < willAggravated + willSuperficial) {
+        // Daño superficial - cuadrado con diagonal
+        pdf.setDrawColor(0, 0, 0);
+        pdf.setLineWidth(0.5);
+        pdf.rect(boxX, yPosition - 3, 4, 4);
+        pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1);
+      } else {
+        // Sin daño - cuadrado vacío
+        pdf.setDrawColor(0, 0, 0);
+        pdf.setLineWidth(0.5);
+        pdf.rect(boxX, yPosition - 3, 4, 4);
       }
     }
 
     yPosition += lineHeight * 2;
-    drawTitledBox("HEALTH & WILLPOWER", sectionStart - lineHeight, yPosition);
+    drawSimpleBox("HEALTH & WILLPOWER", sectionStart - lineHeight, yPosition);
     yPosition += sectionSpacing * 2;
 
     // Sangre y Potencia
     sectionStart = yPosition;
-    
+
     // Potencia de sangre
     pdf.setFont("helvetica", "bold");
     pdf.text("Blood Potency", margin + 10, yPosition);
     yPosition += lineHeight * 1.5;
-    
+
     pdf.setFont("helvetica", "normal");
-    drawDots(sheet.blood_potency || 0, margin + 50, yPosition - 1.5, 10);
+    drawSimpleDots(sheet.blood_potency || 0, margin + 50, yPosition - 1.5, 10);
     yPosition += lineHeight * 2;
 
     // Hambre
     pdf.setFont("helvetica", "bold");
     pdf.text("Hunger", margin + 10, yPosition);
     yPosition += lineHeight * 1.5;
-    
+
     pdf.setFont("helvetica", "normal");
-    drawDots(sheet.hunger || 0, margin + 50, yPosition - 1.5, 5);
+    drawSimpleDots(sheet.hunger || 0, margin + 50, yPosition - 1.5, 5);
     yPosition += lineHeight * 2;
 
     // Humanidad
     pdf.setFont("helvetica", "bold");
     pdf.text("Humanity", margin + 10, yPosition);
     yPosition += lineHeight * 1.5;
-    
+
     pdf.setFont("helvetica", "normal");
-    drawDots(sheet.humanity || 0, margin + 50, yPosition - 1.5, 10);
+    drawSimpleDots(sheet.humanity || 0, margin + 50, yPosition - 1.5, 10);
     yPosition += lineHeight * 2;
 
     if (sheet.resonance) {
       pdf.setFont("helvetica", "bold");
       pdf.text("Resonance", margin + 10, yPosition);
       yPosition += lineHeight;
-      
+
       pdf.setFont("helvetica", "normal");
       pdf.text(sheet.resonance, margin + 15, yPosition);
       yPosition += lineHeight;
     }
 
-    drawTitledBox("BLOOD & HUMANITY", sectionStart - lineHeight, yPosition);
+    drawSimpleBox("BLOOD & HUMANITY", sectionStart - lineHeight, yPosition);
     yPosition += sectionSpacing * 2;
 
     // Experiencia
     if (sheet.exp || sheet.exp_current) {
       sectionStart = yPosition;
-      
+
       pdf.setFont("helvetica", "bold");
       pdf.text("Experience", margin + 10, yPosition);
       yPosition += lineHeight * 1.5;
-      
+
       pdf.setFont("helvetica", "normal");
       if (sheet.exp) {
         pdf.text(`Current: ${sheet.exp.current || 0}`, margin + 15, yPosition);
@@ -552,14 +630,14 @@ export default function ExportCharacterPDF(props) {
       }
       yPosition += lineHeight;
 
-      drawTitledBox("EXPERIENCE", sectionStart - lineHeight, yPosition);
+      drawSimpleBox("EXPERIENCE", sectionStart - lineHeight, yPosition);
       yPosition += sectionSpacing * 2;
     }
 
     // Haven
     if (sheet.haven_name || sheet.haven_location || sheet.haven_description) {
       sectionStart = yPosition;
-      
+
       if (sheet.haven_name) {
         pdf.setFont("helvetica", "bold");
         pdf.text("Name", margin + 10, yPosition);
@@ -567,7 +645,7 @@ export default function ExportCharacterPDF(props) {
         pdf.text(sheet.haven_name, margin + 50, yPosition);
         yPosition += lineHeight * 1.5;
       }
-      
+
       if (sheet.haven_location) {
         pdf.setFont("helvetica", "bold");
         pdf.text("Location", margin + 10, yPosition);
@@ -575,23 +653,33 @@ export default function ExportCharacterPDF(props) {
         pdf.text(sheet.haven_location, margin + 50, yPosition);
         yPosition += lineHeight * 1.5;
       }
-      
+
       if (sheet.haven_description) {
         pdf.setFont("helvetica", "bold");
         pdf.text("Description", margin + 10, yPosition);
         yPosition += lineHeight;
-        
+
         pdf.setFont("helvetica", "normal");
-        const heightUsed = addWrappedText(sheet.haven_description, margin + 15, yPosition, contentWidth - 30);
+        const heightUsed = addWrappedText(
+          sheet.haven_description,
+          margin + 15,
+          yPosition,
+          contentWidth - 30
+        );
         yPosition += heightUsed;
       }
 
-      drawTitledBox("HAVEN", sectionStart - lineHeight, yPosition);
+      drawSimpleBox("HAVEN", sectionStart - lineHeight, yPosition);
       yPosition += sectionSpacing * 2;
     }
 
     // Notas y descripciones en la última página
-    if (sheet.notes || sheet.notes2 || sheet.history || sheet.appearance_description) {
+    if (
+      sheet.notes ||
+      sheet.notes2 ||
+      sheet.history ||
+      sheet.appearance_description
+    ) {
       pdf.addPage();
       yPosition = margin;
       sectionStart = yPosition;
@@ -600,9 +688,14 @@ export default function ExportCharacterPDF(props) {
         pdf.setFont("helvetica", "bold");
         pdf.text("History", margin + 10, yPosition);
         yPosition += lineHeight * 1.5;
-        
+
         pdf.setFont("helvetica", "normal");
-        const heightUsed = addWrappedText(sheet.history, margin + 15, yPosition, contentWidth - 30);
+        const heightUsed = addWrappedText(
+          sheet.history,
+          margin + 15,
+          yPosition,
+          contentWidth - 30
+        );
         yPosition += heightUsed + lineHeight;
       }
 
@@ -610,9 +703,14 @@ export default function ExportCharacterPDF(props) {
         pdf.setFont("helvetica", "bold");
         pdf.text("Appearance", margin + 10, yPosition);
         yPosition += lineHeight * 1.5;
-        
+
         pdf.setFont("helvetica", "normal");
-        const heightUsed = addWrappedText(sheet.appearance_description, margin + 15, yPosition, contentWidth - 30);
+        const heightUsed = addWrappedText(
+          sheet.appearance_description,
+          margin + 15,
+          yPosition,
+          contentWidth - 30
+        );
         yPosition += heightUsed + lineHeight;
       }
 
@@ -620,9 +718,14 @@ export default function ExportCharacterPDF(props) {
         pdf.setFont("helvetica", "bold");
         pdf.text("Notes", margin + 10, yPosition);
         yPosition += lineHeight * 1.5;
-        
+
         pdf.setFont("helvetica", "normal");
-        const heightUsed = addWrappedText(sheet.notes, margin + 15, yPosition, contentWidth - 30);
+        const heightUsed = addWrappedText(
+          sheet.notes,
+          margin + 15,
+          yPosition,
+          contentWidth - 30
+        );
         yPosition += heightUsed + lineHeight;
       }
 
@@ -630,13 +733,18 @@ export default function ExportCharacterPDF(props) {
         pdf.setFont("helvetica", "bold");
         pdf.text("Additional Notes", margin + 10, yPosition);
         yPosition += lineHeight * 1.5;
-        
+
         pdf.setFont("helvetica", "normal");
-        const heightUsed = addWrappedText(sheet.notes2, margin + 15, yPosition, contentWidth - 30);
+        const heightUsed = addWrappedText(
+          sheet.notes2,
+          margin + 15,
+          yPosition,
+          contentWidth - 30
+        );
         yPosition += heightUsed + lineHeight;
       }
 
-      drawTitledBox("NOTES & DESCRIPTIONS", sectionStart - lineHeight, yPosition);
+      drawSimpleBox("NOTES & DESCRIPTIONS", sectionStart - lineHeight, yPosition);
     }
 
     // Guardar el PDF
