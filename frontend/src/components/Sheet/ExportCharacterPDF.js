@@ -26,19 +26,21 @@ export default function ExportCharacterPDF(props) {
     // Función simple para dibujar bordes
     function drawSimpleBorder(x, y, width, height) {
       pdf.setDrawColor(...colors.border);
-      pdf.setLineWidth(0.5);
+      pdf.setLineWidth(0.2);
       pdf.rect(x, y, width, height);
     }
 
     // Función para dibujar una caja simple con título
     function drawSimpleBox(title, startY, endY) {
-      const boxMargin = 5;
-      const titleHeight = 10;
+      const boxMargin = 3;
+      const titleHeight = 8;
       const boxStartY = startY - titleHeight - boxMargin;
       const boxEndY = endY + boxMargin;
 
-      // Solo borde, sin fondo
-      drawSimpleBorder(
+      // Solo borde, sin fondo - con líneas más finas
+      pdf.setDrawColor(...colors.border);
+      pdf.setLineWidth(0.2);
+      pdf.rect(
         margin - boxMargin,
         boxStartY,
         contentWidth + 2 * boxMargin,
@@ -48,8 +50,8 @@ export default function ExportCharacterPDF(props) {
       // Título simple
       pdf.setFont("helvetica", "bold");
       pdf.setTextColor(...colors.primary);
-      pdf.setFontSize(12);
-      pdf.text(title, margin, boxStartY + 7);
+      pdf.setFontSize(11);
+      pdf.text(title, margin, boxStartY + 6);
 
       // Restaurar colores
       pdf.setTextColor(...colors.text);
@@ -516,13 +518,13 @@ export default function ExportCharacterPDF(props) {
       } else if (i < healthAggravated + healthSuperficial) {
         // Daño superficial - cuadrado con diagonal
         pdf.setDrawColor(0, 0, 0);
-        pdf.setLineWidth(0.5);
+        pdf.setLineWidth(0.2);
         pdf.rect(boxX, yPosition - 3, 4, 4);
         pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1);
       } else {
         // Sin daño - cuadrado vacío
         pdf.setDrawColor(0, 0, 0);
-        pdf.setLineWidth(0.5);
+        pdf.setLineWidth(0.2);
         pdf.rect(boxX, yPosition - 3, 4, 4);
       }
     }
@@ -552,13 +554,13 @@ export default function ExportCharacterPDF(props) {
       } else if (i < willAggravated + willSuperficial) {
         // Daño superficial - cuadrado con diagonal
         pdf.setDrawColor(0, 0, 0);
-        pdf.setLineWidth(0.5);
+        pdf.setLineWidth(0.2);
         pdf.rect(boxX, yPosition - 3, 4, 4);
         pdf.line(boxX, yPosition - 3, boxX + 4, yPosition + 1);
       } else {
         // Sin daño - cuadrado vacío
         pdf.setDrawColor(0, 0, 0);
-        pdf.setLineWidth(0.5);
+        pdf.setLineWidth(0.2);
         pdf.rect(boxX, yPosition - 3, 4, 4);
       }
     }
