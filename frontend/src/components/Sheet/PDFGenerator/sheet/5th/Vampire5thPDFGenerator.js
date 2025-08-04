@@ -1,4 +1,4 @@
-import BasePDFGenerator from '../../BasePDFGenerator';
+import BasePDFGenerator from "../../BasePDFGenerator";
 
 /**
  * Generador de PDF específico para Vampiro 5th Edition
@@ -12,7 +12,7 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
         text: [0, 0, 0],
         border: [0.3, 0, 0],
       },
-      ...options
+      ...options,
     });
   }
 
@@ -30,7 +30,7 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     this.generateHealthWillpower();
     this.generateExperience();
     this.generateHaven();
-    
+
     const fileName = `${this.sheet.name || "character"}_V5.pdf`;
     this.save(fileName);
   }
@@ -39,12 +39,19 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     this.pdf.setFont("helvetica", "bold");
     this.pdf.setFontSize(24);
     this.pdf.setTextColor(...this.colors.primary);
-    this.pdf.text("VAMPIRE", this.pageWidth / 2, this.yPosition, { align: "center" });
-    this.yPosition += this.options.lineHeight * 2;
-    this.pdf.setFontSize(16);
-    this.pdf.text("THE MASQUERADE 5th EDITION", this.pageWidth / 2, this.yPosition, {
+    this.pdf.text("VAMPIRE", this.pageWidth / 2, this.yPosition, {
       align: "center",
     });
+    this.yPosition += this.options.lineHeight * 2;
+    this.pdf.setFontSize(16);
+    this.pdf.text(
+      "THE MASQUERADE 5th EDITION",
+      this.pageWidth / 2,
+      this.yPosition,
+      {
+        align: "center",
+      }
+    );
     this.yPosition += this.options.lineHeight * 3;
   }
 
@@ -57,31 +64,51 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     this.pdf.setFont("helvetica", "bold");
     this.pdf.text("Name:", this.options.margin, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(this.sheet.name || "", this.options.margin + 25, this.yPosition);
+    this.pdf.text(
+      this.sheet.name || "",
+      this.options.margin + 25,
+      this.yPosition
+    );
     this.yPosition += this.options.lineHeight * 1.5;
 
     this.pdf.setFont("helvetica", "bold");
     this.pdf.text("Chronicle:", this.options.margin, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(this.sheet.chronicle || "", this.options.margin + 25, this.yPosition);
+    this.pdf.text(
+      this.sheet.chronicle || "",
+      this.options.margin + 25,
+      this.yPosition
+    );
     this.yPosition += this.options.lineHeight * 1.5;
 
     this.pdf.setFont("helvetica", "bold");
     this.pdf.text("Clan:", this.options.margin, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(this.sheet.clan || "", this.options.margin + 25, this.yPosition);
+    this.pdf.text(
+      this.sheet.clan || "",
+      this.options.margin + 25,
+      this.yPosition
+    );
     this.yPosition += this.options.lineHeight * 1.5;
 
     this.pdf.setFont("helvetica", "bold");
     this.pdf.text("Blood Potency:", this.options.margin, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(String(this.sheet.blood_potency || 0), this.options.margin + 35, this.yPosition);
+    this.pdf.text(
+      String(this.sheet.blood_potency || 0),
+      this.options.margin + 35,
+      this.yPosition
+    );
     this.yPosition += this.options.lineHeight * 1.5;
 
     this.pdf.setFont("helvetica", "bold");
     this.pdf.text("Generation:", this.options.margin, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(String(this.sheet.generation || 0), this.options.margin + 35, this.yPosition);
+    this.pdf.text(
+      String(this.sheet.generation || 0),
+      this.options.margin + 35,
+      this.yPosition
+    );
     this.yPosition += this.options.lineHeight * 1.5;
 
     // Segunda columna
@@ -118,7 +145,11 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     this.pdf.text(String(this.sheet.humanity || 0), col2X + 35, this.yPosition);
     this.yPosition += this.options.lineHeight * 2;
 
-    this.drawSimpleBox("CHARACTER INFORMATION", sectionStart - this.options.lineHeight, this.yPosition);
+    this.drawSimpleBox(
+      "CHARACTER INFORMATION",
+      sectionStart - this.options.lineHeight,
+      this.yPosition
+    );
     this.yPosition += this.options.sectionSpacing * 2;
   }
 
@@ -185,7 +216,11 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     });
 
     const attrEndY = sectionStart + this.options.lineHeight * 5;
-    this.drawSimpleBox("ATTRIBUTES", sectionStart - this.options.lineHeight, attrEndY);
+    this.drawSimpleBox(
+      "ATTRIBUTES",
+      sectionStart - this.options.lineHeight,
+      attrEndY
+    );
     this.yPosition = attrEndY + this.options.sectionSpacing * 2;
   }
 
@@ -224,9 +259,15 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
       { name: "Animal Ken", value: this.sheet.skills?.animal_ken?.value || 0 },
       { name: "Etiquette", value: this.sheet.skills?.etiquette?.value || 0 },
       { name: "Insight", value: this.sheet.skills?.insight?.value || 0 },
-      { name: "Intimidation", value: this.sheet.skills?.intimidation?.value || 0 },
+      {
+        name: "Intimidation",
+        value: this.sheet.skills?.intimidation?.value || 0,
+      },
       { name: "Leadership", value: this.sheet.skills?.leadership?.value || 0 },
-      { name: "Performance", value: this.sheet.skills?.performance?.value || 0 },
+      {
+        name: "Performance",
+        value: this.sheet.skills?.performance?.value || 0,
+      },
       { name: "Persuasion", value: this.sheet.skills?.persuasion?.value || 0 },
       { name: "Streetwise", value: this.sheet.skills?.streetwise?.value || 0 },
       { name: "Subterfuge", value: this.sheet.skills?.subterfuge?.value || 0 },
@@ -248,7 +289,10 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
       { name: "Academics", value: this.sheet.skills?.academics?.value || 0 },
       { name: "Awareness", value: this.sheet.skills?.awareness?.value || 0 },
       { name: "Finance", value: this.sheet.skills?.finance?.value || 0 },
-      { name: "Investigation", value: this.sheet.skills?.investigation?.value || 0 },
+      {
+        name: "Investigation",
+        value: this.sheet.skills?.investigation?.value || 0,
+      },
       { name: "Medicine", value: this.sheet.skills?.medicine?.value || 0 },
       { name: "Occult", value: this.sheet.skills?.occult?.value || 0 },
       { name: "Politics", value: this.sheet.skills?.politics?.value || 0 },
@@ -264,7 +308,11 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     });
 
     const skillsEndY = sectionStart + this.options.lineHeight * 11;
-    this.drawSimpleBox("SKILLS", sectionStart - this.options.lineHeight, skillsEndY);
+    this.drawSimpleBox(
+      "SKILLS",
+      sectionStart - this.options.lineHeight,
+      skillsEndY
+    );
     this.yPosition = skillsEndY + this.options.sectionSpacing * 2;
   }
 
@@ -272,24 +320,41 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     const sectionStart = this.yPosition;
     this.pdf.setFont("helvetica", "bold");
 
-    if (this.sheet.disciplines && Object.keys(this.sheet.disciplines).length > 0) {
-      Object.entries(this.sheet.disciplines).forEach(([discipline, disciplineData]) => {
-        const level = typeof disciplineData === 'object' ? disciplineData.value || 0 : disciplineData || 0;
-        
-        if (level > 0) {
-          this.pdf.setFont("helvetica", "normal");
-          this.pdf.text(discipline, this.options.margin + 10, this.yPosition);
-          this.drawSimpleDots(level, this.options.margin + 50, this.yPosition - 1.5, 5);
-          this.yPosition += this.options.lineHeight;
+    if (
+      this.sheet.disciplines &&
+      Object.keys(this.sheet.disciplines).length > 0
+    ) {
+      Object.entries(this.sheet.disciplines).forEach(
+        ([discipline, disciplineData]) => {
+          const level =
+            typeof disciplineData === "object"
+              ? disciplineData.value || 0
+              : disciplineData || 0;
+
+          if (level > 0) {
+            this.pdf.setFont("helvetica", "normal");
+            this.pdf.text(discipline, this.options.margin + 10, this.yPosition);
+            this.drawSimpleDots(
+              level,
+              this.options.margin + 50,
+              this.yPosition - 1.5,
+              5
+            );
+            this.yPosition += this.options.lineHeight;
+          }
         }
-      });
+      );
     } else {
       this.pdf.setFont("helvetica", "normal");
       this.pdf.text("No disciplines", this.options.margin + 10, this.yPosition);
       this.yPosition += this.options.lineHeight;
     }
 
-    this.drawSimpleBox("DISCIPLINES", sectionStart - this.options.lineHeight, this.yPosition);
+    this.drawSimpleBox(
+      "DISCIPLINES",
+      sectionStart - this.options.lineHeight,
+      this.yPosition
+    );
     this.yPosition += this.options.sectionSpacing * 2;
   }
 
@@ -307,7 +372,11 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
         if (item.name) {
           this.pdf.setFont("helvetica", "normal");
           this.pdf.text(item.name, this.options.margin + 15, currentY);
-          this.drawSimpleDots(item.rating || item.level || 0, this.options.margin + 70, currentY - 1.5);
+          this.drawSimpleDots(
+            item.rating || item.level || 0,
+            this.options.margin + 70,
+            currentY - 1.5
+          );
           currentY += this.options.lineHeight;
 
           if (item.description) {
@@ -340,9 +409,17 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     let advantagesY = this.yPosition;
     advantagesY = addAdvantageSection("Merits", this.sheet.merits, advantagesY);
     advantagesY = addAdvantageSection("Flaws", this.sheet.flaws, advantagesY);
-    advantagesY = addAdvantageSection("Backgrounds", this.sheet.backgrounds, advantagesY);
+    advantagesY = addAdvantageSection(
+      "Backgrounds",
+      this.sheet.backgrounds,
+      advantagesY
+    );
 
-    this.drawSimpleBox("ADVANTAGES", sectionStart - this.options.lineHeight, advantagesY);
+    this.drawSimpleBox(
+      "ADVANTAGES",
+      sectionStart - this.options.lineHeight,
+      advantagesY
+    );
     this.yPosition = advantagesY + this.options.sectionSpacing * 2;
   }
 
@@ -440,13 +517,22 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
         }
       }
 
-      this.drawSimpleBox("BELIEFS & CONVICTIONS", sectionStart - this.options.lineHeight, this.yPosition);
+      this.drawSimpleBox(
+        "BELIEFS & CONVICTIONS",
+        sectionStart - this.options.lineHeight,
+        this.yPosition
+      );
       this.yPosition += this.options.sectionSpacing * 2;
     }
   }
 
   generateNotes() {
-    if (this.sheet.notes || this.sheet.notes2 || this.sheet.history || this.sheet.appearance_description) {
+    if (
+      this.sheet.notes ||
+      this.sheet.notes2 ||
+      this.sheet.history ||
+      this.sheet.appearance_description
+    ) {
       const sectionStart = this.yPosition;
 
       if (this.sheet.history) {
@@ -496,7 +582,11 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
 
       if (this.sheet.notes2) {
         this.pdf.setFont("helvetica", "bold");
-        this.pdf.text("Additional Notes", this.options.margin + 10, this.yPosition);
+        this.pdf.text(
+          "Additional Notes",
+          this.options.margin + 10,
+          this.yPosition
+        );
         this.yPosition += this.options.lineHeight * 1.5;
 
         this.pdf.setFont("helvetica", "normal");
@@ -509,7 +599,11 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
         this.yPosition += heightUsed + this.options.lineHeight;
       }
 
-      this.drawSimpleBox("NOTES & DESCRIPTIONS", sectionStart - this.options.lineHeight, this.yPosition);
+      this.drawSimpleBox(
+        "NOTES & DESCRIPTIONS",
+        sectionStart - this.options.lineHeight,
+        this.yPosition
+      );
       this.yPosition += this.options.sectionSpacing * 2;
     }
   }
@@ -563,7 +657,7 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     const willBoxY = healthY + this.options.lineHeight * 1.9;
     this.pdf.setFont("helvetica", "bold");
     this.pdf.text("Willpower", willX, healthY);
-    
+
     const willTotal = this.sheet.willpower?.total || 10;
     const willSuperficial = this.sheet.willpower?.superficial || 0;
     const willAggravated = this.sheet.willpower?.aggravated || 0;
@@ -593,7 +687,12 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
 
     this.pdf.setDrawColor(...this.colors.border);
     this.pdf.setLineWidth(0.2);
-    this.pdf.rect(this.options.margin - 3, sectionStart - 5, this.contentWidth + 6, this.yPosition - sectionStart + 5);
+    this.pdf.rect(
+      this.options.margin - 3,
+      sectionStart - 5,
+      this.contentWidth + 6,
+      this.yPosition - sectionStart + 5
+    );
     this.yPosition += this.options.sectionSpacing * 2;
   }
 
@@ -616,24 +715,49 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
 
     this.pdf.setFont("helvetica", "normal");
     if (this.sheet.exp) {
-      this.pdf.text(`Current: ${this.sheet.exp.current || 0}`, this.options.margin + 15, expCurrentY);
+      this.pdf.text(
+        `Current: ${this.sheet.exp.current || 0}`,
+        this.options.margin + 15,
+        expCurrentY
+      );
       this.yPosition += this.options.lineHeight;
-      this.pdf.text(`Total: ${this.sheet.exp.total || 0}`, this.options.margin + 15, expTotalY);
+      this.pdf.text(
+        `Total: ${this.sheet.exp.total || 0}`,
+        this.options.margin + 15,
+        expTotalY
+      );
     } else {
-      this.pdf.text(`Current: ${this.sheet.exp_current || 0}`, this.options.margin + 15, expCurrentY);
+      this.pdf.text(
+        `Current: ${this.sheet.exp_current || 0}`,
+        this.options.margin + 15,
+        expCurrentY
+      );
       this.yPosition += this.options.lineHeight;
-      this.pdf.text(`Total: ${this.sheet.exp_total || 0}`, this.options.margin + 15, expTotalY);
+      this.pdf.text(
+        `Total: ${this.sheet.exp_total || 0}`,
+        this.options.margin + 15,
+        expTotalY
+      );
     }
     this.yPosition += this.options.lineHeight;
 
     this.pdf.setDrawColor(...this.colors.border);
     this.pdf.setLineWidth(0.2);
-    this.pdf.rect(this.options.margin - 3, sectionStart - 5, this.contentWidth + 6, this.yPosition - sectionStart + 5);
+    this.pdf.rect(
+      this.options.margin - 3,
+      sectionStart - 5,
+      this.contentWidth + 6,
+      this.yPosition - sectionStart + 5
+    );
     this.yPosition += this.options.sectionSpacing * 2;
   }
 
   generateHaven() {
-    if (this.sheet.haven_name || this.sheet.haven_location || this.sheet.haven_description) {
+    if (
+      this.sheet.haven_name ||
+      this.sheet.haven_location ||
+      this.sheet.haven_description
+    ) {
       const sectionStart = this.yPosition;
       this.pdf.setFont("helvetica", "bold");
       this.pdf.setFontSize(12);
@@ -647,7 +771,11 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
         this.pdf.setFont("helvetica", "bold");
         this.pdf.text("Name", this.options.margin + 10, this.yPosition);
         this.pdf.setFont("helvetica", "normal");
-        this.pdf.text(this.sheet.haven_name, this.options.margin + 50, this.yPosition);
+        this.pdf.text(
+          this.sheet.haven_name,
+          this.options.margin + 50,
+          this.yPosition
+        );
         this.yPosition += this.options.lineHeight * 1.5;
       }
 
@@ -655,7 +783,11 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
         this.pdf.setFont("helvetica", "bold");
         this.pdf.text("Location", this.options.margin + 10, this.yPosition);
         this.pdf.setFont("helvetica", "normal");
-        this.pdf.text(this.sheet.haven_location, this.options.margin + 50, this.yPosition);
+        this.pdf.text(
+          this.sheet.haven_location,
+          this.options.margin + 50,
+          this.yPosition
+        );
         this.yPosition += this.options.lineHeight * 1.5;
       }
 
@@ -663,13 +795,22 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
         this.pdf.setFont("helvetica", "bold");
         this.pdf.text("Description", this.options.margin + 10, this.yPosition);
         this.pdf.setFont("helvetica", "normal");
-        this.pdf.text(this.sheet.haven_description || "", this.options.margin + 50, this.yPosition);
+        this.pdf.text(
+          this.sheet.haven_description || "",
+          this.options.margin + 50,
+          this.yPosition
+        );
         this.yPosition += this.options.lineHeight * 1.5;
       }
 
       this.pdf.setDrawColor(...this.colors.border);
       this.pdf.setLineWidth(0.2);
-      this.pdf.rect(this.options.margin - 3, sectionStart - 5, this.contentWidth + 6, this.yPosition - sectionStart + 5);
+      this.pdf.rect(
+        this.options.margin - 3,
+        sectionStart - 5,
+        this.contentWidth + 6,
+        this.yPosition - sectionStart + 5
+      );
     }
   }
-} 
+}

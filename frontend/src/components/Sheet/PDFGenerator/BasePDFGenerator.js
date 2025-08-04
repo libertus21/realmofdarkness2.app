@@ -14,15 +14,15 @@ export default class BasePDFGenerator {
       margin: 20,
       lineHeight: 6,
       sectionSpacing: 15,
-      ...options
+      ...options,
     };
-    
+
     this.pdf = new jsPDF(this.options.orientation, "mm", this.options.pageSize);
     this.pageWidth = this.pdf.internal.pageSize.getWidth();
     this.pageHeight = this.pdf.internal.pageSize.getHeight();
     this.contentWidth = this.pageWidth - 2 * this.options.margin;
     this.yPosition = this.options.margin;
-    
+
     // Default colors (can be overridden by subclasses)
     this.colors = {
       primary: [0.2, 0, 0], // Dark red
@@ -35,7 +35,9 @@ export default class BasePDFGenerator {
    * Main method that must be implemented by each subclass
    */
   generate() {
-    throw new Error("The generate() method must be implemented by the subclass");
+    throw new Error(
+      "The generate() method must be implemented by the subclass"
+    );
   }
 
   /**
@@ -82,7 +84,7 @@ export default class BasePDFGenerator {
    */
   addWrappedText(text, x, y, maxWidth) {
     if (!text) return 0;
-    
+
     const words = text.split(" ");
     let line = "";
     let currentY = y;
@@ -119,7 +121,7 @@ export default class BasePDFGenerator {
 
     for (let i = 0; i < maxDots; i++) {
       const dotX = x + i * dotSpacing;
-      
+
       if (i < value) {
         this.pdf.setFillColor(...this.colors.primary);
         this.pdf.circle(dotX, y, dotRadius, "F");
@@ -149,13 +151,13 @@ export default class BasePDFGenerator {
    * Gets the PDF as blob (useful for preview or upload)
    */
   getBlob() {
-    return this.pdf.output('blob');
+    return this.pdf.output("blob");
   }
 
   /**
    * Gets the PDF as base64 (useful for preview)
    */
   getBase64() {
-    return this.pdf.output('datauristring');
+    return this.pdf.output("datauristring");
   }
-} 
+}

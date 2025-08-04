@@ -1,12 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Tooltip,
-  IconButton,
-  Alert,
-  Snackbar,
-} from '@mui/material';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import PDFGeneratorFactory from './PDFGenerator/PDFGeneratorFactory';
+import React, { useState } from "react";
+import { Tooltip, IconButton, Alert, Snackbar } from "@mui/material";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import PDFGeneratorFactory from "./PDFGenerator/PDFGeneratorFactory";
 
 /**
  * Modular component for exporting character sheet PDFs
@@ -18,28 +13,28 @@ export default function PDFImportExport({ sheet }) {
 
   // Function to detect sheet type from sheet.splat
   const detectSheetType = (sheet) => {
-    if (!sheet || !sheet.splat) return 'v5'; // Default fallback
-    
+    if (!sheet || !sheet.splat) return "v5"; // Default fallback
+
     const splat = sheet.splat.toLowerCase();
-    
+
     // Map splat values to sheet type codes
     const splatToSheetType = {
-      'vampire5th': 'v5',
-      'werewolf5th': 'w5',
-      'hunter5th': 'h5',
-      'human5th': 'h5',
-      'ghoul5th': 'g5',
-      'vampire20th': 'v20',
-      'werewolf20th': 'w20',
-      'mage20th': 'm20',
-      'changeling20th': 'c20',
-      'wraith20th': 'wr20',
-      'demon20th': 'd20',
-      'human20th': 'h20',
-      'ghoul20th': 'g20',
+      vampire5th: "v5",
+      werewolf5th: "w5",
+      hunter5th: "h5",
+      human5th: "h5",
+      ghoul5th: "g5",
+      vampire20th: "v20",
+      werewolf20th: "w20",
+      mage20th: "m20",
+      changeling20th: "c20",
+      wraith20th: "wr20",
+      demon20th: "d20",
+      human20th: "h20",
+      ghoul20th: "g20",
     };
-    
-    return splatToSheetType[splat] || 'v5';
+
+    return splatToSheetType[splat] || "v5";
   };
 
   const handleExport = async () => {
@@ -64,10 +59,7 @@ export default function PDFImportExport({ sheet }) {
   return (
     <>
       <Tooltip title="Export as PDF">
-        <IconButton 
-          onClick={handleExport}
-          disabled={isProcessing}
-        >
+        <IconButton onClick={handleExport} disabled={isProcessing}>
           <PictureAsPdfIcon fontSize="large" color="secondary" />
         </IconButton>
       </Tooltip>
@@ -83,4 +75,4 @@ export default function PDFImportExport({ sheet }) {
       </Snackbar>
     </>
   );
-} 
+}

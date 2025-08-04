@@ -8,7 +8,6 @@ export default function ExportCharacterPDF(props) {
   function generateV5PDF() {
     const pdf = new jsPDF("p", "mm", "a4");
     const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
     const margin = 20;
     const contentWidth = pageWidth - 2 * margin;
 
@@ -22,13 +21,6 @@ export default function ExportCharacterPDF(props) {
       text: [0, 0, 0], // Pure black
       border: [0.3, 0, 0], // Red for borders
     };
-
-    // Simple function to draw borders
-    function drawSimpleBorder(x, y, width, height) {
-      pdf.setDrawColor(...colors.border);
-      pdf.setLineWidth(0.2);
-      pdf.rect(x, y, width, height);
-    }
 
     // Function to draw a simple box with title
     function drawSimpleBox(title, startY, endY) {
@@ -97,7 +89,7 @@ export default function ExportCharacterPDF(props) {
 
       for (let i = 0; i < maxDots; i++) {
         const dotX = x + i * dotSpacing;
-        
+
         if (i < value) {
           // Filled dot
           pdf.setFillColor(...colors.primary);
@@ -191,7 +183,11 @@ export default function ExportCharacterPDF(props) {
     pdf.text(String(sheet.humanity || 0), col2X + 35, yPosition);
     yPosition += lineHeight * 2;
 
-    drawSimpleBox("CHARACTER INFORMATION", sectionStart - lineHeight, yPosition);
+    drawSimpleBox(
+      "CHARACTER INFORMATION",
+      sectionStart - lineHeight,
+      yPosition
+    );
     yPosition += sectionSpacing * 2;
 
     // Attributes
@@ -344,17 +340,22 @@ export default function ExportCharacterPDF(props) {
     pdf.setFont("helvetica", "bold");
 
     if (sheet.disciplines && Object.keys(sheet.disciplines).length > 0) {
-      Object.entries(sheet.disciplines).forEach(([discipline, disciplineData]) => {
-        // Handle both object format {value: X} and direct number format
-        const level = typeof disciplineData === 'object' ? disciplineData.value || 0 : disciplineData || 0;
-        
-        if (level > 0) {
-          pdf.setFont("helvetica", "normal");
-          pdf.text(discipline, margin + 10, yPosition);
-          drawSimpleDots(level, margin + 50, yPosition - 1.5, 5);
-          yPosition += lineHeight;
+      Object.entries(sheet.disciplines).forEach(
+        ([discipline, disciplineData]) => {
+          // Handle both object format {value: X} and direct number format
+          const level =
+            typeof disciplineData === "object"
+              ? disciplineData.value || 0
+              : disciplineData || 0;
+
+          if (level > 0) {
+            pdf.setFont("helvetica", "normal");
+            pdf.text(discipline, margin + 10, yPosition);
+            drawSimpleDots(level, margin + 50, yPosition - 1.5, 5);
+            yPosition += lineHeight;
+          }
         }
-      });
+      );
     } else {
       // If no disciplines, add a placeholder
       pdf.setFont("helvetica", "normal");
@@ -379,7 +380,11 @@ export default function ExportCharacterPDF(props) {
         if (item.name) {
           pdf.setFont("helvetica", "normal");
           pdf.text(item.name, margin + 15, currentY);
-          drawSimpleDots(item.rating || item.level || 0, margin + 70, currentY - 1.5);
+          drawSimpleDots(
+            item.rating || item.level || 0,
+            margin + 70,
+            currentY - 1.5
+          );
           currentY += lineHeight;
 
           if (item.description) {
@@ -412,7 +417,11 @@ export default function ExportCharacterPDF(props) {
     let advantagesY = yPosition;
     advantagesY = addAdvantageSection("Merits", sheet.merits, advantagesY);
     advantagesY = addAdvantageSection("Flaws", sheet.flaws, advantagesY);
-    advantagesY = addAdvantageSection("Backgrounds", sheet.backgrounds, advantagesY);
+    advantagesY = addAdvantageSection(
+      "Backgrounds",
+      sheet.backgrounds,
+      advantagesY
+    );
 
     drawSimpleBox("ADVANTAGES", sectionStart - lineHeight, advantagesY);
     yPosition = advantagesY + sectionSpacing * 2;
@@ -511,17 +520,13 @@ export default function ExportCharacterPDF(props) {
         }
       }
 
-      drawSimpleBox("BELIEFS & CONVICTIONS", sectionStart - lineHeight, yPosition);
+      drawSimpleBox(
+        "BELIEFS & CONVICTIONS",
+        sectionStart - lineHeight,
+        yPosition
+      );
       yPosition += sectionSpacing * 2;
     }
-
-
-
-
-
-
-
-
 
     // Notes and descriptions on the last page
     if (
@@ -594,176 +599,193 @@ export default function ExportCharacterPDF(props) {
         yPosition += heightUsed + lineHeight;
       }
 
-      drawSimpleBox("NOTES & DESCRIPTIONS", sectionStart - lineHeight, yPosition);
+      drawSimpleBox(
+        "NOTES & DESCRIPTIONS",
+        sectionStart - lineHeight,
+        yPosition
+      );
       yPosition += sectionSpacing * 2;
     }
 
-  // HEALTH & WILLPOWER
-  sectionStart = yPosition;
-  pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(12);
-  pdf.setTextColor(...colors.primary);
-  pdf.text("HEALTH & WILLPOWER", margin, yPosition);
-  pdf.setTextColor(...colors.text);
-  pdf.setFontSize(10);
-  yPosition += lineHeight * 2;
-
-  // Health
-  const healthY = yPosition;
-  const healthBoxY = healthY + lineHeight * 1.9;
-  pdf.setFont("helvetica", "bold");
-  pdf.text("Health", margin + 10, healthY);
-  yPosition += lineHeight * 1.9;
-
-  const healthTotal = sheet.health?.total || 10;
-  const healthSuperficial = sheet.health?.superficial || 0;
-  const healthAggravated = sheet.health?.aggravated || 0;
-
-  for (let i = 0; i < healthTotal; i++) {
-    const boxX = margin + 15 + i * 5;
-    if (i < healthAggravated) {
-      // Aggravated damage
-      pdf.setFillColor(0, 0, 0);
-      pdf.rect(boxX, healthBoxY - 2, 4, 4, "F");
-      pdf.setTextColor(1, 1, 1);
-      pdf.setFontSize(6);
-      pdf.text("X", boxX + 1, healthBoxY + 1);
-      pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(10);
-    } else if (i < healthAggravated + healthSuperficial) {
-      // Superficial damage
-      pdf.setDrawColor(0, 0, 0);
-      pdf.setLineWidth(0.2);
-      pdf.rect(boxX, healthBoxY - 2, 4, 4);
-      pdf.line(boxX, healthBoxY - 2, boxX + 4, healthBoxY + 2);
-    } else {
-      // No damage
-      pdf.setDrawColor(0, 0, 0);
-      pdf.setLineWidth(0.2);
-      pdf.rect(boxX, healthBoxY - 2, 4, 4);
-    }
-  }
-  yPosition += lineHeight * 2;
-
-  // Willpower
-  const willX = margin + 100;
-  const willBoxY = healthY + lineHeight * 1.9; // Same Y position as Health boxes
-  pdf.setFont("helvetica", "bold");
-  pdf.text("Willpower", willX, healthY);
-  
-  const willTotal = sheet.willpower?.total || 10;
-  const willSuperficial = sheet.willpower?.superficial || 0;
-  const willAggravated = sheet.willpower?.aggravated || 0;
-
-  for (let i = 0; i < willTotal; i++) {
-    const boxX = willX + 5 + i * 5;
-    if (i < willAggravated) {
-      // Aggravated damage
-      pdf.setFillColor(0, 0, 0);
-      pdf.rect(boxX, willBoxY - 2, 4, 4, "F");
-      pdf.setTextColor(1, 1, 1);
-      pdf.setFontSize(6);
-      pdf.text("X", boxX + 1, willBoxY + 1);
-      pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(10);
-    } else if (i < willAggravated + willSuperficial) {
-      // Superficial damage
-      pdf.setDrawColor(0, 0, 0);
-      pdf.setLineWidth(0.2);
-      pdf.rect(boxX, willBoxY - 2, 4, 4);
-      pdf.line(boxX, willBoxY - 2, boxX + 4, willBoxY + 2);
-    } else {
-      // No damage
-      pdf.setDrawColor(0, 0, 0);
-      pdf.setLineWidth(0.2);
-      pdf.rect(boxX, willBoxY - 2, 4, 4);
-    }
-  }
-  yPosition += lineHeight * 2;
-
-  // Border of the HEALTH & WILLPOWER section
-  pdf.setDrawColor(...colors.border);
-  pdf.setLineWidth(0.2);
-  pdf.rect(margin - 3, sectionStart - 5, contentWidth + 6, yPosition - sectionStart + 5);
-  yPosition += sectionSpacing * 2;
-
-
-
-  // EXPERIENCE
-  sectionStart = yPosition;
-  pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(12);
-  pdf.setTextColor(...colors.primary);
-  pdf.text("EXPERIENCE", margin, yPosition);
-  pdf.setTextColor(...colors.text);
-  pdf.setFontSize(10);
-  yPosition += lineHeight * 2;
-
-  const expY = yPosition;
-  const expCurrentY = expY + lineHeight * 1.5; // Explicit Y for Current
-  const expTotalY = expCurrentY + lineHeight; // Explicit Y for Total
-  pdf.setFont("helvetica", "bold");
-  pdf.text("Experience", margin + 10, expY);
-  yPosition += lineHeight * 1.5;
-
-  pdf.setFont("helvetica", "normal");
-  if (sheet.exp) {
-    pdf.text(`Current: ${sheet.exp.current || 0}`, margin + 15, expCurrentY);
-    yPosition += lineHeight;
-    pdf.text(`Total: ${sheet.exp.total || 0}`, margin + 15, expTotalY);
-  } else {
-    pdf.text(`Current: ${sheet.exp_current || 0}`, margin + 15, expCurrentY);
-    yPosition += lineHeight;
-    pdf.text(`Total: ${sheet.exp_total || 0}`, margin + 15, expTotalY);
-  }
-  yPosition += lineHeight;
-
-  // Border of the EXPERIENCE section
-  pdf.setDrawColor(...colors.border);
-  pdf.setLineWidth(0.2);
-  pdf.rect(margin - 3, sectionStart - 5, contentWidth + 6, yPosition - sectionStart + 5);
-  yPosition += sectionSpacing * 2;
-
-  // HAVEN
-  if (sheet.haven_name || sheet.haven_location || sheet.haven_description) {
+    // HEALTH & WILLPOWER
     sectionStart = yPosition;
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(12);
     pdf.setTextColor(...colors.primary);
-    pdf.text("HAVEN", margin, yPosition);
+    pdf.text("HEALTH & WILLPOWER", margin, yPosition);
     pdf.setTextColor(...colors.text);
     pdf.setFontSize(10);
     yPosition += lineHeight * 2;
 
-    if (sheet.haven_name) {
-      pdf.setFont("helvetica", "bold");
-      pdf.text("Name", margin + 10, yPosition);
-      pdf.setFont("helvetica", "normal");
-      pdf.text(sheet.haven_name, margin + 50, yPosition);
-      yPosition += lineHeight * 1.5;
+    // Health
+    const healthY = yPosition;
+    const healthBoxY = healthY + lineHeight * 1.9;
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Health", margin + 10, healthY);
+    yPosition += lineHeight * 1.9;
+
+    const healthTotal = sheet.health?.total || 10;
+    const healthSuperficial = sheet.health?.superficial || 0;
+    const healthAggravated = sheet.health?.aggravated || 0;
+
+    for (let i = 0; i < healthTotal; i++) {
+      const boxX = margin + 15 + i * 5;
+      if (i < healthAggravated) {
+        // Aggravated damage
+        pdf.setFillColor(0, 0, 0);
+        pdf.rect(boxX, healthBoxY - 2, 4, 4, "F");
+        pdf.setTextColor(1, 1, 1);
+        pdf.setFontSize(6);
+        pdf.text("X", boxX + 1, healthBoxY + 1);
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFontSize(10);
+      } else if (i < healthAggravated + healthSuperficial) {
+        // Superficial damage
+        pdf.setDrawColor(0, 0, 0);
+        pdf.setLineWidth(0.2);
+        pdf.rect(boxX, healthBoxY - 2, 4, 4);
+        pdf.line(boxX, healthBoxY - 2, boxX + 4, healthBoxY + 2);
+      } else {
+        // No damage
+        pdf.setDrawColor(0, 0, 0);
+        pdf.setLineWidth(0.2);
+        pdf.rect(boxX, healthBoxY - 2, 4, 4);
+      }
     }
+    yPosition += lineHeight * 2;
 
-    if (sheet.haven_location) {
-      pdf.setFont("helvetica", "bold");
-      pdf.text("Location", margin + 10, yPosition);
-      pdf.setFont("helvetica", "normal");
-      pdf.text(sheet.haven_location, margin + 50, yPosition);
-      yPosition += lineHeight * 1.5;
+    // Willpower
+    const willX = margin + 100;
+    const willBoxY = healthY + lineHeight * 1.9; // Same Y position as Health boxes
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Willpower", willX, healthY);
+
+    const willTotal = sheet.willpower?.total || 10;
+    const willSuperficial = sheet.willpower?.superficial || 0;
+    const willAggravated = sheet.willpower?.aggravated || 0;
+
+    for (let i = 0; i < willTotal; i++) {
+      const boxX = willX + 5 + i * 5;
+      if (i < willAggravated) {
+        // Aggravated damage
+        pdf.setFillColor(0, 0, 0);
+        pdf.rect(boxX, willBoxY - 2, 4, 4, "F");
+        pdf.setTextColor(1, 1, 1);
+        pdf.setFontSize(6);
+        pdf.text("X", boxX + 1, willBoxY + 1);
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFontSize(10);
+      } else if (i < willAggravated + willSuperficial) {
+        // Superficial damage
+        pdf.setDrawColor(0, 0, 0);
+        pdf.setLineWidth(0.2);
+        pdf.rect(boxX, willBoxY - 2, 4, 4);
+        pdf.line(boxX, willBoxY - 2, boxX + 4, willBoxY + 2);
+      } else {
+        // No damage
+        pdf.setDrawColor(0, 0, 0);
+        pdf.setLineWidth(0.2);
+        pdf.rect(boxX, willBoxY - 2, 4, 4);
+      }
     }
+    yPosition += lineHeight * 2;
 
-         if (sheet.haven_description) {
-       pdf.setFont("helvetica", "bold");
-       pdf.text("Description", margin + 10, yPosition);
-       pdf.setFont("helvetica", "normal");
-       pdf.text(sheet.haven_description || "", margin + 50, yPosition);
-       yPosition += lineHeight * 1.5;
-     }
-
-    // Border of the HAVEN section
+    // Border of the HEALTH & WILLPOWER section
     pdf.setDrawColor(...colors.border);
     pdf.setLineWidth(0.2);
-    pdf.rect(margin - 3, sectionStart - 5, contentWidth + 6, yPosition - sectionStart + 5);
-  }
+    pdf.rect(
+      margin - 3,
+      sectionStart - 5,
+      contentWidth + 6,
+      yPosition - sectionStart + 5
+    );
+    yPosition += sectionSpacing * 2;
+
+    // EXPERIENCE
+    sectionStart = yPosition;
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(12);
+    pdf.setTextColor(...colors.primary);
+    pdf.text("EXPERIENCE", margin, yPosition);
+    pdf.setTextColor(...colors.text);
+    pdf.setFontSize(10);
+    yPosition += lineHeight * 2;
+
+    const expY = yPosition;
+    const expCurrentY = expY + lineHeight * 1.5; // Explicit Y for Current
+    const expTotalY = expCurrentY + lineHeight; // Explicit Y for Total
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Experience", margin + 10, expY);
+    yPosition += lineHeight * 1.5;
+
+    pdf.setFont("helvetica", "normal");
+    if (sheet.exp) {
+      pdf.text(`Current: ${sheet.exp.current || 0}`, margin + 15, expCurrentY);
+      yPosition += lineHeight;
+      pdf.text(`Total: ${sheet.exp.total || 0}`, margin + 15, expTotalY);
+    } else {
+      pdf.text(`Current: ${sheet.exp_current || 0}`, margin + 15, expCurrentY);
+      yPosition += lineHeight;
+      pdf.text(`Total: ${sheet.exp_total || 0}`, margin + 15, expTotalY);
+    }
+    yPosition += lineHeight;
+
+    // Border of the EXPERIENCE section
+    pdf.setDrawColor(...colors.border);
+    pdf.setLineWidth(0.2);
+    pdf.rect(
+      margin - 3,
+      sectionStart - 5,
+      contentWidth + 6,
+      yPosition - sectionStart + 5
+    );
+    yPosition += sectionSpacing * 2;
+
+    // HAVEN
+    if (sheet.haven_name || sheet.haven_location || sheet.haven_description) {
+      sectionStart = yPosition;
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(12);
+      pdf.setTextColor(...colors.primary);
+      pdf.text("HAVEN", margin, yPosition);
+      pdf.setTextColor(...colors.text);
+      pdf.setFontSize(10);
+      yPosition += lineHeight * 2;
+
+      if (sheet.haven_name) {
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Name", margin + 10, yPosition);
+        pdf.setFont("helvetica", "normal");
+        pdf.text(sheet.haven_name, margin + 50, yPosition);
+        yPosition += lineHeight * 1.5;
+      }
+
+      if (sheet.haven_location) {
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Location", margin + 10, yPosition);
+        pdf.setFont("helvetica", "normal");
+        pdf.text(sheet.haven_location, margin + 50, yPosition);
+        yPosition += lineHeight * 1.5;
+      }
+
+      if (sheet.haven_description) {
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Description", margin + 10, yPosition);
+        pdf.setFont("helvetica", "normal");
+        pdf.text(sheet.haven_description || "", margin + 50, yPosition);
+        yPosition += lineHeight * 1.5;
+      }
+
+      // Border of the HAVEN section
+      pdf.setDrawColor(...colors.border);
+      pdf.setLineWidth(0.2);
+      pdf.rect(
+        margin - 3,
+        sectionStart - 5,
+        contentWidth + 6,
+        yPosition - sectionStart + 5
+      );
+    }
 
     // Save the PDF
     const fileName = `${sheet.name || "character"}_V5.pdf`;

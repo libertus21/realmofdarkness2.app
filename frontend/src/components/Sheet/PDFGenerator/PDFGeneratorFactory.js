@@ -1,5 +1,5 @@
-import Vampire5thPDFGenerator from './sheet/5th/Vampire5thPDFGenerator';
-import Werewolf5thPDFGenerator from './sheet/5th/Werewolf5thPDFGenerator';
+import Vampire5thPDFGenerator from "./sheet/5th/Vampire5thPDFGenerator";
+import Werewolf5thPDFGenerator from "./sheet/5th/Werewolf5thPDFGenerator";
 
 /**
  * Factory for creating specific PDF generators according to sheet type
@@ -16,25 +16,25 @@ export default class PDFGeneratorFactory {
    */
   static createGenerator(sheetType, sheet, options = {}) {
     switch (sheetType.toLowerCase()) {
-      case 'v5':
-      case 'vampire5th':
-      case 'vampire5':
+      case "v5":
+      case "vampire5th":
+      case "vampire5":
         return new Vampire5thPDFGenerator(sheet, options);
-      
+
       // Here you can add more cases for other sheet types
-      case 'w5':
-      case 'werewolf5th':
-      case 'werewolf5':
+      case "w5":
+      case "werewolf5th":
+      case "werewolf5":
         return new Werewolf5thPDFGenerator(sheet, options);
-      
+
       // case 'm5':
       // case 'mage5th':
       //   return new Mage5thPDFGenerator(sheet, options);
-      
+
       // case 'v20':
       // case 'vampire20th':
       //   return new Vampire20thPDFGenerator(sheet, options);
-      
+
       default:
         throw new Error(`Unsupported sheet type: ${sheetType}`);
     }
@@ -46,8 +46,8 @@ export default class PDFGeneratorFactory {
    */
   static getSupportedTypes() {
     return [
-      { value: 'v5', label: 'Vampire 5th Edition', color: '#8B0000' },
-      { value: 'w5', label: 'Werewolf 5th Edition', color: '#8B4513' },
+      { value: "v5", label: "Vampire 5th Edition", color: "#8B0000" },
+      { value: "w5", label: "Werewolf 5th Edition", color: "#8B4513" },
       // { value: 'm5', label: 'Mage 5th Edition', color: '#4B0082' },
       // { value: 'v20', label: 'Vampire 20th Anniversary', color: '#8B0000' },
     ];
@@ -66,4 +66,4 @@ export default class PDFGeneratorFactory {
       return false;
     }
   }
-} 
+}
