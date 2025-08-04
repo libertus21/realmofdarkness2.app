@@ -1,14 +1,14 @@
 import BasePDFGenerator from "../../BasePDFGenerator";
 
 /**
- * Generador de PDF específico para Vampiro 5th Edition
- * Extiende BasePDFGenerator con funcionalidades específicas de V5
+ * Specific PDF generator for Vampire 5th Edition
+ * Extends BasePDFGenerator with V5-specific functionality
  */
 export default class Vampire5thPDFGenerator extends BasePDFGenerator {
   constructor(sheet, options = {}) {
     super(sheet, {
       colors: {
-        primary: [0.2, 0, 0], // Rojo oscuro para vampiro
+        primary: [0.2, 0, 0], // Dark red for vampire
         text: [0, 0, 0],
         border: [0.3, 0, 0],
       },
@@ -60,7 +60,7 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     this.pdf.setTextColor(...this.colors.text);
     this.pdf.setFontSize(10);
 
-    // Primera columna
+    // First column
     this.pdf.setFont("helvetica", "bold");
     this.pdf.text("Name:", this.options.margin, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
@@ -111,7 +111,7 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     );
     this.yPosition += this.options.lineHeight * 1.5;
 
-    // Segunda columna
+    // Second column
     const col2X = this.pageWidth / 2;
     this.yPosition = sectionStart;
 
@@ -157,7 +157,7 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     const sectionStart = this.yPosition;
     this.pdf.setFont("helvetica", "bold");
 
-    // Físicos
+    // Physical
     const physicalX = this.options.margin + 10;
     this.pdf.text("Physical", physicalX, this.yPosition);
     this.yPosition += this.options.lineHeight * 1.5;
@@ -175,7 +175,7 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
       this.yPosition += this.options.lineHeight;
     });
 
-    // Sociales
+    // Social
     this.yPosition = sectionStart;
     const socialX = this.options.margin + this.contentWidth / 3 + 5;
     this.pdf.setFont("helvetica", "bold");
@@ -195,7 +195,7 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
       this.yPosition += this.options.lineHeight;
     });
 
-    // Mentales
+    // Mental
     this.yPosition = sectionStart;
     const mentalX = this.options.margin + (2 * this.contentWidth) / 3;
     this.pdf.setFont("helvetica", "bold");
@@ -227,7 +227,7 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
   generateSkills() {
     const sectionStart = this.yPosition;
 
-    // Habilidades Físicas
+    // Physical Skills
     this.yPosition += this.options.lineHeight * 1.5;
     const physicalX = this.options.margin + 10;
 
@@ -250,7 +250,7 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
       this.yPosition += this.options.lineHeight;
     });
 
-    // Habilidades Sociales
+    // Social Skills
     this.yPosition = sectionStart;
     this.yPosition += this.options.lineHeight * 1.5;
     const socialX = this.options.margin + this.contentWidth / 3 + 5;
@@ -280,7 +280,7 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
       this.yPosition += this.options.lineHeight;
     });
 
-    // Habilidades Mentales
+    // Mental Skills
     this.yPosition = sectionStart;
     this.yPosition += this.options.lineHeight * 1.5;
     const mentalX = this.options.margin + (2 * this.contentWidth) / 3;

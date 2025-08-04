@@ -1,14 +1,14 @@
 import BasePDFGenerator from "../../BasePDFGenerator";
 
 /**
- * Generador de PDF específico para Hombre Lobo 5th Edition
- * Extiende BasePDFGenerator con funcionalidades específicas de W5
+ * Specific PDF generator for Werewolf 5th Edition
+ * Extends BasePDFGenerator with W5-specific functionality
  */
 export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
   constructor(sheet, options = {}) {
     super(sheet, {
       colors: {
-        primary: [0.55, 0.27, 0.07], // Marrón para hombre lobo
+        primary: [0.55, 0.27, 0.07], // Brown for werewolf
         text: [0, 0, 0],
         border: [0.4, 0.2, 0.05],
       },
@@ -60,7 +60,7 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
     this.pdf.setTextColor(...this.colors.text);
     this.pdf.setFontSize(10);
 
-    // Primera columna
+    // First column
     this.pdf.setFont("helvetica", "bold");
     this.pdf.text("Name:", this.options.margin, this.yPosition);
     this.pdf.setFont("helvetica", "normal");
@@ -111,7 +111,7 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
     );
     this.yPosition += this.options.lineHeight * 1.5;
 
-    // Segunda columna
+    // Second column
     const col2X = this.pageWidth / 2;
     this.yPosition = sectionStart;
 
@@ -152,11 +152,11 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
   }
 
   generateAttributes() {
-    // Similar a Vampire5thPDFGenerator pero con atributos específicos de W5
+    // Similar to Vampire5thPDFGenerator but with W5-specific attributes
     const sectionStart = this.yPosition;
     this.pdf.setFont("helvetica", "bold");
 
-    // Físicos
+    // Physical
     const physicalX = this.options.margin + 10;
     this.pdf.text("Physical", physicalX, this.yPosition);
     this.yPosition += this.options.lineHeight * 1.5;
@@ -174,7 +174,7 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
       this.yPosition += this.options.lineHeight;
     });
 
-    // Sociales
+    // Social
     this.yPosition = sectionStart;
     const socialX = this.options.margin + this.contentWidth / 3 + 5;
     this.pdf.setFont("helvetica", "bold");
@@ -194,7 +194,7 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
       this.yPosition += this.options.lineHeight;
     });
 
-    // Mentales
+    // Mental
     this.yPosition = sectionStart;
     const mentalX = this.options.margin + (2 * this.contentWidth) / 3;
     this.pdf.setFont("helvetica", "bold");
@@ -224,10 +224,10 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
   }
 
   generateSkills() {
-    // Similar a Vampire5thPDFGenerator pero con habilidades específicas de W5
+    // Similar to Vampire5thPDFGenerator but with W5-specific skills
     const sectionStart = this.yPosition;
 
-    // Habilidades Físicas
+    // Physical Skills
     this.yPosition += this.options.lineHeight * 1.5;
     const physicalX = this.options.margin + 10;
 
@@ -250,7 +250,7 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
       this.yPosition += this.options.lineHeight;
     });
 
-    // Habilidades Sociales
+    // Social Skills
     this.yPosition = sectionStart;
     this.yPosition += this.options.lineHeight * 1.5;
     const socialX = this.options.margin + this.contentWidth / 3 + 5;
@@ -280,7 +280,7 @@ export default class Werewolf5thPDFGenerator extends BasePDFGenerator {
       this.yPosition += this.options.lineHeight;
     });
 
-    // Habilidades Mentales
+    // Mental Skills
     this.yPosition = sectionStart;
     this.yPosition += this.options.lineHeight * 1.5;
     const mentalX = this.options.margin + (2 * this.contentWidth) / 3;
