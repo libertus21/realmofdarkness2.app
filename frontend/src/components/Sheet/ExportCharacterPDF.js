@@ -16,28 +16,28 @@ export default function ExportCharacterPDF(props) {
     const lineHeight = 6;
     const sectionSpacing = 15;
 
-    // Colores simples y seguros
+    // Simple and safe colors
     const colors = {
-      primary: [0.2, 0, 0], // Rojo oscuro
-      text: [0, 0, 0], // Negro puro
-      border: [0.3, 0, 0], // Rojo para bordes
+      primary: [0.2, 0, 0], // Dark red
+      text: [0, 0, 0], // Pure black
+      border: [0.3, 0, 0], // Red for borders
     };
 
-    // Función simple para dibujar bordes
+    // Simple function to draw borders
     function drawSimpleBorder(x, y, width, height) {
       pdf.setDrawColor(...colors.border);
       pdf.setLineWidth(0.2);
       pdf.rect(x, y, width, height);
     }
 
-    // Función para dibujar una caja simple con título
+    // Function to draw a simple box with title
     function drawSimpleBox(title, startY, endY) {
       const boxMargin = 3;
       const titleHeight = 8;
       const boxStartY = startY - titleHeight - boxMargin;
       const boxEndY = endY + boxMargin;
 
-      // Solo borde, sin fondo - con líneas más finas
+      // Border only, no background - with thinner lines
       pdf.setDrawColor(...colors.border);
       pdf.setLineWidth(0.2);
       pdf.rect(
@@ -47,13 +47,13 @@ export default function ExportCharacterPDF(props) {
         boxEndY - boxStartY
       );
 
-      // Título simple
+      // Simple title
       pdf.setFont("helvetica", "bold");
       pdf.setTextColor(...colors.primary);
       pdf.setFontSize(11);
       pdf.text(title, margin, boxStartY + 6);
 
-      // Restaurar colores
+      // Restore colors
       pdf.setTextColor(...colors.text);
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(10);
@@ -61,7 +61,7 @@ export default function ExportCharacterPDF(props) {
       return boxEndY;
     }
 
-    // Función para manejar texto largo
+    // Function to handle long text
     function addWrappedText(text, x, y, maxWidth) {
       const words = text.split(" ");
       let line = "";
@@ -90,7 +90,7 @@ export default function ExportCharacterPDF(props) {
       return linesAdded * lineHeight;
     }
 
-    // Función simple para dibujar puntos
+    // Simple function to draw dots
     function drawSimpleDots(value, x, y, maxDots = 5) {
       const dotRadius = 1;
       const dotSpacing = 4;
@@ -99,18 +99,18 @@ export default function ExportCharacterPDF(props) {
         const dotX = x + i * dotSpacing;
         
         if (i < value) {
-          // Punto lleno
+          // Filled dot
           pdf.setFillColor(...colors.primary);
           pdf.circle(dotX, y, dotRadius, "F");
         } else {
-          // Punto vacío
+          // Empty dot
           pdf.setDrawColor(...colors.border);
           pdf.circle(dotX, y, dotRadius, "S");
         }
       }
     }
 
-    // Título principal simple
+    // Simple main title
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(24);
     pdf.setTextColor(...colors.primary);
@@ -122,12 +122,12 @@ export default function ExportCharacterPDF(props) {
     });
     yPosition += lineHeight * 3;
 
-    // Información general
+    // General information
     let sectionStart = yPosition;
     pdf.setTextColor(...colors.text);
     pdf.setFontSize(10);
 
-    // Primera columna
+    // First column
     pdf.text("Name:", margin, yPosition);
     pdf.setFont("helvetica", "normal");
     pdf.text(sheet.name || "", margin + 25, yPosition);
@@ -157,7 +157,7 @@ export default function ExportCharacterPDF(props) {
     pdf.text(String(sheet.generation || 0), margin + 35, yPosition);
     yPosition += lineHeight * 1.5;
 
-    // Segunda columna
+    // Second column
     const col2X = pageWidth / 2;
     yPosition = sectionStart;
 
@@ -194,11 +194,11 @@ export default function ExportCharacterPDF(props) {
     drawSimpleBox("CHARACTER INFORMATION", sectionStart - lineHeight, yPosition);
     yPosition += sectionSpacing * 2;
 
-    // Atributos
+    // Attributes
     sectionStart = yPosition;
     pdf.setFont("helvetica", "bold");
 
-    // Físicos
+    // Physical
     const physicalX = margin + 10;
     pdf.text("Physical", physicalX, yPosition);
     yPosition += lineHeight * 1.5;
@@ -216,7 +216,7 @@ export default function ExportCharacterPDF(props) {
       yPosition += lineHeight;
     });
 
-    // Sociales
+    // Social
     yPosition = sectionStart;
     const socialX = margin + contentWidth / 3 + 5;
     pdf.setFont("helvetica", "bold");
@@ -236,7 +236,7 @@ export default function ExportCharacterPDF(props) {
       yPosition += lineHeight;
     });
 
-    // Mentales
+    // Mental
     yPosition = sectionStart;
     const mentalX = margin + (2 * contentWidth) / 3;
     pdf.setFont("helvetica", "bold");
@@ -260,10 +260,10 @@ export default function ExportCharacterPDF(props) {
     drawSimpleBox("ATTRIBUTES", sectionStart - lineHeight, attrEndY);
     yPosition = attrEndY + sectionSpacing * 2;
 
-    // Habilidades
+    // Skills
     sectionStart = yPosition;
 
-    // Habilidades Físicas
+    // Physical Skills
     yPosition += lineHeight * 1.5;
 
     const physicalSkills = [
@@ -285,7 +285,7 @@ export default function ExportCharacterPDF(props) {
       yPosition += lineHeight;
     });
 
-    // Habilidades Sociales
+    // Social Skills
     yPosition = sectionStart;
     yPosition += lineHeight * 1.5;
 
@@ -308,7 +308,7 @@ export default function ExportCharacterPDF(props) {
       yPosition += lineHeight;
     });
 
-    // Habilidades Mentales
+    // Mental Skills
     yPosition = sectionStart;
     yPosition += lineHeight * 1.5;
 
@@ -335,11 +335,11 @@ export default function ExportCharacterPDF(props) {
     drawSimpleBox("SKILLS", sectionStart - lineHeight, skillsEndY);
     yPosition = skillsEndY + sectionSpacing * 2;
 
-    // Nueva página para el resto del contenido
+    // New page for the rest of the content
     pdf.addPage();
     yPosition = margin;
 
-    // Disciplinas
+    // Disciplines
     sectionStart = yPosition;
     pdf.setFont("helvetica", "bold");
 
@@ -357,7 +357,7 @@ export default function ExportCharacterPDF(props) {
     drawSimpleBox("DISCIPLINES", sectionStart - lineHeight, yPosition);
     yPosition += sectionSpacing * 2;
 
-    // Ventajas
+    // Advantages
     sectionStart = yPosition;
 
     function addAdvantageSection(title, items, startY) {
@@ -409,7 +409,7 @@ export default function ExportCharacterPDF(props) {
     drawSimpleBox("ADVANTAGES", sectionStart - lineHeight, advantagesY);
     yPosition = advantagesY + sectionSpacing * 2;
 
-    // Creencias y Touchstones
+    // Beliefs and Touchstones
     if (sheet.tenets || sheet.touchstones || sheet.convictions) {
       sectionStart = yPosition;
 
@@ -515,7 +515,7 @@ export default function ExportCharacterPDF(props) {
 
 
 
-    // Notas y descripciones en la última página
+    // Notes and descriptions on the last page
     if (
       sheet.notes ||
       sheet.notes2 ||
@@ -614,7 +614,7 @@ export default function ExportCharacterPDF(props) {
   for (let i = 0; i < healthTotal; i++) {
     const boxX = margin + 15 + i * 5;
     if (i < healthAggravated) {
-      // Daño agravado
+      // Aggravated damage
       pdf.setFillColor(0, 0, 0);
       pdf.rect(boxX, healthBoxY - 2, 4, 4, "F");
       pdf.setTextColor(1, 1, 1);
@@ -623,13 +623,13 @@ export default function ExportCharacterPDF(props) {
       pdf.setTextColor(0, 0, 0);
       pdf.setFontSize(10);
     } else if (i < healthAggravated + healthSuperficial) {
-      // Daño superficial
+      // Superficial damage
       pdf.setDrawColor(0, 0, 0);
       pdf.setLineWidth(0.2);
       pdf.rect(boxX, healthBoxY - 2, 4, 4);
       pdf.line(boxX, healthBoxY - 2, boxX + 4, healthBoxY + 2);
     } else {
-      // Sin daño
+      // No damage
       pdf.setDrawColor(0, 0, 0);
       pdf.setLineWidth(0.2);
       pdf.rect(boxX, healthBoxY - 2, 4, 4);
@@ -639,7 +639,7 @@ export default function ExportCharacterPDF(props) {
 
   // Willpower
   const willX = margin + 100;
-  const willBoxY = healthY + lineHeight * 1.9; // Misma posición Y que Health boxes
+  const willBoxY = healthY + lineHeight * 1.9; // Same Y position as Health boxes
   pdf.setFont("helvetica", "bold");
   pdf.text("Willpower", willX, healthY);
   
@@ -650,7 +650,7 @@ export default function ExportCharacterPDF(props) {
   for (let i = 0; i < willTotal; i++) {
     const boxX = willX + 5 + i * 5;
     if (i < willAggravated) {
-      // Daño agravado
+      // Aggravated damage
       pdf.setFillColor(0, 0, 0);
       pdf.rect(boxX, willBoxY - 2, 4, 4, "F");
       pdf.setTextColor(1, 1, 1);
@@ -659,13 +659,13 @@ export default function ExportCharacterPDF(props) {
       pdf.setTextColor(0, 0, 0);
       pdf.setFontSize(10);
     } else if (i < willAggravated + willSuperficial) {
-      // Daño superficial
+      // Superficial damage
       pdf.setDrawColor(0, 0, 0);
       pdf.setLineWidth(0.2);
       pdf.rect(boxX, willBoxY - 2, 4, 4);
       pdf.line(boxX, willBoxY - 2, boxX + 4, willBoxY + 2);
     } else {
-      // Sin daño
+      // No damage
       pdf.setDrawColor(0, 0, 0);
       pdf.setLineWidth(0.2);
       pdf.rect(boxX, willBoxY - 2, 4, 4);
@@ -673,7 +673,7 @@ export default function ExportCharacterPDF(props) {
   }
   yPosition += lineHeight * 2;
 
-  // Borde de la sección HEALTH & WILLPOWER
+  // Border of the HEALTH & WILLPOWER section
   pdf.setDrawColor(...colors.border);
   pdf.setLineWidth(0.2);
   pdf.rect(margin - 3, sectionStart - 5, contentWidth + 6, yPosition - sectionStart + 5);
@@ -710,7 +710,7 @@ export default function ExportCharacterPDF(props) {
   }
   yPosition += lineHeight;
 
-  // Borde de la sección EXPERIENCE
+  // Border of the EXPERIENCE section
   pdf.setDrawColor(...colors.border);
   pdf.setLineWidth(0.2);
   pdf.rect(margin - 3, sectionStart - 5, contentWidth + 6, yPosition - sectionStart + 5);
@@ -751,19 +751,19 @@ export default function ExportCharacterPDF(props) {
        yPosition += lineHeight * 1.5;
      }
 
-    // Borde de la sección HAVEN
+    // Border of the HAVEN section
     pdf.setDrawColor(...colors.border);
     pdf.setLineWidth(0.2);
     pdf.rect(margin - 3, sectionStart - 5, contentWidth + 6, yPosition - sectionStart + 5);
   }
 
-    // Guardar el PDF
-    const fileName = `${sheet.name || "personaje"}_V5.pdf`;
+    // Save the PDF
+    const fileName = `${sheet.name || "character"}_V5.pdf`;
     pdf.save(fileName);
   }
 
   return (
-    <Tooltip title="Exportar como PDF">
+    <Tooltip title="Export as PDF">
       <IconButton onClick={generateV5PDF}>
         <PictureAsPdfIcon fontSize="large" color="secondary" />
       </IconButton>
