@@ -10,7 +10,7 @@ import DeleteCharacterButton from "../Sheet/DeleteCharacterButton";
 import SheetPreviewNews from "../Sheet/SheetPreviewNews";
 import { useClientContext } from "../ClientProvider";
 import ExportCharacterJSON from "../Sheet/ExportCharacterJSON";
-import ExportCharacterPDF from "../Sheet/ExportCharacterPDF";
+import PDFImportExport from "../Sheet/PDFImportExport";
 
 import { CircularProgress } from "@mui/material";
 import CloudCircleIcon from "@mui/icons-material/CloudCircle";
@@ -103,7 +103,7 @@ export default function SheetControls(props) {
         <ExportCharacterJSON sheet={sheet} />
       </Grid2>
       <Grid2>
-        <ExportCharacterPDF sheet={sheet} />
+        <PDFImportExport sheet={sheet} sheetType="v5" />
       </Grid2>
       <Grid2>
         <IconButton disabled>
