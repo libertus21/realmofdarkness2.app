@@ -103,7 +103,7 @@ export default function SheetControls(props) {
         <ExportCharacterJSON sheet={sheet} />
       </Grid2>
       <Grid2>
-        <PDFImportExport sheet={sheet} sheetType="v5" />
+        <PDFImportExport sheet={sheet} />
       </Grid2>
       <Grid2>
         <IconButton disabled>
