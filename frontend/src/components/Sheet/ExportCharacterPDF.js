@@ -743,20 +743,13 @@ export default function ExportCharacterPDF(props) {
       yPosition += lineHeight * 1.5;
     }
 
-    if (sheet.haven_description) {
-      pdf.setFont("helvetica", "bold");
-      pdf.text("Description", margin + 10, yPosition);
-      yPosition += lineHeight;
-
-      pdf.setFont("helvetica", "normal");
-      const heightUsed = addWrappedText(
-        sheet.haven_description,
-        margin + 15,
-        yPosition,
-        contentWidth - 30
-      );
-      yPosition += heightUsed;
-    }
+         if (sheet.haven_description) {
+       pdf.setFont("helvetica", "bold");
+       pdf.text("Description", margin + 10, yPosition);
+       pdf.setFont("helvetica", "normal");
+       pdf.text(sheet.haven_description || "", margin + 50, yPosition);
+       yPosition += lineHeight * 1.5;
+     }
 
     // Borde de la sección HAVEN
     pdf.setDrawColor(...colors.border);
