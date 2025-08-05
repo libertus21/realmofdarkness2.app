@@ -184,68 +184,248 @@ export default function PDFDotActivatorByPage() {
     technology: 1
   });
 
-  // Mapeo de dots a habilidades
+  // Mapeo de dots a habilidades con niveles específicos
   const dotMapping = useMemo(() => ({
-    // Atributos
-    'dot5b': 'strength',
-    'dot13b': 'dexterity', 
-    'dot21b': 'stamina',
-    'dot29b': 'charisma',
-    'dot37b': 'manipulation',
-    'dot45b': 'composure',
-    'dot53b': 'intelligence',
-    'dot61b': 'wits',
-    'dot69b': 'resolve',
+    // Atributos - cada nivel tiene su propio dot
+    'dot5b': { skill: 'strength', level: 1 },
+    'dot6b': { skill: 'strength', level: 2 },
+    'dot7b': { skill: 'strength', level: 3 },
+    'dot8b': { skill: 'strength', level: 4 },
+    'dot9b': { skill: 'strength', level: 5 },
+    
+    'dot13b': { skill: 'dexterity', level: 1 },
+    'dot14b': { skill: 'dexterity', level: 2 },
+    'dot15b': { skill: 'dexterity', level: 3 },
+    'dot16b': { skill: 'dexterity', level: 4 },
+    'dot17b': { skill: 'dexterity', level: 5 },
+    
+    'dot21b': { skill: 'stamina', level: 1 },
+    'dot22b': { skill: 'stamina', level: 2 },
+    'dot23b': { skill: 'stamina', level: 3 },
+    'dot24b': { skill: 'stamina', level: 4 },
+    'dot25b': { skill: 'stamina', level: 5 },
+    
+    'dot29b': { skill: 'charisma', level: 1 },
+    'dot30b': { skill: 'charisma', level: 2 },
+    'dot31b': { skill: 'charisma', level: 3 },
+    'dot32b': { skill: 'charisma', level: 4 },
+    'dot33b': { skill: 'charisma', level: 5 },
+    
+    'dot37b': { skill: 'manipulation', level: 1 },
+    'dot38b': { skill: 'manipulation', level: 2 },
+    'dot39b': { skill: 'manipulation', level: 3 },
+    'dot40b': { skill: 'manipulation', level: 4 },
+    'dot41b': { skill: 'manipulation', level: 5 },
+    
+    'dot45b': { skill: 'composure', level: 1 },
+    'dot46b': { skill: 'composure', level: 2 },
+    'dot47b': { skill: 'composure', level: 3 },
+    'dot48b': { skill: 'composure', level: 4 },
+    'dot49b': { skill: 'composure', level: 5 },
+    
+    'dot53b': { skill: 'intelligence', level: 1 },
+    'dot54b': { skill: 'intelligence', level: 2 },
+    'dot55b': { skill: 'intelligence', level: 3 },
+    'dot56b': { skill: 'intelligence', level: 4 },
+    'dot57b': { skill: 'intelligence', level: 5 },
+    
+    'dot61b': { skill: 'wits', level: 1 },
+    'dot62b': { skill: 'wits', level: 2 },
+    'dot63b': { skill: 'wits', level: 3 },
+    'dot64b': { skill: 'wits', level: 4 },
+    'dot65b': { skill: 'wits', level: 5 },
+    
+    'dot69b': { skill: 'resolve', level: 1 },
+    'dot70b': { skill: 'resolve', level: 2 },
+    'dot71b': { skill: 'resolve', level: 3 },
+    'dot72b': { skill: 'resolve', level: 4 },
+    'dot73b': { skill: 'resolve', level: 5 },
     
     // Habilidades Físicas
-    'dot77b': 'athletics',
-    'dot85b': 'brawl',
-    'dot93b': 'craft',
-    'dot101b': 'drive',
-    'dot109b': 'firearms',
-    'dot117b': 'larceny',
-    'dot125b': 'melee',
-    'dot133b': 'stealth',
-    'dot141b': 'survival',
+    'dot77b': { skill: 'athletics', level: 1 },
+    'dot78b': { skill: 'athletics', level: 2 },
+    'dot79b': { skill: 'athletics', level: 3 },
+    'dot80b': { skill: 'athletics', level: 4 },
+    'dot81b': { skill: 'athletics', level: 5 },
+    
+    'dot85b': { skill: 'brawl', level: 1 },
+    'dot86b': { skill: 'brawl', level: 2 },
+    'dot87b': { skill: 'brawl', level: 3 },
+    'dot88b': { skill: 'brawl', level: 4 },
+    'dot89b': { skill: 'brawl', level: 5 },
+    
+    'dot93b': { skill: 'craft', level: 1 },
+    'dot94b': { skill: 'craft', level: 2 },
+    'dot95b': { skill: 'craft', level: 3 },
+    'dot96b': { skill: 'craft', level: 4 },
+    'dot97b': { skill: 'craft', level: 5 },
+    
+    'dot101b': { skill: 'drive', level: 1 },
+    'dot102b': { skill: 'drive', level: 2 },
+    'dot103b': { skill: 'drive', level: 3 },
+    'dot104b': { skill: 'drive', level: 4 },
+    'dot105b': { skill: 'drive', level: 5 },
+    
+    'dot109b': { skill: 'firearms', level: 1 },
+    'dot110b': { skill: 'firearms', level: 2 },
+    'dot111b': { skill: 'firearms', level: 3 },
+    'dot112b': { skill: 'firearms', level: 4 },
+    'dot113b': { skill: 'firearms', level: 5 },
+    
+    'dot117b': { skill: 'larceny', level: 1 },
+    'dot118b': { skill: 'larceny', level: 2 },
+    'dot119b': { skill: 'larceny', level: 3 },
+    'dot120b': { skill: 'larceny', level: 4 },
+    'dot121b': { skill: 'larceny', level: 5 },
+    
+    'dot125b': { skill: 'melee', level: 1 },
+    'dot126b': { skill: 'melee', level: 2 },
+    'dot127b': { skill: 'melee', level: 3 },
+    'dot128b': { skill: 'melee', level: 4 },
+    'dot129b': { skill: 'melee', level: 5 },
+    
+    'dot133b': { skill: 'stealth', level: 1 },
+    'dot134b': { skill: 'stealth', level: 2 },
+    'dot135b': { skill: 'stealth', level: 3 },
+    'dot136b': { skill: 'stealth', level: 4 },
+    'dot137b': { skill: 'stealth', level: 5 },
+    
+    'dot141b': { skill: 'survival', level: 1 },
+    'dot142b': { skill: 'survival', level: 2 },
+    'dot143b': { skill: 'survival', level: 3 },
+    'dot144b': { skill: 'survival', level: 4 },
+    'dot145b': { skill: 'survival', level: 5 },
     
     // Habilidades Sociales
-    'dot149b': 'animal',
-    'dot157b': 'etiquette',
-    'dot165b': 'insight',
-    'dot173b': 'intimidation',
-    'dot181b': 'leadership',
-    'dot189b': 'performance',
-    'dot197b': 'persuasion',
-    'dot205b': 'streetwise',
-    'dot213b': 'subterfuge',
+    'dot149b': { skill: 'animal', level: 1 },
+    'dot150b': { skill: 'animal', level: 2 },
+    'dot151b': { skill: 'animal', level: 3 },
+    'dot152b': { skill: 'animal', level: 4 },
+    'dot153b': { skill: 'animal', level: 5 },
+    
+    'dot157b': { skill: 'etiquette', level: 1 },
+    'dot158b': { skill: 'etiquette', level: 2 },
+    'dot159b': { skill: 'etiquette', level: 3 },
+    'dot160b': { skill: 'etiquette', level: 4 },
+    'dot161b': { skill: 'etiquette', level: 5 },
+    
+    'dot165b': { skill: 'insight', level: 1 },
+    'dot166b': { skill: 'insight', level: 2 },
+    'dot167b': { skill: 'insight', level: 3 },
+    'dot168b': { skill: 'insight', level: 4 },
+    'dot169b': { skill: 'insight', level: 5 },
+    
+    'dot173b': { skill: 'intimidation', level: 1 },
+    'dot174b': { skill: 'intimidation', level: 2 },
+    'dot175b': { skill: 'intimidation', level: 3 },
+    'dot176b': { skill: 'intimidation', level: 4 },
+    'dot177b': { skill: 'intimidation', level: 5 },
+    
+    'dot181b': { skill: 'leadership', level: 1 },
+    'dot182b': { skill: 'leadership', level: 2 },
+    'dot183b': { skill: 'leadership', level: 3 },
+    'dot184b': { skill: 'leadership', level: 4 },
+    'dot185b': { skill: 'leadership', level: 5 },
+    
+    'dot189b': { skill: 'performance', level: 1 },
+    'dot190b': { skill: 'performance', level: 2 },
+    'dot191b': { skill: 'performance', level: 3 },
+    'dot192b': { skill: 'performance', level: 4 },
+    'dot193b': { skill: 'performance', level: 5 },
+    
+    'dot197b': { skill: 'persuasion', level: 1 },
+    'dot198b': { skill: 'persuasion', level: 2 },
+    'dot199b': { skill: 'persuasion', level: 3 },
+    'dot200b': { skill: 'persuasion', level: 4 },
+    'dot201b': { skill: 'persuasion', level: 5 },
+    
+    'dot205b': { skill: 'streetwise', level: 1 },
+    'dot206b': { skill: 'streetwise', level: 2 },
+    'dot207b': { skill: 'streetwise', level: 3 },
+    'dot208b': { skill: 'streetwise', level: 4 },
+    'dot209b': { skill: 'streetwise', level: 5 },
+    
+    'dot213b': { skill: 'subterfuge', level: 1 },
+    'dot214b': { skill: 'subterfuge', level: 2 },
+    'dot215b': { skill: 'subterfuge', level: 3 },
+    'dot216b': { skill: 'subterfuge', level: 4 },
+    'dot217b': { skill: 'subterfuge', level: 5 },
     
     // Habilidades Mentales
-    'dot221b': 'academics',
-    'dot229b': 'awareness',
-    'dot237b': 'finance',
-    'dot245b': 'investigation',
-    'dot253b': 'medicine',
-    'dot261b': 'occult',
-    'dot269b': 'politics',
-    'dot277b': 'science',
-    'dot285b': 'technology'
+    'dot221b': { skill: 'academics', level: 1 },
+    'dot222b': { skill: 'academics', level: 2 },
+    'dot223b': { skill: 'academics', level: 3 },
+    'dot224b': { skill: 'academics', level: 4 },
+    'dot225b': { skill: 'academics', level: 5 },
+    
+    'dot229b': { skill: 'awareness', level: 1 },
+    'dot230b': { skill: 'awareness', level: 2 },
+    'dot231b': { skill: 'awareness', level: 3 },
+    'dot232b': { skill: 'awareness', level: 4 },
+    'dot233b': { skill: 'awareness', level: 5 },
+    
+    'dot237b': { skill: 'finance', level: 1 },
+    'dot238b': { skill: 'finance', level: 2 },
+    'dot239b': { skill: 'finance', level: 3 },
+    'dot240b': { skill: 'finance', level: 4 },
+    'dot241b': { skill: 'finance', level: 5 },
+    
+    'dot245b': { skill: 'investigation', level: 1 },
+    'dot246b': { skill: 'investigation', level: 2 },
+    'dot247b': { skill: 'investigation', level: 3 },
+    'dot248b': { skill: 'investigation', level: 4 },
+    'dot249b': { skill: 'investigation', level: 5 },
+    
+    'dot253b': { skill: 'medicine', level: 1 },
+    'dot254b': { skill: 'medicine', level: 2 },
+    'dot255b': { skill: 'medicine', level: 3 },
+    'dot256b': { skill: 'medicine', level: 4 },
+    'dot257b': { skill: 'medicine', level: 5 },
+    
+    'dot261b': { skill: 'occult', level: 1 },
+    'dot262b': { skill: 'occult', level: 2 },
+    'dot263b': { skill: 'occult', level: 3 },
+    'dot264b': { skill: 'occult', level: 4 },
+    'dot265b': { skill: 'occult', level: 5 },
+    
+    'dot269b': { skill: 'politics', level: 1 },
+    'dot270b': { skill: 'politics', level: 2 },
+    'dot271b': { skill: 'politics', level: 3 },
+    'dot272b': { skill: 'politics', level: 4 },
+    'dot273b': { skill: 'politics', level: 5 },
+    
+    'dot277b': { skill: 'science', level: 1 },
+    'dot278b': { skill: 'science', level: 2 },
+    'dot279b': { skill: 'science', level: 3 },
+    'dot280b': { skill: 'science', level: 4 },
+    'dot281b': { skill: 'science', level: 5 },
+    
+    'dot285b': { skill: 'technology', level: 1 },
+    'dot286b': { skill: 'technology', level: 2 },
+    'dot287b': { skill: 'technology', level: 3 },
+    'dot288b': { skill: 'technology', level: 4 },
+    'dot289b': { skill: 'technology', level: 5 }
   }), []);
 
   // Función para obtener el valor mapeado de un dot
   const getMappedValue = useCallback((dotName) => {
     // Buscar en el mapeo directo
     if (dotMapping[dotName]) {
-      return characterData[dotMapping[dotName]];
+      const { skill, level } = dotMapping[dotName];
+      const skillValue = characterData[skill];
+      
+      // Activar solo si el nivel es menor o igual al valor de la habilidad
+      return skillValue >= level ? 1 : 0;
     }
     
     // Buscar patrones de último nivel (ab o ba)
     const baseDot = dotName.replace(/[ab]+$/, 'b');
     if (dotMapping[baseDot]) {
-      const skillName = dotMapping[baseDot];
-      const skillValue = characterData[skillName];
+      const { skill, level } = dotMapping[baseDot];
+      const skillValue = characterData[skill];
       
-      // Si es un patrón de último nivel, activar solo si el valor es máximo
-      if (dotName.endsWith('ab') || dotName.endsWith('ba')) {
+      // Si es un patrón de último nivel, activar solo si el valor es máximo y es el nivel 5
+      if ((dotName.endsWith('ab') || dotName.endsWith('ba')) && level === 5) {
         return skillValue === 5 ? 1 : 0; // Solo activar si es nivel máximo
       }
     }
@@ -521,7 +701,7 @@ export default function PDFDotActivatorByPage() {
                       sx={{ width: 120 }}
                     />
                     <Chip 
-                      label={dot} 
+                      label={`${dot} (1er nivel)`} 
                       size="small" 
                       color="primary" 
                       variant="outlined"
@@ -561,7 +741,7 @@ export default function PDFDotActivatorByPage() {
                       sx={{ width: 120 }}
                     />
                     <Chip 
-                      label={dot} 
+                      label={`${dot} (1er nivel)`} 
                       size="small" 
                       color="primary" 
                       variant="outlined"
@@ -601,7 +781,7 @@ export default function PDFDotActivatorByPage() {
                       sx={{ width: 120 }}
                     />
                     <Chip 
-                      label={dot} 
+                      label={`${dot} (1er nivel)`} 
                       size="small" 
                       color="primary" 
                       variant="outlined"
@@ -641,7 +821,7 @@ export default function PDFDotActivatorByPage() {
                       sx={{ width: 120 }}
                     />
                     <Chip 
-                      label={dot} 
+                      label={`${dot} (1er nivel)`} 
                       size="small" 
                       color="primary" 
                       variant="outlined"
@@ -765,8 +945,9 @@ export default function PDFDotActivatorByPage() {
             <li>Usa "Mostrar Mapeo de Habilidades" para configurar los valores de la ficha</li>
             <li>Configura los valores de atributos y habilidades (0-5)</li>
             <li>Haz clic en "Mapear Dots Automáticamente" para activar según los valores</li>
-            <li>Los dots se mapean: dot5b=Strength, dot13b=Dexterity, dot21b=Stamina, etc.</li>
-            <li>Los patrones "ab" o "ba" se activan solo si la habilidad está al máximo (5)</li>
+            <li><strong>Sistema de Niveles:</strong> Cada habilidad tiene 5 dots consecutivos (ej: dot13b, dot14b, dot15b, dot16b, dot17b para Dexterity)</li>
+            <li><strong>Activación por Nivel:</strong> Si Dexterity = 3, se activan dot13b, dot14b, y dot15b (los primeros 3 niveles)</li>
+            <li><strong>Patrones Especiales:</strong> Los patrones "ab" o "ba" se activan solo si la habilidad está al máximo (5)</li>
             <li>Usa las pestañas para navegar entre las 4 páginas del PDF</li>
             <li>Activa "Ordenar Numéricamente" para ver los dots en orden</li>
             <li>Haz clic en "Generar PDF con Dots" para crear el PDF</li>
