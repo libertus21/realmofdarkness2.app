@@ -21,6 +21,7 @@ import AlertProvider from "./components/AlertProvider";
 import PDFFieldMapperTest from "./components/Sheet/PDFGenerator/PDFFieldMapperTest";
 import PDFTestComponent from "./components/Sheet/PDFGenerator/PDFTestComponent";
 import PDFDotActivator from "./components/Sheet/PDFGenerator/PDFDotActivator";
+import PDFDotActivatorByPage from "./components/Sheet/PDFGenerator/PDFDotActivatorByPage";
 
 const darkTheme = createTheme({
   components: {
@@ -100,6 +101,7 @@ function App() {
                   <Route path="pdf-test" element={<PDFFieldMapperTest />} />
                   <Route path="pdf-simple-test" element={<PDFTestComponent />} />
                   <Route path="pdf-dot-activator" element={<PDFDotActivator />} />
+                  <Route path="pdf-dot-activator-by-page" element={<PDFDotActivatorByPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
               </Routes>

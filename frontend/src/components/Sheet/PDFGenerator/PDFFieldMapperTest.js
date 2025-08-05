@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Typography, Box, Paper, List, ListItem, ListItemText, Divider, Chip, Alert, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { Button, Typography, Box, Paper, List, ListItem, ListItemText, Divider, Chip, Alert, Accordion, AccordionSummary, AccordionDetails, Tabs, Tab } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PDFFieldMapper from './PDFFieldMapper';
 
 /**
- * Test component for mapping PDF fields
+ * Test component for mapping PDF fields organized by page
  * This helps identify the exact field names in the PDF template
  */
 export default function PDFFieldMapperTest() {
@@ -12,6 +12,7 @@ export default function PDFFieldMapperTest() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [selectedPage, setSelectedPage] = useState(0);
 
   const handleMapFields = async () => {
     try {
@@ -26,12 +27,10 @@ export default function PDFFieldMapperTest() {
       setSuccess(true);
       
       // Also print to console for debugging
-      console.log('=== PDF Field Mapping ===');
-      console.log('Text Fields:', fields.textFields);
-      console.log('Checkboxes:', fields.checkBoxes);
-      console.log('Radio Groups:', fields.radioGroups);
-      console.log('Dropdowns:', fields.dropdowns);
-      console.log('Signatures:', fields.signatures);
+      console.log('=== PDF Field Mapping by Page ===');
+      Object.entries(fields).forEach(([page, pageFields]) => {
+        console.log(`${page}:`, pageFields);
+      });
       
     } catch (err) {
       setError(`Error mapping fields: ${err.message}`);
@@ -54,6 +53,10 @@ export default function PDFFieldMapperTest() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handlePageChange = (event, newValue) => {
+    setSelectedPage(newValue);
   };
 
   const renderFieldList = (fields, title, type) => (
@@ -105,14 +108,52 @@ export default function PDFFieldMapperTest() {
     </Accordion>
   );
 
+  const renderPageContent = (pageData, pageNumber) => {
+    if (!pageData) return null;
+
+    const totalFields = pageData.textFields.length + pageData.checkBoxes.length + 
+                       pageData.radioGroups.length + pageData.dropdowns.length + 
+                       pageData.signatures.length;
+
+    return (
+      <Box>
+        <Paper sx={{ p: 2, mb: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            Página {pageNumber} - Resumen
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            <Chip label={`Total: ${totalFields}`} color="primary" />
+            <Chip label={`Campos de texto: ${pageData.textFields.length}`} color="info" />
+            <Chip label={`Checkboxes: ${pageData.checkBoxes.length}`} color="warning" />
+            <Chip label={`Radio groups: ${pageData.radioGroups.length}`} color="success" />
+            <Chip label={`Dropdowns: ${pageData.dropdowns.length}`} color="error" />
+            <Chip label={`Firmas: ${pageData.signatures.length}`} color="default" />
+          </Box>
+        </Paper>
+
+        <Paper sx={{ p: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            Detalles por Tipo de Campo
+          </Typography>
+          
+          {renderFieldList(pageData.textFields, 'Campos de Texto', 'text')}
+          {renderFieldList(pageData.checkBoxes, 'Checkboxes', 'checkbox')}
+          {renderFieldList(pageData.radioGroups, 'Grupos de Radio', 'radio')}
+          {renderFieldList(pageData.dropdowns, 'Dropdowns', 'dropdown')}
+          {renderFieldList(pageData.signatures, 'Firmas', 'signature')}
+        </Paper>
+      </Box>
+    );
+  };
+
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h4" gutterBottom>
-        PDF Field Mapper Test
+        PDF Field Mapper Test (por Página)
       </Typography>
       
       <Typography variant="body1" sx={{ mb: 2 }}>
-        Este componente mapea todos los campos disponibles en el PDF editable y los muestra de manera organizada.
+        Este componente mapea todos los campos disponibles en el PDF editable organizados por página.
       </Typography>
       
       <Box sx={{ mb: 2 }}>
@@ -122,7 +163,7 @@ export default function PDFFieldMapperTest() {
           disabled={isLoading}
           sx={{ mr: 1 }}
         >
-          {isLoading ? 'Mapeando...' : 'Mapear Campos'}
+          {isLoading ? 'Mapeando...' : 'Mapear Campos por Página'}
         </Button>
         
         <Button 
@@ -144,7 +185,7 @@ export default function PDFFieldMapperTest() {
         <Paper sx={{ p: 2, mb: 2, bgcolor: 'success.light' }}>
           <Alert severity="success">
             <Typography variant="h6">¡Éxito!</Typography>
-            <Typography>Se mapearon todos los campos del PDF correctamente.</Typography>
+            <Typography>Se mapearon todos los campos del PDF correctamente por página.</Typography>
           </Alert>
         </Paper>
       )}
@@ -153,29 +194,42 @@ export default function PDFFieldMapperTest() {
         <Box>
           <Paper sx={{ p: 2, mb: 2 }}>
             <Typography variant="h6" gutterBottom>
-              Resumen de Campos Encontrados
+              Resumen por Página
             </Typography>
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-              <Chip label={`Total: ${fieldMap.textFields.length + fieldMap.checkBoxes.length + fieldMap.radioGroups.length + fieldMap.dropdowns.length + fieldMap.signatures.length}`} color="primary" />
-              <Chip label={`Campos de texto: ${fieldMap.textFields.length}`} color="info" />
-              <Chip label={`Checkboxes: ${fieldMap.checkBoxes.length}`} color="warning" />
-              <Chip label={`Radio groups: ${fieldMap.radioGroups.length}`} color="success" />
-              <Chip label={`Dropdowns: ${fieldMap.dropdowns.length}`} color="error" />
-              <Chip label={`Firmas: ${fieldMap.signatures.length}`} color="default" />
+              {Object.entries(fieldMap).map(([page, pageData], index) => {
+                const totalFields = pageData.textFields.length + pageData.checkBoxes.length + 
+                                  pageData.radioGroups.length + pageData.dropdowns.length + 
+                                  pageData.signatures.length;
+                return (
+                  <Chip 
+                    key={page}
+                    label={`Página ${index + 1}: ${totalFields} campos`} 
+                    color="primary" 
+                    variant={selectedPage === index ? "filled" : "outlined"}
+                    onClick={() => setSelectedPage(index)}
+                    sx={{ cursor: 'pointer' }}
+                  />
+                );
+              })}
             </Box>
           </Paper>
 
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Detalles por Tipo de Campo
-            </Typography>
-            
-            {renderFieldList(fieldMap.textFields, 'Campos de Texto', 'text')}
-            {renderFieldList(fieldMap.checkBoxes, 'Checkboxes', 'checkbox')}
-            {renderFieldList(fieldMap.radioGroups, 'Grupos de Radio', 'radio')}
-            {renderFieldList(fieldMap.dropdowns, 'Dropdowns', 'dropdown')}
-            {renderFieldList(fieldMap.signatures, 'Firmas', 'signature')}
+          <Paper sx={{ p: 2, mb: 2 }}>
+            <Tabs value={selectedPage} onChange={handlePageChange} aria-label="PDF pages">
+              {Object.entries(fieldMap).map(([page, pageData], index) => (
+                <Tab key={page} label={`Página ${index + 1}`} />
+              ))}
+            </Tabs>
           </Paper>
+
+          <Box sx={{ mt: 2 }}>
+            {Object.entries(fieldMap).map(([page, pageData], index) => (
+              <Box key={page} sx={{ display: selectedPage === index ? 'block' : 'none' }}>
+                {renderPageContent(pageData, index + 1)}
+              </Box>
+            ))}
+          </Box>
 
           <Paper sx={{ p: 2, mt: 2 }}>
             <Typography variant="h6" gutterBottom>
@@ -183,9 +237,12 @@ export default function PDFFieldMapperTest() {
             </Typography>
             <Typography variant="body2" component="div">
               <ul>
+                <li>Los campos están organizados por página para facilitar el mapeo</li>
+                <li>Página 1: Información básica, atributos, habilidades</li>
+                <li>Página 2: Disciplinas, poderes, ventajas, antecedentes</li>
+                <li>Página 3: Potencia de sangre, hambre, humanidad, fuerza de voluntad</li>
+                <li>Página 4: Apariencia, descripción, otros detalles</li>
                 <li>Los nombres de los campos se pueden usar directamente en el generador de PDF</li>
-                <li>Los campos marcados como "Requerido" son obligatorios en el PDF</li>
-                <li>Los campos "Solo lectura" no se pueden editar</li>
                 <li>Para checkboxes, usa <code>fillCheckboxField(form, fieldName, true/false)</code></li>
                 <li>Para campos de texto, usa <code>fillTextField(form, fieldName, value)</code></li>
                 <li>Para radio groups, usa <code>fillRadioField(form, fieldName, optionValue)</code></li>
@@ -201,7 +258,8 @@ export default function PDFFieldMapperTest() {
         </Typography>
         <Typography variant="body2" component="div">
           <ul>
-            <li>Haz clic en "Mapear Campos" para cargar y analizar el PDF</li>
+            <li>Haz clic en "Mapear Campos por Página" para cargar y analizar el PDF</li>
+            <li>Usa las pestañas para navegar entre las 4 páginas del PDF</li>
             <li>Expande cada sección para ver los campos específicos</li>
             <li>Usa "Exportar Mapeo" para descargar un archivo JSON con todos los campos</li>
             <li>Los nombres de los campos se pueden usar directamente en el código</li>
