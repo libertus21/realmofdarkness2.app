@@ -1,5 +1,6 @@
 import Vampire5thPDFGenerator from "./sheet/5th/Vampire5thPDFGenerator";
 import Werewolf5thPDFGenerator from "./sheet/5th/Werewolf5thPDFGenerator";
+import Vampire5thEditablePDFGenerator from "./sheet/5th/Vampire5thEditablePDFGenerator";
 
 /**
  * Factory for creating specific PDF generators according to sheet type
@@ -15,10 +16,15 @@ export default class PDFGeneratorFactory {
    * @returns {BasePDFGenerator} Instance of the appropriate generator
    */
   static createGenerator(sheetType, sheet, options = {}) {
+    const useEditable = options.useEditable || false;
+    
     switch (sheetType.toLowerCase()) {
       case "v5":
       case "vampire5th":
       case "vampire5":
+        if (useEditable) {
+          return new Vampire5thEditablePDFGenerator(sheet, options);
+        }
         return new Vampire5thPDFGenerator(sheet, options);
 
       // Here you can add more cases for other sheet types

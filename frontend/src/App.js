@@ -18,6 +18,9 @@ import Character from "./routes/Character/Character";
 import V5Dice from "./routes/v5/V5Dice";
 import ClientProvider from "./components/ClientProvider";
 import AlertProvider from "./components/AlertProvider";
+import PDFFieldMapperTest from "./components/Sheet/PDFGenerator/PDFFieldMapperTest";
+import PDFTestComponent from "./components/Sheet/PDFGenerator/PDFTestComponent";
+import PDFDotActivator from "./components/Sheet/PDFGenerator/PDFDotActivator";
 
 const darkTheme = createTheme({
   components: {
@@ -94,6 +97,9 @@ function App() {
                     <Route index element={<NotFound />} />
                     <Route path="v5/:id" element={<Vampire5thSheet />} />
                   </Route>
+                  <Route path="pdf-test" element={<PDFFieldMapperTest />} />
+                  <Route path="pdf-simple-test" element={<PDFTestComponent />} />
+                  <Route path="pdf-dot-activator" element={<PDFDotActivator />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
               </Routes>
