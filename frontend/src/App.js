@@ -16,6 +16,7 @@ import Vampire5thSheet from "./routes/Character/Vampire5thSheet";
 import Character from "./routes/Character/Character";
 //import initAnalytics from "./functions/initAnalytics";
 import V5Dice from "./routes/v5/V5Dice";
+import TestPDF from "./routes/TestPDF";
 import ClientProvider from "./components/ClientProvider";
 import AlertProvider from "./components/AlertProvider";
 
@@ -94,6 +95,7 @@ function App() {
                     <Route index element={<NotFound />} />
                     <Route path="v5/:id" element={<Vampire5thSheet />} />
                   </Route>
+                  <Route path="test-pdf" element={<TestPDF />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
               </Routes>

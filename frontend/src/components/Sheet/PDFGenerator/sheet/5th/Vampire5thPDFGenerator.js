@@ -1,19 +1,39 @@
 import BasePDFGenerator from "../../BasePDFGenerator";
 
 /**
- * Specific PDF generator for Vampire 5th Edition
- * Extends BasePDFGenerator with V5-specific functionality
+ * Professional and aesthetic PDF generator for Vampire 5th Edition
+ * Features modern design with elegant typography and visual hierarchy
  */
 export default class Vampire5thPDFGenerator extends BasePDFGenerator {
   constructor(sheet, options = {}) {
     super(sheet, {
-      colors: {
-        primary: [0.2, 0, 0], // Dark red for vampire
-        text: [0, 0, 0],
-        border: [0.3, 0, 0],
+      fonts: {
+        title: { size: 28, weight: "bold" },
+        subtitle: { size: 16, weight: "bold" },
+        sectionHeader: { size: 14, weight: "bold" },
+        fieldLabel: { size: 10, weight: "bold" },
+        fieldValue: { size: 10, weight: "normal" },
+        body: { size: 9, weight: "normal" },
+      },
+      spacing: {
+        titleMargin: 25,
+        sectionGap: 20,
+        fieldGap: 12,
+        columnGap: 15,
       },
       ...options,
     });
+
+    // Override colors after super() call to ensure proper initialization
+    this.colors = {
+      primary: [0.15, 0, 0], // Deep crimson for vampire
+      secondary: [0.4, 0.1, 0.1], // Darker red accent
+      accent: [0.6, 0.2, 0.2], // Medium red for highlights
+      text: [0.1, 0.1, 0.1], // Soft black for better readability
+      lightText: [0.4, 0.4, 0.4], // Gray for secondary text
+      border: [0.2, 0, 0], // Rich red borders
+      background: [0.95, 0.95, 0.95], // Very light gray background
+    };
   }
 
   generate() {
@@ -36,132 +56,304 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
   }
 
   generateHeader() {
+    // Elegant header with decorative elements
+    const centerX = this.pageWidth / 2;
+
+    // Main title with larger, more dramatic font
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.setFontSize(24);
+    this.pdf.setFontSize(28);
     this.pdf.setTextColor(...this.colors.primary);
-    this.pdf.text("VAMPIRE", this.pageWidth / 2, this.yPosition, {
+    this.pdf.text("VAMPIRE", centerX, this.yPosition + 20, { align: "center" });
+
+    // Decorative double lines with gothic feel
+    this.pdf.setDrawColor(...this.colors.primary);
+    this.pdf.setLineWidth(1.5);
+    this.pdf.line(
+      centerX - 60,
+      this.yPosition + 25,
+      centerX + 60,
+      this.yPosition + 25
+    );
+    this.pdf.setLineWidth(0.5);
+    this.pdf.line(
+      centerX - 65,
+      this.yPosition + 27,
+      centerX + 65,
+      this.yPosition + 27
+    );
+
+    // Subtitle with elegant spacing
+    this.pdf.setFont("helvetica", "bold");
+    this.pdf.setFontSize(16);
+    this.pdf.setTextColor(...this.colors.secondary);
+    this.pdf.text("THE MASQUERADE", centerX, this.yPosition + 38, {
       align: "center",
     });
-    this.yPosition += this.options.lineHeight * 2;
-    this.pdf.setFontSize(16);
-    this.pdf.text(
-      "THE MASQUERADE 5th EDITION",
-      this.pageWidth / 2,
-      this.yPosition,
-      {
-        align: "center",
-      }
+
+    // Edition with style
+    this.pdf.setFont("helvetica", "normal");
+    this.pdf.setFontSize(10);
+    this.pdf.setTextColor(...this.colors.lightText);
+    this.pdf.text("5TH EDITION", centerX, this.yPosition + 48, {
+      align: "center",
+    });
+
+    // Ornamental corner elements
+    this.pdf.setDrawColor(...this.colors.accent);
+    this.pdf.setLineWidth(0.8);
+    // Top left corner
+    this.pdf.line(
+      this.options.margin,
+      this.yPosition + 5,
+      this.options.margin + 15,
+      this.yPosition + 5
     );
-    this.yPosition += this.options.lineHeight * 3;
+    this.pdf.line(
+      this.options.margin,
+      this.yPosition + 5,
+      this.options.margin,
+      this.yPosition + 15
+    );
+    // Top right corner
+    this.pdf.line(
+      this.pageWidth - this.options.margin,
+      this.yPosition + 5,
+      this.pageWidth - this.options.margin - 15,
+      this.yPosition + 5
+    );
+    this.pdf.line(
+      this.pageWidth - this.options.margin,
+      this.yPosition + 5,
+      this.pageWidth - this.options.margin,
+      this.yPosition + 15
+    );
+
+    this.yPosition += 70;
+  }
+
+  // Elegant section design with decorative borders
+  drawStyledSection(title, startY, endY, accentColor = null) {
+    const sectionColor = accentColor || this.colors.primary;
+
+    // Main section border with rounded corners effect
+    this.pdf.setDrawColor(...sectionColor);
+    this.pdf.setLineWidth(1);
+    this.pdf.rect(
+      this.options.margin - 5,
+      startY - 15,
+      this.contentWidth + 10,
+      endY - startY + 20
+    );
+
+    // Inner decorative border
+    this.pdf.setLineWidth(0.3);
+    this.pdf.rect(
+      this.options.margin - 3,
+      startY - 13,
+      this.contentWidth + 6,
+      endY - startY + 16
+    );
+
+    // Title with elegant underline
+    this.pdf.setFont("helvetica", "bold");
+    this.pdf.setFontSize(14);
+    this.pdf.setTextColor(...sectionColor);
+    this.pdf.text(title, this.options.margin, startY - 5);
+
+    // Decorative underline for title
+    this.pdf.setLineWidth(0.8);
+    const titleWidth = this.pdf.getTextWidth(title);
+    this.pdf.line(
+      this.options.margin,
+      startY - 2,
+      this.options.margin + titleWidth + 10,
+      startY - 2
+    );
+
+    // Small decorative elements at corners
+    this.pdf.setLineWidth(0.5);
+    // Top corners
+    this.pdf.line(
+      this.options.margin - 5,
+      startY - 10,
+      this.options.margin + 5,
+      startY - 10
+    );
+    this.pdf.line(
+      this.options.margin + this.contentWidth + 5,
+      startY - 10,
+      this.options.margin + this.contentWidth - 5,
+      startY - 10
+    );
+
+    // Reset text color
+    this.pdf.setTextColor(...this.colors.text);
+  }
+
+  drawStyledField(label, value, x, y, width = 85) {
+    // Elegant field with double border effect
+    this.pdf.setDrawColor(...this.colors.border);
+    this.pdf.setLineWidth(0.8);
+    this.pdf.rect(x, y - 3, width, 12);
+
+    // Inner shadow effect with lighter border
+    this.pdf.setDrawColor(...this.colors.lightText);
+    this.pdf.setLineWidth(0.2);
+    this.pdf.rect(x + 1, y - 2, width - 2, 10);
+
+    // Label with better typography
+    this.pdf.setFont("helvetica", "bold");
+    this.pdf.setFontSize(8);
+    this.pdf.setTextColor(...this.colors.primary);
+    this.pdf.text(label + ":", x + 3, y + 1);
+
+    // Value with elegant spacing
+    this.pdf.setFont("helvetica", "normal");
+    this.pdf.setFontSize(10);
+    this.pdf.setTextColor(...this.colors.text);
+    this.pdf.text(String(value || ""), x + 3, y + 6);
+  }
+
+  drawStyledDots(value, x, y, maxDots = 5, size = 2) {
+    const spacing = 8;
+    for (let i = 0; i < maxDots; i++) {
+      const dotX = x + i * spacing;
+
+      if (i < value) {
+        // Filled dot with enhanced style
+        this.pdf.setFont("helvetica", "normal");
+        this.pdf.setFontSize(10);
+        this.pdf.setTextColor(...this.colors.primary);
+        this.pdf.text("●", dotX, y + 1);
+      } else {
+        // Empty dot with elegant outline
+        this.pdf.setFont("helvetica", "normal");
+        this.pdf.setFontSize(10);
+        this.pdf.setTextColor(...this.colors.lightText);
+        this.pdf.text("○", dotX, y + 1);
+      }
+    }
+
+    // Add decorative bracket around dots
+    if (maxDots > 0) {
+      this.pdf.setDrawColor(...this.colors.lightText);
+      this.pdf.setLineWidth(0.3);
+      const startX = x - 2;
+      const endX = x + (maxDots - 1) * spacing + 4;
+      this.pdf.line(startX, y - 2, startX, y + 4);
+      this.pdf.line(endX, y - 2, endX, y + 4);
+      this.pdf.line(startX, y - 2, startX + 2, y - 2);
+      this.pdf.line(startX, y + 4, startX + 2, y + 4);
+      this.pdf.line(endX, y - 2, endX - 2, y - 2);
+      this.pdf.line(endX, y + 4, endX - 2, y + 4);
+    }
   }
 
   generateCharacterInfo() {
-    let sectionStart = this.yPosition;
-    this.pdf.setTextColor(...this.colors.text);
-    this.pdf.setFontSize(10);
+    const sectionStart = this.yPosition;
 
-    // First column
+    // Character name with dramatic presentation
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Name:", this.options.margin, this.yPosition);
-    this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(
-      this.sheet.name || "",
-      this.options.margin + 25,
-      this.yPosition
+    this.pdf.setFontSize(18);
+    this.pdf.setTextColor(...this.colors.primary);
+    const characterName = this.sheet.name || "Unnamed Character";
+    this.pdf.text(characterName, this.options.margin, this.yPosition);
+
+    // Decorative line under character name
+    this.pdf.setDrawColor(...this.colors.accent);
+    this.pdf.setLineWidth(0.5);
+    const nameWidth = this.pdf.getTextWidth(characterName);
+    this.pdf.line(
+      this.options.margin,
+      this.yPosition + 3,
+      this.options.margin + nameWidth,
+      this.yPosition + 3
     );
-    this.yPosition += this.options.lineHeight * 1.5;
 
-    this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Chronicle:", this.options.margin, this.yPosition);
-    this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(
-      this.sheet.chronicle || "",
-      this.options.margin + 25,
-      this.yPosition
+    this.yPosition += 20;
+
+    // Enhanced two-column layout with better spacing
+    const col1X = this.options.margin;
+    const col2X = this.options.margin + this.contentWidth / 2 + 5;
+    const fieldSpacing = 15;
+
+    let currentY = this.yPosition;
+
+    // Left column with enhanced fields
+    this.drawStyledField(
+      "Chronicle",
+      this.sheet.chronicle,
+      col1X,
+      currentY,
+      90
     );
-    this.yPosition += this.options.lineHeight * 1.5;
-
-    this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Clan:", this.options.margin, this.yPosition);
-    this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(
-      this.sheet.clan || "",
-      this.options.margin + 25,
-      this.yPosition
+    currentY += fieldSpacing;
+    this.drawStyledField("Clan", this.sheet.clan, col1X, currentY, 90);
+    currentY += fieldSpacing;
+    this.drawStyledField(
+      "Blood Potency",
+      this.sheet.blood_potency,
+      col1X,
+      currentY,
+      90
     );
-    this.yPosition += this.options.lineHeight * 1.5;
+    currentY += fieldSpacing;
 
-    this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Blood Potency:", this.options.margin, this.yPosition);
-    this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(
-      String(this.sheet.blood_potency || 0),
-      this.options.margin + 35,
-      this.yPosition
+    // Right column (reset Y)
+    currentY = this.yPosition;
+    this.drawStyledField(
+      "Predator Type",
+      this.sheet.predator_type,
+      col2X,
+      currentY,
+      90
     );
-    this.yPosition += this.options.lineHeight * 1.5;
-
-    this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Generation:", this.options.margin, this.yPosition);
-    this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(
-      String(this.sheet.generation || 0),
-      this.options.margin + 35,
-      this.yPosition
+    currentY += fieldSpacing;
+    this.drawStyledField(
+      "Generation",
+      this.sheet.generation,
+      col2X,
+      currentY,
+      90
     );
-    this.yPosition += this.options.lineHeight * 1.5;
+    currentY += fieldSpacing;
+    this.drawStyledField("Humanity", this.sheet.humanity, col2X, currentY, 90);
+    currentY += fieldSpacing;
 
-    // Second column
-    const col2X = this.pageWidth / 2;
-    this.yPosition = sectionStart;
-
-    this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Ambition:", col2X, this.yPosition);
-    this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(this.sheet.ambition || "", col2X + 25, this.yPosition);
-    this.yPosition += this.options.lineHeight * 1.5;
-
-    this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Desire:", col2X, this.yPosition);
-    this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(this.sheet.desire || "", col2X + 25, this.yPosition);
-    this.yPosition += this.options.lineHeight * 1.5;
-
-    this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Predator Type:", col2X, this.yPosition);
-    this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(this.sheet.predator_type || "", col2X + 25, this.yPosition);
-    this.yPosition += this.options.lineHeight * 1.5;
-
-    this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Hunger:", col2X, this.yPosition);
-    this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(String(this.sheet.hunger || 0), col2X + 35, this.yPosition);
-    this.yPosition += this.options.lineHeight * 1.5;
-
-    this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Humanity:", col2X, this.yPosition);
-    this.pdf.setFont("helvetica", "normal");
-    this.pdf.text(String(this.sheet.humanity || 0), col2X + 35, this.yPosition);
-    this.yPosition += this.options.lineHeight * 2;
-
-    this.drawSimpleBox(
+    this.yPosition = currentY + 15;
+    this.drawStyledSection(
       "CHARACTER INFORMATION",
-      sectionStart - this.options.lineHeight,
-      this.yPosition
+      sectionStart,
+      this.yPosition,
+      this.colors.secondary
     );
-    this.yPosition += this.options.sectionSpacing * 2;
+    this.yPosition += 25;
   }
 
   generateAttributes() {
     const sectionStart = this.yPosition;
+
+    // Enhanced three-column layout for attributes
+    const col1X = this.options.margin + 5;
+    const col2X = this.options.margin + this.contentWidth / 3 + 5;
+    const col3X = this.options.margin + (2 * this.contentWidth) / 3 + 5;
+
+    // Physical attributes with enhanced styling
     this.pdf.setFont("helvetica", "bold");
+    this.pdf.setFontSize(12);
+    this.pdf.setTextColor(...this.colors.primary);
+    this.pdf.text("Physical", col1X, this.yPosition);
 
-    // Physical
-    const physicalX = this.options.margin + 10;
-    this.pdf.text("Physical", physicalX, this.yPosition);
-    this.yPosition += this.options.lineHeight * 1.5;
+    // Decorative underline for category
+    this.pdf.setDrawColor(...this.colors.primary);
+    this.pdf.setLineWidth(0.5);
+    this.pdf.line(col1X, this.yPosition + 2, col1X + 40, this.yPosition + 2);
 
+    this.pdf.setFont("helvetica", "normal");
+    this.pdf.setFontSize(9);
+    this.pdf.setTextColor(...this.colors.text);
+
+    let attrY = this.yPosition + 12;
     const attributes = [
       { name: "Strength", value: this.sheet.attributes?.strength || 0 },
       { name: "Dexterity", value: this.sheet.attributes?.dexterity || 0 },
@@ -169,19 +361,26 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     ];
 
     attributes.forEach((attr) => {
-      this.pdf.setFont("helvetica", "normal");
-      this.pdf.text(attr.name, physicalX, this.yPosition);
-      this.drawSimpleDots(attr.value, physicalX + 30, this.yPosition - 1.5);
-      this.yPosition += this.options.lineHeight;
+      this.pdf.text(attr.name, col1X, attrY);
+      this.drawStyledDots(attr.value, col1X + 45, attrY - 2, 5);
+      attrY += 12;
     });
 
-    // Social
-    this.yPosition = sectionStart;
-    const socialX = this.options.margin + this.contentWidth / 3 + 5;
+    // Social attributes
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Social", socialX, this.yPosition);
-    this.yPosition += this.options.lineHeight * 1.5;
+    this.pdf.setFontSize(12);
+    this.pdf.setTextColor(...this.colors.primary);
+    this.pdf.text("Social", col2X, this.yPosition);
 
+    this.pdf.setDrawColor(...this.colors.primary);
+    this.pdf.setLineWidth(0.5);
+    this.pdf.line(col2X, this.yPosition + 2, col2X + 30, this.yPosition + 2);
+
+    this.pdf.setFont("helvetica", "normal");
+    this.pdf.setFontSize(9);
+    this.pdf.setTextColor(...this.colors.text);
+
+    attrY = this.yPosition + 12;
     const socialAttributes = [
       { name: "Charisma", value: this.sheet.attributes?.charisma || 0 },
       { name: "Manipulation", value: this.sheet.attributes?.manipulation || 0 },
@@ -189,19 +388,26 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     ];
 
     socialAttributes.forEach((attr) => {
-      this.pdf.setFont("helvetica", "normal");
-      this.pdf.text(attr.name, socialX, this.yPosition);
-      this.drawSimpleDots(attr.value, socialX + 30, this.yPosition - 1.5);
-      this.yPosition += this.options.lineHeight;
+      this.pdf.text(attr.name, col2X, attrY);
+      this.drawStyledDots(attr.value, col2X + 45, attrY - 2, 5);
+      attrY += 12;
     });
 
-    // Mental
-    this.yPosition = sectionStart;
-    const mentalX = this.options.margin + (2 * this.contentWidth) / 3;
+    // Mental attributes
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Mental", mentalX, this.yPosition);
-    this.yPosition += this.options.lineHeight * 1.5;
+    this.pdf.setFontSize(12);
+    this.pdf.setTextColor(...this.colors.primary);
+    this.pdf.text("Mental", col3X, this.yPosition);
 
+    this.pdf.setDrawColor(...this.colors.primary);
+    this.pdf.setLineWidth(0.5);
+    this.pdf.line(col3X, this.yPosition + 2, col3X + 35, this.yPosition + 2);
+
+    this.pdf.setFont("helvetica", "normal");
+    this.pdf.setFontSize(9);
+    this.pdf.setTextColor(...this.colors.text);
+
+    attrY = this.yPosition + 12;
     const mentalAttributes = [
       { name: "Intelligence", value: this.sheet.attributes?.intelligence || 0 },
       { name: "Wits", value: this.sheet.attributes?.wits || 0 },
@@ -209,28 +415,44 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     ];
 
     mentalAttributes.forEach((attr) => {
-      this.pdf.setFont("helvetica", "normal");
-      this.pdf.text(attr.name, mentalX, this.yPosition);
-      this.drawSimpleDots(attr.value, mentalX + 30, this.yPosition - 1.5);
-      this.yPosition += this.options.lineHeight;
+      this.pdf.text(attr.name, col3X, attrY);
+      this.drawStyledDots(attr.value, col3X + 45, attrY - 2, 5);
+      attrY += 12;
     });
 
-    const attrEndY = sectionStart + this.options.lineHeight * 5;
-    this.drawSimpleBox(
+    this.yPosition += 50;
+    this.drawStyledSection(
       "ATTRIBUTES",
-      sectionStart - this.options.lineHeight,
-      attrEndY
+      sectionStart,
+      this.yPosition,
+      this.colors.accent
     );
-    this.yPosition = attrEndY + this.options.sectionSpacing * 2;
+    this.yPosition += 25;
   }
 
   generateSkills() {
     const sectionStart = this.yPosition;
 
-    // Physical Skills
-    this.yPosition += this.options.lineHeight * 1.5;
-    const physicalX = this.options.margin + 10;
+    // Enhanced three-column layout for skills
+    const col1X = this.options.margin + 5;
+    const col2X = this.options.margin + this.contentWidth / 3 + 5;
+    const col3X = this.options.margin + (2 * this.contentWidth) / 3 + 5;
 
+    // Physical skills with enhanced styling
+    this.pdf.setFont("helvetica", "bold");
+    this.pdf.setFontSize(12);
+    this.pdf.setTextColor(...this.colors.primary);
+    this.pdf.text("Physical", col1X, this.yPosition);
+
+    this.pdf.setDrawColor(...this.colors.primary);
+    this.pdf.setLineWidth(0.5);
+    this.pdf.line(col1X, this.yPosition + 2, col1X + 40, this.yPosition + 2);
+
+    this.pdf.setFont("helvetica", "normal");
+    this.pdf.setFontSize(8);
+    this.pdf.setTextColor(...this.colors.text);
+
+    let skillY = this.yPosition + 12;
     const physicalSkills = [
       { name: "Athletics", value: this.sheet.skills?.athletics?.value || 0 },
       { name: "Brawl", value: this.sheet.skills?.brawl?.value || 0 },
@@ -244,17 +466,26 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     ];
 
     physicalSkills.forEach((skill) => {
-      this.pdf.setFont("helvetica", "normal");
-      this.pdf.text(skill.name, physicalX, this.yPosition);
-      this.drawSimpleDots(skill.value, physicalX + 30, this.yPosition - 1.5);
-      this.yPosition += this.options.lineHeight;
+      this.pdf.text(skill.name, col1X, skillY);
+      this.drawStyledDots(skill.value, col1X + 40, skillY - 2, 5);
+      skillY += 10;
     });
 
-    // Social Skills
-    this.yPosition = sectionStart;
-    this.yPosition += this.options.lineHeight * 1.5;
-    const socialX = this.options.margin + this.contentWidth / 3 + 5;
+    // Social skills
+    this.pdf.setFont("helvetica", "bold");
+    this.pdf.setFontSize(12);
+    this.pdf.setTextColor(...this.colors.primary);
+    this.pdf.text("Social", col2X, this.yPosition);
 
+    this.pdf.setDrawColor(...this.colors.primary);
+    this.pdf.setLineWidth(0.5);
+    this.pdf.line(col2X, this.yPosition + 2, col2X + 30, this.yPosition + 2);
+
+    this.pdf.setFont("helvetica", "normal");
+    this.pdf.setFontSize(8);
+    this.pdf.setTextColor(...this.colors.text);
+
+    skillY = this.yPosition + 12;
     const socialSkills = [
       { name: "Animal Ken", value: this.sheet.skills?.animal_ken?.value || 0 },
       { name: "Etiquette", value: this.sheet.skills?.etiquette?.value || 0 },
@@ -274,17 +505,26 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     ];
 
     socialSkills.forEach((skill) => {
-      this.pdf.setFont("helvetica", "normal");
-      this.pdf.text(skill.name, socialX, this.yPosition);
-      this.drawSimpleDots(skill.value, socialX + 30, this.yPosition - 1.5);
-      this.yPosition += this.options.lineHeight;
+      this.pdf.text(skill.name, col2X, skillY);
+      this.drawStyledDots(skill.value, col2X + 40, skillY - 2, 5);
+      skillY += 10;
     });
 
-    // Mental Skills
-    this.yPosition = sectionStart;
-    this.yPosition += this.options.lineHeight * 1.5;
-    const mentalX = this.options.margin + (2 * this.contentWidth) / 3;
+    // Mental skills
+    this.pdf.setFont("helvetica", "bold");
+    this.pdf.setFontSize(12);
+    this.pdf.setTextColor(...this.colors.primary);
+    this.pdf.text("Mental", col3X, this.yPosition);
 
+    this.pdf.setDrawColor(...this.colors.primary);
+    this.pdf.setLineWidth(0.5);
+    this.pdf.line(col3X, this.yPosition + 2, col3X + 35, this.yPosition + 2);
+
+    this.pdf.setFont("helvetica", "normal");
+    this.pdf.setFontSize(8);
+    this.pdf.setTextColor(...this.colors.text);
+
+    skillY = this.yPosition + 12;
     const mentalSkills = [
       { name: "Academics", value: this.sheet.skills?.academics?.value || 0 },
       { name: "Awareness", value: this.sheet.skills?.awareness?.value || 0 },
@@ -301,29 +541,36 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
     ];
 
     mentalSkills.forEach((skill) => {
-      this.pdf.setFont("helvetica", "normal");
-      this.pdf.text(skill.name, mentalX, this.yPosition);
-      this.drawSimpleDots(skill.value, mentalX + 30, this.yPosition - 1.5);
-      this.yPosition += this.options.lineHeight;
+      this.pdf.text(skill.name, col3X, skillY);
+      this.drawStyledDots(skill.value, col3X + 40, skillY - 2, 5);
+      skillY += 10;
     });
 
-    const skillsEndY = sectionStart + this.options.lineHeight * 11;
-    this.drawSimpleBox(
+    this.yPosition += 95;
+    this.drawStyledSection(
       "SKILLS",
-      sectionStart - this.options.lineHeight,
-      skillsEndY
+      sectionStart,
+      this.yPosition,
+      this.colors.secondary
     );
-    this.yPosition = skillsEndY + this.options.sectionSpacing * 2;
+    this.yPosition += 25;
   }
 
   generateDisciplines() {
     const sectionStart = this.yPosition;
-    this.pdf.setFont("helvetica", "bold");
 
-    if (
-      this.sheet.disciplines &&
-      Object.keys(this.sheet.disciplines).length > 0
-    ) {
+    // Enhanced disciplines layout
+    const hasDisplayedDisciplines =
+      this.sheet.disciplines && Object.keys(this.sheet.disciplines).length > 0;
+
+    if (hasDisplayedDisciplines) {
+      // Create elegant two-column layout for disciplines
+      const col1X = this.options.margin + 5;
+      const col2X = this.options.margin + this.contentWidth / 2 + 10;
+      let currentCol = 1;
+      let col1Y = this.yPosition;
+      let col2Y = this.yPosition;
+
       Object.entries(this.sheet.disciplines).forEach(
         ([discipline, disciplineData]) => {
           const level =
@@ -332,30 +579,56 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
               : disciplineData || 0;
 
           if (level > 0) {
-            this.pdf.setFont("helvetica", "normal");
-            this.pdf.text(discipline, this.options.margin + 10, this.yPosition);
-            this.drawSimpleDots(
-              level,
-              this.options.margin + 50,
-              this.yPosition - 1.5,
-              5
-            );
-            this.yPosition += this.options.lineHeight;
+            // Capitalize discipline name for better presentation
+            const disciplineName =
+              discipline.charAt(0).toUpperCase() + discipline.slice(1);
+
+            const x = currentCol === 1 ? col1X : col2X;
+            const y = currentCol === 1 ? col1Y : col2Y;
+
+            this.pdf.setFont("helvetica", "bold");
+            this.pdf.setFontSize(10);
+            this.pdf.setTextColor(...this.colors.primary);
+            this.pdf.text(disciplineName, x, y);
+
+            this.drawStyledDots(level, x + 60, y - 2, 5);
+
+            // Add subtle separator line
+            this.pdf.setDrawColor(...this.colors.lightText);
+            this.pdf.setLineWidth(0.2);
+            this.pdf.line(x, y + 2, x + 120, y + 2);
+
+            if (currentCol === 1) {
+              col1Y += 14;
+              currentCol = 2;
+            } else {
+              col2Y += 14;
+              currentCol = 1;
+            }
           }
         }
       );
+
+      this.yPosition = Math.max(col1Y, col2Y) + 5;
     } else {
-      this.pdf.setFont("helvetica", "normal");
-      this.pdf.text("No disciplines", this.options.margin + 10, this.yPosition);
-      this.yPosition += this.options.lineHeight;
+      this.pdf.setFont("helvetica", "italic");
+      this.pdf.setFontSize(10);
+      this.pdf.setTextColor(...this.colors.lightText);
+      this.pdf.text(
+        "No disciplines acquired",
+        this.options.margin + 5,
+        this.yPosition
+      );
+      this.yPosition += 15;
     }
 
-    this.drawSimpleBox(
+    this.drawStyledSection(
       "DISCIPLINES",
-      sectionStart - this.options.lineHeight,
-      this.yPosition
+      sectionStart,
+      this.yPosition,
+      this.colors.primary
     );
-    this.yPosition += this.options.sectionSpacing * 2;
+    this.yPosition += 25;
   }
 
   generateAdvantages() {
@@ -610,90 +883,118 @@ export default class Vampire5thPDFGenerator extends BasePDFGenerator {
 
   generateHealthWillpower() {
     const sectionStart = this.yPosition;
+
+    // Enhanced health and willpower display with visual tracks
+    const col1X = this.options.margin + 5;
+    const col2X = this.options.margin + this.contentWidth / 2 + 10;
+
+    // Health section
     this.pdf.setFont("helvetica", "bold");
     this.pdf.setFontSize(12);
     this.pdf.setTextColor(...this.colors.primary);
-    this.pdf.text("HEALTH & WILLPOWER", this.options.margin, this.yPosition);
-    this.pdf.setTextColor(...this.colors.text);
-    this.pdf.setFontSize(10);
-    this.yPosition += this.options.lineHeight * 2;
+    this.pdf.text("Health", col1X, this.yPosition);
 
-    // Health
-    const healthY = this.yPosition;
-    const healthBoxY = healthY + this.options.lineHeight * 1.9;
-    this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Health", this.options.margin + 10, healthY);
-    this.yPosition += this.options.lineHeight * 1.9;
+    // Decorative underline
+    this.pdf.setDrawColor(...this.colors.primary);
+    this.pdf.setLineWidth(0.5);
+    this.pdf.line(col1X, this.yPosition + 2, col1X + 35, this.yPosition + 2);
 
     const healthTotal = this.sheet.health?.total || 10;
     const healthSuperficial = this.sheet.health?.superficial || 0;
     const healthAggravated = this.sheet.health?.aggravated || 0;
 
-    for (let i = 0; i < healthTotal; i++) {
-      const boxX = this.options.margin + 15 + i * 5;
-      if (i < healthAggravated) {
-        this.pdf.setFillColor(0, 0, 0);
-        this.pdf.rect(boxX, healthBoxY - 2, 4, 4, "F");
-        this.pdf.setTextColor(1, 1, 1);
-        this.pdf.setFontSize(6);
-        this.pdf.text("X", boxX + 1, healthBoxY + 1);
-        this.pdf.setTextColor(0, 0, 0);
-        this.pdf.setFontSize(10);
-      } else if (i < healthAggravated + healthSuperficial) {
-        this.pdf.setDrawColor(0, 0, 0);
-        this.pdf.setLineWidth(0.2);
-        this.pdf.rect(boxX, healthBoxY - 2, 4, 4);
-        this.pdf.line(boxX, healthBoxY - 2, boxX + 4, healthBoxY + 2);
-      } else {
-        this.pdf.setDrawColor(0, 0, 0);
-        this.pdf.setLineWidth(0.2);
-        this.pdf.rect(boxX, healthBoxY - 2, 4, 4);
-      }
-    }
-    this.yPosition += this.options.lineHeight * 2;
+    // Health track visualization with boxes
+    let healthY = this.yPosition + 8;
+    this.drawHealthTrack(
+      col1X,
+      healthY,
+      healthTotal,
+      healthSuperficial,
+      healthAggravated,
+      this.colors.primary
+    );
 
-    // Willpower
-    const willX = this.options.margin + 100;
-    const willBoxY = healthY + this.options.lineHeight * 1.9;
+    // Health stats
+    this.pdf.setFont("helvetica", "normal");
+    this.pdf.setFontSize(8);
+    this.pdf.setTextColor(...this.colors.text);
+    this.pdf.text(`Total: ${healthTotal}`, col1X, healthY + 25);
+    this.pdf.text(`Superficial: ${healthSuperficial}`, col1X, healthY + 32);
+    this.pdf.text(`Aggravated: ${healthAggravated}`, col1X, healthY + 39);
+
+    // Willpower section
     this.pdf.setFont("helvetica", "bold");
-    this.pdf.text("Willpower", willX, healthY);
+    this.pdf.setFontSize(12);
+    this.pdf.setTextColor(...this.colors.primary);
+    this.pdf.text("Willpower", col2X, this.yPosition);
+
+    this.pdf.setDrawColor(...this.colors.primary);
+    this.pdf.setLineWidth(0.5);
+    this.pdf.line(col2X, this.yPosition + 2, col2X + 45, this.yPosition + 2);
 
     const willTotal = this.sheet.willpower?.total || 10;
     const willSuperficial = this.sheet.willpower?.superficial || 0;
     const willAggravated = this.sheet.willpower?.aggravated || 0;
 
-    for (let i = 0; i < willTotal; i++) {
-      const boxX = willX + 5 + i * 5;
-      if (i < willAggravated) {
-        this.pdf.setFillColor(0, 0, 0);
-        this.pdf.rect(boxX, willBoxY - 2, 4, 4, "F");
-        this.pdf.setTextColor(1, 1, 1);
+    // Willpower track visualization
+    this.drawHealthTrack(
+      col2X,
+      healthY,
+      willTotal,
+      willSuperficial,
+      willAggravated,
+      this.colors.secondary
+    );
+
+    // Willpower stats
+    this.pdf.setFont("helvetica", "normal");
+    this.pdf.setFontSize(8);
+    this.pdf.setTextColor(...this.colors.text);
+    this.pdf.text(`Total: ${willTotal}`, col2X, healthY + 25);
+    this.pdf.text(`Superficial: ${willSuperficial}`, col2X, healthY + 32);
+    this.pdf.text(`Aggravated: ${willAggravated}`, col2X, healthY + 39);
+
+    this.yPosition += 55;
+    this.drawStyledSection(
+      "HEALTH & WILLPOWER",
+      sectionStart,
+      this.yPosition,
+      this.colors.accent
+    );
+    this.yPosition += 25;
+  }
+
+  drawHealthTrack(x, y, total, superficial, aggravated, color) {
+    const boxSize = 6;
+    const boxSpacing = 8;
+    const maxBoxesPerRow = 10;
+
+    for (let i = 0; i < total; i++) {
+      const row = Math.floor(i / maxBoxesPerRow);
+      const col = i % maxBoxesPerRow;
+      const boxX = x + col * boxSpacing;
+      const boxY = y + row * boxSpacing;
+
+      // Draw box border
+      this.pdf.setDrawColor(...color);
+      this.pdf.setLineWidth(0.5);
+      this.pdf.rect(boxX, boxY, boxSize, boxSize);
+
+      // Fill based on damage type
+      if (i < aggravated) {
+        // Aggravated damage - X mark
+        this.pdf.setFont("helvetica", "bold");
         this.pdf.setFontSize(6);
-        this.pdf.text("X", boxX + 1, willBoxY + 1);
-        this.pdf.setTextColor(0, 0, 0);
-        this.pdf.setFontSize(10);
-      } else if (i < willAggravated + willSuperficial) {
-        this.pdf.setDrawColor(0, 0, 0);
-        this.pdf.setLineWidth(0.2);
-        this.pdf.rect(boxX, willBoxY - 2, 4, 4);
-        this.pdf.line(boxX, willBoxY - 2, boxX + 4, willBoxY + 2);
-      } else {
-        this.pdf.setDrawColor(0, 0, 0);
-        this.pdf.setLineWidth(0.2);
-        this.pdf.rect(boxX, willBoxY - 2, 4, 4);
+        this.pdf.setTextColor(...color);
+        this.pdf.text("X", boxX + boxSize / 2, boxY + boxSize / 2 + 1, {
+          align: "center",
+        });
+      } else if (i < aggravated + superficial) {
+        // Superficial damage - diagonal line
+        this.pdf.setLineWidth(0.8);
+        this.pdf.line(boxX, boxY, boxX + boxSize, boxY + boxSize);
       }
     }
-    this.yPosition += this.options.lineHeight * 2;
-
-    this.pdf.setDrawColor(...this.colors.border);
-    this.pdf.setLineWidth(0.2);
-    this.pdf.rect(
-      this.options.margin - 3,
-      sectionStart - 5,
-      this.contentWidth + 6,
-      this.yPosition - sectionStart + 5
-    );
-    this.yPosition += this.options.sectionSpacing * 2;
   }
 
   generateExperience() {

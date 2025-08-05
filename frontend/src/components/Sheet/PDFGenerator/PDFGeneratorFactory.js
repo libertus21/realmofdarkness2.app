@@ -1,5 +1,6 @@
 import Vampire5thPDFGenerator from "./sheet/5th/Vampire5thPDFGenerator";
 import Werewolf5thPDFGenerator from "./sheet/5th/Werewolf5thPDFGenerator";
+import Vampire5thEditablePDFGenerator from "./sheet/5th/Vampire5thEditablePDFGenerator";
 
 /**
  * Factory for creating specific PDF generators according to sheet type
@@ -20,6 +21,11 @@ export default class PDFGeneratorFactory {
       case "vampire5th":
       case "vampire5":
         return new Vampire5thPDFGenerator(sheet, options);
+
+      case "v5_editable":
+      case "vampire5th_editable":
+      case "vampire5_editable":
+        return new Vampire5thEditablePDFGenerator(sheet, options);
 
       // Here you can add more cases for other sheet types
       case "w5":
@@ -47,6 +53,11 @@ export default class PDFGeneratorFactory {
   static getSupportedTypes() {
     return [
       { value: "v5", label: "Vampire 5th Edition", color: "#8B0000" },
+      {
+        value: "v5_editable",
+        label: "Vampire 5th Edition (Editable)",
+        color: "#8B0000",
+      },
       { value: "w5", label: "Werewolf 5th Edition", color: "#8B4513" },
       // { value: 'm5', label: 'Mage 5th Edition', color: '#4B0082' },
       // { value: 'v20', label: 'Vampire 20th Anniversary', color: '#8B0000' },
