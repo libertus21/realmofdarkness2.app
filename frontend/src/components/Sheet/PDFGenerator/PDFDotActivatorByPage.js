@@ -1,10 +1,100 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Button, Typography, Box, Paper, TextField, Switch, FormControlLabel, Alert, List, ListItem, ListItemText, Chip, Tabs, Tab } from '@mui/material';
 import Vampire5thEditablePDFGenerator from './sheet/5th/Vampire5thEditablePDFGenerator';
 import PDFFieldMapper from './PDFFieldMapper';
 
+// Componente optimizado para cada campo individual
+const DotFieldItem = React.memo(({ field, index, pageKey, onToggle, onRemove }) => {
+  const handleToggle = useCallback(() => {
+    onToggle(pageKey, index);
+  }, [onToggle, pageKey, index]);
+
+  const handleRemove = useCallback(() => {
+    onRemove(pageKey, index);
+  }, [onRemove, pageKey, index]);
+
+  return (
+    <ListItem sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+      <ListItemText 
+        primary={
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
+              {field.name}
+            </Typography>
+            {field.active && <Chip label="Activo" size="small" color="success" />}
+            {field.isRequired && <Chip label="Requerido" size="small" color="error" />}
+            {field.isReadOnly && <Chip label="Solo lectura" size="small" color="warning" />}
+          </Box>
+        }
+        secondary={field.description}
+      />
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={field.active}
+              onChange={handleToggle}
+              size="small"
+            />
+          }
+          label=""
+        />
+        <Button 
+          size="small" 
+          color="error" 
+          onClick={handleRemove}
+        >
+          Eliminar
+        </Button>
+      </Box>
+    </ListItem>
+  );
+});
+
+// Componente optimizado para el contenido de cada página
+const PageContent = React.memo(({ pageKey, pageData, pageNumber, onToggle, onRemove }) => {
+  const activeCount = useMemo(() => 
+    pageData.filter(field => field.active).length, 
+    [pageData]
+  );
+
+  if (!pageData || pageData.length === 0) {
+    return (
+      <Paper sx={{ p: 2 }}>
+        <Typography variant="body1" color="text.secondary">
+          No hay campos de dots en esta página.
+        </Typography>
+      </Paper>
+    );
+  }
+
+  return (
+    <Box>
+      <Paper sx={{ p: 2, mb: 2 }}>
+        <Typography variant="h6" gutterBottom>
+          Página {pageNumber} - Campos de Dots ({activeCount} activos)
+        </Typography>
+        
+        <List dense>
+          {pageData.map((field, index) => (
+            <DotFieldItem
+              key={`${pageKey}-${index}-${field.name}`}
+              field={field}
+              index={index}
+              pageKey={pageKey}
+              onToggle={onToggle}
+              onRemove={onRemove}
+            />
+          ))}
+        </List>
+      </Paper>
+    </Box>
+  );
+});
+
 /**
  * Component for activating specific dot fields in the PDF organized by page
+ * Optimized for performance with React.memo and useCallback
  */
 export default function PDFDotActivatorByPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +105,7 @@ export default function PDFDotActivatorByPage() {
   const [newFieldName, setNewFieldName] = useState('');
   const [newFieldDescription, setNewFieldDescription] = useState('');
 
-  const handleMapDotFields = async () => {
+  const handleMapDotFields = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -38,45 +128,53 @@ export default function PDFDotActivatorByPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const handleToggleDot = (pageKey, index) => {
-    const updatedFields = { ...dotFieldsByPage };
-    updatedFields[pageKey][index].active = !updatedFields[pageKey][index].active;
-    setDotFieldsByPage(updatedFields);
-  };
+  const handleToggleDot = useCallback((pageKey, index) => {
+    setDotFieldsByPage(prev => {
+      const updated = { ...prev };
+      updated[pageKey] = [...updated[pageKey]];
+      updated[pageKey][index] = { ...updated[pageKey][index], active: !updated[pageKey][index].active };
+      return updated;
+    });
+  }, []);
 
-  const handleAddField = () => {
+  const handleAddField = useCallback(() => {
     if (newFieldName.trim() && dotFieldsByPage) {
       const pageKey = `page${selectedPage + 1}`;
-      const updatedFields = { ...dotFieldsByPage };
       
-      if (!updatedFields[pageKey]) {
-        updatedFields[pageKey] = [];
-      }
-      
-      updatedFields[pageKey].push({
-        name: newFieldName.trim(),
-        active: false,
-        description: newFieldDescription.trim() || 'Campo personalizado',
-        isRequired: false,
-        isReadOnly: false,
-        isChecked: false
+      setDotFieldsByPage(prev => {
+        const updated = { ...prev };
+        if (!updated[pageKey]) {
+          updated[pageKey] = [];
+        }
+        
+        updated[pageKey] = [...updated[pageKey], {
+          name: newFieldName.trim(),
+          active: false,
+          description: newFieldDescription.trim() || 'Campo personalizado',
+          isRequired: false,
+          isReadOnly: false,
+          isChecked: false
+        }];
+        
+        return updated;
       });
       
-      setDotFieldsByPage(updatedFields);
       setNewFieldName('');
       setNewFieldDescription('');
     }
-  };
+  }, [newFieldName, newFieldDescription, selectedPage, dotFieldsByPage]);
 
-  const handleRemoveField = (pageKey, index) => {
-    const updatedFields = { ...dotFieldsByPage };
-    updatedFields[pageKey] = updatedFields[pageKey].filter((_, i) => i !== index);
-    setDotFieldsByPage(updatedFields);
-  };
+  const handleRemoveField = useCallback((pageKey, index) => {
+    setDotFieldsByPage(prev => {
+      const updated = { ...prev };
+      updated[pageKey] = updated[pageKey].filter((_, i) => i !== index);
+      return updated;
+    });
+  }, []);
 
-  const handleGeneratePDF = async () => {
+  const handleGeneratePDF = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -119,74 +217,38 @@ export default function PDFDotActivatorByPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [dotFieldsByPage]);
 
-  const handlePageChange = (event, newValue) => {
+  const handlePageChange = useCallback((event, newValue) => {
     setSelectedPage(newValue);
-  };
+  }, []);
 
-  const renderPageContent = (pageKey, pageData, pageNumber) => {
-    if (!pageData || pageData.length === 0) {
-      return (
-        <Paper sx={{ p: 2 }}>
-          <Typography variant="body1" color="text.secondary">
-            No hay campos de dots en esta página.
-          </Typography>
-        </Paper>
-      );
-    }
+  const handleNewFieldNameChange = useCallback((e) => {
+    setNewFieldName(e.target.value);
+  }, []);
 
-    const activeCount = pageData.filter(field => field.active).length;
+  const handleNewFieldDescriptionChange = useCallback((e) => {
+    setNewFieldDescription(e.target.value);
+  }, []);
 
-    return (
-      <Box>
-        <Paper sx={{ p: 2, mb: 2 }}>
-          <Typography variant="h6" gutterBottom>
-            Página {pageNumber} - Campos de Dots ({activeCount} activos)
-          </Typography>
-          
-          <List dense>
-            {pageData.map((field, index) => (
-              <ListItem key={index} sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                <ListItemText 
-                  primary={
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-                        {field.name}
-                      </Typography>
-                      {field.active && <Chip label="Activo" size="small" color="success" />}
-                      {field.isRequired && <Chip label="Requerido" size="small" color="error" />}
-                      {field.isReadOnly && <Chip label="Solo lectura" size="small" color="warning" />}
-                    </Box>
-                  }
-                  secondary={field.description}
-                />
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={field.active}
-                        onChange={() => handleToggleDot(pageKey, index)}
-                        size="small"
-                      />
-                    }
-                    label=""
-                  />
-                  <Button 
-                    size="small" 
-                    color="error" 
-                    onClick={() => handleRemoveField(pageKey, index)}
-                  >
-                    Eliminar
-                  </Button>
-                </Box>
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-      </Box>
-    );
-  };
+  const handleChipClick = useCallback((index) => {
+    setSelectedPage(index);
+  }, []);
+
+  // Memoizar el resumen de páginas para evitar recálculos innecesarios
+  const pageSummary = useMemo(() => {
+    if (!dotFieldsByPage) return [];
+    
+    return Object.entries(dotFieldsByPage).map(([page, pageData], index) => {
+      const activeCount = pageData.filter(field => field.active).length;
+      return {
+        page,
+        index,
+        totalCount: pageData.length,
+        activeCount
+      };
+    });
+  }, [dotFieldsByPage]);
 
   return (
     <Box sx={{ p: 2 }}>
@@ -242,14 +304,14 @@ export default function PDFDotActivatorByPage() {
               <TextField
                 label="Nombre del Campo"
                 value={newFieldName}
-                onChange={(e) => setNewFieldName(e.target.value)}
+                onChange={handleNewFieldNameChange}
                 placeholder="ej: dot317b"
                 size="small"
               />
               <TextField
                 label="Descripción"
                 value={newFieldDescription}
-                onChange={(e) => setNewFieldDescription(e.target.value)}
+                onChange={handleNewFieldDescriptionChange}
                 placeholder="Descripción del campo"
                 size="small"
               />
@@ -268,19 +330,16 @@ export default function PDFDotActivatorByPage() {
               Resumen por Página
             </Typography>
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-              {Object.entries(dotFieldsByPage).map(([page, pageData], index) => {
-                const activeCount = pageData.filter(field => field.active).length;
-                return (
-                  <Chip 
-                    key={page}
-                    label={`Página ${index + 1}: ${pageData.length} dots (${activeCount} activos)`} 
-                    color="primary" 
-                    variant={selectedPage === index ? "filled" : "outlined"}
-                    onClick={() => setSelectedPage(index)}
-                    sx={{ cursor: 'pointer' }}
-                  />
-                );
-              })}
+              {pageSummary.map(({ page, index, totalCount, activeCount }) => (
+                <Chip 
+                  key={page}
+                  label={`Página ${index + 1}: ${totalCount} dots (${activeCount} activos)`} 
+                  color="primary" 
+                  variant={selectedPage === index ? "filled" : "outlined"}
+                  onClick={() => handleChipClick(index)}
+                  sx={{ cursor: 'pointer' }}
+                />
+              ))}
             </Box>
           </Paper>
 
@@ -295,7 +354,13 @@ export default function PDFDotActivatorByPage() {
           <Box sx={{ mt: 2 }}>
             {Object.entries(dotFieldsByPage).map(([page, pageData], index) => (
               <Box key={page} sx={{ display: selectedPage === index ? 'block' : 'none' }}>
-                {renderPageContent(page, pageData, index + 1)}
+                <PageContent
+                  pageKey={page}
+                  pageData={pageData}
+                  pageNumber={index + 1}
+                  onToggle={handleToggleDot}
+                  onRemove={handleRemoveField}
+                />
               </Box>
             ))}
           </Box>
