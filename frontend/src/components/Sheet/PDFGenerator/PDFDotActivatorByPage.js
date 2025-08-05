@@ -52,11 +52,29 @@ const DotFieldItem = React.memo(({ field, index, pageKey, onToggle, onRemove }) 
 });
 
 // Componente optimizado para el contenido de cada página
-const PageContent = React.memo(({ pageKey, pageData, pageNumber, onToggle, onRemove }) => {
+const PageContent = React.memo(({ pageKey, pageData, pageNumber, onToggle, onRemove, sortNumerically }) => {
   const activeCount = useMemo(() => 
     pageData.filter(field => field.active).length, 
     [pageData]
   );
+
+  // Ordenar los campos si está habilitado el ordenamiento numérico
+  const sortedPageData = useMemo(() => {
+    if (!sortNumerically) return pageData;
+    
+    return [...pageData].sort((a, b) => {
+      // Extraer números de los nombres de campos (ej: dot317b -> 317)
+      const getNumber = (name) => {
+        const match = name.match(/\d+/);
+        return match ? parseInt(match[0]) : 0;
+      };
+      
+      const numA = getNumber(a.name);
+      const numB = getNumber(b.name);
+      
+      return numA - numB;
+    });
+  }, [pageData, sortNumerically]);
 
   if (!pageData || pageData.length === 0) {
     return (
@@ -73,10 +91,18 @@ const PageContent = React.memo(({ pageKey, pageData, pageNumber, onToggle, onRem
       <Paper sx={{ p: 2, mb: 2 }}>
         <Typography variant="h6" gutterBottom>
           Página {pageNumber} - Campos de Dots ({activeCount} activos)
+          {sortNumerically && (
+            <Chip 
+              label="Ordenado Numéricamente" 
+              size="small" 
+              color="info" 
+              sx={{ ml: 1 }}
+            />
+          )}
         </Typography>
         
         <List dense>
-          {pageData.map((field, index) => (
+          {sortedPageData.map((field, index) => (
             <DotFieldItem
               key={`${pageKey}-${index}-${field.name}`}
               field={field}
@@ -104,6 +130,7 @@ export default function PDFDotActivatorByPage() {
   const [selectedPage, setSelectedPage] = useState(0);
   const [newFieldName, setNewFieldName] = useState('');
   const [newFieldDescription, setNewFieldDescription] = useState('');
+  const [sortNumerically, setSortNumerically] = useState(false);
 
   const handleMapDotFields = useCallback(async () => {
     try {
@@ -235,6 +262,10 @@ export default function PDFDotActivatorByPage() {
     setSelectedPage(index);
   }, []);
 
+  const handleSortToggle = useCallback(() => {
+    setSortNumerically(prev => !prev);
+  }, []);
+
   // Memoizar el resumen de páginas para evitar recálculos innecesarios
   const pageSummary = useMemo(() => {
     if (!dotFieldsByPage) return [];
@@ -326,9 +357,21 @@ export default function PDFDotActivatorByPage() {
           </Paper>
 
           <Paper sx={{ p: 2, mb: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Resumen por Página
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Typography variant="h6" gutterBottom>
+                Resumen por Página
+              </Typography>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={sortNumerically}
+                    onChange={handleSortToggle}
+                    size="small"
+                  />
+                }
+                label="Ordenar Numéricamente"
+              />
+            </Box>
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
               {pageSummary.map(({ page, index, totalCount, activeCount }) => (
                 <Chip 
@@ -360,6 +403,7 @@ export default function PDFDotActivatorByPage() {
                   pageNumber={index + 1}
                   onToggle={handleToggleDot}
                   onRemove={handleRemoveField}
+                  sortNumerically={sortNumerically}
                 />
               </Box>
             ))}
@@ -375,6 +419,7 @@ export default function PDFDotActivatorByPage() {
           <ul>
             <li>Haz clic en "Mapear Dots por Página" para cargar los campos de dots</li>
             <li>Usa las pestañas para navegar entre las 4 páginas del PDF</li>
+            <li>Activa "Ordenar Numéricamente" para ver los dots en orden (dot1, dot2, dot3...)</li>
             <li>Agrega campos personalizados específicos para cada página</li>
             <li>Usa el switch para activar/desactivar cada campo</li>
             <li>Haz clic en "Generar PDF con Dots" para crear el PDF</li>
