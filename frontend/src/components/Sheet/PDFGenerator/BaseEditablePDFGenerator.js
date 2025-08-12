@@ -1,4 +1,4 @@
-import { PDFDocument, PDFForm } from 'pdf-lib';
+import { PDFDocument, PDFForm } from "pdf-lib";
 
 /**
  * Abstract base class for generating editable character sheet PDFs
@@ -8,7 +8,7 @@ export default class BaseEditablePDFGenerator {
   constructor(sheet, options = {}) {
     this.sheet = sheet;
     this.options = {
-      templatePath: '/static/pdfFicha/v5 WintersTeeth 4-Page Interactive.pdf',
+      templatePath: "/static/pdfFicha/v5 WintersTeeth 4-Page Interactive.pdf",
       ...options,
     };
   }
@@ -27,21 +27,21 @@ export default class BaseEditablePDFGenerator {
    */
   async loadTemplate() {
     try {
-      console.log('Loading PDF template from:', this.options.templatePath);
+      console.log("Loading PDF template from:", this.options.templatePath);
       const response = await fetch(this.options.templatePath);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       const templateBytes = await response.arrayBuffer();
-      console.log('PDF loaded, size:', templateBytes.byteLength, 'bytes');
-      
+      console.log("PDF loaded, size:", templateBytes.byteLength, "bytes");
+
       const pdfDoc = await PDFDocument.load(templateBytes);
-      console.log('PDF document loaded successfully');
+      console.log("PDF document loaded successfully");
       return pdfDoc;
     } catch (error) {
-      console.error('Error loading PDF template:', error);
+      console.error("Error loading PDF template:", error);
       throw new Error(`Error loading PDF template: ${error.message}`);
     }
   }
@@ -106,10 +106,10 @@ export default class BaseEditablePDFGenerator {
    */
   async save(pdfDoc, fileName) {
     const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
-    
-    const link = document.createElement('a');
+
+    const link = document.createElement("a");
     link.href = url;
     link.download = fileName;
     document.body.appendChild(link);
@@ -123,7 +123,7 @@ export default class BaseEditablePDFGenerator {
    */
   async getBlob(pdfDoc) {
     const pdfBytes = await pdfDoc.save();
-    return new Blob([pdfBytes], { type: 'application/pdf' });
+    return new Blob([pdfBytes], { type: "application/pdf" });
   }
 
   /**
@@ -134,4 +134,4 @@ export default class BaseEditablePDFGenerator {
     const base64 = btoa(String.fromCharCode(...new Uint8Array(pdfBytes)));
     return `data:application/pdf;base64,${base64}`;
   }
-} 
+}

@@ -99,9 +99,18 @@ function App() {
                     <Route path="v5/:id" element={<Vampire5thSheet />} />
                   </Route>
                   <Route path="pdf-test" element={<PDFFieldMapperTest />} />
-                  <Route path="pdf-simple-test" element={<PDFTestComponent />} />
-                  <Route path="pdf-dot-activator" element={<PDFDotActivator />} />
-                  <Route path="pdf-dot-activator-by-page" element={<PDFDotActivatorByPage />} />
+                  <Route
+                    path="pdf-simple-test"
+                    element={<PDFTestComponent />}
+                  />
+                  <Route
+                    path="pdf-dot-activator"
+                    element={<PDFDotActivator />}
+                  />
+                  <Route
+                    path="pdf-dot-activator-by-page"
+                    element={<PDFDotActivatorByPage />}
+                  />
                   <Route path="*" element={<NotFound />} />
                 </Route>
               </Routes>

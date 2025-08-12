@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Tooltip, IconButton, Alert, Snackbar, Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  Tooltip,
+  IconButton,
+  Alert,
+  Snackbar,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import EditIcon from "@mui/icons-material/Edit";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -47,8 +56,10 @@ export default function PDFImportExport({ sheet }) {
       setError(null);
 
       const sheetType = detectSheetType(sheet);
-      const generator = PDFGeneratorFactory.createGenerator(sheetType, sheet, { useEditable });
-      
+      const generator = PDFGeneratorFactory.createGenerator(sheetType, sheet, {
+        useEditable,
+      });
+
       if (useEditable) {
         await generator.generate();
       } else {
@@ -78,10 +89,12 @@ export default function PDFImportExport({ sheet }) {
     try {
       setIsProcessing(true);
       setError(null);
-      
+
       const mapper = new PDFFieldMapper();
       await mapper.printFieldMapping();
-      console.log('Field mapping printed to console. Check browser console for details.');
+      console.log(
+        "Field mapping printed to console. Check browser console for details."
+      );
     } catch (err) {
       setError(`Error mapping fields: ${err.message}`);
     } finally {
@@ -107,19 +120,28 @@ export default function PDFImportExport({ sheet }) {
           <ListItemIcon>
             <DescriptionIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="PDF Generado" secondary="Genera un PDF desde cero" />
+          <ListItemText
+            primary="PDF Generado"
+            secondary="Genera un PDF desde cero"
+          />
         </MenuItem>
         <MenuItem onClick={() => handleExport(true)}>
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="PDF Editable" secondary="Rellena el PDF editable existente" />
+          <ListItemText
+            primary="PDF Editable"
+            secondary="Rellena el PDF editable existente"
+          />
         </MenuItem>
         <MenuItem onClick={handleMapFields}>
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Mapear Campos" secondary="Ver campos disponibles en consola" />
+          <ListItemText
+            primary="Mapear Campos"
+            secondary="Ver campos disponibles en consola"
+          />
         </MenuItem>
       </Menu>
 

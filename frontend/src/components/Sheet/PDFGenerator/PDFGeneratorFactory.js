@@ -17,7 +17,7 @@ export default class PDFGeneratorFactory {
    */
   static createGenerator(sheetType, sheet, options = {}) {
     const useEditable = options.useEditable || false;
-    
+
     switch (sheetType.toLowerCase()) {
       case "v5":
       case "vampire5th":
