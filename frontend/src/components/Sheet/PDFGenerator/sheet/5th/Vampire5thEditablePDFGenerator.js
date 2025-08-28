@@ -7,7 +7,7 @@ import BaseEditablePDFGenerator from "../../BaseEditablePDFGenerator";
 export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGenerator {
   constructor(sheet, options = {}) {
     super(sheet, {
-      templatePath: "/static/pdfFicha/v5 WintersTeeth 4-Page Interactive.pdf",
+      templatePath: "/static/pdfSheets/v5 WintersTeeth 4-Page Interactive.pdf",
       ...options,
     });
   }

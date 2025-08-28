@@ -8,7 +8,7 @@ export default class BaseEditablePDFGenerator {
   constructor(sheet, options = {}) {
     this.sheet = sheet;
     this.options = {
-      templatePath: "/static/pdfFicha/v5 WintersTeeth 4-Page Interactive.pdf",
+      templatePath: "/static/pdfSheets/v5 WintersTeeth 4-Page Interactive.pdf",
       ...options,
     };
   }

@@ -11,9 +11,7 @@ import {
 } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import EditIcon from "@mui/icons-material/Edit";
-import DescriptionIcon from "@mui/icons-material/Description";
 import PDFGeneratorFactory from "./PDFGenerator/PDFGeneratorFactory";
-import PDFFieldMapper from "./PDFGenerator/PDFFieldMapper";
 
 /**
  * Modular component for exporting character sheet PDFs
@@ -50,21 +48,17 @@ export default function PDFImportExport({ sheet }) {
     return splatToSheetType[splat] || "v5";
   };
 
-  const handleExport = async (useEditable = false) => {
+  const handleExport = async () => {
     try {
       setIsProcessing(true);
       setError(null);
 
       const sheetType = detectSheetType(sheet);
       const generator = PDFGeneratorFactory.createGenerator(sheetType, sheet, {
-        useEditable,
+        useEditable: true,
       });
 
-      if (useEditable) {
-        await generator.generate();
-      } else {
-        generator.generate();
-      }
+      await generator.generate();
     } catch (err) {
       setError(`Error exporting PDF: ${err.message}`);
     } finally {
@@ -85,23 +79,7 @@ export default function PDFImportExport({ sheet }) {
     setError(null);
   };
 
-  const handleMapFields = async () => {
-    try {
-      setIsProcessing(true);
-      setError(null);
 
-      const mapper = new PDFFieldMapper();
-      await mapper.printFieldMapping();
-      console.log(
-        "Field mapping printed to console. Check browser console for details."
-      );
-    } catch (err) {
-      setError(`Error mapping fields: ${err.message}`);
-    } finally {
-      setIsProcessing(false);
-      setAnchorEl(null);
-    }
-  };
 
   return (
     <>
@@ -116,31 +94,13 @@ export default function PDFImportExport({ sheet }) {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={() => handleExport(false)}>
-          <ListItemIcon>
-            <DescriptionIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText
-            primary="PDF Generado"
-            secondary="Genera un PDF desde cero"
-          />
-        </MenuItem>
-        <MenuItem onClick={() => handleExport(true)}>
+        <MenuItem onClick={handleExport}>
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText
             primary="PDF Editable"
-            secondary="Rellena el PDF editable existente"
-          />
-        </MenuItem>
-        <MenuItem onClick={handleMapFields}>
-          <ListItemIcon>
-            <EditIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText
-            primary="Mapear Campos"
-            secondary="Ver campos disponibles en consola"
+            secondary="Fill existing editable PDF"
           />
         </MenuItem>
       </Menu>
