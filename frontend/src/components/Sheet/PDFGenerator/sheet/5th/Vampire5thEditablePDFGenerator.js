@@ -58,40 +58,38 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
   /**
    * Fills basic character information
    */
-  fillBasicInfo(form) {
+    fillBasicInfo(form) {
     const { sheet } = this;
 
+    console.log("📝 Filling basic character information...");
 
-    // Campos principales de personaje (usando nombres exactos del PDF)
-    this.fillTextField(form, "name", sheet.name); // Campo real encontrado
-    this.fillTextField(form, "Character Name", sheet.name); // Intento alternativo
+    // Main character fields (using exact PDF field names)
+    this.fillTextField(form, "name", sheet.name); // Real field found
+    this.fillTextField(form, "Character Name", sheet.name); // Alternative attempt
     this.fillTextField(form, "Player Name", sheet.player_name);
     this.fillTextField(form, "Chronicle", sheet.chronicle?.name);
     
- 
+    // Try different approaches for the clan field
+    this.fillTextField(form, "clan", sheet.clan); // Real field found
+    this.fillTextField(form, "Clan", sheet.clan); // Attempt with capital
     
-    // Probar diferentes enfoques para el campo clan
-    this.fillTextField(form, "clan", sheet.clan); // Campo real encontrado
-    this.fillTextField(form, "Clan", sheet.clan); // Intento con mayúscula
+    this.fillTextField(form, "generation", sheet.generation); // Real field found
+    this.fillTextField(form, "sire", sheet.sire); // Real field found
+    this.fillTextField(form, "desire", sheet.desire); // Real field found
     
-
-    
-    this.fillTextField(form, "generation", sheet.generation); // Campo real encontrado
-    this.fillTextField(form, "sire", sheet.sire); // Campo real encontrado
-    this.fillTextField(form, "desire", sheet.desire); // Campo real encontrado
-    
-    // Otros campos básicos
+    // Other basic fields
     this.fillTextField(form, "Predator Type", sheet.predator_type);
     this.fillTextField(form, "Concept", sheet.concept);
     this.fillTextField(form, "Ambition", sheet.ambition);
     this.fillTextField(form, "Touchstone", sheet.touchstone);
 
-    // Campos de descripción (encontrados en logs)
-    this.fillTextField(form, "description", sheet.description); // Campo real encontrado
-    this.fillTextField(form, "description5", sheet.appearance); // Podría ser apariencia
+    // Description fields (found in logs)
+    this.fillTextField(form, "description", sheet.description); // Real field found
+    this.fillTextField(form, "description5", sheet.appearance); // Could be appearance
     this.fillTextField(form, "haven_name", sheet.haven_name);
     this.fillTextField(form, "haven_description", sheet.haven_description);
 
+    console.log("✅ Basic information filled");
   }
 
 
@@ -249,24 +247,24 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
   fillSpecificDotFields(form) {
     const { sheet } = this;
 
-    // Mapeo completo de dots a habilidades con niveles específicos
+    // Complete mapping of dots to skills with specific levels
     const dotMapping = this.getDotMapping();
 
-    console.log("Aplicando mapeo automático de habilidades a dots...");
+    console.log("📝 Applying automatic skill mapping to dots...");
 
-    // Función para obtener el valor de habilidad según el tipo
+    // Function to get skill value according to type
     const getSkillValue = (skillName, type) => {
       if (type === "attribute") {
         return sheet.attributes?.[skillName] || 0;
       } else if (type === "skill") {
-        // Las habilidades tienen una estructura con .value
+        // Skills have a structure with .value
         return sheet.skills?.[skillName]?.value || 0;
       }
       return 0;
     };
 
-    // Activar dots según los valores de habilidades y atributos
-    // Primero obtener lista de campos existentes
+    // Activate dots according to skill and attribute values
+    // First get list of existing fields
     const form_fields = form.getFields();
     const existingFieldNames = form_fields.map(f => f.getName());
 
@@ -275,25 +273,24 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
       const skillValue = getSkillValue(skill, type);
       const shouldActivate = skillValue >= level;
       
-      // Solo intentar activar si el campo existe en el PDF
+      // Only try to activate if the field exists in the PDF
       if (!existingFieldNames.includes(dotName)) {
         if (level === 5) {
-          console.log(`⚠️ Campo de nivel 5 no existe: ${dotName} - ${skill} (${type})`);
+          console.log(`⚠️ Level 5 field does not exist: ${dotName} - ${skill} (${type})`);
         }
         return;
       }
       
       if (shouldActivate) {
         this.fillCheckboxField(form, dotName, true);
-        console.log(`✅ Activado ${dotName}: ${skill} (${type}) nivel ${level} - valor actual: ${skillValue}`);
+        console.log(`✅ Activated ${dotName}: ${skill} (${type}) level ${level} - current value: ${skillValue}`);
       } else if (skillValue > 0) {
-        console.log(`❌ NO activado ${dotName}: ${skill} (${type}) nivel ${level} - valor actual: ${skillValue} (insuficiente)`);
+        console.log(`❌ NOT activated ${dotName}: ${skill} (${type}) level ${level} - current value: ${skillValue} (insufficient)`);
       }
     });
 
-    console.log("🔍 Mapeo automático de dots completado - usando patrón 'ab' para nivel 5");
-
-    console.log("Mapeo de habilidades completado");
+    console.log("🔍 Automatic dot mapping completed - using 'ab' pattern for level 5");
+    console.log("✅ Skill mapping completed");
   }
 
   /**
@@ -340,11 +337,11 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
 
   /**
    * Returns the complete mapping of PDF dot fields to character skills/attributes
-   * Extracted from PDFDotActivatorByPage component
+   * Maps each skill/attribute level to its corresponding checkbox field in the PDF
    */
   getDotMapping() {
     return {
-      // Atributos - cada nivel tiene su propio dot
+      // Attributes - each level has its own dot
       dot5b: { skill: "strength", level: 1, type: "attribute" },
       dot6b: { skill: "strength", level: 2, type: "attribute" },
       dot7b: { skill: "strength", level: 3, type: "attribute" },
@@ -399,7 +396,7 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
       dot72b: { skill: "resolve", level: 4, type: "attribute" },
       dot72ab: { skill: "resolve", level: 5, type: "attribute" },
 
-      // Habilidades Físicas
+      // Physical Skills
       dot77b: { skill: "athletics", level: 1, type: "skill" },
       dot78b: { skill: "athletics", level: 2, type: "skill" },
       dot79b: { skill: "athletics", level: 3, type: "skill" },
@@ -454,7 +451,7 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
       dot144b: { skill: "survival", level: 4, type: "skill" },
       dot144ab: { skill: "survival", level: 5, type: "skill" },
 
-      // Habilidades Sociales
+      // Social Skills
       dot149b: { skill: "animal_ken", level: 1, type: "skill" },
       dot150b: { skill: "animal_ken", level: 2, type: "skill" },
       dot151b: { skill: "animal_ken", level: 3, type: "skill" },
@@ -509,7 +506,7 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
       dot216b: { skill: "subterfuge", level: 4, type: "skill" },
       dot216ab: { skill: "subterfuge", level: 5, type: "skill" },
 
-      // Habilidades Mentales
+      // Mental Skills
       dot221b: { skill: "academics", level: 1, type: "skill" },
       dot222b: { skill: "academics", level: 2, type: "skill" },
       dot223b: { skill: "academics", level: 3, type: "skill" },
