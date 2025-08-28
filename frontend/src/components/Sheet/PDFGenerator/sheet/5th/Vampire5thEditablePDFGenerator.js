@@ -61,19 +61,39 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
   fillBasicInfo(form) {
     const { sheet } = this;
 
-    // Basic character info
-    this.fillTextField(form, "Character Name", sheet.name);
+
+    // Campos principales de personaje (usando nombres exactos del PDF)
+    this.fillTextField(form, "name", sheet.name); // Campo real encontrado
+    this.fillTextField(form, "Character Name", sheet.name); // Intento alternativo
     this.fillTextField(form, "Player Name", sheet.player_name);
     this.fillTextField(form, "Chronicle", sheet.chronicle?.name);
-    this.fillTextField(form, "Clan", sheet.clan);
+    
+ 
+    
+    // Probar diferentes enfoques para el campo clan
+    this.fillTextField(form, "clan", sheet.clan); // Campo real encontrado
+    this.fillTextField(form, "Clan", sheet.clan); // Intento con mayúscula
+    
+
+    
+    this.fillTextField(form, "generation", sheet.generation); // Campo real encontrado
+    this.fillTextField(form, "sire", sheet.sire); // Campo real encontrado
+    this.fillTextField(form, "desire", sheet.desire); // Campo real encontrado
+    
+    // Otros campos básicos
     this.fillTextField(form, "Predator Type", sheet.predator_type);
-    this.fillTextField(form, "Generation", sheet.generation);
-    this.fillTextField(form, "Sire", sheet.sire);
     this.fillTextField(form, "Concept", sheet.concept);
     this.fillTextField(form, "Ambition", sheet.ambition);
-    this.fillTextField(form, "Desire", sheet.desire);
     this.fillTextField(form, "Touchstone", sheet.touchstone);
+
+    // Campos de descripción (encontrados en logs)
+    this.fillTextField(form, "description", sheet.description); // Campo real encontrado
+    this.fillTextField(form, "description5", sheet.appearance); // Podría ser apariencia
+    this.fillTextField(form, "haven_name", sheet.haven_name);
+    this.fillTextField(form, "haven_description", sheet.haven_description);
+
   }
+
 
   /**
    * Fills attributes section
