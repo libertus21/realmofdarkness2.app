@@ -61,17 +61,15 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
     fillBasicInfo(form) {
     const { sheet } = this;
 
-    console.log("📝 Filling basic character information...");
+    //console.log("📝 Filling basic character information...");
 
     // Main character fields (using exact PDF field names)
-    this.fillTextField(form, "name", sheet.name); // Real field found
-    this.fillTextField(form, "Character Name", sheet.name); // Alternative attempt
+    this.fillTextField(form, "name", sheet.name);
     this.fillTextField(form, "Player Name", sheet.player_name);
-    this.fillTextField(form, "Chronicle", sheet.chronicle?.name);
+    this.fillTextField(form, "chronicle", sheet.chronicle?.name);
     
     // Try different approaches for the clan field
     this.fillTextField(form, "clan", sheet.clan); // Real field found
-    this.fillTextField(form, "Clan", sheet.clan); // Attempt with capital
     
     this.fillTextField(form, "generation", sheet.generation); // Real field found
     this.fillTextField(form, "sire", sheet.sire); // Real field found
@@ -79,8 +77,8 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
     
     // Other basic fields
     this.fillTextField(form, "Predator Type", sheet.predator_type);
-    this.fillTextField(form, "Concept", sheet.concept);
-    this.fillTextField(form, "Ambition", sheet.ambition);
+    this.fillTextField(form, "concept", sheet.concept);
+    this.fillTextField(form, "ambition", sheet.ambition);
     this.fillTextField(form, "Touchstone", sheet.touchstone);
 
     // Description fields (found in logs)
@@ -89,7 +87,7 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
     this.fillTextField(form, "haven_name", sheet.haven_name);
     this.fillTextField(form, "haven_description", sheet.haven_description);
 
-    console.log("✅ Basic information filled");
+    //console.log("✅ Basic information filled");
   }
 
 
@@ -250,7 +248,7 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
     // Complete mapping of dots to skills with specific levels
     const dotMapping = this.getDotMapping();
 
-    console.log("📝 Applying automatic skill mapping to dots...");
+    //console.log("📝 Applying automatic skill mapping to dots...");
 
     // Function to get skill value according to type
     const getSkillValue = (skillName, type) => {
@@ -276,21 +274,21 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
       // Only try to activate if the field exists in the PDF
       if (!existingFieldNames.includes(dotName)) {
         if (level === 5) {
-          console.log(`⚠️ Level 5 field does not exist: ${dotName} - ${skill} (${type})`);
+          //console.log(`⚠️ Level 5 field does not exist: ${dotName} - ${skill} (${type})`);
         }
         return;
       }
       
       if (shouldActivate) {
         this.fillCheckboxField(form, dotName, true);
-        console.log(`✅ Activated ${dotName}: ${skill} (${type}) level ${level} - current value: ${skillValue}`);
+        //console.log(`✅ Activated ${dotName}: ${skill} (${type}) level ${level} - current value: ${skillValue}`);
       } else if (skillValue > 0) {
-        console.log(`❌ NOT activated ${dotName}: ${skill} (${type}) level ${level} - current value: ${skillValue} (insufficient)`);
+        //console.log(`❌ NOT activated ${dotName}: ${skill} (${type}) level ${level} - current value: ${skillValue} (insufficient)`);
       }
     });
 
-    console.log("🔍 Automatic dot mapping completed - using 'ab' pattern for level 5");
-    console.log("✅ Skill mapping completed");
+    //console.log("🔍 Automatic dot mapping completed - using 'ab' pattern for level 5");
+    //console.log("✅ Skill mapping completed");
   }
 
   /**
@@ -332,7 +330,7 @@ export default class Vampire5thEditablePDFGenerator extends BaseEditablePDFGener
    */
   activateSpecificDot(form, fieldName, active = true) {
     this.fillCheckboxField(form, fieldName, active);
-    console.log(`Activated field ${fieldName}: ${active}`);
+    //console.log(`Activated field ${fieldName}: ${active}`);
   }
 
   /**
