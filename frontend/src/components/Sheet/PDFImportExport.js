@@ -4,13 +4,9 @@ import {
   IconButton,
   Alert,
   Snackbar,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
+  CircularProgress,
 } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import EditIcon from "@mui/icons-material/Edit";
 import PDFGeneratorFactory from "./PDFGenerator/PDFGeneratorFactory";
 
 /**
@@ -20,7 +16,6 @@ import PDFGeneratorFactory from "./PDFGenerator/PDFGeneratorFactory";
 export default function PDFImportExport({ sheet }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
-  const [anchorEl, setAnchorEl] = useState(null);
 
   // Function to detect sheet type from sheet.splat
   const detectSheetType = (sheet) => {
@@ -63,16 +58,7 @@ export default function PDFImportExport({ sheet }) {
       setError(`Error exporting PDF: ${err.message}`);
     } finally {
       setIsProcessing(false);
-      setAnchorEl(null);
     }
-  };
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
   };
 
   const handleCloseError = () => {
@@ -83,27 +69,15 @@ export default function PDFImportExport({ sheet }) {
 
   return (
     <>
-      <Tooltip title="Export as PDF">
-        <IconButton onClick={handleMenuOpen} disabled={isProcessing}>
-          <PictureAsPdfIcon fontSize="large" color="secondary" />
+      <Tooltip title="Export as Editable PDF">
+        <IconButton onClick={handleExport} disabled={isProcessing}>
+          {isProcessing ? (
+            <CircularProgress size={24} color="secondary" />
+          ) : (
+            <PictureAsPdfIcon fontSize="large" color="secondary" />
+          )}
         </IconButton>
       </Tooltip>
-
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        <MenuItem onClick={handleExport}>
-          <ListItemIcon>
-            <EditIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText
-            primary="PDF Editable"
-            secondary="Fill existing editable PDF"
-          />
-        </MenuItem>
-      </Menu>
 
       <Snackbar
         open={!!error}
