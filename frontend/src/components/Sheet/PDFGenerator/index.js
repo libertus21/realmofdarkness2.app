@@ -1,11 +1,10 @@
-// Export the base class
-export { default as BasePDFGenerator } from "./BasePDFGenerator";
+// Export the base class for editable PDFs
+export { default as BaseEditablePDFGenerator } from "./BaseEditablePDFGenerator";
 
-// Export specific generators
-export { default as Vampire5thPDFGenerator } from "./sheet/5th/Vampire5thPDFGenerator";
-export { default as Werewolf5thPDFGenerator } from "./sheet/5th/Werewolf5thPDFGenerator";
+// Export the main Vampire 5th Edition editable PDF generator
+export { default as Vampire5thEditablePDFGenerator } from "./sheet/5th/Vampire5thEditablePDFGenerator";
 
-// Export the factory
+// Export the factory for creating generators
 export { default as PDFGeneratorFactory } from "./PDFGeneratorFactory";
 
 // Export the main component

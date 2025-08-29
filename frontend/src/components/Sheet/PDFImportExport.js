@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Tooltip, IconButton, Alert, Snackbar } from "@mui/material";
+import {
+  Tooltip,
+  IconButton,
+  Alert,
+  Snackbar,
+  CircularProgress,
+} from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import PDFGeneratorFactory from "./PDFGenerator/PDFGeneratorFactory";
 
@@ -43,8 +49,11 @@ export default function PDFImportExport({ sheet }) {
       setError(null);
 
       const sheetType = detectSheetType(sheet);
-      const generator = PDFGeneratorFactory.createGenerator(sheetType, sheet);
-      generator.generate();
+      const generator = PDFGeneratorFactory.createGenerator(sheetType, sheet, {
+        useEditable: true,
+      });
+
+      await generator.generate();
     } catch (err) {
       setError(`Error exporting PDF: ${err.message}`);
     } finally {
@@ -56,11 +65,17 @@ export default function PDFImportExport({ sheet }) {
     setError(null);
   };
 
+
+
   return (
     <>
-      <Tooltip title="Export as PDF">
+      <Tooltip title="Export as Editable PDF">
         <IconButton onClick={handleExport} disabled={isProcessing}>
-          <PictureAsPdfIcon fontSize="large" color="secondary" />
+          {isProcessing ? (
+            <CircularProgress size={24} color="secondary" />
+          ) : (
+            <PictureAsPdfIcon fontSize="large" color="secondary" />
+          )}
         </IconButton>
       </Tooltip>
 
